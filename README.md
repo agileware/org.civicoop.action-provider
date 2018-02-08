@@ -1,15 +1,16 @@
 # action-provider
 
-![Screenshot](/images/screenshot.png)
+**This extension is in an prototype stage**
 
-(*FIXME: In one or two paragraphs, describe what the extension does and why one would download it. *)
+This extension provides a base class for actions. An action is something other extensions could reuse and which is executable.
+At its own this extension does not do something but it might be used by other extensions.
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
 
 ## Requirements
 
 * PHP v5.4+
-* CiviCRM (*FIXME: Version number*)
+* CiviCRM > 4.7
 
 ## Installation (Web UI)
 
@@ -22,7 +23,7 @@ install it with the command-line tool [cv](https://github.com/civicrm/cv).
 
 ```bash
 cd <extension-dir>
-cv dl action-provider@https://github.com/FIXME/action-provider/archive/master.zip
+cv dl action-provider@https://lab.civicrm.org/jaapjansma/action-provider/repository/master/archive.zip
 ```
 
 ## Installation (CLI, Git)
@@ -31,14 +32,11 @@ Sysadmins and developers may clone the [Git](https://en.wikipedia.org/wiki/Git) 
 install it with the command-line tool [cv](https://github.com/civicrm/cv).
 
 ```bash
-git clone https://github.com/FIXME/action-provider.git
+git clone https://lab.civicrm.org/jaapjansma/action-provider.git
 cv en action_provider
 ```
 
-## Usage
+## Roadmap
 
-(* FIXME: Where would a new user navigate to get started? What changes would they see? *)
-
-## Known Issues
-
-(* FIXME *)
+1. Implement an interface and implement the interface in the form-processor extension.
+2. Add a set of action which could be reused to this extension
