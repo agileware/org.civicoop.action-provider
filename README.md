@@ -7,6 +7,8 @@ At its own this extension does not do something but it might be used by other ex
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
 
+See also: [CiviCRM Form-Action-Integration Architecture](https://docs.google.com/presentation/d/1Zs6UQDXBXe4K3zV5xrt8HK2R5nxttw2sGslZ82hM9us/edit?usp=sharing)
+
 ## Requirements
 
 * PHP v5.4+
