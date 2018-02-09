@@ -20,6 +20,9 @@
     <ver>4.7</ver>
   </compatibility>
   <comments>This is a module in a prototype stage</comments>
+  <classloader>
+    <psr4 prefix="Civi\" path="Civi" />
+	</classloader>
   <civix>
     <namespace>CRM/ActionProvider</namespace>
   </civix>
