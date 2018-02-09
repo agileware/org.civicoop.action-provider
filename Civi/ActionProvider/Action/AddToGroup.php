@@ -32,7 +32,7 @@ class AddToGroup extends AbstractAction {
 	 */
 	public function getConfigurationSpecification() {
 		return new SpecificationBag(array(
-			new Specification('group_id', 'Integer', E::ts('Group ID'), true)
+			new Specification('group_id', 'Integer', E::ts('Group ID'), true, null, 'Group')
 		));
 	}
 	
