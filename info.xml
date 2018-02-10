@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <extension key="action-provider" type="module">
   <file>action_provider</file>
-  <name>Actin Provider</name>
+  <name>Action Provider</name>
   <description>This is a base extension providing an abstract action interface to be used in other extensions.</description>
   <license>AGPL-3.0</license>
   <maintainer>

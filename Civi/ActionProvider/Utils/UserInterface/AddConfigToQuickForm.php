@@ -95,7 +95,7 @@ class AddConfigToQuickForm {
 	public static function getSubmittedConfiguration(\CRM_Core_Form $form, AbstractAction $action) {
 		$prefix = $action->getName();	
 		$submitted_configuration = array();
-		$submittedValues = $form->get('_submitValues');
+		$submittedValues = $form->getVar('_submitValues');
 		foreach($action->getConfigurationSpecification() as $config_field) {
   		if (isset($submittedValues[$prefix.$config_field->getName()])) {
   			$submitted_configuration[$config_field->getName()] = $submittedValues[$prefix.$config_field->getName()];

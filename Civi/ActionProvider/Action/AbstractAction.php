@@ -61,7 +61,7 @@ abstract class AbstractAction {
 	 */
 	public function getName() {
 		$className = get_class($this);
-		return str_replace('\\', '_', $className);
+		return $className;
 	}
 	 
 	/**
