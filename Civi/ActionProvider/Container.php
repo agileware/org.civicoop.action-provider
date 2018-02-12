@@ -16,7 +16,7 @@ class Container {
 	private static $instance;
 	
 	protected function __construct() {
-		$this->defaultProvider = Provider::getInstance();
+		$this->defaultProvider = new Provider();
 	}
 	
 	/**
@@ -45,9 +45,22 @@ class Container {
 	 */
 	public function getProviderByContext($context) {
 		if (isset($this->providerContexts[$context])) {
-			return $this->providerContexts;
+			return $this->providerContexts[$context];
 		}
 		return $this->defaultProvider;
+	}
+	
+	/**
+	 * Returns whether the container has already a particulair context.
+	 * 
+	 * @param string $context
+	 * @return bool
+	 */
+	public function hasContext($context) {
+		if (isset($this->providerContexts[$context])) {
+			return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -61,7 +74,7 @@ class Container {
 	 * @param Provider $provider
 	 * @return Container
 	 */
-	public function addContextProvider($context, Provider $provider) {
+	public function addProviderWithContext($context, Provider $provider) {
 		$this->providerContexts[$context] = $provider;
 		return $this;
 	}

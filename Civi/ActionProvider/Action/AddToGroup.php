@@ -54,4 +54,14 @@ class AddToGroup extends AbstractAction {
 	 	return E::ts('Add to group'); 
 	}
 	
+	/**
+	 * Returns the tags for this action.
+	 */
+	public function getTags() {
+		return array(
+			AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+			'GroupContactAdd', // This how this action is called in CiviRules
+		);
+	}
+	
 }

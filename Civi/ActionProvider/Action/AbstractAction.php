@@ -18,6 +18,10 @@ use \Civi\ActionProvider\Exception\InvalidConfigurationException;
  */
 abstract class AbstractAction {
 	
+	const DATA_MANIPULATION_TAG = 'data-manipulation';
+	const SINGLE_CONTACT_ACTION_TAG = 'act-on-a-single-contact';
+	const MULTIPLE_CONTACTS_ACTION_TAG = 'action-on-multiple-contacts';
+	
 	/**
 	 * @var ParameterBag
 	 */
@@ -60,7 +64,8 @@ abstract class AbstractAction {
 	 * @return string
 	 */
 	public function getName() {
-		$className = get_class($this);
+		$reflect = new \ReflectionClass($this);
+		$className = $reflect->getShortName();
 		return $className;
 	}
 	 
@@ -114,6 +119,21 @@ abstract class AbstractAction {
 	public function setConfiguration(ParameterBag $configuration) {
 		$this->configuration = $configuration;
 		return $this;
+	}
+	
+	/**
+	 * Returns a list with tags for this action. 
+	 * 
+	 * Each tag might indicate in what context this action might be used.
+	 * Filtering which actions might be useful in a certain context
+	 * is done by the Provider class or a child class of the provider. 
+	 * 
+	 * Tags could also be aliases of the action name.
+	 * 
+	 * @return array
+	 */
+	public function getTags() {
+		return array();
 	}
 	
 }
