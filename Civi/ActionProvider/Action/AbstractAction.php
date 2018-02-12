@@ -5,7 +5,7 @@ namespace Civi\ActionProvider\Action;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\ParameterBag;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
-use \Civi\ActionProvider\Exception\InvalidParametersException;
+use \Civi\ActionProvider\Exception\InvalidParameterException;
 use \Civi\ActionProvider\Exception\InvalidConfigurationException;
 
 /**
@@ -86,7 +86,7 @@ abstract class AbstractAction {
 			throw new InvalidConfigurationException("Found invalid configuration for the action: ".$this->getTitle());
 		}
 		if (!$this->validateParameters($parameters)) {
-			throw new InvalidParametersException("Found invalid configuration for the action: ".$this->getTitle());
+			throw new InvalidParameterException("Found invalid configuration for the action: ".$this->getTitle());
 		}
 			
 		$this->doAction($parameters);
@@ -103,6 +103,9 @@ abstract class AbstractAction {
 	 * @return bool;
 	 */
 	protected function validateConfiguration() {
+		if ($this->configuration === null) {
+			return false;
+		}
 		return SpecificationBag::validate($this->configuration, $this->getConfigurationSpecification());
 	}
 	
