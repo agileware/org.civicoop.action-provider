@@ -38,4 +38,13 @@ class ParameterBag implements ParameterBagInterface, \IteratorAggregate {
     return new \ArrayIterator($this->parameters);
   }
 	
+	/**
+	 * Converts the object to an array.
+	 * 
+	 * @return array
+	 */
+	public function toArray() {
+		return $this->parameters;
+	}
+	
 }

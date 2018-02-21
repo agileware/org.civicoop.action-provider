@@ -16,7 +16,7 @@ use \Civi\ActionProvider\Exception\InvalidConfigurationException;
  * with civirules. Or the data in the table with SqlTasks. 
  * 
  */
-abstract class AbstractAction {
+abstract class AbstractAction implements \JsonSerializable {
 	
 	const DATA_MANIPULATION_TAG = 'data-manipulation';
 	const SINGLE_CONTACT_ACTION_TAG = 'act-on-a-single-contact';
@@ -26,6 +26,23 @@ abstract class AbstractAction {
 	 * @var ParameterBag
 	 */
 	protected $configuration;
+	
+	/**
+	 * @var ParameterBag
+	 */
+	protected $defaultConfiguration;
+	
+	public function __construct() {
+		$this->configuration = new ParameterBag();
+		$this->defaultConfiguration = new ParameterBag();
+
+		foreach($this->getConfigurationSpecification() as $spec) {
+			if ($spec->getDefaultValue()) {
+				$this->configuration->set($spec->getName(), $spec->getDefaultValue());
+				$this->defaultConfiguration->set($spec->getName(), $spec->getDefaultValue());
+			}
+		}
+	}
 	
 	/**
 	 * Run the action
@@ -112,6 +129,13 @@ abstract class AbstractAction {
 	/**
 	 * @return ParameterBag
 	 */
+	public function getDefaultConfiguration() {
+		return $this->defaultConfiguration;
+	}
+	
+	/**
+	 * @return ParameterBag
+	 */
 	public function getConfiguration() {
 		return $this->configuration;
 	}
@@ -137,6 +161,26 @@ abstract class AbstractAction {
 	 */
 	public function getTags() {
 		return array();
+	}
+	
+	/**
+	 * Converts the object to an array.
+	 * 
+	 * @return array
+	 */
+	public function toArray() {
+		$return['configuration_spec'] = $this->getConfigurationSpecification()->toArray();
+		$return['default_configuration'] = $this->getDefaultConfiguration()->toArray();
+		$return['name'] = $this->getName();
+		$return['title'] = $this->getTitle();
+		return $return;
+	}
+	
+	/**
+	 * Returns the data structure to serialize it as a json
+	 */
+	public function jsonSerialize() {
+		return $this->toArray();
 	}
 	
 }

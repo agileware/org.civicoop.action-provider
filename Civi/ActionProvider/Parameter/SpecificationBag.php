@@ -91,4 +91,17 @@ class SpecificationBag implements \IteratorAggregate  {
     return new \ArrayIterator($this->parameterSpecifications);
   }
 	
+	/**
+	 * Converts the object to an array.
+	 * 
+	 * @return array
+	 */
+	public function toArray() {
+		$return = array();
+		foreach($this->parameterSpecifications as $spec) {
+			$return[] = $spec->toArray();
+		}
+		return $return;
+	}
+	
 }

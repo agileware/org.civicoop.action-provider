@@ -19,4 +19,11 @@ interface ParameterBagInterface {
 	 */
 	public function setParameter($name, $value);
 	
+	/**
+	 * Converts the object to an array.
+	 * 
+	 * @return array
+	 */
+	public function toArray();
+	
 }
