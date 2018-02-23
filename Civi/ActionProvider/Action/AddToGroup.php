@@ -15,15 +15,18 @@ class AddToGroup extends AbstractAction {
 	 * Run the action
 	 * 
 	 * @param ParameterInterface $parameters
-	 *   The parameters to this action. 
+	 *   The parameters to this action.
+	 * @param ParameterBagInterface $output
+	 * 	 The parameters this action can send back 
 	 * @return void
 	 */
-	protected function doAction(ParameterBagInterface $parameters) {
+	protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
 		civicrm_api3('GroupContact', 'create', array(
 			'contact_id' => $parameters->getParameter('contact_id'),
 			'group_id' => $this->configuration->getParameter('group_id'),
 		));
-		//$output = new 
+		
+		$output->setParameter('contact_id', $parameters->getParameter('contact_id')); 
 	}
 	
 	/**

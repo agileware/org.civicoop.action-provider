@@ -47,9 +47,11 @@ abstract class AbstractAction implements \JsonSerializable {
 	 * 
 	 * @param ParameterInterface $parameters
 	 *   The parameters to this action. 
-	 * @return ParameterBag
+	 * @param ParameterBagInterface $output
+	 * 	 The parameters this action can send back
+	 * @return void
 	 */
-	abstract protected function doAction(ParameterBagInterface $parameters);
+	abstract protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output);
 	
 	/**
 	 * Returns the specification of the configuration options for the actual action.
@@ -115,7 +117,9 @@ abstract class AbstractAction implements \JsonSerializable {
 			throw new InvalidParameterException("Found invalid configuration for the action: ".$this->getTitle());
 		}
 			
-		return $this->doAction($parameters);
+		$output = $this->createParameterBag();
+		$this->doAction($parameters, $output);
+		return $output;
 	} 
 	
 	/**
