@@ -23,6 +23,7 @@ class AddToGroup extends AbstractAction {
 			'contact_id' => $parameters->getParameter('contact_id'),
 			'group_id' => $this->configuration->getParameter('group_id'),
 		));
+		//$output = new 
 	}
 	
 	/**
@@ -42,6 +43,19 @@ class AddToGroup extends AbstractAction {
 	 * @return SpecificationBag
 	 */
 	public function getParameterSpecification() {
+		return new SpecificationBag(array(
+			new Specification('contact_id', 'Integer', E::ts('Contact ID'), true)
+		));
+	}
+	
+	/**
+	 * Returns the specification of the output parameters of this action.
+	 * 
+	 * This function could be overriden by child classes.
+	 * 
+	 * @return SpecificationBag
+	 */
+	public function getOutputSpecification() {
 		return new SpecificationBag(array(
 			new Specification('contact_id', 'Integer', E::ts('Contact ID'), true)
 		));

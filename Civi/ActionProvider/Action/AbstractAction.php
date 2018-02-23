@@ -2,6 +2,7 @@
 
 namespace Civi\ActionProvider\Action;
 
+use \Civi\ActionProvider\Provider;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\ParameterBag;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
@@ -32,16 +33,13 @@ abstract class AbstractAction implements \JsonSerializable {
 	 */
 	protected $defaultConfiguration;
 	
+	/**
+	 * @var Provider
+	 */
+	protected $provider;
+	
 	public function __construct() {
-		$this->configuration = new ParameterBag();
-		$this->defaultConfiguration = new ParameterBag();
-
-		foreach($this->getConfigurationSpecification() as $spec) {
-			if ($spec->getDefaultValue()) {
-				$this->configuration->set($spec->getName(), $spec->getDefaultValue());
-				$this->defaultConfiguration->set($spec->getName(), $spec->getDefaultValue());
-			}
-		}
+		
 	}
 	
 	/**
@@ -49,7 +47,7 @@ abstract class AbstractAction implements \JsonSerializable {
 	 * 
 	 * @param ParameterInterface $parameters
 	 *   The parameters to this action. 
-	 * @return void
+	 * @return ParameterBag
 	 */
 	abstract protected function doAction(ParameterBagInterface $parameters);
 	
@@ -85,6 +83,17 @@ abstract class AbstractAction implements \JsonSerializable {
 		$className = $reflect->getShortName();
 		return $className;
 	}
+	
+	/**
+	 * Returns the specification of the output parameters of this action.
+	 * 
+	 * This function could be overriden by child classes.
+	 * 
+	 * @return SpecificationBag
+	 */
+	public function getOutputSpecification() {
+		return new SpecificationBag();
+	}
 	 
 	/**
 	 * Execute the action.
@@ -106,7 +115,7 @@ abstract class AbstractAction implements \JsonSerializable {
 			throw new InvalidParameterException("Found invalid configuration for the action: ".$this->getTitle());
 		}
 			
-		$this->doAction($parameters);
+		return $this->doAction($parameters);
 	} 
 	
 	/**
@@ -164,12 +173,47 @@ abstract class AbstractAction implements \JsonSerializable {
 	}
 	
 	/**
+	 * Sets the provider class
+	 * 
+	 * @return Provider
+	 */
+	public function setProvider(Provider $provider) {
+		$this->provider = $provider;
+	}
+	
+	/**
+	 * Sets the default values of this action
+	 */
+	public function setDefaults() {
+		$this->configuration = $this->createParameterBag();
+		$this->defaultConfiguration = $this->createParameterBag();
+
+		foreach($this->getConfigurationSpecification() as $spec) {
+			if ($spec->getDefaultValue()) {
+				$this->configuration->set($spec->getName(), $spec->getDefaultValue());
+				$this->defaultConfiguration->set($spec->getName(), $spec->getDefaultValue());
+			}
+		}
+	}
+	
+	/**
+	 * Creates a parameterBag object.
+	 * 
+	 * @return ParameterBagInterface
+	 */
+	protected function createParameterBag() {
+		return $this->provider->createParameterBag();
+	}
+	
+	/**
 	 * Converts the object to an array.
 	 * 
 	 * @return array
 	 */
 	public function toArray() {
+		$return['parameter_spec'] = $this->getParameterSpecification()->toArray();
 		$return['configuration_spec'] = $this->getConfigurationSpecification()->toArray();
+		$return['output_spec'] = $this->getOutputSpecification()->toArray();
 		$return['default_configuration'] = $this->getDefaultConfiguration()->toArray();
 		$return['name'] = $this->getName();
 		$return['title'] = $this->getTitle();
@@ -180,7 +224,12 @@ abstract class AbstractAction implements \JsonSerializable {
 	 * Returns the data structure to serialize it as a json
 	 */
 	public function jsonSerialize() {
-		return $this->toArray();
+		$return = $this->toArray();
+		// An empty array goes wrong with the default confifuration.
+		if (empty($return['default_configuration'])) {
+			$return['default_configuration'] = new \stdClass();;
+		}
+		return $return;
 	}
 	
 }

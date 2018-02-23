@@ -1,0 +1,57 @@
+<div class="crm-block crm-form-block">
+
+<ng-repeat ng-repeat="spec in action.configuration_spec">
+	<div ng-if="spec.options"
+		crm-ui-field="{name: 'spec.name', title: spec.title, required: spec.required}">
+		<select
+          crm-ui-select
+          name="{{spec.name}}"
+          ng-model="configuration[spec.name]"
+          ng-required="spec.required"
+      >
+      	<option ng-repeat="(key,value) in spec.options" value="{{key}}">{{value}}</option>
+      </select>
+	</div>
+	<div ng-if="spec.fk_entity"
+		crm-ui-field="{name: 'spec.name', title: spec.title, required: spec.required}">
+			<input
+        crm-entityref="{entity: spec.fk_entity, select: {allowClear: true, placeholder: spec.title}}"
+        name="{{spec.name}}"
+        ng-model="configuration[spec.name]"
+        ng-required="spec.required"
+	    />
+	</div>
+	<div ng-if="!spec.options && !spec.fk_entity"
+		crm-ui-field="{name: 'spec.name', title: spec.title, required: spec.required}">
+	      <input
+	        type="text"
+	        name="{{spec.name}}"
+	        ng-model="configuration[spec.name]"
+	        class="big crm-form-text"
+	        ng-required="spec.required"
+	        />
+				
+				<div class="description" ng-if="spec.description" ng-bind-html="spec.description"></div>
+	</div>
+</ng-repeat>
+
+<div ng-if="fields" class="crm-block crm-form-block"  ng-form="input_mapper">
+	<h3>{{ts('Parameter Mapping')}}</h3>
+		<ng-repeat ng-repeat="spec in action.parameter_spec">
+			<div crm-ui-field="{name: spec.name, title: spec.title, required: spec.required}">
+	      <select
+	      	style="width: 90%;"
+	      	crm-ui-id="input_mapper.{{spec.name}}"
+	        name="{{spec.name}}"
+	        ui-jq="select2"
+	        ui-options="{allowClear: true}"
+	        ng-model="mapping[spec.name]"
+	        required="spec.required"
+	        ng-options="field.name as field.label for field in fields">
+	        <option value=""></option>
+	      </select>
+	    </div>
+		</ng-repeat>
+</div>
+
+</div>

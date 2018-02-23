@@ -32,6 +32,7 @@ class Provider {
 		);
 		
 		foreach($actions as $action) {
+			$action->setProvider($this);
 			$this->allActions[$action->getName()] = $action;
 		}
 		
@@ -54,6 +55,7 @@ class Provider {
 	 * @return Provider
 	 */
 	public function addAction(\Civi\ActionProvider\Action\AbstractAction $action) {
+		$action->setProvider($this);
 		$this->allActions[$action->getName()] = $action;
 		$this->availableActions = array_filter($this->allActions, array($this, 'filterActions'));
 		return $this;
@@ -66,7 +68,10 @@ class Provider {
 	 */
 	public function getActionByName($name) {
 		if (isset($this->availableActions[$name])) {
-			return $this->availableActions[$name];
+			$action = clone $this->availableActions[$name];
+			$action->setProvider($this);
+			$action->setDefaults();
+			return $action;
 		}
 		return null;
 	}
