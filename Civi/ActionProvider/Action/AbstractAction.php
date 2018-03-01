@@ -218,7 +218,10 @@ abstract class AbstractAction implements \JsonSerializable {
 		$return['parameter_spec'] = $this->getParameterSpecification()->toArray();
 		$return['configuration_spec'] = $this->getConfigurationSpecification()->toArray();
 		$return['output_spec'] = $this->getOutputSpecification()->toArray();
-		$return['default_configuration'] = $this->getDefaultConfiguration()->toArray();
+		$return['default_configuration'] = null;
+		if ($this->getDefaultConfiguration()) {
+			$return['default_configuration'] = $this->getDefaultConfiguration()->toArray();
+		}
 		$return['name'] = $this->getName();
 		$return['title'] = $this->getTitle();
 		return $return;
