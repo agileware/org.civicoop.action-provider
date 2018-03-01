@@ -52,19 +52,6 @@ class AddToGroup extends AbstractAction {
 	}
 	
 	/**
-	 * Returns the specification of the output parameters of this action.
-	 * 
-	 * This function could be overriden by child classes.
-	 * 
-	 * @return SpecificationBag
-	 */
-	public function getOutputSpecification() {
-		return new SpecificationBag(array(
-			new Specification('contact_id', 'Integer', E::ts('Contact ID'), true)
-		));
-	}
-	
-	/**
 	 * Returns the human readable title of this action
 	 */
 	public function getTitle() {
