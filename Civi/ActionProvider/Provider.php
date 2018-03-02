@@ -90,6 +90,23 @@ class Provider {
 	}
 	
 	/**
+	 * Returns a new parameter bag based on the given mapping.
+	 * 
+	 * @param ParameterBagInterface $parameterBag
+	 * @param array $mapping
+	 * @return ParameterBagInterface
+	 */
+	public function createdMappedParameterBag(ParameterBagInterface $parameterBag, $mapping) {
+		$mappedParameterBag = $this->createParameterBag();
+		foreach($mapping as $mappedField => $field) {
+			if ($parameterBag->doesParameterExists($field)) {
+				$mappedParameterBag->setParameter($mappedField, $parameterBag->getParameter($field));
+			}
+		}
+		return $mappedParameterBag;
+	}
+	
+	/**
 	 * Filter the actions array and keep certain actions.
 	 * 
 	 * This function might be override in a child class to filter out certain actions which do

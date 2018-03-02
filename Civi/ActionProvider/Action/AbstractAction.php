@@ -114,7 +114,7 @@ abstract class AbstractAction implements \JsonSerializable {
 			throw new InvalidConfigurationException("Found invalid configuration for the action: ".$this->getTitle());
 		}
 		if (!$this->validateParameters($parameters)) {
-			throw new InvalidParameterException("Found invalid configuration for the action: ".$this->getTitle());
+			throw new InvalidParameterException("Found invalid parameters for the action: ".$this->getTitle());
 		}
 			
 		$output = $this->createParameterBag();
