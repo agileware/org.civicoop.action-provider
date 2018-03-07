@@ -25,8 +25,6 @@ class AddToGroup extends AbstractAction {
 			'contact_id' => $parameters->getParameter('contact_id'),
 			'group_id' => $this->configuration->getParameter('group_id'),
 		));
-		
-		$output->setParameter('contact_id', $parameters->getParameter('contact_id')); 
 	}
 	
 	/**
