@@ -1,6 +1,6 @@
 <?php
 
-namespace Civi\ActionProvider\Action;
+namespace Civi\ActionProvider\Action\Contact;
 
 use \Civi\ActionProvider\Action\AbstractAction;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
@@ -9,7 +9,7 @@ use \Civi\ActionProvider\Parameter\Specification;
 
 use CRM_ActionProvider_ExtensionUtil as E;
 
-class AddToGroup extends AbstractAction {
+class ContactDataById extends AbstractAction {
 	
 	/**
 	 * Run the action
@@ -21,10 +21,10 @@ class AddToGroup extends AbstractAction {
 	 * @return void
 	 */
 	protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-		civicrm_api3('GroupContact', 'create', array(
-			'contact_id' => $parameters->getParameter('contact_id'),
-			'group_id' => $this->configuration->getParameter('group_id'),
-		));
+		$contact = civicrm_api3('Contact', 'getsingle', array('id' => $parameters->getParameter('contact_id')));
+		foreach($contact as $field => $value) {
+			$output->setParameter($field, $value);
+		} 
 	}
 	
 	/**
@@ -32,10 +32,8 @@ class AddToGroup extends AbstractAction {
 	 * 
 	 * @return SpecificationBag
 	 */
-	public function getConfigurationSpecification() {
-		return new SpecificationBag(array(
-			new Specification('group_id', 'Integer', E::ts('Select group'), true, null, 'Group', null, FALSE),
-		));
+	public function getConfigurationSpecification() {	
+		return new SpecificationBag(array());
 	}
 	
 	/**
@@ -50,10 +48,42 @@ class AddToGroup extends AbstractAction {
 	}
 	
 	/**
+	 * Returns the specification of the output parameters of this action.
+	 * 
+	 * This function could be overriden by child classes.
+	 * 
+	 * @return SpecificationBag
+	 */
+	public function getOutputSpecification() {
+		$bag = new SpecificationBag();
+		$contact_fields = civicrm_api3('contact', 'getfields', array('action' => 'get', 'options' => array('limit' => 0)));
+		foreach($contact_fields['values'] as $field) {
+			if (empty($field['type'])) {
+				continue;
+			}
+			$type = \CRM_Utils_Type::typeToString($field['type']);
+			switch ($type) {
+				case 'Int':
+					$type = 'Integer';
+					break;
+			}
+			$fieldSpec = new Specification(
+				$field['name'],
+				$type,
+				$field['title'],
+				false
+			);
+			$bag->addSpecification($fieldSpec);
+		}
+		
+		return $bag;
+	}
+	
+	/**
 	 * Returns the human readable title of this action
 	 */
 	public function getTitle() {
-	 	return E::ts('Add to group'); 
+	 	return E::ts('Get contact data by ID'); 
 	}
 	
 	/**
@@ -62,8 +92,6 @@ class AddToGroup extends AbstractAction {
 	public function getTags() {
 		return array(
 			AbstractAction::SINGLE_CONTACT_ACTION_TAG,
-			AbstractAction::DATA_MANIPULATION_TAG,
-			'GroupContactAdd', // This how this action is called in CiviRules
 		);
 	}
 	

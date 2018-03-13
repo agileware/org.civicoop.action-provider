@@ -1,6 +1,6 @@
 <?php
 
-namespace Civi\ActionProvider\Action;
+namespace Civi\ActionProvider\Action\Contact;
 
 use \Civi\ActionProvider\Action\AbstractAction;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
@@ -97,6 +97,7 @@ class FindOrCreateContactByEmail extends AbstractAction {
 	public function getTags() {
 		return array(
 			AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+			AbstractAction::DATA_MANIPULATION_TAG,
 		);
 	}
 	

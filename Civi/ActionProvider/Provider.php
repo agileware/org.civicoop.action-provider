@@ -3,7 +3,8 @@
 namespace Civi\ActionProvider;
 
 use \Civi\ActionProvider\Action\AddToGroup;
-use \Civi\ActionProvider\Action\FindOrCreateContactByEmail;
+use \Civi\ActionProvider\Action\Contact\ContactDataById;
+use \Civi\ActionProvider\Action\Contact\FindOrCreateContactByEmail;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\ParameterBag;
 
@@ -30,6 +31,7 @@ class Provider {
 	public function __construct() {
 		$actions = array(
 			new AddToGroup(),
+			new ContactDataById(),
 			new FindOrCreateContactByEmail(),
 		);
 		
