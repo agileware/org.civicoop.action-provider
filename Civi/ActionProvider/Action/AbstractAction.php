@@ -19,8 +19,17 @@ use \Civi\ActionProvider\Exception\InvalidConfigurationException;
  */
 abstract class AbstractAction implements \JsonSerializable {
 	
+  // Use this tag for the action does not do any data manipulation 
+  // but only data retrieval.
+  const DATA_RETRIEVAL_TAG = 'data-retrieval';
+  
+  // Use this tag if the action manipulates data.   
 	const DATA_MANIPULATION_TAG = 'data-manipulation';
+  
+  // Use this tag if the action works with a single contact.
 	const SINGLE_CONTACT_ACTION_TAG = 'act-on-a-single-contact';
+  
+  // Use this tag if the action works with multieple contacts.
 	const MULTIPLE_CONTACTS_ACTION_TAG = 'action-on-multiple-contacts';
 	
 	/**
@@ -116,7 +125,7 @@ abstract class AbstractAction implements \JsonSerializable {
 		if (!$this->validateParameters($parameters)) {
 			throw new InvalidParameterException("Found invalid parameters for the action: ".$this->getTitle());
 		}
-			
+    
 		$output = $this->createParameterBag();
 		$this->doAction($parameters, $output);
 		return $output;

@@ -92,6 +92,7 @@ class ContactDataById extends AbstractAction {
 	public function getTags() {
 		return array(
 			AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+			AbstractAction::DATA_RETRIEVAL_TAG,
 		);
 	}
 	

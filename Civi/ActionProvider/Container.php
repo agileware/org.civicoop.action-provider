@@ -78,6 +78,13 @@ class Container {
 		$this->providerContexts[$context] = $provider;
 		return $this;
 	}
+  
+  public function addAction(\Civi\ActionProvider\Action\AbstractAction $action) {
+    $this->defaultProvider->addAction($action);
+    foreach($this->providerContexts as $provider) {
+      $provider->addAction($action);
+    }
+  }
 	
 	
 }

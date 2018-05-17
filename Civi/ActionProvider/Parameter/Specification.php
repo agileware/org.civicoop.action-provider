@@ -41,9 +41,15 @@ class Specification {
    */
   protected $fkEntity;
 	
-	  /**
-   * @param $name
-   * @param $dataType
+  /**
+   * @param string $name
+   * @param string $dataType
+   * @param string $title
+   * @param bool $required
+   * @param mixed $defaultValue
+   * @param string|null $fkEntity
+   * @param array $options
+   * @param bool $multiple 
    */
   public function __construct($name, $dataType = 'String', $title='', $required = false, $defaultValue = null, $fkEntity = null, $options = array(), $multiple = false) {
     $this->setName($name);
