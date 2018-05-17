@@ -306,5 +306,5 @@ What we have to do to is to add our class to the action provider class in _Civi\
 
 ```
 
-The only thing we do is add our action to the __construct method. 
+The only thing we do is add our action to the constructor. 
 If you implement actions in your own extensions this would be done in a different way.
