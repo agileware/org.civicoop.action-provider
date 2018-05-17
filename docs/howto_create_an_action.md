@@ -9,6 +9,12 @@ It is also possible to create an action in your own extensions but that would be
 * [Create an action class](#create-an-action-class)
   * [Create the class](#create-the-class)
   * [Set a title](#set-a-title)
+  * [Specify the configuration options](#specify-the-configuration-options)
+  * [Specify the parameter options](#specify-the-parameter-options)
+  * [Specify the output of the action](#specify-the-output-of-the-action)
+  * [The actual action](#the-actual-action)
+  * [Add a tag to this action](#add-a-tag-to-this-action)
+* [Make it available to the action provider](#make-it-available-to-the-action-provider)
 
 ## Required functionality
 
@@ -19,12 +25,14 @@ In _action-provider_ terminology this means we need _status_ as a _configuration
 
 The action would not return anything.  
 
+![Configuration Screen](images/UpdateParticipantStatusAction.png)
+
 ## Create an action class
 
 Start with a file in the directory _Civi\ActionProvider\Actions\Event\UpdateParticipantStatus.php_
 This file will contain the action class which is extended from the abstract action.
 
-### Creating the class
+### Create the class
 
 ```php
 
@@ -179,7 +187,7 @@ In this particilair example we dont output anything.
 
 ```
 
-### Develop the actual action
+### The actual action
 
 In this step the actual action is developed. So what we have to do here is to look up 
 a participant record for certain event and contact and set the status to configured status.
@@ -285,8 +293,7 @@ What we have to do to is to add our class to the action provider class in _Civi\
     public function __construct() {
       $actions = array(
         new \Civi\ActionProvider\Action\AddToGroup(),
-        new \Civi\ActionProvider\Action\Contact\ContactDataById(),
-        new \Civi\ActionProvider\Action\Contact\FindOrCreateContactByEmail(),
+        // ...
         new \Civi\ActionProvider\Action\Event\UpdateParticipantStatus(),
       );
       
