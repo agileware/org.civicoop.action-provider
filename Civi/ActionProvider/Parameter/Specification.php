@@ -2,6 +2,8 @@
 
 namespace Civi\ActionProvider\Parameter;
 
+use CRM_ActionProvider_ExtensionUtil as E;
+
 class Specification {
 	
 	 /**
@@ -60,6 +62,13 @@ class Specification {
 		$this->setFkEntity($fkEntity);
 		$this->setOptions($options);
 		$this->setMultiple($multiple);
+    
+    if ($this->dataType == 'Boolean') {
+      $this->options = array(
+        '0' => E::ts('No'),
+        '1' => E::ts('Yes'),
+      );
+    }
   }
 	
   /**

@@ -60,7 +60,10 @@ class UpdateParticipantStatus extends AbstractAction {
    * @return SpecificationBag
    */
   public function getOutputSpecification() {
-    return new SpecificationBag();
+    return new SpecificationBag(array(
+      new Specification('old_status_id', 'Integer', E::ts('Old status ID')),
+      new Specification('new_status_id', 'Integer', E::ts('New status ID')),
+    ));
   }
   
   /**
@@ -77,30 +80,39 @@ class UpdateParticipantStatus extends AbstractAction {
     $contact_id = $parameters->getParameter('contact_id');
     $event_id = $parameters->getParameter('event_id');
     
+    $output->setParameter('old_status_id', null);
+    $output->setParameter('new_status_id', null);
+    
     // Find the participant record for this contact and event. 
     // This assumes that the contact has already been registered for the event.
-    $participant = civicrm_api3('Participant', 'get', array(
-      'contact_id' => $contact_id,
-      'event_id' => $event_id,
-      'options' => array('limit' => 1),
+    $participant_id = \CRM_Core_DAO::singleValueQuery("SELECT id FROM civicrm_participant WHERE is_test = '0' AND contact_id = %1 AND event_id = %2 ORDER BY id DESC LIMIT 1", array(
+      1 => array($contact_id, 'Integer'),
+      2 => array($event_id, 'Integer'),
     ));
-    if ($participant['count'] < 1) {
+    if (!$participant_id) {
       // No record is found. 
-      throw new \Civi\ActionProvider\Action\Exception\ExecutionException(E::ts('Could not find a participant record'));
+      throw new \Civi\ActionProvider\Exception\ExecutionException(E::ts('Could not find a participant record'));
     }
     
-    // Get the participant record and the status id from the configuration.
-    $participant = reset($participant['values']);
-    $new_status_id = $this->configuration->getParameter('status');
+    //Find the old status ID
+    $old_status_id = \CRM_Core_DAO::singleValueQuery("SELECT status_id FROM civicrm_participant WHERE id = %1", array(
+      1 => array($participant_id, 'Integer'),
+    ));
+    if ($old_status_id) {
+      $output->setParameter('old_status_id', $old_status_id);
+    }
     
+    $new_status_id = $this->configuration->getParameter('status');
     // Update the participant record through an API call.
     try {
       civicrm_api3('Participant', 'create', array(
-        'id' => $participant['id'],
+        'id' => $participant_id,
         'status_id' => $new_status_id,
+        'check_permissions' => false,
       ));
+      $output->setParameter('new_status_id', $new_status_id);
     } catch (Exception $e) {
-      throw new \Civi\ActionProvider\Action\Exception\ExecutionException(E::ts('Could not update participant status'));
+      throw new \Civi\ActionProvider\Exception\ExecutionException(E::ts('Could not update participant status'));
     }
   }
 
