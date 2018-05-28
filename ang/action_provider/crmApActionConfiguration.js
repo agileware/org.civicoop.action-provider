@@ -13,6 +13,7 @@
       },
       link: function($scope, $el, $attr) {
       	$scope.ts = CRM.ts(null);
+      	console.log($scope.action.parameter_spec);
       }
     };
   });

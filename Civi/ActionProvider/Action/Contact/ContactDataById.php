@@ -62,11 +62,14 @@ class ContactDataById extends AbstractAction {
 				continue;
 			}
 			$type = \CRM_Utils_Type::typeToString($field['type']);
+      if (empty($type)) {
+        continue;
+      }
 			switch ($type) {
 				case 'Int':
 					$type = 'Integer';
 					break;
-			}
+			} 
 			$fieldSpec = new Specification(
 				$field['name'],
 				$type,

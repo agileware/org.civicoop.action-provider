@@ -248,9 +248,19 @@ class Specification {
 	
 	public function toArray() {
     $ret = array();
-    foreach (get_object_vars($this) as $key => $val) {
-      $key = strtolower(preg_replace('/(?=[A-Z])/', '_$0', $key));
-      $ret[$key] = $val;
+    foreach (get_class_methods($this) as $method) {
+      $var = false;
+      if (stripos($method, 'get') === 0) {
+        $var = lcfirst(substr($method, 3));
+      } elseif (stripos($method, 'is') === 0) {
+        $var = lcfirst(substr($method, 2));
+      }
+      if (!$var) {
+        continue;
+      }
+      
+      $key = strtolower(preg_replace('/(?=[A-Z])/', '_$0', $var));
+      $ret[$key] = $this->$method();
     }
     return $ret;
   }
