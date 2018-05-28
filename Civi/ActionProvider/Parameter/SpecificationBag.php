@@ -22,14 +22,13 @@ class SpecificationBag implements \IteratorAggregate  {
 	public static function validate(ParameterBagInterface $parameters, SpecificationBag $specification) {
 		foreach($specification as $spec) {
 			// First check whether the value is present and should be present.
-			$value = $parameters->getParameter($spec->getName());
-			if (isset($value)) {
-				// Check the type
-				if (!\CRM_Utils_Type::validate($value, $spec->getDataType(), false)) {
-					return false;
-				}
-			} elseif ($spec->isRequired()) {
-				return false;
+			if ($spec->isRequired() && !$parameters->doesParameterExists($spec->getName())) {
+			  return false;
+			} if($parameters->doesParameterExists($spec->getName())) {
+			  $value = $parameters->getParameter($spec->getName());
+        if (!\CRM_Utils_Type::validate($value, $spec->getDataType(), false)) {
+          return false;
+        }  
 			}
 		}
 		return true;

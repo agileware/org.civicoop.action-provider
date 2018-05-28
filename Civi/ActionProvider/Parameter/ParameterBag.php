@@ -21,7 +21,7 @@ class ParameterBag implements ParameterBagInterface, \IteratorAggregate {
 	 * Tests whether the parameter with the name exists.
 	 */
 	public function doesParameterExists($name) {
-		if (isset($this->parameters[$name])) {
+		if (isset($this->parameters[$name]) && $this->parameters[$name] != null) {
 			return true;
 		}
 		return false;

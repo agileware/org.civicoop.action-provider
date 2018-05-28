@@ -202,9 +202,9 @@ abstract class AbstractAction implements \JsonSerializable {
 		$this->defaultConfiguration = $this->createParameterBag();
 
 		foreach($this->getConfigurationSpecification() as $spec) {
-			if ($spec->getDefaultValue()) {
-				$this->configuration->set($spec->getName(), $spec->getDefaultValue());
-				$this->defaultConfiguration->set($spec->getName(), $spec->getDefaultValue());
+			if ($spec->getDefaultValue() !== null) {
+				$this->configuration->setParameter($spec->getName(), $spec->getDefaultValue());
+				$this->defaultConfiguration->setParameter($spec->getName(), $spec->getDefaultValue());
 			}
 		}
 	}

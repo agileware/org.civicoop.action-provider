@@ -4,7 +4,9 @@
 	<div ng-if="spec.options"
 		crm-ui-field="{name: 'spec.name', title: spec.title, required: spec.required}">
 		<select
+		      style="width: 90%;"
           crm-ui-select
+          ui-options="{allowClear: true}"
           name="{{spec.name}}"
           ng-model="configuration[spec.name]"
           ng-required="spec.required"
@@ -30,9 +32,8 @@
 	        class="big crm-form-text"
 	        ng-required="spec.required"
 	        />
-				
-				<div class="description" ng-if="spec.description" ng-bind-html="spec.description"></div>
 	</div>
+	<div class="description" ng-if="spec.description" ng-bind-html="spec.description"></div>
 </ng-repeat>
 
 <div ng-if="fields" class="crm-block crm-form-block"  ng-form="input_mapper">
@@ -46,7 +47,7 @@
 	        ui-jq="select2"
 	        ui-options="{allowClear: true}"
 	        ng-model="mapping[spec.name]"
-	        required="spec.required"
+	        ng-required="spec.required"
 	        ng-options="field.name as field.label for field in fields">
 	        <option value=""></option>
 	      </select>
