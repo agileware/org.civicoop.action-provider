@@ -25,6 +25,12 @@ class ContactDataById extends AbstractAction {
 		foreach($contact as $field => $value) {
 			$output->setParameter($field, $value);
 		} 
+    
+    // Get custom data
+    $custom_data = civicrm_api3('CustomValue', 'get', array('entity_id' => $parameters->getParameter('contact_id'), 'entity_table' => 'civicrm_contact'));
+    foreach($custom_data['values'] as $custom) {
+      $output->setParameter('custom_'.$custom['id'], $custom['latest']);
+    }
 	}
 	
 	/**

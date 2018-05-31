@@ -93,8 +93,8 @@ class CreateUpdateIndividual extends AbstractAction {
     $contactIdSpec->setDescription(E::ts('Leave empty to create a new Individual'));
     $spec = new SpecificationBag(array(
       $contactIdSpec,
-      new Specification('first_name', 'String', E::ts('First name'), true),
-      new Specification('last_name', 'String', E::ts('Last name'), true),
+      new Specification('first_name', 'String', E::ts('First name'), false),
+      new Specification('last_name', 'String', E::ts('Last name'), false),
       new Specification('middle_name', 'String', E::ts('Middle name'), false),
     ));
     ContactActionUtils::createAddressParameterSpecification($spec);
