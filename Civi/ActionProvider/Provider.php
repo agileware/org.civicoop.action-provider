@@ -30,6 +30,7 @@ class Provider {
 			new \Civi\ActionProvider\Action\AddToGroup(),
 			new \Civi\ActionProvider\Action\Contact\ContactDataById(),
 			new \Civi\ActionProvider\Action\Contact\CreateUpdateIndividual(),
+			new \Civi\ActionProvider\Action\Contact\UpdateCustomData(),
 			new \Civi\ActionProvider\Action\Contact\FindOrCreateContactByEmail(),
 			new \Civi\ActionProvider\Action\Event\UpdateParticipantStatus(),
 			new \Civi\ActionProvider\Action\Event\CreateOrUpdateParticipant(),
