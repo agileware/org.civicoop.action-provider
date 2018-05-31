@@ -112,7 +112,7 @@ class CreateUpdateIndividual extends AbstractAction {
    */
   public function getOutputSpecification() {
     return new SpecificationBag(array(
-      new Specification('contact_id', 'Integer', E::ts('Contact ID'), true),
+      new Specification('contact_id', 'Integer', E::ts('Contact ID'), false),
       new Specification('address_id', 'Integer', E::ts('Address record ID'), false),
       new Specification('email_id', 'Integer', E::ts('Email record ID'), false),
       new Specification('phone_id', 'Integer', E::ts('Phone ID'), false),
