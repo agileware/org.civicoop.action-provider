@@ -34,6 +34,7 @@ class Provider {
 			new \Civi\ActionProvider\Action\Contact\FindOrCreateContactByEmail(),
 			new \Civi\ActionProvider\Action\Event\UpdateParticipantStatus(),
 			new \Civi\ActionProvider\Action\Event\CreateOrUpdateParticipant(),
+			new \Civi\ActionProvider\Action\Event\GetParticipant(),
 		);
 		
 		foreach($actions as $action) {
