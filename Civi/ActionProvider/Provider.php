@@ -29,6 +29,7 @@ class Provider {
 		$actions = array(
 			new \Civi\ActionProvider\Action\AddToGroup(),
 			new \Civi\ActionProvider\Action\Contact\ContactDataById(),
+			new \Civi\ActionProvider\Action\Contact\CreateUpdateAddress(),
 			new \Civi\ActionProvider\Action\Contact\GetAddress(),
 			new \Civi\ActionProvider\Action\Contact\CreateUpdateIndividual(),
 			new \Civi\ActionProvider\Action\Contact\UpdateCustomData(),
