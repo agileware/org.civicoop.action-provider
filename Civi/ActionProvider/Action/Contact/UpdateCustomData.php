@@ -28,7 +28,7 @@ class UpdateCustomData extends AbstractAction {
         continue;
       }
       if ($parameters->getParameter($spec->getName())) {
-        $apiParams[$spec->getName()] = $parameters->getParameter($spec->getName());
+        $apiParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
       }
     }
     

@@ -42,6 +42,11 @@ class Specification {
    * @var string
    */
   protected $fkEntity;
+  
+  /**
+   * @var string
+   */
+  protected $apiFieldName;
 	
   /**
    * @param string $name
@@ -102,6 +107,23 @@ class Specification {
    */
   public function setName($name) {
     $this->name = $name;
+    return $this;
+  }
+  
+  /**
+   * @return string
+   */
+  public function getApiFieldName() {
+    return $this->apiFieldName;
+  }
+  
+  /**
+   * @param string $name
+   *
+   * @return $this
+   */
+  public function setApiFieldName($name) {
+    $this->apiFieldName = $name;
     return $this;
   }
 	

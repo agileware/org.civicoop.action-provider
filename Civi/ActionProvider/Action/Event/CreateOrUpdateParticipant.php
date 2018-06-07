@@ -133,7 +133,7 @@ class CreateOrUpdateParticipant extends AbstractAction {
           continue;
         }
         if ($parameters->getParameter($spec->getName())) {
-          $participantParams[$spec->getName()] = $parameters->getParameter($spec->getName());
+          $participantParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
         }
       }
       

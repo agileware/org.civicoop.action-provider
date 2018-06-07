@@ -6,6 +6,7 @@ use \Civi\ActionProvider\Action\AbstractAction;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
+use \Civi\ActionProvider\Utils\CustomField;
 
 use CRM_ActionProvider_ExtensionUtil as E;
 
@@ -29,7 +30,8 @@ class ContactDataById extends AbstractAction {
     // Get custom data
     $custom_data = civicrm_api3('CustomValue', 'get', array('entity_id' => $parameters->getParameter('contact_id'), 'entity_table' => 'civicrm_contact'));
     foreach($custom_data['values'] as $custom) {
-      $output->setParameter('custom_'.$custom['id'], $custom['latest']);
+      $fieldName = CustomField::getCustomFieldName($custom['id']);
+      $output->setParameter($fieldName, $custom['latest']);
     }
 	}
 	
@@ -76,12 +78,26 @@ class ContactDataById extends AbstractAction {
 					$type = 'Integer';
 					break;
 			} 
-			$fieldSpec = new Specification(
-				$field['name'],
-				$type,
-				$field['title'],
-				false
-			);
+      
+      if (stripos($field['name'], 'custom_') === 0) {
+        // It is a custom field
+        $customFieldId = str_replace("custom_", "", $field['name']);
+        $fieldName = CustomField::getCustomFieldName($customFieldId);
+        $fieldSpec = new Specification(
+          $fieldName,
+          $type,
+          $field['title'],
+          false
+        );
+        $fieldSpec->setApiFieldName($field['name']);
+      } else {
+        $fieldSpec = new Specification(
+          $field['name'],
+          $type,
+          $field['title'],
+          false
+        );
+      }
 			$bag->addSpecification($fieldSpec);
 		}
 		
