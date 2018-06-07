@@ -63,7 +63,7 @@ class AddToGroup extends AbstractAction {
 		return array(
 			AbstractAction::SINGLE_CONTACT_ACTION_TAG,
 			AbstractAction::DATA_MANIPULATION_TAG,
-			'GroupContactAdd', // This how this action is called in CiviRules
+			'CiviRules.GroupContactAdd', // This how this action is called in CiviRules
 		);
 	}
 	

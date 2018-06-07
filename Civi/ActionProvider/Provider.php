@@ -35,6 +35,8 @@ class Provider {
 			new \Civi\ActionProvider\Action\Event\UpdateParticipantStatus(),
 			new \Civi\ActionProvider\Action\Event\CreateOrUpdateParticipant(),
 			new \Civi\ActionProvider\Action\Event\GetParticipant(),
+			new \Civi\ActionProvider\Action\Website\CreateUpdateWebsite(),
+			new \Civi\ActionProvider\Action\Website\GetWebsite(),
 		);
 		
 		foreach($actions as $action) {

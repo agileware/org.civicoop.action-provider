@@ -89,7 +89,7 @@ class CreateUpdateIndividual extends AbstractAction {
    * @return SpecificationBag
    */
   public function getParameterSpecification() {
-    $contactIdSpec = new Specification('contact_id', 'String', E::ts('Contact ID'), false);
+    $contactIdSpec = new Specification('contact_id', 'Integer', E::ts('Contact ID'), false);
     $contactIdSpec->setDescription(E::ts('Leave empty to create a new Individual'));
     $spec = new SpecificationBag(array(
       $contactIdSpec,
