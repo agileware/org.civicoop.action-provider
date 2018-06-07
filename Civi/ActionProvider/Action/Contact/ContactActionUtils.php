@@ -191,7 +191,10 @@ class ContactActionUtils {
     $spec->addSpecification(new Specification('email', 'String', E::ts('E-mail'), false));
   }
   
-  private static function getLocationTypes() {
+  /**
+   * Returns the location types
+   */
+  public static function getLocationTypes() {
     if (!self::$locationTypes) {
       self::$locationTypes = array();
       $locationTypesApi = civicrm_api3('LocationType', 'get', array('options' => array('limit' => 0)));
