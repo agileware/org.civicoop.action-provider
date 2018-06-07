@@ -26,7 +26,7 @@ class SpecificationBag implements \IteratorAggregate  {
 			  return false;
 			} if($parameters->doesParameterExists($spec->getName())) {
 			  $value = $parameters->getParameter($spec->getName());
-        if (!\CRM_Utils_Type::validate($value, $spec->getDataType(), false)) {
+        if ($value && !\CRM_Utils_Type::validate($value, $spec->getDataType(), false)) {
           return false;
         }  
 			}

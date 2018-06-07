@@ -132,7 +132,7 @@ class CreateOrUpdateParticipant extends AbstractAction {
         if (stripos($spec->getName(), 'custom_')!==0) {
           continue;
         }
-        if ($parameters->getParameter($spec->getName())) {
+        if ($parameters->doesParameterExists($spec->getName())) {
           $participantParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
         }
       }
