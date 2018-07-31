@@ -58,7 +58,7 @@ class Specification {
    * @param array $options
    * @param bool $multiple 
    */
-  public function __construct($name, $dataType = 'String', $title='', $required = false, $defaultValue = null, $fkEntity = null, $options = array(), $multiple = false) {
+  public function __construct($name, $dataType = 'String', $title='', $required = false, $defaultValue = null, $fkEntity = null, $options = null, $multiple = false) {
     $this->setName($name);
     $this->setDataType($dataType);
 		$this->setTitle($title);
