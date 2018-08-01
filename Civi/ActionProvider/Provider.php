@@ -57,6 +57,8 @@ class Provider {
 
 		$conditions = array(
 		  new \Civi\ActionProvider\Condition\ParameterIsEmpty(),
+      new \Civi\ActionProvider\Condition\ParameterIsNotEmpty(),
+      new \Civi\ActionProvider\Condition\ParameterHasValue(),
     );
 		
 		foreach($actions as $action) {

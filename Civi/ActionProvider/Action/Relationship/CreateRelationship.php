@@ -13,6 +13,7 @@ use \Civi\ActionProvider\Parameter\Specification;
 use \Civi\ActionProvider\Utils\CustomField;
 
 use CRM_ActionProvider_ExtensionUtil as E;
+use Dompdf\Exception;
 
 class CreateRelationship extends AbstractAction {
 
@@ -105,7 +106,6 @@ class CreateRelationship extends AbstractAction {
       $relationshipParams['start_date'] = $today->format('Ymd');
     }
 
-
     foreach($this->getParameterSpecification() as $spec) {
       if (stripos($spec->getName(), 'custom_')!==0) {
         continue;
@@ -116,9 +116,9 @@ class CreateRelationship extends AbstractAction {
     }
 
     try {
-      var_dump($relationshipParams);
-      $result = civicrm_api3('Relationship', 'create', $relationshipParams);
-      $output->setParameter('id', $result['id']);
+      // Do not use api as the api checks for an existing relationship.
+      $relationship = \CRM_Contact_BAO_Relationship::add($relationshipParams);
+      $output->setParameter('id', $relationship->id);
     } catch (\Exception $e) {
       // Do nothing.
     }
