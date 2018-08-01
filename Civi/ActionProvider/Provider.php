@@ -24,6 +24,18 @@ class Provider {
 	 *   All the actions including the inactive ones.
 	 */
 	protected $allActions = array();
+
+  /**
+   * @var array
+   *   All the condition which are available to be used in this context.
+   */
+	protected $availableConditions = array();
+
+  /**
+   * @var array
+   *   Contains all possible conditions.
+   */
+	protected $allConditions = array();
 	
 	public function __construct() {
 		$actions = array(
@@ -42,13 +54,23 @@ class Provider {
 			new \Civi\ActionProvider\Action\Website\CreateUpdateWebsite(),
 			new \Civi\ActionProvider\Action\Website\GetWebsite(),
 		);
+
+		$conditions = array(
+		  new \Civi\ActionProvider\Condition\ParameterIsEmpty(),
+    );
 		
 		foreach($actions as $action) {
 			$action->setProvider($this);
 			$this->allActions[$action->getName()] = $action;
 		}
+
+    foreach($conditions as $condition) {
+      $condition->setProvider($this);
+      $this->allConditions[$condition->getName()] = $condition;
+    }
 		
 		$this->availableActions = array_filter($this->allActions, array($this, 'filterActions'));
+    $this->availableConditions = array_filter($this->allConditions, array($this, 'filterConditions'));
 	}
 	
 	/**
@@ -87,6 +109,44 @@ class Provider {
 		}
 		return null;
 	}
+
+  /**
+   * Returns all available conditins
+   */
+  public function getConditions() {
+    return $this->availableConditions;
+  }
+
+  /**
+   * Adds a condition to the list of available conditions.
+   *
+   * This function might be used by extensions to add their own conditions to the system.
+   *
+   * @param \Civi\ActionProvider\Condition\AbstractCondition $condition
+   * @return Provider
+   * @throws \Exception
+   */
+  public function addCondition(\Civi\ActionProvider\Condition\AbstractCondition $condition) {
+    $condition->setProvider($this);
+    $this->allConditions[$condition->getName()] = $condition;
+    $this->availableConditions = array_filter($this->allConditions, array($this, 'filterConditions'));
+    return $this;
+  }
+
+  /**
+   * Returns a condition by its name.
+   *
+   * @return \Civi\ActionProvider\Condition\AbstractCondition|null when condition is not found.
+   */
+  public function getConditionByName($name) {
+    if (isset($this->availableConditions[$name])) {
+      $condition = clone $this->availableConditions[$name];
+      $condition->setProvider($this);
+      $condition->setDefaults();
+      return $condition;
+    }
+    return null;
+  }
 	
 	/**
 	 * Returns a new ParameterBag
@@ -131,5 +191,20 @@ class Provider {
 	protected function filterActions(\Civi\ActionProvider\Action\AbstractAction $action) {
 		return true;
 	}
+
+  /**
+   * Filter the conditions array and keep certain condition.
+   *
+   * This function might be override in a child class to filter out certain conditions which do
+   * not make sense in that context.
+   *
+   * @param \Civi\ActionProvider\Condition\AbstractCondition $condition
+   *   The condition to filter.
+   * @return bool
+   *   Returns true when the element is valid, false when the element should be disregarded.
+   */
+  protected function filterConditions(\Civi\ActionProvider\Condition\AbstractCondition $condition) {
+    return true;
+  }
 	
 }
