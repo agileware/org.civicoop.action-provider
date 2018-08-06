@@ -46,7 +46,9 @@ class CreateUpdateAddress extends AbstractAction {
    * @return SpecificationBag
    */
   public function getParameterSpecification() {
-    $specs = new SpecificationBag();
+    $specs = new SpecificationBag(array(
+      new Specification('contact_id', 'Integer', E::ts('Contact ID'), false),
+    ));
     ContactActionUtils::createAddressParameterSpecification($specs);
     return $specs;
   }
