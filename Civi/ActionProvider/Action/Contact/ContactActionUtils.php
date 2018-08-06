@@ -43,7 +43,16 @@ class ContactActionUtils {
       $addressParams['id'] = $existingAddressId;
     }
     $addressParams['contact_id'] = $contact_id;
+    $addressParams['master_id'] = 'null';
     $addressParams['location_type_id'] = $configuration->getParameter('address_location_type');
+    if ($parameters->getParameter('name')) {
+      $addressParams['name'] = $parameters->getParameter('name');
+      $hasAddressParams = true;
+    }
+    if ($parameters->getParameter('supplemental_address_1')) {
+      $addressParams['supplemental_address_1'] = $parameters->getParameter('supplemental_address_1');
+      $hasAddressParams = true;
+    }
     if ($parameters->getParameter('street_address')) {
       $addressParams['street_address'] = $parameters->getParameter('street_address');
       $hasAddressParams = true;
@@ -83,6 +92,8 @@ class ContactActionUtils {
    * Update the parameter specification for create address.
    */
   public static function createAddressParameterSpecification(SpecificationBag $spec) {
+    $spec->addSpecification(new Specification('name', 'String', E::ts('Address name'), false));
+    $spec->addSpecification(new Specification('supplemental_address_1', 'String', E::ts('Supplemental address 1'), false));
     $spec->addSpecification(new Specification('street_address', 'String', E::ts('Street and housenumber'), false));
     $spec->addSpecification(new Specification('postal_code', 'String', E::ts('Postal code'), false));
     $spec->addSpecification(new Specification('city', 'String', E::ts('City'), false));
