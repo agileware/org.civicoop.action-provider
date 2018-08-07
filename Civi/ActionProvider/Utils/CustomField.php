@@ -29,8 +29,12 @@ class CustomField {
         break;
       case 'File':
         $type = null;
-        break;  
+        break;
+      case 'Memo':
+        $type = 'Text';
+        break;
     }
+
     return $type;
   }
   
