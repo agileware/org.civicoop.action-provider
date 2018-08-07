@@ -35,6 +35,9 @@ class CreateUpdateIndividual extends AbstractAction {
     if ($parameters->getParameter('middle_name')) {
       $params['middle_name'] = $parameters->getParameter('middle_name');
     }
+    if ($parameters->getParameter('birth_date')) {
+      $params['birth_date'] = $parameters->getParameter('birth_date');
+    }
     $result = civicrm_api3('Contact', 'create', $params);
     $contact_id = $result['id'];
     $output->setParameter('contact_id', $contact_id);
@@ -96,6 +99,7 @@ class CreateUpdateIndividual extends AbstractAction {
       new Specification('first_name', 'String', E::ts('First name'), false),
       new Specification('last_name', 'String', E::ts('Last name'), false),
       new Specification('middle_name', 'String', E::ts('Middle name'), false),
+      new Specification('birth_date', 'Date', E::ts('Birth date'), false),
     ));
     ContactActionUtils::createAddressParameterSpecification($spec);
     ContactActionUtils::createEmailParameterSpecification($spec);
