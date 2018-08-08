@@ -39,6 +39,7 @@ class Provider {
 	
 	public function __construct() {
 		$actions = array(
+		  new \Civi\ActionProvider\Action\Generic\SetValue(),
 			new \Civi\ActionProvider\Action\AddToGroup(),
 			new \Civi\ActionProvider\Action\Contact\ContactDataById(),
 			new \Civi\ActionProvider\Action\Contact\CreateUpdateAddress(),

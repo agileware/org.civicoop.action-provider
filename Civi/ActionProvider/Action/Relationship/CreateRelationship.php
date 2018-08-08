@@ -13,7 +13,6 @@ use \Civi\ActionProvider\Parameter\Specification;
 use \Civi\ActionProvider\Utils\CustomField;
 
 use CRM_ActionProvider_ExtensionUtil as E;
-use Dompdf\Exception;
 
 class CreateRelationship extends AbstractAction {
 
