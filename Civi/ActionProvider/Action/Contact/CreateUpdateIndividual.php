@@ -3,6 +3,7 @@
 namespace Civi\ActionProvider\Action\Contact;
 
 use \Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\Parameter\OptionGroupSpecification;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
@@ -37,6 +38,9 @@ class CreateUpdateIndividual extends AbstractAction {
     }
     if ($parameters->getParameter('birth_date')) {
       $params['birth_date'] = $parameters->getParameter('birth_date');
+    }
+    if ($parameters->getParameter('gender_id')) {
+      $params['gender_id'] = $parameters->getParameter('gender_id');
     }
     $result = civicrm_api3('Contact', 'create', $params);
     $contact_id = $result['id'];
@@ -100,6 +104,7 @@ class CreateUpdateIndividual extends AbstractAction {
       new Specification('last_name', 'String', E::ts('Last name'), false),
       new Specification('middle_name', 'String', E::ts('Middle name'), false),
       new Specification('birth_date', 'Date', E::ts('Birth date'), false),
+      new OptionGroupSpecification('gender_id', 'gender', E::ts('Gender'), false),
     ));
     ContactActionUtils::createAddressParameterSpecification($spec);
     ContactActionUtils::createEmailParameterSpecification($spec);
