@@ -60,6 +60,8 @@ class Provider {
 			new \Civi\ActionProvider\Action\Relationship\EndRelationship(),
 			new \Civi\ActionProvider\Action\Website\CreateUpdateWebsite(),
 			new \Civi\ActionProvider\Action\Website\GetWebsite(),
+      new \Civi\ActionProvider\Action\Phone\CreateUpdatePhone(),
+      new \Civi\ActionProvider\Action\Phone\GetPhone(),
 		);
 
 		$conditions = array(
