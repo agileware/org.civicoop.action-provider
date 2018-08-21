@@ -109,8 +109,10 @@ class CreateRelationship extends AbstractAction {
       if (stripos($spec->getName(), 'custom_')!==0) {
         continue;
       }
+      $relationshipParams['custom'] = array();
       if ($parameters->doesParameterExists($spec->getName())) {
-        $relationshipParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
+        list($customFieldID, $customValueID) = \CRM_Core_BAO_CustomField::getKeyID($spec->getApiFieldName(), TRUE);
+        \CRM_Core_BAO_CustomField::formatCustomField($customFieldID, $relationshipParams['custom'], $parameters->getParameter($spec->getName()), 'Relationship', $customValueID);
       }
     }
 
