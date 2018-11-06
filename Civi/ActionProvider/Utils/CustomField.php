@@ -33,6 +33,9 @@ class CustomField {
       case 'Memo':
         $type = 'Text';
         break;
+      case 'Link':
+        $type = 'String';
+        break;
     }
 
     return $type;
