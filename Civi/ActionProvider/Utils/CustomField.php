@@ -88,7 +88,7 @@ class CustomField {
     $apiFieldName = 'custom_'.$customField['id'];
     $type = self::getTypeForCustomField($customField);
     $title = trim($titlePrefix.$customField['label']);
-    $is_required = $customField['is_required'] && $useRequiredFromCustomField ? true : false;
+    $is_required = isset($customField['is_required']) && $customField['is_required'] && $useRequiredFromCustomField ? true : false;
     $multiple = false;
     $default = null;
     $spec = null;

@@ -75,12 +75,25 @@ class GetEvent extends AbstractAction {
           $type = 'Integer';
           break;
       }
-      $fieldSpec = new Specification(
-        $field['name'],
-        $type,
-        $field['title'],
-        false
-      );
+      if (stripos($field['name'], 'custom_') === 0) {
+        // It is a custom field
+        $customFieldId = str_replace("custom_", "", $field['name']);
+        $fieldName = CustomField::getCustomFieldName($customFieldId);
+        $fieldSpec = new Specification(
+          $fieldName,
+          $type,
+          $field['title'],
+          false
+        );
+        $fieldSpec->setApiFieldName($field['name']);
+      } else {
+        $fieldSpec = new Specification(
+          $field['name'],
+          $type,
+          $field['title'],
+          false
+        );
+      }
       $bag->addSpecification($fieldSpec);
     }
 
