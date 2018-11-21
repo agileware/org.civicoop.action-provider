@@ -51,6 +51,7 @@ class Send extends AbstractAction {
        * @param array $options
        * @param bool $multiple
        */
+      new Specification('name', 'String', E::ts('Name'), true, null, null, null, False),
       new Specification('subject', 'String', E::ts('Subject'), true, null, null, null, False),
       new Specification('body_html', 'Text', E::ts('HTML Body'), true, null, null, null, FALSE),
       new Specification('group_id', 'Integer', E::ts('Select group'), true, null, 'Group', null, FALSE),
@@ -83,10 +84,20 @@ class Send extends AbstractAction {
    * @throws \Exception
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    $apiParams['name'] = $parameters->getParameter('subject');
+    $sender_contact = civicrm_api3('Contact', 'getsingle', array('id' => $parameters->getParameter('sender_contact_id')));
+
+    $apiParams['name'] = $parameters->getParameter('name');
     $apiParams['subject'] = $parameters->getParameter('subject');
     $apiParams['body_html'] = $parameters->getParameter('body_html');
     $apiParams['created_id'] = $parameters->getParameter('sender_contact_id');
+    $apiParams['header_id'] = 'null';
+    $apiParams['footer_id'] = 'null';
+    if (isset($sender_contact['email'])) {
+      $apiParams['from_email']  = $sender_contact['email'];
+      $apiParams['from_name']  = $sender_contact['display_name'];
+      $apiParams['from_email']  = $sender_contact['email'];
+      $apiParams['replyto_email'] = $sender_contact['email'];
+    }
     $mailing = civicrm_api3('Mailing', 'Create', $apiParams);
     $apiGroupParams['group_type'] = 'Include';
     $apiGroupParams['entity_table'] = 'civicrm_group';
