@@ -53,6 +53,7 @@ class Provider {
 			new \Civi\ActionProvider\Action\Contact\GetAddress(),
 			new \Civi\ActionProvider\Action\Contact\GetContactIdFromMasterAddress(),
 			new \Civi\ActionProvider\Action\Contact\CreateUpdateIndividual(),
+      new \Civi\ActionProvider\Action\Contact\CreateUpdateHousehold(),
 			new \Civi\ActionProvider\Action\Contact\UpdateCustomData(),
 			new \Civi\ActionProvider\Action\Contact\FindOrCreateContactByEmail(),
 			new \Civi\ActionProvider\Action\Activity\CreateActivity(),
@@ -71,6 +72,7 @@ class Provider {
 			new \Civi\ActionProvider\Action\Website\GetWebsite(),
       new \Civi\ActionProvider\Action\Phone\CreateUpdatePhone(),
       new \Civi\ActionProvider\Action\Phone\GetPhone(),
+      new \Civi\ActionProvider\Action\Membership\CreateOrUpdateMembership(),
 		);
 
 		$conditions = array(
