@@ -33,6 +33,9 @@ abstract class AbstractAction implements \JsonSerializable {
   // Use this tag if the action works with multieple contacts.
 	const MULTIPLE_CONTACTS_ACTION_TAG = 'action-on-multiple-contacts';
 
+  // Use this tag if the action works without a contact.
+  const WITHOUT_CONTACT_ACTION_TAG = 'act-without-a-contact';
+
 	const SEND_MESSAGES_TO_CONTACTS = 'send-messages';
 	
 	/**

@@ -34,7 +34,7 @@ class MembershipTypeSpecification extends Specification {
     $options = array();
     $optionsApi = civicrm_api3('MembershipType', 'get', array('is_active' => 1, 'options' => array('limit' => 0)));
     foreach($optionsApi['values'] as $optionValue) {
-      $options[$optionValue['id']] = $optionValue['name'];
+      $options[$optionValue['name']] = $optionValue['name'];
     }
     return $options;
   }

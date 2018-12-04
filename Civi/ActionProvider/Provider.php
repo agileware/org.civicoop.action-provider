@@ -73,6 +73,7 @@ class Provider {
       new \Civi\ActionProvider\Action\Phone\CreateUpdatePhone(),
       new \Civi\ActionProvider\Action\Phone\GetPhone(),
       new \Civi\ActionProvider\Action\Membership\CreateOrUpdateMembership(),
+      new \Civi\ActionProvider\Action\Membership\GetMembershipType(),
 		);
 
 		$conditions = array(

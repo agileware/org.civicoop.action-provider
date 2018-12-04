@@ -90,13 +90,14 @@ class CreateOrUpdateMembership extends AbstractAction {
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    // Get the contact and the event.
+    $membership_type = civicrm_api3('MembershipType', 'getvalue', array('name' => $this->configuration->getParameter('membership_type'), 'return' => 'id'));
+
     $apiParams = array();
     if ($parameters->doesParameterExists('membership_id')) {
       $apiParams['id'] = $parameters->getParameter('membership_id');
     }
     $apiParams['contact_id'] = $parameters->getParameter('contact_id');
-    $apiParams['membership_type_id'] = $this->configuration->getParameter('membership_type');
+    $apiParams['membership_type_id'] = $membership_type;
 
     foreach($this->getParameterSpecification() as $spec) {
       if (stripos($spec->getName(), 'custom_')!==0) {
