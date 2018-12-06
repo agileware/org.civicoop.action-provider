@@ -31,8 +31,10 @@ class Create extends AbstractAction {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
+    $visibilityOptions = \CRM_Contact_DAO_Group::buildOptions('visibility');
     return new SpecificationBag([
       new OptionGroupSpecification('group_type','group_type', E::ts('Group type'), FALSE),
+      new Specification('visibility','String', E::ts('Visibility'), FALSE, null, null, $visibilityOptions),
     ]);
   }
 
@@ -102,6 +104,9 @@ class Create extends AbstractAction {
     $groupApiParams['description'] = $parameters->getParameter('description');
     if ($this->configuration->doesParameterExists('group_type')) {
       $groupApiParams['group_type'] = $this->configuration->getParameter('group_type');
+    }
+    if ($this->configuration->doesParameterExists('visibility')) {
+      $groupApiParams['visibility'] = $this->configuration->getParameter('visibility');
     }
     foreach($this->getParameterSpecification() as $spec) {
       if (stripos($spec->getName(), 'custom_')!==0) {
