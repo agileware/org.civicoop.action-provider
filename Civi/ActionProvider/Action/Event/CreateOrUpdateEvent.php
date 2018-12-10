@@ -115,6 +115,8 @@ class CreateOrUpdateEvent extends AbstractAction {
     try {
       $result = civicrm_api3('Event', 'create', $apiParams);
       $output->setParameter('id', $result['id']);
+      $output->setParameter('dump', var_export($apiParams, true));
+      $output->setParameter('dump2', var_export($parameters, true));
     } catch (Exception $e) {
       throw new \Civi\ActionProvider\Exception\ExecutionException(E::ts('Could not update or create an event.'));
     }

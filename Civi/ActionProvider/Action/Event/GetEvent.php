@@ -9,6 +9,7 @@ use \Civi\ActionProvider\Parameter\Specification;
 use \Civi\ActionProvider\Parameter\OptionGroupSpecification;
 use \Civi\ActionProvider\Utils\CustomField;
 
+use Civi\DataProcessor\DataSpecification\CustomFieldSpecification;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class GetEvent extends AbstractAction {
@@ -61,8 +62,8 @@ class GetEvent extends AbstractAction {
    */
   public function getOutputSpecification() {
     $bag = new SpecificationBag();
-    $contact_fields = civicrm_api3('Event', 'getfields', array('action' => 'get', 'options' => array('limit' => 0)));
-    foreach($contact_fields['values'] as $field) {
+    $event_fields = civicrm_api3('Event', 'getfields', array('action' => 'get', 'options' => array('limit' => 0)));
+    foreach($event_fields['values'] as $field) {
       if (empty($field['type'])) {
         continue;
       }
@@ -76,8 +77,15 @@ class GetEvent extends AbstractAction {
           break;
       }
       if (stripos($field['name'], 'custom_') === 0) {
+        $customFieldId = str_replace("custom_", "", $field['name']);
+        /*var_dump($field);
         // It is a custom field
         $customFieldId = str_replace("custom_", "", $field['name']);
+        $fieldSpec = CustomField::getSpecFromCustomField($field);
+        echo $field['id']."\r\n";
+        if ($fieldSpec) {
+          echo "API: ".$fieldSpec->getApiFieldName()."\r\n";
+        }*/
         $fieldName = CustomField::getCustomFieldName($customFieldId);
         $fieldSpec = new Specification(
           $fieldName,
@@ -94,7 +102,9 @@ class GetEvent extends AbstractAction {
           false
         );
       }
-      $bag->addSpecification($fieldSpec);
+      if ($fieldSpec) {
+        $bag->addSpecification($fieldSpec);
+      }
     }
 
     return $bag;
@@ -121,6 +131,9 @@ class GetEvent extends AbstractAction {
       $event = civicrm_api3('Event', 'getsingle', array('id' => $event_id));
       foreach($this->getOutputSpecification() as $spec) {
         $fieldName = $spec->getName();
+        if (stripos($fieldName, 'custom_') === 0) {
+          $fieldName = $spec->getApiFieldName();
+        }
         if (stripos($fieldName, 'custom_') === 0 && isset($event[$fieldName.'_id'])) {
           $fieldName = $fieldName . '_id';
         }
