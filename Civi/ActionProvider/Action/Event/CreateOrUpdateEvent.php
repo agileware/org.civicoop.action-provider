@@ -51,7 +51,8 @@ class CreateOrUpdateEvent extends AbstractAction {
       new OptionGroupSpecification('event_type', 'event_type', E::ts('Event Type'), TRUE),
       new Specification('title', 'String', E::ts('Title'), true, null, null, null, FALSE),
       new Specification('description', 'String', E::ts('Description'), false, null, null, null, FALSE),
-      new Specification('start_date', 'Timestamp', E::ts('start_date'), true, null, null, null, FALSE),
+      new Specification('start_date', 'Timestamp', E::ts('Start date'), true, null, null, null, FALSE),
+      new Specification('end_date', 'Timestamp', E::ts('End date'), false, null, null, null, FALSE),
     ));
     
     $customGroups = civicrm_api3('CustomGroup', 'get', array('extends' => 'Event', 'is_active' => 1, 'options' => array('limit' => 0)));
@@ -101,6 +102,9 @@ class CreateOrUpdateEvent extends AbstractAction {
       $apiParams['description'] = $parameters->getParameter('description');
     }
     $apiParams['start_date'] = $parameters->getParameter('start_date');
+    if ($parameters->doesParameterExists('end_date')) {
+      $apiParams['end_date'] = $parameters->getParameter('end_date');
+    }
     $apiParams['event_type_id'] = $parameters->getParameter('event_type');
 
     foreach($this->getParameterSpecification() as $spec) {
