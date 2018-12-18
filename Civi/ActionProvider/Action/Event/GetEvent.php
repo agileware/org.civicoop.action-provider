@@ -107,6 +107,8 @@ class GetEvent extends AbstractAction {
       }
     }
 
+    $bag->addSpecification(new Specification('address_id', 'Integer', E::ts('Address ID')));
+
     return $bag;
   }
 
@@ -129,6 +131,7 @@ class GetEvent extends AbstractAction {
 
     try {
       $event = civicrm_api3('Event', 'getsingle', array('id' => $event_id));
+
       foreach($this->getOutputSpecification() as $spec) {
         $fieldName = $spec->getName();
         if (stripos($fieldName, 'custom_') === 0) {
@@ -140,6 +143,18 @@ class GetEvent extends AbstractAction {
         if (isset($event[$fieldName])) {
           $output->setParameter($spec->getName(), $event[$fieldName]);
         }
+      }
+
+      // Get Address ID
+      try {
+        $event = civicrm_api3('Event', 'getsingle', ['id' => $parameters->getParameter('event_id')]);
+        $locationInUseByOtherEvents = civicrm_api3('Event', 'getcount', array('loc_block_id' => $event['loc_block_id']));
+        if ($locationInUseByOtherEvents == 1) {
+          $loc = civicrm_api3('LocBlock', 'getsingle', ['id' => $event['loc_block_id']]);
+          $output->setParameter('address_id', $loc['address_id']);
+        }
+      } catch (\Exception $e) {
+        // Do nothing
       }
     } catch (\Exception $e) {
       // Do nothing

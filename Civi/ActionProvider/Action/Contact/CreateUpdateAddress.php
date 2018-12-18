@@ -25,7 +25,7 @@ class CreateUpdateAddress extends AbstractAction {
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
       
     $contact_id = $parameters->getParameter('contact_id');
-    $id = ContactActionUtils::createAddress($contact_id, $parameters, $this->configuration);
+    $id = ContactActionUtils::createAddressForContact($contact_id, $parameters, $this->configuration);
     $output->setParameter('id', $id);
   }
   

@@ -47,7 +47,7 @@ class CreateUpdateIndividual extends AbstractAction {
     $output->setParameter('contact_id', $contact_id);
     
     // Create address
-    $address_id = ContactActionUtils::createAddress($contact_id, $parameters, $this->configuration);
+    $address_id = ContactActionUtils::createAddressForContact($contact_id, $parameters, $this->configuration);
     if ($address_id) {
       $output->setParameter('address_id', $address_id);
     }

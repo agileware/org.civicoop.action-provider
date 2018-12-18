@@ -22,7 +22,7 @@ class ContactActionUtils {
   /**
    * Create an address for a contact.
    */
-  public static function createAddress($contact_id, ParameterBagInterface $parameters, ParameterBagInterface $configuration) {
+  public static function createAddressForContact($contact_id, ParameterBagInterface $parameters, ParameterBagInterface $configuration) {
     $existingAddressId = false;  
     if ($configuration->getParameter('address_update_existing')) {
       // Try to find existing address
@@ -35,16 +35,35 @@ class ContactActionUtils {
         // Do nothing
       }
     }
-    
+    return self::createAddress($existingAddressId, $contact_id, $parameters, $configuration);
+  }
+
+  /**
+   * Create an address
+   * @param $existingAddressId
+   * @param int|null $contact_id
+   * @param \Civi\ActionProvider\Parameter\ParameterBagInterface $parameters
+   * @param \Civi\ActionProvider\Parameter\ParameterBagInterface $configuration
+   *
+   * @return bool
+   * @throws \CiviCRM_API3_Exception
+   */
+  public static function createAddress($existingAddressId, $contact_id, ParameterBagInterface $parameters, ParameterBagInterface $configuration)  {
     // Create address
     $hasAddressParams = false;
     $addressParams = array();
     if ($existingAddressId) {
       $addressParams['id'] = $existingAddressId;
     }
-    $addressParams['contact_id'] = $contact_id;
+    if ($contact_id) {
+      $addressParams['contact_id'] = $contact_id;
+    } else {
+      $addressParams['contact_id'] = 'null';
+    }
     $addressParams['master_id'] = 'null';
-    $addressParams['location_type_id'] = $configuration->getParameter('address_location_type');
+    if ($configuration->doesParameterExists('address_location_type')) {
+      $addressParams['location_type_id'] = $configuration->getParameter('address_location_type');
+    }
     if ($parameters->getParameter('name')) {
       $addressParams['name'] = $parameters->getParameter('name');
       $hasAddressParams = true;
@@ -72,8 +91,8 @@ class ContactActionUtils {
     if ($hasAddressParams) {
       $result = civicrm_api3('Address', 'create', $addressParams);
       return $result['id'];
-    }    
-    
+    }
+
     return false;
   }
   

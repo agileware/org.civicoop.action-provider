@@ -51,6 +51,7 @@ class Provider {
 			new \Civi\ActionProvider\Action\Contact\CreateUpdateAddress(),
 			new \Civi\ActionProvider\Action\Contact\UsePrimaryAddressOfContact(),
 			new \Civi\ActionProvider\Action\Contact\GetAddress(),
+      new \Civi\ActionProvider\Action\Contact\GetAddressById(),
 			new \Civi\ActionProvider\Action\Contact\GetContactIdFromMasterAddress(),
 			new \Civi\ActionProvider\Action\Contact\CreateUpdateIndividual(),
       new \Civi\ActionProvider\Action\Contact\CreateUpdateHousehold(),

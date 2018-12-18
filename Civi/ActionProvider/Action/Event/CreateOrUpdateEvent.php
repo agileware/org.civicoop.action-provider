@@ -3,6 +3,7 @@
 namespace Civi\ActionProvider\Action\Event;
 
 use \Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\Action\Contact\ContactActionUtils;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
@@ -10,6 +11,7 @@ use \Civi\ActionProvider\Parameter\OptionGroupSpecification;
 use \Civi\ActionProvider\Utils\CustomField;
 
 use CRM_ActionProvider_ExtensionUtil as E;
+use Dompdf\Exception;
 
 class CreateOrUpdateEvent extends AbstractAction {
   
@@ -26,7 +28,13 @@ class CreateOrUpdateEvent extends AbstractAction {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
-    return new SpecificationBag(array());
+    $locationTypes = ContactActionUtils::getLocationTypes();
+    reset($locationTypes);
+    $defaultLocationType = key($locationTypes);
+    return new SpecificationBag(array(
+      new Specification('add_address', 'Boolean', E::ts('Add address'), true, false),
+      new Specification('address_location_type', 'Integer', E::ts('Address: Location type'), false, $defaultLocationType, null, $locationTypes, FALSE),
+    ));
   }
   
   /**
@@ -65,6 +73,8 @@ class CreateOrUpdateEvent extends AbstractAction {
         }
       }
     }
+
+    ContactActionUtils::createAddressParameterSpecification($specs);
     
     return $specs;
   }
@@ -92,6 +102,29 @@ class CreateOrUpdateEvent extends AbstractAction {
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
+    $existingAddressId = false;
+    $locBlockId = false;
+    if ($this->configuration->getParameter('add_address')) {
+      if ($parameters->doesParameterExists('event_id')) {
+        try {
+          $event = civicrm_api3('Event', 'getsingle', ['id' => $parameters->getParameter('event_id')]);
+          $locationInUseByOtherEvents = civicrm_api3('Event', 'getcount', array('loc_block_id' => $event['loc_block_id']));
+          if ($locationInUseByOtherEvents == 1) {
+            $loc = civicrm_api3('LocBlock', 'getsingle', ['id' => $event['loc_block_id']]);
+            $locBlockId = $loc['id'];
+            $existingAddressId = $loc['address_id'];
+          }
+        } catch (\Exception $e) {
+          // Do nothing
+        }
+      }
+      $address_id = ContactActionUtils::createAddress($existingAddressId, null, $parameters, $this->configuration);
+      if (!$locBlockId) {
+        $result = civicrm_api3('LocBlock', 'create', array('address_id' => $address_id));
+        $locBlockId = $result['id'];
+      }
+    }
+
     // Get the contact and the event.
     $apiParams = array();
     if ($parameters->doesParameterExists('event_id')) {
@@ -106,6 +139,10 @@ class CreateOrUpdateEvent extends AbstractAction {
       $apiParams['end_date'] = $parameters->getParameter('end_date');
     }
     $apiParams['event_type_id'] = $parameters->getParameter('event_type');
+    if ($locBlockId) {
+      $apiParams['loc_block_id'] = $locBlockId;
+      $apiParams['is_show_location'] = '1';
+    }
 
     foreach($this->getParameterSpecification() as $spec) {
       if (stripos($spec->getName(), 'custom_')!==0) {
@@ -119,8 +156,6 @@ class CreateOrUpdateEvent extends AbstractAction {
     try {
       $result = civicrm_api3('Event', 'create', $apiParams);
       $output->setParameter('id', $result['id']);
-      $output->setParameter('dump', var_export($apiParams, true));
-      $output->setParameter('dump2', var_export($parameters, true));
     } catch (Exception $e) {
       throw new \Civi\ActionProvider\Exception\ExecutionException(E::ts('Could not update or create an event.'));
     }
