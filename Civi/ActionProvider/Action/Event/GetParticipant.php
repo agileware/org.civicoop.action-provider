@@ -78,13 +78,22 @@ class GetParticipant extends AbstractAction {
         case 'Int':
           $type = 'Integer';
           break;
-      } 
-      $fieldSpec = new Specification(
-        $field['name'],
-        $type,
-        $field['title'],
-        false
-      );
+      }
+      if (stripos($field['name'], 'custom_') === 0) {
+        $fieldId = substr($field['name'], 7);
+        $name = CustomField::getCustomFieldName($fieldId);
+        $title = $field['groupTitle'].' :: '.$field['title'];
+        $fieldSpec = new Specification($name, $type, $title, FALSE);
+        $fieldSpec->setApiFieldName($field['name']);
+      } else {
+        $fieldSpec = new Specification(
+          $field['name'],
+          $type,
+          $field['title'],
+          FALSE
+        );
+        $fieldSpec->setApiFieldName($field['name']);
+      }
       $bag->addSpecification($fieldSpec);
     }
     
@@ -94,7 +103,7 @@ class GetParticipant extends AbstractAction {
   /**
    * Run the action
    * 
-   * @param ParameterInterface $parameters
+   * @param ParameterBagInterface $parameters
    *   The parameters to this action.
    * @param ParameterBagInterface $output
    *   The parameters this action can send back 
@@ -120,7 +129,7 @@ class GetParticipant extends AbstractAction {
       $participant = civicrm_api3('Participant', 'getsingle', array('id' => $participant_id));
       foreach($this->getOutputSpecification() as $spec) {
         if (isset($participant[$spec->getName()])) {
-          $output->setParameter($spec->getName(), $participant[$spec->getName()]);
+          $output->setParameter($spec->getName(), $participant[$spec->getApiFieldName()]);
         }
       }
     } catch (\Exception $e) {
@@ -137,5 +146,5 @@ class GetParticipant extends AbstractAction {
       AbstractAction::DATA_RETRIEVAL_TAG,
     );
   }
-  
+
 }
