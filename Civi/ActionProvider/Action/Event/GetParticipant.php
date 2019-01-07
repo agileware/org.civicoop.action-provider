@@ -128,7 +128,7 @@ class GetParticipant extends AbstractAction {
     try {
       $participant = civicrm_api3('Participant', 'getsingle', array('id' => $participant_id));
       foreach($this->getOutputSpecification() as $spec) {
-        if (isset($participant[$spec->getName()])) {
+        if (isset($participant[$spec->getApiFieldName()])) {
           $output->setParameter($spec->getName(), $participant[$spec->getApiFieldName()]);
         }
       }
