@@ -84,6 +84,8 @@ class Provider {
 		  new \Civi\ActionProvider\Condition\ParameterIsEmpty(),
       new \Civi\ActionProvider\Condition\ParameterIsNotEmpty(),
       new \Civi\ActionProvider\Condition\ParameterHasValue(),
+      new \Civi\ActionProvider\Condition\ParametersMatch(),
+      new \Civi\ActionProvider\Condition\ParametersDontMatch(),
     );
 		
 		foreach($actions as $action) {
