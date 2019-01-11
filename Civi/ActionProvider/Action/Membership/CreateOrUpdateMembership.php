@@ -14,13 +14,6 @@ use CRM_ActionProvider_ExtensionUtil as E;
 class CreateOrUpdateMembership extends AbstractAction {
 
   /**
-   * Returns the human readable title of this action
-   */
-  public function getTitle() {
-    return E::ts('Create or update an membership');
-  }
-
-  /**
    * Returns the specification of the configuration options for the actual action.
    *
    * @return SpecificationBag
@@ -114,15 +107,6 @@ class CreateOrUpdateMembership extends AbstractAction {
     } catch (Exception $e) {
       throw new \Civi\ActionProvider\Exception\ExecutionException(E::ts('Could not update or create an membership.'));
     }
-  }
-
-  /**
-   * Returns the tags for this action.
-   */
-  public function getTags() {
-    return array(
-      AbstractAction::DATA_MANIPULATION_TAG,
-    );
   }
 
 }

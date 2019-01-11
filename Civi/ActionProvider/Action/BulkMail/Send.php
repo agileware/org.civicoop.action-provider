@@ -17,13 +17,6 @@ use CRM_ActionProvider_ExtensionUtil as E;
 class Send extends AbstractAction {
 
   /**
-   * Returns the human readable title of this action
-   */
-  public function getTitle() {
-    return E::ts('Send Bulk Mail');
-  }
-
-  /**
    * Returns the specification of the configuration options for the actual action.
    *
    * @return SpecificationBag
@@ -111,16 +104,6 @@ class Send extends AbstractAction {
     $mailingSendParams['scheduled_date'] = $now->format('Ymd His');
     civicrm_api3('Mailing', 'submit', $mailingSendParams);
     $output->setParameter('id', $mailing['id']);
-  }
-
-  /**
-   * Returns the tags for this action.
-   */
-  public function getTags() {
-    return array(
-      AbstractAction::SEND_MESSAGES_TO_CONTACTS,
-      'bulk_mail',
-    );
   }
 
 }

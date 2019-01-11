@@ -12,14 +12,7 @@ use \Civi\ActionProvider\Utils\CustomField;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class CreateOrUpdateParticipant extends AbstractAction {
-  
-  /**
-   * Returns the human readable title of this action
-   */
-  public function getTitle() {
-    return E::ts('Register contact for an event'); 
-  }
-  
+
   /**
    * Returns the specification of the configuration options for the actual action.
    * 
@@ -142,16 +135,6 @@ class CreateOrUpdateParticipant extends AbstractAction {
     } catch (Exception $e) {
       throw new \Civi\ActionProvider\Exception\ExecutionException(E::ts('Could not update or create a participant record'));
     }
-  }
-
-  /**
-   * Returns the tags for this action.
-   */
-  public function getTags() {
-    return array(
-      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
-      AbstractAction::DATA_MANIPULATION_TAG,
-    );
   }
   
 }

@@ -17,13 +17,6 @@ use CRM_ActionProvider_ExtensionUtil as E;
 class CreateRelationship extends AbstractAction {
 
   /**
-   * Returns the human readable title of this action
-   */
-  public function getTitle() {
-    return E::ts('Create relationship');
-  }
-
-  /**
    * Returns the specification of the configuration options for the actual action.
    *
    * @return SpecificationBag
@@ -123,16 +116,6 @@ class CreateRelationship extends AbstractAction {
     } catch (\Exception $e) {
       // Do nothing.
     }
-  }
-
-  /**
-   * Returns the tags for this action.
-   */
-  public function getTags() {
-    return array(
-      AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
-      AbstractAction::DATA_MANIPULATION_TAG
-    );
   }
 
 }

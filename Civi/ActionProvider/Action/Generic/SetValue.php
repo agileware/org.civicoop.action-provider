@@ -17,13 +17,6 @@ use CRM_ActionProvider_ExtensionUtil as E;
 class SetValue extends AbstractAction {
 
   /**
-   * Returns the human readable title of this action
-   */
-  public function getTitle() {
-    return E::ts('Set value');
-  }
-
-  /**
    * Returns the specification of the configuration options for the actual action.
    *
    * @return SpecificationBag
@@ -69,15 +62,6 @@ class SetValue extends AbstractAction {
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $output->setParameter('value', $this->configuration->getParameter('value'));
-  }
-
-  /**
-   * Returns the tags for this action.
-   */
-  public function getTags() {
-    return array(
-      AbstractAction::DATA_MANIPULATION_TAG
-    );
   }
 
 }

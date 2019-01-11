@@ -74,23 +74,6 @@ class GetPhone extends AbstractAction {
       new Specification('phone', 'String', E::ts('Phone'), false),
     ));
   }
-  
-  /**
-   * Returns the human readable title of this action
-   */
-  public function getTitle() {
-    return E::ts('Get phonenumber of a contact');
-  }
-  
-  /**
-   * Returns the tags for this action.
-   */
-  public function getTags() {
-    return array(
-      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
-      AbstractAction::DATA_RETRIEVAL_TAG,
-    );
-  }
 
 
   

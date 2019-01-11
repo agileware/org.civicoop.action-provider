@@ -114,21 +114,4 @@ class CreateUpdateHousehold extends AbstractAction {
     ));
   }
   
-  /**
-   * Returns the human readable title of this action
-   */
-  public function getTitle() {
-    return E::ts('Create or update Household');
-  }
-  
-  /**
-   * Returns the tags for this action.
-   */
-  public function getTags() {
-    return array(
-      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
-      AbstractAction::DATA_MANIPULATION_TAG,
-    );
-  }
-  
 }

@@ -19,6 +19,9 @@ function civicrm_api3_action_provider_getaction($params) {
     $provider = $container->getDefaultProvider();
   }
   $action = $provider->getActionByName($params['name']);
+  if (!$action) {
+    return civicrm_api3_create_error('Could not find action');
+  }
   return $action->toArray();
 }
 

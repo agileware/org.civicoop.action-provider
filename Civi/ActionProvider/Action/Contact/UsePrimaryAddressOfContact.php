@@ -120,22 +120,4 @@ class UsePrimaryAddressOfContact extends AbstractAction {
       new Specification('id', 'Integer', E::ts('Address ID')),
     ));
   }
-
-  /**
-   * Returns the human readable title of this action
-   */
-  public function getTitle() {
-    return E::ts('Use primary address of another contact');
-  }
-
-  /**
-   * Returns the tags for this action.
-   */
-  public function getTags() {
-    return array(
-      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
-      AbstractAction::DATA_MANIPULATION_TAG,
-    );
-  }
-
 }

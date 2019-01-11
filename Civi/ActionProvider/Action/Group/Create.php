@@ -18,13 +18,6 @@ use CRM_ActionProvider_ExtensionUtil as E;
 class Create extends AbstractAction {
 
   /**
-   * Returns the human readable title of this action
-   */
-  public function getTitle() {
-    return E::ts('Create/Update a group');
-  }
-
-  /**
    * Returns the specification of the configuration options for the actual
    * action.
    *
@@ -124,16 +117,6 @@ class Create extends AbstractAction {
     } catch (\Exception $e) {
       // Do nothing.
     }
-  }
-
-  /**
-   * Returns the tags for this action.
-   */
-  public function getTags() {
-    return array(
-      AbstractAction::DATA_MANIPULATION_TAG,
-      'group',
-    );
   }
 
 

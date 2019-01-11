@@ -46,5 +46,17 @@ class ParameterBag implements ParameterBagInterface, \IteratorAggregate {
 	public function toArray() {
 		return $this->parameters;
 	}
+
+  /**
+   * @param array $data
+   *
+   * @return \Civi\ActionProvider\Parameter\ParameterBag
+   */
+	public function fromArray($data) {
+	  foreach($data as $key => $val) {
+	    $this->setParameter($key, $val);
+    }
+	  return $this;
+  }
 	
 }

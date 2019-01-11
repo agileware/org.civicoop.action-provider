@@ -78,12 +78,22 @@ class Container {
 		$this->providerContexts[$context] = $provider;
 		return $this;
 	}
-  
-  public function addAction(\Civi\ActionProvider\Action\AbstractAction $action) {
-    $this->defaultProvider->addAction($action);
+
+  /**
+   * Adds an action to the list of available actions.
+   *
+   * @param String $name
+   * @param String $className
+   * @param String $title
+   * @param String[] $tags
+   * @return Container
+   */
+  public function addAction($name, $className, $title, $tags=array()) {
+    $this->defaultProvider->addAction($name, $className, $title, $tags);
     foreach($this->providerContexts as $provider) {
-      $provider->addAction($action);
+      $provider->addAction($name, $className, $title, $tags);
     }
+    return $this;
   }
 	
 	

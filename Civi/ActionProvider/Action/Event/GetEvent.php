@@ -15,13 +15,6 @@ use CRM_ActionProvider_ExtensionUtil as E;
 class GetEvent extends AbstractAction {
   
   /**
-   * Returns the human readable title of this action
-   */
-  public function getTitle() {
-    return E::ts('Get event data');
-  }
-  
-  /**
    * Returns the specification of the configuration options for the actual action.
    * 
    * @return SpecificationBag
@@ -78,14 +71,6 @@ class GetEvent extends AbstractAction {
       }
       if (stripos($field['name'], 'custom_') === 0) {
         $customFieldId = str_replace("custom_", "", $field['name']);
-        /*var_dump($field);
-        // It is a custom field
-        $customFieldId = str_replace("custom_", "", $field['name']);
-        $fieldSpec = CustomField::getSpecFromCustomField($field);
-        echo $field['id']."\r\n";
-        if ($fieldSpec) {
-          echo "API: ".$fieldSpec->getApiFieldName()."\r\n";
-        }*/
         $fieldName = CustomField::getCustomFieldName($customFieldId);
         $fieldSpec = new Specification(
           $fieldName,
@@ -160,13 +145,6 @@ class GetEvent extends AbstractAction {
       // Do nothing
     }
   }
-  /**
-   * Returns the tags for this action.
-   */
-  public function getTags() {
-    return array(
-      AbstractAction::DATA_RETRIEVAL_TAG,
-    );
-  }
+
   
 }

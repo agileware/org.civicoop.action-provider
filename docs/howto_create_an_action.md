@@ -8,7 +8,6 @@ It is also possible to create an action in your own extensions but that would be
 * [Required functionality](#required-functionality)
 * [Create an action class](#create-an-action-class)
   * [Create the class](#create-the-class)
-  * [Set a title](#set-a-title)
   * [Specify the configuration options](#specify-the-configuration-options)
   * [Specify the parameter options](#specify-the-parameter-options)
   * [Specify the output of the action](#specify-the-output-of-the-action)
@@ -54,25 +53,6 @@ This file will contain the action class which is extended from the abstract acti
 
 Above code will create the class, every action has to extend the _AbstractAction_ class. As you can see we use namespace and use statements. 
 The use statement are required for the next step and are a kind of _include_ or _require_ statement. 
-
-### Set a title
-
-In this step we make sure our action returns a human readable title.
-
-```php
-
-  class UpdateParticipantStatus extends AbstractAction {
-    
-    /**
-     * Returns the human readable title of this action
-     */
-    public function getTitle() {
-      return E::ts('Update participant status'); 
-    }
-    
-  } 
-
-```
 
 ### Specify the configuration options
 
@@ -247,39 +227,13 @@ Also note that we throw an Exception when no participant record could be found.
 
 ```
 
-### Add a tag to this action
-
-Each action could have several tags indicating wherefor this action could be used. So that other extension implementing the 
-action provider could filter out only actions which works in their context.
-
-The available tags could be found in the _AbstractAction_ class. You could also add your own tags if your want, each tag is a string.
-
-In our example the tags we want to use are `AbstractAction::DATA_MANIPULATION` and `AbstractAction::SINGLE_CONTACT_ACTION`.
-
-```php
-
-  class UpdateParticipantStatus extends AbstractAction {
-    
-    // ...
-    
-    /**
-     * Returns the tags for this action.
-     */
-    public function getTags() {
-      return array(
-        AbstractAction::SINGLE_CONTACT_ACTION_TAG,
-        AbstractAction::DATA_MANIPULATION_TAG,
-      );
-    }
-  }
-
-```
-
 ## Make it available to the action provider
 
 Now we have defined our action class. The last thing we have to do is to make it known to the action provider. 
 
 What we have to do to is to add our class to the action provider class in _Civi\ActionProvider\Provider.php_:
+
+When we do that we give our action a name, a title and we provide some tags for the action. 
 
 ```php
 
@@ -291,12 +245,11 @@ What we have to do to is to add our class to the action provider class in _Civi\
     // ...
     
     public function __construct() {
-      $actions = array(
-        new \Civi\ActionProvider\Action\AddToGroup(),
-        // ...
-        new \Civi\ActionProvider\Action\Event\UpdateParticipantStatus(),
-      );
-      
+      // ..
+      $this->addAction('UpdateParticipantStatus', '\Civi\ActionProvider\Action\Event\UpdateParticipantStatus', E::ts('Update participant status'), array(
+        AbstractAction::SINGLE_CONTACT_ACTION,
+        AbstractAction::DATA_MANIPULATION
+      ));         
       // ...
     }
     

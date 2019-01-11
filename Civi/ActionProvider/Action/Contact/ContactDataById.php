@@ -104,21 +104,4 @@ class ContactDataById extends AbstractAction {
 		return $bag;
 	}
 	
-	/**
-	 * Returns the human readable title of this action
-	 */
-	public function getTitle() {
-	 	return E::ts('Get contact data by ID'); 
-	}
-	
-	/**
-	 * Returns the tags for this action.
-	 */
-	public function getTags() {
-		return array(
-			AbstractAction::SINGLE_CONTACT_ACTION_TAG,
-			AbstractAction::DATA_RETRIEVAL_TAG,
-		);
-	}
-	
 }

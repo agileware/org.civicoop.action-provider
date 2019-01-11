@@ -4,6 +4,8 @@ namespace Civi\ActionProvider;
 
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\ParameterBag;
+use Civi\ActionProvider\Action\AbstractAction;
+use \CRM_ActionProvider_ExtensionUtil as E;
 
 /**
  * Singleton and conatiner class with all the actions.
@@ -27,6 +29,16 @@ class Provider {
 
   /**
    * @var array
+   */
+	protected $actionTitles = array();
+
+  /**
+   * @var array
+   */
+  protected $acttionTags = array();
+
+  /**
+   * @var array
    *   All the condition which are available to be used in this context.
    */
 	protected $availableConditions = array();
@@ -38,47 +50,157 @@ class Provider {
 	protected $allConditions = array();
 	
 	public function __construct() {
-		$actions = array(
-		  new \Civi\ActionProvider\Action\Generic\SetValue(),
-      new \Civi\ActionProvider\Action\Generic\SetDateValue(),
-			new \Civi\ActionProvider\Action\Group\AddToGroup(),
-      new \Civi\ActionProvider\Action\Group\AddToGroupParameter(),
-      new \Civi\ActionProvider\Action\Group\RemoveFromGroupParameter(),
-			new \Civi\ActionProvider\Action\Group\Create(),
-      new \Civi\ActionProvider\Action\Group\GetGroup(),
-      new \Civi\ActionProvider\Action\Group\DeleteGroup(),
-			new \Civi\ActionProvider\Action\Contact\ContactDataById(),
-			new \Civi\ActionProvider\Action\Contact\CreateUpdateAddress(),
-			new \Civi\ActionProvider\Action\Contact\UsePrimaryAddressOfContact(),
-			new \Civi\ActionProvider\Action\Contact\GetAddress(),
-      new \Civi\ActionProvider\Action\Contact\GetAddressById(),
-			new \Civi\ActionProvider\Action\Contact\GetContactIdFromMasterAddress(),
-			new \Civi\ActionProvider\Action\Contact\CreateUpdateIndividual(),
-      new \Civi\ActionProvider\Action\Contact\CreateUpdateHousehold(),
-			new \Civi\ActionProvider\Action\Contact\UpdateCustomData(),
-			new \Civi\ActionProvider\Action\Contact\FindOrCreateContactByEmail(),
-			new \Civi\ActionProvider\Action\Activity\CreateActivity(),
-      new \Civi\ActionProvider\Action\Activity\DeleteActivity(),
-      new \Civi\ActionProvider\Action\Activity\GetActivity(),
-			new \Civi\ActionProvider\Action\BulkMail\Send(),
-			new \Civi\ActionProvider\Action\Event\UpdateParticipantStatus(),
-      new \Civi\ActionProvider\Action\Event\UpdateParticipantStatusWithDynamicStatus(),
-			new \Civi\ActionProvider\Action\Event\CreateOrUpdateParticipant(),
-      new \Civi\ActionProvider\Action\Event\CreateOrUpdateParticipantWithDynamicStatus(),
-      new \Civi\ActionProvider\Action\Event\CreateOrUpdateEvent(),
-      new \Civi\ActionProvider\Action\Event\GetEvent(),
-      new \Civi\ActionProvider\Action\Event\DeleteEvent(),
-			new \Civi\ActionProvider\Action\Event\GetParticipant(),
-      new \Civi\ActionProvider\Action\Event\DeleteParticipant(),
-			new \Civi\ActionProvider\Action\Relationship\CreateRelationship(),
-			new \Civi\ActionProvider\Action\Relationship\EndRelationship(),
-			new \Civi\ActionProvider\Action\Website\CreateUpdateWebsite(),
-			new \Civi\ActionProvider\Action\Website\GetWebsite(),
-      new \Civi\ActionProvider\Action\Phone\CreateUpdatePhone(),
-      new \Civi\ActionProvider\Action\Phone\GetPhone(),
-      new \Civi\ActionProvider\Action\Membership\CreateOrUpdateMembership(),
-      new \Civi\ActionProvider\Action\Membership\GetMembershipType(),
-		);
+	  $this->addActionWithoutFiltering('SetValue', '\Civi\ActionProvider\Action\Generic\SetValue', E::ts('Set Value'), array(
+	    AbstractAction::DATA_MANIPULATION_TAG));
+    $this->addActionWithoutFiltering('SetDateValue', '\Civi\ActionProvider\Action\Generic\SetDateValue', E::ts('Set date value'), array(
+      AbstractAction::DATA_MANIPULATION_TAG));
+    $this->addActionWithoutFiltering('AddToGroup', '\Civi\ActionProvider\Action\Group\AddToGroup', E::ts('Add to Group'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+      'CiviRules.GroupContactAdd', // This how this action is called in CiviRules
+    ));
+    $this->addActionWithoutFiltering('AddToGroupParameter', '\Civi\ActionProvider\Action\Group\AddToGroupParameter', E::ts('Add to Group (with Group ID as parameter)'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('RemoveFromGroupParameter', '\Civi\ActionProvider\Action\Group\RemoveFromGroupParameter', E::ts('Remove from  group (with Group ID as parameter)'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('CreateGroup', '\Civi\ActionProvider\Action\Group\Create', E::ts('Create/Update a group'), array(
+      AbstractAction::DATA_MANIPULATION_TAG,
+      'group',
+    ));
+    $this->addActionWithoutFiltering('GetGroup', '\Civi\ActionProvider\Action\Group\GetGroup', E::ts('Get group data'), array(
+      AbstractAction::DATA_RETRIEVAL_TAG
+    ));
+    $this->addActionWithoutFiltering('DeleteGroup', '\Civi\ActionProvider\Action\Group\DeleteGroup', E::ts('Delete Group'), array(
+      AbstractAction::DATA_MANIPULATION_TAG
+    ));
+    $this->addActionWithoutFiltering('ContactDataById', '\Civi\ActionProvider\Action\Contact\ContactDataById', E::ts('Get contact data by ID'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
+    $this->addActionWithoutFiltering('CreateUpdateAddress', '\Civi\ActionProvider\Action\Contact\CreateUpdateAddress', E::ts('Create or update address of a contact'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('UsePrimaryAddressOfContact', '\Civi\ActionProvider\Action\Contact\UsePrimaryAddressOfContact', E::ts('Use primary address of another contact'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('GetAddress', '\Civi\ActionProvider\Action\Contact\GetAddress', E::ts('Get address of a contact'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
+    $this->addActionWithoutFiltering('GetAddressById', '\Civi\ActionProvider\Action\Contact\GetAddressById', E::ts('Get address by ID'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
+    $this->addActionWithoutFiltering('GetContactIdFromMasterAddress', '\Civi\ActionProvider\Action\Contact\GetContactIdFromMasterAddress', E::ts('Get contact ID of a master address'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
+    $this->addActionWithoutFiltering('CreateUpdateIndividual', '\Civi\ActionProvider\Action\Contact\CreateUpdateIndividual', E::ts('Create or update Individual'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('CreateUpdateHousehold', '\Civi\ActionProvider\Action\Contact\CreateUpdateHousehold', E::ts('Create or update Household'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('UpdateCustomData', '\Civi\ActionProvider\Action\Contact\UpdateCustomData',E::ts('Update custom data for a contact') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('FindOrCreateContactByEmail', '\Civi\ActionProvider\Action\Contact\FindOrCreateContactByEmail', E::ts('Find or create contact by e-mail') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('CreateActivity', '\Civi\ActionProvider\Action\Activity\CreateActivity',E::ts('Create or update activity') , array(
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG
+    ));
+    $this->addActionWithoutFiltering('DeleteActivity', '\Civi\ActionProvider\Action\Activity\DeleteActivity', E::ts('Delete activity'), array(
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG
+    ));
+    $this->addActionWithoutFiltering('GetActivity', '\Civi\ActionProvider\Action\Activity\GetActivity', E::ts('Get activity data'), array(
+      AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
+    $this->addActionWithoutFiltering('Send', '\Civi\ActionProvider\Action\BulkMail\Send',E::ts('Send Bulk Mail') , array(
+      AbstractAction::SEND_MESSAGES_TO_CONTACTS,
+      'bulk_mail'
+    ));
+    $this->addActionWithoutFiltering('UpdateParticipantStatus', '\Civi\ActionProvider\Action\Event\UpdateParticipantStatus',E::ts('Update participant status') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('UpdateParticipantStatusWithDynamicStatus', '\Civi\ActionProvider\Action\Event\UpdateParticipantStatusWithDynamicStatus',E::ts('Update participant status (with dynamic status)') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('CreateOrUpdateParticipant', '\Civi\ActionProvider\Action\Event\CreateOrUpdateParticipant',E::ts('Register contact for an event') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('CreateOrUpdateParticipantWithDynamicStatus', '\Civi\ActionProvider\Action\Event\CreateOrUpdateParticipantWithDynamicStatus', E::ts('Register contact for an event (with dynamic status)') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('CreateOrUpdateEvent', '\Civi\ActionProvider\Action\Event\CreateOrUpdateEvent', E::ts('Create or update an event') , array(
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('GetEvent', '\Civi\ActionProvider\Action\Event\GetEvent',E::ts('Get event data') , array(
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
+    $this->addActionWithoutFiltering('DeleteEvent', '\Civi\ActionProvider\Action\Event\DeleteEvent',E::ts('Delete event') , array(
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('GetParticipant', '\Civi\ActionProvider\Action\Event\GetParticipant',E::ts('Get participant data') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
+    $this->addActionWithoutFiltering('DeleteParticipant', '\Civi\ActionProvider\Action\Event\DeleteParticipant', E::ts('Delete participant'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('SendEmailToParticipants', '\Civi\ActionProvider\Action\Event\SendEmailToParticipants', E::ts('Send e-mail to participants'), array(
+      AbstractAction::SEND_MESSAGES_TO_CONTACTS,
+    ));
+    $this->addActionWithoutFiltering('CreateRelationship', '\Civi\ActionProvider\Action\Relationship\CreateRelationship',E::ts('Create relationship') , array(
+      AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('EndRelationship', '\Civi\ActionProvider\Action\Relationship\EndRelationship',E::ts('End relationship') , array(
+      AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('CreateUpdateWebsite', '\Civi\ActionProvider\Action\Website\CreateUpdateWebsite',E::ts('Create or update website of a contact') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('GetWebsite', '\Civi\ActionProvider\Action\Website\GetWebsite', E::ts('Get website url of a contact'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
+    $this->addActionWithoutFiltering('CreateUpdatePhone', '\Civi\ActionProvider\Action\Phone\CreateUpdatePhone',E::ts('Create or update phonenumber of a contact') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('GetPhone', '\Civi\ActionProvider\Action\Phone\GetPhone', E::ts('Get phonenumber of a contact'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
+    $this->addActionWithoutFiltering('CreateOrUpdateMembership', '\Civi\ActionProvider\Action\Membership\CreateOrUpdateMembership',E::ts('Create or update an membership') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('GetMembershipType', '\Civi\ActionProvider\Action\Membership\GetMembershipType',E::ts('Get membership type data') , array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
 
 		$conditions = array(
 		  new \Civi\ActionProvider\Condition\ParameterIsEmpty(),
@@ -87,17 +209,12 @@ class Provider {
       new \Civi\ActionProvider\Condition\ParametersMatch(),
       new \Civi\ActionProvider\Condition\ParametersDontMatch(),
     );
-		
-		foreach($actions as $action) {
-			$action->setProvider($this);
-			$this->allActions[$action->getName()] = $action;
-		}
 
     foreach($conditions as $condition) {
       $condition->setProvider($this);
       $this->allConditions[$condition->getName()] = $condition;
     }
-		
+
 		$this->availableActions = array_filter($this->allActions, array($this, 'filterActions'));
     $this->availableConditions = array_filter($this->allConditions, array($this, 'filterConditions'));
 	}
@@ -108,21 +225,51 @@ class Provider {
 	public function getActions() {
 		return $this->availableActions;
 	}
+
+	public function getActionTitles() {
+	  $titles = array();
+	  foreach($this->availableActions as $actionName => $actionClass) {
+	    if (isset($this->actionTitles[$actionName])) {
+        $titles[$actionName] = $this->actionTitles[$actionName];
+      }
+    }
+    return $titles;
+  }
 	
 	/**
 	 * Adds an action to the list of available actions.
 	 * 
 	 * This function might be used by extensions to add their own actions to the system.
 	 * 
-	 * @param \Civi\ActionProvider\Action\AbstractAction $action
+	 * @param String $name
+   * @param String $className
+   * @param String $title
+   * @param String[] $tags
 	 * @return Provider
 	 */
-	public function addAction(\Civi\ActionProvider\Action\AbstractAction $action) {
-		$action->setProvider($this);
-		$this->allActions[$action->getName()] = $action;
+	public function addAction($name, $className, $title, $tags=array()) {
+		$this->addActionWithoutFiltering($name, $className, $title, $tags);
 		$this->availableActions = array_filter($this->allActions, array($this, 'filterActions'));
 		return $this;
 	}
+
+  /**
+   * Adds an action to the list of available actions.
+   *
+   * This function might be used by extensions to add their own actions to the system.
+   *
+   * @param String $name
+   * @param String $className
+   * @param String $title
+   * @param String[] $tags
+   * @return Provider
+   */
+  private function addActionWithoutFiltering($name, $className, $title, $tags=array()) {
+    $this->allActions[$name] = $className;
+    $this->actionTitles[$name] = $title;
+    $this->acttionTags[$name] = $tags;
+    return $this;
+  }
 	
 	/**
 	 * Returns an action by its name.
@@ -131,7 +278,7 @@ class Provider {
 	 */
 	public function getActionByName($name) {
 		if (isset($this->availableActions[$name])) {
-			$action = clone $this->availableActions[$name];
+			$action = new $this->availableActions[$name];
 			$action->setProvider($this);
 			$action->setDefaults();
 			return $action;
@@ -212,12 +359,12 @@ class Provider {
 	 * not make sense in that context. E.g. for example CiviRules has already a AddContactToGroup action 
 	 * so it does not make sense to use the one provided by us.
 	 * 
-	 * @param \Civi\ActionProvider\Action\AbstractAction $action
+	 * @param string
 	 *   The action to filter.
 	 * @return bool
 	 *   Returns true when the element is valid, false when the element should be disregarded.
 	 */
-	protected function filterActions(\Civi\ActionProvider\Action\AbstractAction $action) {
+	protected function filterActions($actionName) {
 		return true;
 	}
 

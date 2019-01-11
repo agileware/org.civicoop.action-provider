@@ -17,13 +17,6 @@ use CRM_ActionProvider_ExtensionUtil as E;
 class SetDateValue extends AbstractAction {
 
   /**
-   * Returns the human readable title of this action
-   */
-  public function getTitle() {
-    return E::ts('Set date value');
-  }
-
-  /**
    * Returns the specification of the configuration options for the actual action.
    *
    * @return SpecificationBag
@@ -72,15 +65,6 @@ class SetDateValue extends AbstractAction {
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $date = new \DateTime($this->configuration->getParameter('date'));
     $output->setParameter('date', $date->format('Ymd'));
-  }
-
-  /**
-   * Returns the tags for this action.
-   */
-  public function getTags() {
-    return array(
-      AbstractAction::DATA_MANIPULATION_TAG
-    );
   }
 
 }
