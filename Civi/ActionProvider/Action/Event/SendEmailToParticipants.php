@@ -44,8 +44,7 @@ class SendEmailToParticipants extends AbstractAction {
     }
     $senderContact = civicrm_api3('Contact', 'getsingle', array('id' => $parameters->getParameter('sender_contact_id')));
 
-    //$email = new \Civi\ActionProvider\Utils\SendEmail($senderContact['email'], $senderContact['display_name']);
-    $email = new \Civi\ActionProvider\Utils\SendEmail();
+    $email = new \Civi\ActionProvider\Utils\SendEmail($senderContact['email'], $senderContact['display_name']);
     $email->send($contactIds, $parameters->getParameter('subject'), $parameters->getParameter('message'), $parameters->getParameter('message'));
   }
 
