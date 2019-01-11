@@ -42,9 +42,7 @@ class SendEmail {
    * @throws \Exception
    */
   public function send($contactIds, $subject, $body_text, $body_html, $extra_data=false) {
-    $version = CRM_Core_BAO_Domain::version();
-
-    $from = CRM_Core_BAO_Domain::getNameAndEmail();
+    $from = \CRM_Core_BAO_Domain::getNameAndEmail();
     $from = "$from[0] <$from[1]>";
     if ($this->from_email && $this->from_name) {
       $from = $this->from_name."<".$this->from_email.">";
@@ -52,16 +50,16 @@ class SendEmail {
       $from = $this->from_email;
     }
 
-    $domain     = CRM_Core_BAO_Domain::getDomain();
+    $domain     = \CRM_Core_BAO_Domain::getDomain();
     $result     = NULL;
     if (!$body_text) {
-      $body_text = CRM_Utils_String::htmlToText($body_html);
+      $body_text = \CRM_Utils_String::htmlToText($body_html);
     }
 
     $returnValues = array();
     foreach($contactIds as $contactId) {
       $contact_params = array(array('contact_id', '=', $contactId, 0, 0));
-      list($contact, $_) = CRM_Contact_BAO_Query::apiQuery($contact_params);
+      list($contact, $_) = \CRM_Contact_BAO_Query::apiQuery($contact_params);
 
       //CRM-4524
       $contact = reset($contact);
@@ -73,9 +71,9 @@ class SendEmail {
       //CRM-5734
 
       // get tokens to be replaced
-      $tokens = array_merge_recursive(CRM_Utils_Token::getTokens($body_text),
-        CRM_Utils_Token::getTokens($body_html),
-        CRM_Utils_Token::getTokens($subject));
+      $tokens = array_merge_recursive(\CRM_Utils_Token::getTokens($body_text),
+        \CRM_Utils_Token::getTokens($body_html),
+        \CRM_Utils_Token::getTokens($subject));
 
       if ($this->case_id) {
         $contact['case.id'] = $this->case_id;
@@ -87,7 +85,7 @@ class SendEmail {
         $contact['extra_data'] = $extra_data;
       }
 
-      if ($contact['do_not_email'] || empty($contact['email']) || CRM_Utils_Array::value('is_deceased', $contact) || $contact['on_hold']) {
+      if ($contact['do_not_email'] || empty($contact['email']) || \CRM_Utils_Array::value('is_deceased', $contact) || $contact['on_hold']) {
         /**
          * Contact is deceased or has opted out from mailings so do not send the e-mail
          */
@@ -100,10 +98,10 @@ class SendEmail {
         $toName = $contact['display_name'];
       }
 
-      CRM_Utils_Hook::tokenValues($contact, $contact['contact_id'], NULL, $tokens);
+      \CRM_Utils_Hook::tokenValues($contact, $contact['contact_id'], NULL, $tokens);
       // call token hook
       $hookTokens = array();
-      CRM_Utils_Hook::tokens($hookTokens);
+      \CRM_Utils_Hook::tokens($hookTokens);
       $categories = array_keys($hookTokens);
 
       // do replacements in text and html body
@@ -114,20 +112,20 @@ class SendEmail {
           if ($this->contribution_id) {
             try {
               $contribution = civicrm_api3('Contribution', 'getsingle', ['id' => $this->contribution_id]);
-              $$bodyType = CRM_Utils_Token::replaceContributionTokens($$bodyType, $contribution, TRUE, $tokens);
+              $$bodyType = \CRM_Utils_Token::replaceContributionTokens($$bodyType, $contribution, TRUE, $tokens);
             } catch (\Exception $e) {
               // Do nothing
             }
           }
 
-          $$bodyType = CRM_Utils_Token::replaceDomainTokens($$bodyType, $domain, TRUE, $tokens, TRUE);
-          $$bodyType = CRM_Utils_Token::replaceHookTokens($$bodyType, $contact, $categories, TRUE);
+          $$bodyType = \CRM_Utils_Token::replaceDomainTokens($$bodyType, $domain, TRUE, $tokens, TRUE);
+          $$bodyType = \CRM_Utils_Token::replaceHookTokens($$bodyType, $contact, $categories, TRUE);
           foreach ($tokens as $type => $tokenValue) {
-            CRM_Utils_Token::replaceGreetingTokens($$bodyType, $contact, $contact['contact_id']);
+            \CRM_Utils_Token::replaceGreetingTokens($$bodyType, $contact, $contact['contact_id']);
             foreach ($tokenValue as $var) {
-              $$bodyType = CRM_Utils_Token::replaceContactTokens($$bodyType, $contact, FALSE, $tokens, FALSE, TRUE);
+              $$bodyType = \CRM_Utils_Token::replaceContactTokens($$bodyType, $contact, FALSE, $tokens, FALSE, TRUE);
               $contactKey = NULL;
-              $$bodyType = CRM_Utils_Token::replaceComponentTokens($$bodyType, $contact, $tokens, TRUE);
+              $$bodyType = \CRM_Utils_Token::replaceComponentTokens($$bodyType, $contact, $tokens, TRUE);
             }
           }
         }
@@ -135,17 +133,17 @@ class SendEmail {
       $html = $body_html;
       $text = $body_text;
       if (defined('CIVICRM_MAIL_SMARTY') && CIVICRM_MAIL_SMARTY) {
-        $smarty = CRM_Core_Smarty::singleton();
+        $smarty = \CRM_Core_Smarty::singleton();
         foreach ($type as $elem) {
           $$elem = $smarty->fetch("string:{$$elem}");
         }
       }
 
       // do replacements in message subject
-      $messageSubject = CRM_Utils_Token::replaceContactTokens($subject, $contact, false, $tokens);
-      $messageSubject = CRM_Utils_Token::replaceDomainTokens($messageSubject, $domain, true, $tokens);
-      $messageSubject = CRM_Utils_Token::replaceComponentTokens($messageSubject, $contact, $tokens, true);
-      $messageSubject = CRM_Utils_Token::replaceHookTokens($messageSubject, $contact, $categories, true);
+      $messageSubject = \CRM_Utils_Token::replaceContactTokens($subject, $contact, false, $tokens);
+      $messageSubject = \CRM_Utils_Token::replaceDomainTokens($messageSubject, $domain, true, $tokens);
+      $messageSubject = \CRM_Utils_Token::replaceComponentTokens($messageSubject, $contact, $tokens, true);
+      $messageSubject = \CRM_Utils_Token::replaceHookTokens($messageSubject, $contact, $categories, true);
 
       if (defined('CIVICRM_MAIL_SMARTY') && CIVICRM_MAIL_SMARTY) {
         $messageSubject = $smarty->fetch("string:{$messageSubject}");
@@ -173,13 +171,13 @@ class SendEmail {
       if (isset($params['bcc']) && !empty($params['bcc'])) {
         $mailParams['bcc'] = $params['bcc'];
       }
-      $result = CRM_Utils_Mail::send($mailParams);
+      $result = \CRM_Utils_Mail::send($mailParams);
       if (!$result) {
         throw new \Exception('Error sending e-mail to ' . $contact['display_name'] . ' <' . $email . '> ');
       }
 
       //create activity for sending e-mail.
-      $activityTypeID = CRM_Core_OptionGroup::getValue('activity_type', 'Email', 'name');
+      $activityTypeID = \CRM_Core_OptionGroup::getValue('activity_type', 'Email', 'name');
 
       // CRM-6265: save both text and HTML parts in details (if present)
       if ($html and $text) {
@@ -199,34 +197,24 @@ class SendEmail {
         'status_id' => 2,
       );
 
-      $activity = CRM_Activity_BAO_Activity::create($activityParams);
+      $activity = \CRM_Activity_BAO_Activity::create($activityParams);
 
-      // Compatibility with CiviCRM >= 4.4
-      if ($version >= 4.4) {
-        $activityContacts = CRM_Core_OptionGroup::values('activity_contacts', FALSE, FALSE, FALSE, NULL, 'name');
-        $targetID = CRM_Utils_Array::key('Activity Targets', $activityContacts);
+      $activityContacts = \CRM_Core_OptionGroup::values('activity_contacts', FALSE, FALSE, FALSE, NULL, 'name');
+      $targetID = \CRM_Utils_Array::key('Activity Targets', $activityContacts);
 
-        $activityTargetParams = array(
-          'activity_id' => $activity->id,
-          'contact_id' => $contactId,
-          'record_type_id' => $targetID
-        );
-        CRM_Activity_BAO_ActivityContact::create($activityTargetParams);
-      }
-      else {
-        $activityTargetParams = array(
-          'activity_id' => $activity->id,
-          'target_contact_id' => $contactId,
-        );
-        CRM_Activity_BAO_Activity::createActivityTarget($activityTargetParams);
-      }
+      $activityTargetParams = array(
+        'activity_id' => $activity->id,
+        'contact_id' => $contactId,
+        'record_type_id' => $targetID
+      );
+      \CRM_Activity_BAO_ActivityContact::create($activityTargetParams);
 
       if (!empty($this->case_id)) {
         $caseActivity = array(
           'activity_id' => $activity->id,
           'case_id' => $this->case_id,
         );
-        CRM_Case_BAO_Case::processCaseActivity($caseActivity);
+        \CRM_Case_BAO_Case::processCaseActivity($caseActivity);
       }
 
       $returnValues[$contactId] = array(

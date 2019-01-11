@@ -23,13 +23,31 @@ class SpecificationBag implements \IteratorAggregate  {
 		foreach($specification as $spec) {
 			// First check whether the value is present and should be present.
 			if ($spec->isRequired() && !$parameters->doesParameterExists($spec->getName())) {
-			  return false;
-			} if($parameters->doesParameterExists($spec->getName())) {
-			  $value = $parameters->getParameter($spec->getName());
-        if ($value && !\CRM_Utils_Type::validate($value, $spec->getDataType(), false)) {
-          return false;
-        }  
+			  return FALSE;
 			}
+
+      if($parameters->doesParameterExists($spec->getName()) && $spec->isMultiple()) {
+        $values = $parameters->getParameter($spec->getName());
+        if (is_array($values)) {
+          foreach ($values as $value) {
+            if ($value && \CRM_Utils_Type::validate($value, $spec->getDataType(), FALSE) === NULL) {
+              return FALSE;
+            }
+          }
+        } else {
+          if ($values && \CRM_Utils_Type::validate($values, $spec->getDataType(), FALSE) === NULL) {
+            return FALSE;
+          }
+        }
+      } elseif($parameters->doesParameterExists($spec->getName()) && !$spec->isMultiple()) {
+        $value = $parameters->getParameter($spec->getName());
+        if (is_array($value)) {
+          return FALSE;
+        }
+        if ($value && \CRM_Utils_Type::validate($value, $spec->getDataType(), FALSE) === NULL) {
+          return FALSE;
+        }
+      }
 		}
 		return true;
 	}
