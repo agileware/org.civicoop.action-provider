@@ -37,7 +37,7 @@ class EndRelationship extends AbstractAction {
    */
   public function getConfigurationSpecification() {
     return new SpecificationBag(array(
-      new Specification('relationship_type_id', 'Integer', E::ts('Relationship type'), true, null, null, $this->relationshipTypes, False),
+      new Specification('relationship_type_id', 'String', E::ts('Relationship type'), true, null, null, $this->relationshipTypes, False),
       new Specification('set_end_date', 'Boolean', E::ts('Set end date?'), false, 0, null, null, FALSE),
     ));
   }
