@@ -16,6 +16,21 @@ use CRM_ActionProvider_ExtensionUtil as E;
 
 class CreateRelationship extends AbstractAction {
 
+  protected $relationshipTypes = array();
+  protected $relationshipTypeIds = array();
+
+  public function __construct() {
+    parent::__construct();
+    $relationshipTypesApi = civicrm_api3('RelationshipType', 'get', array('is_active' => 1, 'options' => array('limit' => 0)));
+    $this->relationshipTypes = array();
+    $this->relationshipTypeIds = array();
+    foreach($relationshipTypesApi['values'] as $relType) {
+      $this->relationshipTypes[$relType['name_a_b']] = $relType['label_a_b'];
+      $this->relationshipTypeIds[$relType['name_a_b']] = $relType['id'];
+    }
+
+  }
+
   /**
    * Returns the specification of the configuration options for the actual action.
    *
@@ -23,7 +38,7 @@ class CreateRelationship extends AbstractAction {
    */
   public function getConfigurationSpecification() {
     return new SpecificationBag(array(
-      new Specification('relationship_type_id', 'Integer', E::ts('Relationship type'), true, null, 'RelationshipType', null, False),
+      new Specification('relationship_type_id', 'Integer', E::ts('Relationship type'), true, null, null, $this->relationshipTypes, False),
       new Specification('set_start_date', 'Boolean', E::ts('Set start date?'), false, 0, null, null, FALSE),
     ));
   }
@@ -91,7 +106,7 @@ class CreateRelationship extends AbstractAction {
     // Get the contact and the event.
     $relationshipParams['contact_id_a'] = $parameters->getParameter('contact_id_a');
     $relationshipParams['contact_id_b'] = $parameters->getParameter('contact_id_b');
-    $relationshipParams['relationship_type_id'] = $this->configuration->getParameter('relationship_type_id');
+    $relationshipParams['relationship_type_id'] = $this->relationshipTypes[$this->configuration->getParameter('relationship_type_id')];
     $relationshipParams['is_active'] = '1';
     if ($this->configuration->getParameter('set_start_date')) {
       $today = new \DateTime();

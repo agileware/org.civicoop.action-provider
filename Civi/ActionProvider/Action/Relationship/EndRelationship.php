@@ -15,6 +15,21 @@ use CRM_ActionProvider_ExtensionUtil as E;
 
 class EndRelationship extends AbstractAction {
 
+  protected $relationshipTypes = array();
+  protected $relationshipTypeIds = array();
+
+  public function __construct() {
+    parent::__construct();
+    $relationshipTypesApi = civicrm_api3('RelationshipType', 'get', array('is_active' => 1, 'options' => array('limit' => 0)));
+    $this->relationshipTypes = array();
+    $this->relationshipTypeIds = array();
+    foreach($relationshipTypesApi['values'] as $relType) {
+      $this->relationshipTypes[$relType['name_a_b']] = $relType['label_a_b'];
+      $this->relationshipTypeIds[$relType['name_a_b']] = $relType['id'];
+    }
+
+  }
+
   /**
    * Returns the specification of the configuration options for the actual action.
    *
@@ -22,7 +37,7 @@ class EndRelationship extends AbstractAction {
    */
   public function getConfigurationSpecification() {
     return new SpecificationBag(array(
-      new Specification('relationship_type_id', 'Integer', E::ts('Relationship type'), true, null, 'RelationshipType', null, False),
+      new Specification('relationship_type_id', 'Integer', E::ts('Relationship type'), true, null, null, $this->relationshipTypes, False),
       new Specification('set_end_date', 'Boolean', E::ts('Set end date?'), false, 0, null, null, FALSE),
     ));
   }
@@ -65,7 +80,7 @@ class EndRelationship extends AbstractAction {
     // Get the contact and the event.
     $contact_id_a = $parameters->getParameter('contact_id_a');
     $contact_id_b = $parameters->getParameter('contact_id_b');
-    $relationship_type_id = $this->configuration->getParameter('relationship_type_id');
+    $relationship_type_id = $this->relationshipTypeIds[$this->configuration->getParameter('relationship_type_id')];
 
     $sql = "SELECT id FROM civicrm_relationship WHERE contact_id_a = %1 AND contact_id_b = %2 AND relationship_type_id = %3 
       AND civicrm_relationship.is_active = 1 
