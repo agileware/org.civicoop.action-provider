@@ -14,7 +14,7 @@ use \Civi\ActionProvider\Utils\CustomField;
 
 use CRM_ActionProvider_ExtensionUtil as E;
 
-class CreateRelationship extends AbstractAction {
+class CreateOrUpdateRelationship extends CreateRelationship {
 
   /**
    * Returns the specification of the configuration options for the actual action.
@@ -22,59 +22,47 @@ class CreateRelationship extends AbstractAction {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
-    return new SpecificationBag(array(
-      new Specification('relationship_type_id', 'Integer', E::ts('Relationship type'), true, null, 'RelationshipType', null, False),
-      new Specification('set_start_date', 'Boolean', E::ts('Set start date?'), false, 0, null, null, FALSE),
-    ));
-  }
-
-  /**
-   * Returns the specification of the configuration options for the actual action.
-   *
-   * @return SpecificationBag
-   * @throws \Exception
-   */
-  public function getParameterSpecification() {
-    $specs = new SpecificationBag(array(
-      /**
-       * The parameters given to the Specification object are:
-       * @param string $name
-       * @param string $dataType
-       * @param string $title
-       * @param bool $required
-       * @param mixed $defaultValue
-       * @param string|null $fkEntity
-       * @param array $options
-       * @param bool $multiple
-       */
-      new Specification('contact_id_a', 'Integer', E::ts('Contact ID A'), true, null, null, null, FALSE),
-      new Specification('contact_id_b', 'Integer', E::ts('Contact ID B'), true, null, null, null, FALSE),
-    ));
-
-    $customGroups = civicrm_api3('CustomGroup', 'get', array('extends' => 'Relationship', 'is_active' => 1, 'options' => array('limit' => 0)));
-    foreach($customGroups['values'] as $customGroup) {
-      $customFields = civicrm_api3('CustomField', 'get', array('custom_group_id' => $customGroup['id'], 'is_active' => 1, 'options' => array('limit' => 0)));
-      foreach($customFields['values'] as $customField) {
-        $spec = CustomField::getSpecFromCustomField($customField, $customGroup['title'].': ', false);
-        if ($spec) {
-          $specs->addSpecification($spec);
-        }
-      }
-    }
+    $specs = parent::getConfigurationSpecification();
+    $specs->addSpecification(new Specification('also_update_inactive', 'Boolean', E::ts('Update inactive relationships'), false, 0, null, null, false));
     return $specs;
   }
 
   /**
-   * Returns the specification of the output parameters of this action.
+   * Find existing relationship
    *
-   * This function could be overriden by child classes.
+   * @param $contact_id_a
+   * @param $contact_id_b
+   * @param $type_id
+   * @param bool $also_inactive
    *
-   * @return SpecificationBag
+   * @return mixed
    */
-  public function getOutputSpecification() {
-    return new SpecificationBag(array(
-      new Specification('id', 'Integer', E::ts('Relationship record ID')),
-    ));
+  protected function findExistingRelationshipId($contact_id_a, $contact_id_b, $type_id, $also_inactive=false) {
+    $relationshipFindParams = array();
+    $relationshipFindParams['contact_id_a'] = $contact_id_a;
+    $relationshipFindParams['contact_id_b'] = $contact_id_b;
+    $relationshipFindParams['relationship_type_id'] = $type_id;
+    $relationshipFindParams['is_active'] = '1';
+    try {
+      $relationship = civicrm_api3('Relationship', 'getsingle', $relationshipFindParams);
+      return $relationship['id'];
+    } catch (\Exception $e) {
+      // Do nothing
+    }
+    if ($also_inactive) {
+      $relationshipFindParams = array();
+      $relationshipFindParams['contact_id_a'] = $contact_id_a;
+      $relationshipFindParams['contact_id_b'] = $contact_id_b;
+      $relationshipFindParams['relationship_type_id'] = $type_id;
+      $relationshipFindParams['is_active'] = '0';
+      try {
+        $relationship = civicrm_api3('Relationship', 'getsingle', $relationshipFindParams);
+        return $relationship['id'];
+      } catch (\Exception $e) {
+        // Do nothing
+      }
+    }
+    return false;
   }
 
   /**
@@ -88,14 +76,26 @@ class CreateRelationship extends AbstractAction {
    * @throws \Exception
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
+    $relationship_id = false;
+    $alsoUpdateInactiveOne = false;
+    if ($this->configuration->doesParameterExists('also_update_inactive') && $this->configuration->getParameter('also_update_inactive')) {
+      $alsoUpdateInactiveOne = true;
+    }
+    $relationship_id = $this->findExistingRelationshipId($parameters->getParameter('contact_id_a'), $parameters->getParameter('contact_id_b'), $parameters->getParameter('relationship_type_id'), $alsoUpdateInactiveOne);
+    if ($relationship_id) {
+      $relationshipParams['id'] = $relationship_id;
+    }
     // Get the contact and the event.
     $relationshipParams['contact_id_a'] = $parameters->getParameter('contact_id_a');
     $relationshipParams['contact_id_b'] = $parameters->getParameter('contact_id_b');
     $relationshipParams['relationship_type_id'] = $this->configuration->getParameter('relationship_type_id');
     $relationshipParams['is_active'] = '1';
-    if ($this->configuration->getParameter('set_start_date')) {
+    if ($this->configuration->getParameter('set_start_date') && !$relationship_id) {
       $today = new \DateTime();
       $relationshipParams['start_date'] = $today->format('Ymd');
+    }
+    if ($relationship_id) {
+      $relationshipParams['end_date'] = 'null';
     }
 
     $relationshipParams['custom'] = array();
@@ -112,6 +112,7 @@ class CreateRelationship extends AbstractAction {
         \CRM_Core_BAO_CustomField::formatCustomField($customFieldID, $relationshipParams['custom'], $value, 'Relationship', $customValueID);
       }
     }
+
     try {
       // Do not use api as the api checks for an existing relationship.
       $relationship = \CRM_Contact_BAO_Relationship::add($relationshipParams);

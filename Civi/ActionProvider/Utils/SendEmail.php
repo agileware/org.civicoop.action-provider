@@ -12,9 +12,15 @@ class SendEmail {
 
   private $from_email;
 
+  private $reply_to_email;
+
+  private $sender_contact_id;
+
   private $case_id;
 
   private $contribution_id;
+
+  private $activity_id;
 
   public function __construct($from_email=null, $from_name=null) {
     $this->from_email = $from_email;
@@ -27,6 +33,41 @@ class SendEmail {
 
   public function setContributionId($contribution_id) {
     $this->contribution_id = $contribution_id;
+  }
+
+  public function setActivityId($activity_id) {
+    $this->activity_id = $activity_id;
+  }
+
+  /**
+   * Set the sender contact ID. The sender contact ID is used as the source contact ID
+   * for the e-mail activity.
+   * The e-mail address of the sender is used as ReplyTo
+   * Alternatively you could also set From Header
+   *
+   *
+   * @param int $senderContactId
+   * @param bool $useAsReplyTo
+   * @param bool $useAsFrom
+   */
+  public function setSenderContactId($senderContactId, $useAsReplyTo=true, $useAsFrom=false) {
+    try {
+      $senderContact = civicrm_api3('Contact', 'getsingle', ['id' => $senderContactId]);
+      $this->sender_contact_id = $senderContactId;
+      if ($senderContact['email']) {
+        if ($useAsReplyTo) {
+          $this->reply_to_email = $senderContact['email'];
+        }
+        if ($useAsFrom) {
+          $this->from_email = $senderContact['email'];
+          if ($senderContact['display_name'] != $senderContact['email']) {
+            $this->from_name = $senderContact['display_name'];
+          }
+        }
+      }
+    } catch (\Exception $e) {
+      // Do nothing
+    }
   }
 
   /**
@@ -76,10 +117,13 @@ class SendEmail {
         \CRM_Utils_Token::getTokens($subject));
 
       if ($this->case_id) {
-        $contact['case.id'] = $this->case_id;
+        $contact['case_id'] = $this->case_id;
       }
       if ($this->contribution_id) {
         $contact['contribution_id'] = $this->contribution_id;
+      }
+      if ($this->activity_id) {
+        $contact['activity_id'] = $this->activity_id;
       }
       if ($extra_data) {
         $contact['extra_data'] = $extra_data;
@@ -165,11 +209,8 @@ class SendEmail {
       if ($html && ($contact['preferred_mail_format'] == 'HTML' || $contact['preferred_mail_format'] == 'Both')) {
         $mailParams['html'] = $html;
       }
-      if (isset($params['cc']) && !empty($params['cc'])) {
-        $mailParams['cc'] = $params['cc'];
-      }
-      if (isset($params['bcc']) && !empty($params['bcc'])) {
-        $mailParams['bcc'] = $params['bcc'];
+      if ($this->from_email) {
+        $mailParams['replyTo'] = $this->reply_to_email;
       }
       $result = \CRM_Utils_Mail::send($mailParams);
       if (!$result) {
@@ -193,10 +234,11 @@ class SendEmail {
         'activity_date_time' => date('YmdHis'),
         'subject' => $messageSubject,
         'details' => $details,
-        // FIXME: check for name Completed and get ID from that lookup
-        'status_id' => 2,
+        'status_id' => "Completed",
       );
-
+      if ($this->sender_contact_id) {
+        $activityParams['source_contact_id'] = $this->sender_contact_id;
+      }
       $activity = \CRM_Activity_BAO_Activity::create($activityParams);
 
       $activityContacts = \CRM_Core_OptionGroup::values('activity_contacts', FALSE, FALSE, FALSE, NULL, 'name');

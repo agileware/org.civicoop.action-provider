@@ -26,6 +26,10 @@ class SetDateValue extends AbstractAction {
     $date->setDescription('Set the date value follow the formats from <a href="https://secure.php.net/manual/en/datetime.formats.php">PHP.net date time</a>.');
     return new SpecificationBag(array(
       $date,
+      new Specification('include_time', 'Boolean', E::ts('Include time'), true, '0', '', array(
+        '0' => E::ts('No'),
+        '1' => E::ts('Yes')
+      )),
     ));
   }
 
@@ -36,7 +40,7 @@ class SetDateValue extends AbstractAction {
    * @throws \Exception
    */
   public function getParameterSpecification() {
-    return new SpecificationBag();
+    return new SpecificationBag(array());
   }
 
   /**
@@ -64,7 +68,11 @@ class SetDateValue extends AbstractAction {
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $date = new \DateTime($this->configuration->getParameter('date'));
-    $output->setParameter('date', $date->format('Ymd'));
+    if ($this->configuration->doesParameterExists('include_time') && $this->configuration->getParameter('include_time')) {
+      $output->setParameter('date', $date->format('YmdHis'));
+    } else {
+      $output->setParameter('date', $date->format('Ymd'));
+    }
   }
 
 }

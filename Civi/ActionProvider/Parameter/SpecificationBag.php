@@ -2,6 +2,9 @@
 
 namespace Civi\ActionProvider\Parameter;
 
+use \Civi\ActionProvider\Exception\InvalidParameterException;
+use CRM_ActionProvider_ExtensionUtil as E;
+
 class SpecificationBag implements \IteratorAggregate  {
 	
 	protected $parameterSpecifications = array();
@@ -17,13 +20,15 @@ class SpecificationBag implements \IteratorAggregate  {
 	 * 
 	 * @param ParameterBagInterface $parameters
 	 * @param SpecificationBag $specification
+	 *
 	 * @return bool
+   * @throws \Civi\ActionProvider\Exception\InvalidParameterException
 	 */
 	public static function validate(ParameterBagInterface $parameters, SpecificationBag $specification) {
 		foreach($specification as $spec) {
 			// First check whether the value is present and should be present.
 			if ($spec->isRequired() && !$parameters->doesParameterExists($spec->getName())) {
-			  return FALSE;
+			  throw new InvalidParameterException($spec->getName(). ' is required');
 			}
 
       if($parameters->doesParameterExists($spec->getName()) && $spec->isMultiple()) {
@@ -31,21 +36,21 @@ class SpecificationBag implements \IteratorAggregate  {
         if (is_array($values)) {
           foreach ($values as $value) {
             if ($value && \CRM_Utils_Type::validate($value, $spec->getDataType(), FALSE) === NULL) {
-              return FALSE;
+              throw new InvalidParameterException($spec->getName(). ' is invalid');
             }
           }
         } else {
           if ($values && \CRM_Utils_Type::validate($values, $spec->getDataType(), FALSE) === NULL) {
-            return FALSE;
+            throw new InvalidParameterException($spec->getName(). ' is invalid');
           }
         }
       } elseif($parameters->doesParameterExists($spec->getName()) && !$spec->isMultiple()) {
         $value = $parameters->getParameter($spec->getName());
         if (is_array($value)) {
-          return FALSE;
+          throw new InvalidParameterException($spec->getName(). ' requires a single value a multiple value is given');
         }
         if ($value && \CRM_Utils_Type::validate($value, $spec->getDataType(), FALSE) === NULL) {
-          return FALSE;
+          throw new InvalidParameterException($spec->getName(). ' is invalid');
         }
       }
 		}

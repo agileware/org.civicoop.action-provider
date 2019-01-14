@@ -42,10 +42,10 @@ class SendEmailToParticipants extends AbstractAction {
     foreach($participants['values'] as $participant) {
       $contactIds[] = $participant['contact_id'];
     }
-    $senderContact = civicrm_api3('Contact', 'getsingle', array('id' => $parameters->getParameter('sender_contact_id')));
-
-    $email = new \Civi\ActionProvider\Utils\SendEmail($senderContact['email'], $senderContact['display_name']);
-    $email->send($contactIds, $parameters->getParameter('subject'), $parameters->getParameter('message'), $parameters->getParameter('message'));
+    $senderContactId = $parameters->getParameter('sender_contact_id');
+    $mailer = new \Civi\ActionProvider\Utils\SendEmail();
+    $mailer->setSenderContactId($senderContactId);
+    $mailer->send($contactIds, $parameters->getParameter('subject'), $parameters->getParameter('message'), $parameters->getParameter('message'));
   }
 
   /**

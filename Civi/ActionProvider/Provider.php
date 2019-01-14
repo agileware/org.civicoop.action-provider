@@ -173,6 +173,10 @@ class Provider {
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $this->addActionWithoutFiltering('CreateOrUpdateRelationship', '\Civi\ActionProvider\Action\Relationship\CreateOrUpdateRelationship',E::ts('Creat/Update relationship') , array(
+      AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $this->addActionWithoutFiltering('EndRelationship', '\Civi\ActionProvider\Action\Relationship\EndRelationship',E::ts('End relationship') , array(
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
@@ -200,6 +204,14 @@ class Provider {
     $this->addActionWithoutFiltering('GetMembershipType', '\Civi\ActionProvider\Action\Membership\GetMembershipType',E::ts('Get membership type data') , array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
+    $this->addActionWithoutFiltering('MessageTemplateByName', '\Civi\ActionProvider\Action\Communication\MessageTemplateByName', E::ts('Find message template by name'), array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG
+    ));
+    $this->addActionWithoutFiltering('SendEmail', '\Civi\ActionProvider\Action\Communication\SendEmail', E::ts('Send E-mail'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::SEND_MESSAGES_TO_CONTACTS
     ));
 
 		$conditions = array(

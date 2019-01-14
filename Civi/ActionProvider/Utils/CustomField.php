@@ -90,6 +90,9 @@ class CustomField {
     $title = trim($titlePrefix.$customField['label']);
     $is_required = isset($customField['is_required']) && $customField['is_required'] && $useRequiredFromCustomField ? true : false;
     $multiple = false;
+    if ($customField['html_type'] == 'CheckBox') {
+      $multiple = true;
+    }
     $default = null;
     $spec = null;
     

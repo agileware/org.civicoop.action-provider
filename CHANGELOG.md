@@ -11,5 +11,9 @@ Version 1.2
 
 ** New actions**
 
-* Added action to send an e-mail to event participants
+* Send E-mail
+* Send E-mail To Participants
+* Find message template by name
+* Create or Update relationship
+
 

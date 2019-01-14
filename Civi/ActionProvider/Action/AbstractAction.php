@@ -7,7 +7,7 @@ use \Civi\ActionProvider\Condition\AbstractCondition;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\ParameterBag;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
-use \Civi\ActionProvider\Exception\InvalidParameterException;
+use \Civi\ActionProvider\Parameter\InvalidParameterException;
 use \Civi\ActionProvider\Exception\InvalidConfigurationException;
 
 /**
@@ -115,11 +115,15 @@ abstract class AbstractAction implements \JsonSerializable {
    * @throws \Exception
 	 */
 	public function execute(ParameterBagInterface $parameters, ParameterBagInterface $conditionParameters, ParameterBagInterface $invalidConditionOutput) {
-		if (!$this->validateConfiguration()) {
-			throw new InvalidConfigurationException("Found invalid configuration for the action: ".get_class($this));
+	  try {
+      $this->validateConfiguration();
+    } catch (InvalidParameterException $e) {
+	    throw new InvalidConfigurationException("Found invalid configuration for the action: ".get_class($this).' '.$e->getMessage());
 		}
-		if (!$this->validateParameters($parameters)) {
-			throw new InvalidParameterException("Found invalid parameters for the action: ".get_class($this));
+		try {
+      $this->validateParameters($parameters);
+    } catch (InvalidParameterException $e) {
+			throw new InvalidParameterException("Found invalid parameters for the action: ".get_class($this).' '.$e->getMessage());
 		}
 
 		if ($this->condition && !$this->condition->isConditionValid($conditionParameters)) {
