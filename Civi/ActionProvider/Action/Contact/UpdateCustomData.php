@@ -59,8 +59,12 @@ class UpdateCustomData extends AbstractAction {
         continue;
       }
       
-      $customFields = civicrm_api3('CustomField', 'get', array('custom_group_id' => $customGroup['id'], 'is_view' => 0, 'is_active' => 1, 'options' => array('limit' => 0)));
+      $customFields = civicrm_api3('CustomField', 'get', array('custom_group_id' => $customGroup['id'], 'is_active' => 1, 'options' => array('limit' => 0)));
       foreach($customFields['values'] as $customField) {
+        if (isset($customField['is_view']) && $customField['is_view']) {
+          continue;
+        }
+        
         $spec = CustomField::getSpecFromCustomField($customField, $customGroup['title'].': ', false);
         if ($spec) {
           $specs->addSpecification($spec);
