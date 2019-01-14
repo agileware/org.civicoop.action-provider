@@ -3,10 +3,12 @@
   // Example usage: <crm-ap-condition-configuration configuration="condition.configuration" condition="condition.type"></crm-ap-condition-configuration>
   angular.module('action_provider').directive('crmApConditionConfiguration', ["crmApi", function(crmApi) {
     var conditions = {};
+    var actions = {};
     return {
       restrict: 'E',
       templateUrl: '~/action_provider/crmApConditionConfiguration.html',
       scope: {
+        name: '=',
         action: '=',
         context: '@',
         configuration: '=',
@@ -16,28 +18,44 @@
       link: function($scope, $el, $attr) {
         $scope.ts = CRM.ts(null);
         $scope.condition = {};
+        $scope.actionObject = {};
 
         if (!($scope.context in conditions)) {
           conditions[$scope.context] = {};
         }
+        if (!($scope.context in actions)) {
+          actions[$scope.context] = {};
+        }
 
-        $scope.$watch('action.condition_configuration', function(newCondition, oldCondition) {
+        $scope.$watch('name', function(newCondition, oldCondition) {
           if (!newCondition) {
             $scope.condition = null;
             return;
           }
 
-          if ($scope.action.condition_configuration.name in conditions[$scope.context]) {
-            $scope.condition = conditions[$scope.context][$scope.action.condition_configuration.name];
+          if ($scope.name in conditions[$scope.context]) {
+            $scope.condition = conditions[$scope.context][$scope.name];
             return;
           }
 
-          crmApi('ActionProvider', 'getcondition', {name: $scope.action.condition_configuration.name, context: $scope.context}).
+          crmApi('ActionProvider', 'getcondition', {name: $scope.name, context: $scope.context}).
           then(function (data) {
-            conditions[$scope.context][$scope.action.condition_configuration.name] = data;
+            conditions[$scope.context][$scope.name] = data;
             $scope.condition = data;
           });
         });
+
+        if ($scope.action in actions[$scope.context]) {
+          $scope.actionObject = actions[$scope.context][$scope.action];
+        } else {
+          crmApi('ActionProvider', 'getaction', {
+            name: $scope.action,
+            context: $scope.context
+          }).then(function (data) {
+            actions[$scope.context][$scope.action] = data;
+            $scope.actionObject = data;
+          });
+        }
       }
     };
   }]);

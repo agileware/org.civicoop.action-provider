@@ -64,7 +64,7 @@ class UpdateCustomData extends AbstractAction {
         if (isset($customField['is_view']) && $customField['is_view']) {
           continue;
         }
-        
+
         $spec = CustomField::getSpecFromCustomField($customField, $customGroup['title'].': ', false);
         if ($spec) {
           $specs->addSpecification($spec);

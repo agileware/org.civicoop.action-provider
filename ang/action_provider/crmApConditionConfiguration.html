@@ -9,7 +9,7 @@
           crm-ui-id="{{spec.name}}"
           ui-options="{allowClear: true}"
           name="{{spec.name}}"
-          ng-model="configuration[spec.name]"
+          ng-model="configuration.configuration[spec.name]"
           ng-required="spec.required"
       >
       	<option ng-repeat="(key,value) in spec.options" value="{{key}}">{{value}}</option>
@@ -21,7 +21,7 @@
         crm-entityref="{entity: spec.fk_entity, select: {allowClear: true, placeholder: spec.title}}"
         name="{{spec.name}}"
         crm-ui-id="{{spec.name}}"
-        ng-model="configuration[spec.name]"
+        ng-model="configuration.configuration[spec.name]"
         ng-required="spec.required"
 	    />
 	</div>
@@ -31,7 +31,7 @@
 	        type="text"
 	        crm-ui-id="{{spec.name}}"
 	        name="{{spec.name}}"
-	        ng-model="action.condition_configuration.configuration[spec.name]"
+	        ng-model="configuration.configuration[spec.name]"
 	        class="big crm-form-text"
 	        ng-required="spec.required"
 	        />
@@ -49,7 +49,7 @@
 					name="{{spec.name}}"
 					ui-jq="select2"
 					ui-options="{allowClear: true}"
-					ng-model="action.condition_configuration.parameter_mapping[spec.name]"
+					ng-model="configuration.parameter_mapping[spec.name]"
 					ng-required="spec.required"
 					ng-options="field.name as field.label for field in fields">
 				<option value=""></option>
@@ -60,7 +60,7 @@
 
 <div ng-if="fields" class="crm-block crm-form-block"  ng-form="output_mapper">
 	<h3>{{ts('Map output data if condition is not valid')}}</h3>
-		<ng-repeat ng-repeat="spec in action.type.output_spec">
+		<ng-repeat ng-repeat="spec in actionObject.output_spec">
 			<div crm-ui-field="{name: 'output_mapper.'+spec.name, title: spec.title}">
 	      <select
 	      	style="width: 90%;"
@@ -68,7 +68,7 @@
 	        name="{{spec.name}}"
 	        ui-jq="select2"
 	        ui-options="{allowClear: true}"
-	        ng-model="action.condition_configuration.output_mapping[spec.name]"
+	        ng-model="configuration.output_mapping[spec.name]"
 	        ng-options="field.name as field.label for field in fields">
 	        <option value=""></option>
 	      </select>
