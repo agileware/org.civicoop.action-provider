@@ -11,6 +11,7 @@ Version 1.2
 
 ** New actions**
 
+* Create Contribution
 * Send E-mail
 * Send E-mail To Participants
 * Find message template by name
