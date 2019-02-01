@@ -213,6 +213,10 @@ class Provider {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::SEND_MESSAGES_TO_CONTACTS
     ));
+    $this->addActionWithoutFiltering('CreateContribution', '\Civi\ActionProvider\Action\Contribution\CreateContribution', E::ts('Create contribution'), array(
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ));
 
 		$conditions = array(
 		  new \Civi\ActionProvider\Condition\ParameterIsEmpty(),

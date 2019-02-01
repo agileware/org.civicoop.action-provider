@@ -115,21 +115,22 @@ abstract class AbstractAction implements \JsonSerializable {
    * @throws \Exception
 	 */
 	public function execute(ParameterBagInterface $parameters, ParameterBagInterface $conditionParameters, ParameterBagInterface $invalidConditionOutput) {
-	  try {
-      $this->validateConfiguration();
-    } catch (InvalidParameterException $e) {
-	    throw new InvalidConfigurationException("Found invalid configuration for the action: ".get_class($this).' '.$e->getMessage());
-		}
-		try {
-      $this->validateParameters($parameters);
-    } catch (InvalidParameterException $e) {
-			throw new InvalidParameterException("Found invalid parameters for the action: ".get_class($this).' '.$e->getMessage());
-		}
-
 		if ($this->condition && !$this->condition->isConditionValid($conditionParameters)) {
       // Condition is invalid
       return $invalidConditionOutput;
     }
+
+    try {
+      $this->validateConfiguration();
+    } catch (InvalidParameterException $e) {
+      throw new InvalidConfigurationException("Found invalid configuration for the action: ".get_class($this).' '.$e->getMessage());
+    }
+    try {
+      $this->validateParameters($parameters);
+    } catch (InvalidParameterException $e) {
+      throw new InvalidParameterException("Found invalid parameters for the action: ".get_class($this).' '.$e->getMessage());
+    }
+
     // Condition is valid or no condition class is set
     $output = $this->createParameterBag();
     $this->doAction($parameters, $output);
