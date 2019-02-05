@@ -85,11 +85,19 @@ class Provider {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $this->addActionWithoutFiltering('CreateUpdateEmailAddress', '\Civi\ActionProvider\Action\Contact\CreateUpdateEmailAddress', E::ts('Create or update an e-mail address of a contact'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $this->addActionWithoutFiltering('UsePrimaryAddressOfContact', '\Civi\ActionProvider\Action\Contact\UsePrimaryAddressOfContact', E::ts('Use primary address of another contact'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
     $this->addActionWithoutFiltering('GetAddress', '\Civi\ActionProvider\Action\Contact\GetAddress', E::ts('Get address of a contact'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
+    $this->addActionWithoutFiltering('GetEmailAddress', '\Civi\ActionProvider\Action\Contact\GetEmailAddress', E::ts('Get e-mail address of a contact'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));

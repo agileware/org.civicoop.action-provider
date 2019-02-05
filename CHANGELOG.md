@@ -16,5 +16,7 @@ Version 1.2
 * Send E-mail To Participants
 * Find message template by name
 * Create or Update relationship
+* Create or Update an E-mail address of an contact
+* Get e-mail address of an contact
 
 
