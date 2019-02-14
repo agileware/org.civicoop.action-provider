@@ -76,6 +76,18 @@ class ContactActionUtils {
       $addressParams['street_address'] = $parameters->getParameter('street_address');
       $hasAddressParams = true;
     }
+    if ($parameters->getParameter('street_name')) {
+      $addressParams['street_name'] = $parameters->getParameter('street_name');
+      $hasAddressParams = true;
+    }
+    if ($parameters->getParameter('street_number')) {
+      $addressParams['street_number'] = $parameters->getParameter('street_number');
+      $hasAddressParams = true;
+    }
+    if ($parameters->getParameter('street_number_suffix')) {
+      $addressParams['street_number_suffix'] = $parameters->getParameter('street_number_suffix');
+      $hasAddressParams = true;
+    }
     if ($parameters->getParameter('postal_code')) {
       $addressParams['postal_code'] = $parameters->getParameter('postal_code');
       $hasAddressParams = true;
@@ -114,6 +126,9 @@ class ContactActionUtils {
     $spec->addSpecification(new Specification('name', 'String', E::ts('Address name'), false));
     $spec->addSpecification(new Specification('supplemental_address_1', 'String', E::ts('Supplemental address 1'), false));
     $spec->addSpecification(new Specification('street_address', 'String', E::ts('Street and housenumber'), false));
+    $spec->addSpecification(new Specification('street_name', 'String', E::ts('Street name'), false));
+    $spec->addSpecification(new Specification('street_number', 'String', E::ts('Housenumber'), false));
+    $spec->addSpecification(new Specification('street_number_suffix', 'String', E::ts('Housenumber Suffix'), false));
     $spec->addSpecification(new Specification('postal_code', 'String', E::ts('Postal code'), false));
     $spec->addSpecification(new Specification('city', 'String', E::ts('City'), false));
     $spec->addSpecification(new Specification('country_id', 'Integer', E::ts('Country ID'), false));
