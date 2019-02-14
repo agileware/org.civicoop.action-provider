@@ -2,6 +2,7 @@
 
 namespace Civi\ActionProvider;
 
+use Civi\ActionProvider\Condition\AbstractCondition;
 use \Civi\ActionProvider\Provider;
 
 class Container {
@@ -92,6 +93,21 @@ class Container {
     $this->defaultProvider->addAction($name, $className, $title, $tags);
     foreach($this->providerContexts as $provider) {
       $provider->addAction($name, $className, $title, $tags);
+    }
+    return $this;
+  }
+
+  /**
+   * Add an condition class to the list of available conditions.
+   *
+   * @param \Civi\ActionProvider\Condition\AbstractCondition $condition
+   * @return Container
+   * @throws \Exception
+   */
+  public function addCondition(AbstractCondition $condition) {
+    $this->defaultProvider->addCondition($condition);
+    foreach($this->providerContexts as $provider) {
+      $provider->addCondition($condition);
     }
     return $this;
   }
