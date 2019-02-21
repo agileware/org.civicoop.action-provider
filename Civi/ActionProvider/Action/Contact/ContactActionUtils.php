@@ -25,17 +25,46 @@ class ContactActionUtils {
   public static function createAddressForContact($contact_id, ParameterBagInterface $parameters, ParameterBagInterface $configuration) {
     $existingAddressId = false;  
     if ($configuration->getParameter('address_update_existing')) {
-      // Try to find existing address
-      $existingAddressParams['contact_id'] = $contact_id;
-      $existingAddressParams['location_type_id'] = $configuration->getParameter('address_location_type');
-      $existingAddressParams['return'] = 'id';
-      try {
-        $existingAddressId = civicrm_api3('Address', 'getvalue', $existingAddressParams);
-      } catch (\Exception $e) {
-        // Do nothing
-      }
+      $existingAddressId = self::findExistingAddress($contact_id, $configuration->getParameter('address_location_type'));
     }
     return self::createAddress($existingAddressId, $contact_id, $parameters, $configuration);
+  }
+
+  /**
+   * Try to find an existing address for this location type
+   * first see if a is_primary exists. If not then return the first one.
+   *
+   * @param $contact_id
+   * @param $location_type_id
+   *
+   * @return array|bool
+   */
+  public static function findExistingAddress($contact_id, $location_type_id) {
+    // First find the address with the location type and is_primary = 1
+    $existingAddressParams = array();
+    $existingAddressParams['contact_id'] = $contact_id;
+    if ($location_type_id > 0) {
+      $existingAddressParams['location_type_id'] = $location_type_id;
+    }
+    $existingAddressParams['is_primary'] = 1;
+    $existingAddressParams['return'] = 'id';
+    try {
+      return civicrm_api3('Address', 'getvalue', $existingAddressParams);
+    } catch (\Exception $e) {
+      // Do nothing
+    }
+    $existingAddressParams = array();
+    $existingAddressParams['contact_id'] = $contact_id;
+    $existingAddressParams['location_type_id'] = $location_type_id;
+    try {
+      $result = civicrm_api3('Address', 'get', $existingAddressParams);
+      foreach($result['values'] as $address) {
+        return $address['id'];
+      }
+    } catch (\Exception $e) {
+      // Do nothing
+    }
+    return false;
   }
 
   /**
@@ -172,7 +201,9 @@ class ContactActionUtils {
     // First find the phone with the location type and is_primary = 1
     $existingPhoneParams = array();
     $existingPhoneParams['contact_id'] = $contact_id;
-    $existingPhoneParams['location_type_id'] = $location_type_id;
+    if ($location_type_id > 0) {
+      $existingPhoneParams['location_type_id'] = $location_type_id;
+    }
     $existingPhoneParams['is_primary'] = 1;
     $existingPhoneParams['return'] = 'id';
     try {
@@ -183,7 +214,6 @@ class ContactActionUtils {
     $existingPhoneParams = array();
     $existingPhoneParams['contact_id'] = $contact_id;
     $existingPhoneParams['location_type_id'] = $location_type_id;
-    $existingPhoneParams['return'] = 'id';
     try {
       $result = civicrm_api3('Phone', 'get', $existingPhoneParams);
       foreach($result['values'] as $phone) {
@@ -251,7 +281,9 @@ class ContactActionUtils {
     // First find the email with the location type and is_primary = 1
     $existingEmailParams = array();
     $existingEmailParams['contact_id'] = $contact_id;
-    $existingEmailParams['location_type_id'] = $location_type_id;
+    if ($location_type_id > 0) {
+      $existingEmailParams['location_type_id'] = $location_type_id;
+    }
     $existingEmailParams['is_primary'] = 1;
     $existingEmailParams['return'] = 'id';
     try {
@@ -262,7 +294,6 @@ class ContactActionUtils {
     $existingEmailParams = array();
     $existingEmailParams['contact_id'] = $contact_id;
     $existingEmailParams['location_type_id'] = $location_type_id;
-    $existingEmailParams['return'] = 'id';
     try {
       $result = civicrm_api3('Email', 'get', $existingEmailParams);
       foreach($result['values'] as $email) {
@@ -298,6 +329,7 @@ class ContactActionUtils {
   public static function getLocationTypes() {
     if (!self::$locationTypes) {
       self::$locationTypes = array();
+      self::$locationTypes[-1] = E::ts('Is Primary');
       $locationTypesApi = civicrm_api3('LocationType', 'get', array('options' => array('limit' => 0)));
       foreach($locationTypesApi['values'] as $locationType) {
         self::$locationTypes[$locationType['id']] = $locationType['display_name'];
