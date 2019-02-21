@@ -9,6 +9,7 @@ Version 1.2
 
 * Refactor of the action provider, so that list of available actions only contains the title, name and not the instaciated class (with all the loaded configuration, such as groups, option values etc..)
 * Create Address actions now also contains parameters for street name, housenumber and housenumber suffix
+* Added OptionGroupByNameSpecification for parameter and configuration specification where the name of the option value is used rather than the value.
 
 ** New actions**
 
