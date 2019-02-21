@@ -25,7 +25,7 @@ class ContactActionUtils {
   public static function createAddressForContact($contact_id, ParameterBagInterface $parameters, ParameterBagInterface $configuration) {
     $existingAddressId = false;  
     if ($configuration->getParameter('address_update_existing')) {
-      $existingAddressId = self::findExistingAddress($contact_id, $configuration->getParameter('address_location_type'));
+      $existingAddressId = self::findExistingAddress($contact_id, $configuration->getParameter('address_location_type'), $configuration->getParameter('address_is_primary'));
     }
     return self::createAddress($existingAddressId, $contact_id, $parameters, $configuration);
   }
@@ -39,19 +39,18 @@ class ContactActionUtils {
    *
    * @return array|bool
    */
-  public static function findExistingAddress($contact_id, $location_type_id) {
+  public static function findExistingAddress($contact_id, $location_type_id, $is_primary) {
     // First find the address with the location type and is_primary = 1
-    $existingAddressParams = array();
-    $existingAddressParams['contact_id'] = $contact_id;
-    if ($location_type_id > 0) {
-      $existingAddressParams['location_type_id'] = $location_type_id;
-    }
-    $existingAddressParams['is_primary'] = 1;
-    $existingAddressParams['return'] = 'id';
-    try {
-      return civicrm_api3('Address', 'getvalue', $existingAddressParams);
-    } catch (\Exception $e) {
-      // Do nothing
+    if ($is_primary) {
+      $existingAddressParams = [];
+      $existingAddressParams['contact_id'] = $contact_id;
+      $existingAddressParams['is_primary'] = 1;
+      $existingAddressParams['return'] = 'id';
+      try {
+        return civicrm_api3('Address', 'getvalue', $existingAddressParams);
+      } catch (\Exception $e) {
+        // Do nothing
+      }
     }
     $existingAddressParams = array();
     $existingAddressParams['contact_id'] = $contact_id;
@@ -92,6 +91,9 @@ class ContactActionUtils {
     $addressParams['master_id'] = 'null';
     if ($configuration->doesParameterExists('address_location_type')) {
       $addressParams['location_type_id'] = $configuration->getParameter('address_location_type');
+    }
+    if ($configuration->doesParameterExists('address_is_primary') && $configuration->getParameter('address_is_primary')) {
+      $addressParams['is_primary'] = 1;
     }
     if ($parameters->getParameter('name')) {
       $addressParams['name'] = $parameters->getParameter('name');
@@ -144,8 +146,10 @@ class ContactActionUtils {
     $locationTypes = self::getLocationTypes();
     reset($locationTypes);
     $defaultLocationType = key($locationTypes);
+    $spec->addSpecification(new Specification('address_is_primary', 'Boolean', E::ts('Address: is primary'), false, 0, null, null, FALSE));
     $spec->addSpecification(new Specification('address_location_type', 'Integer', E::ts('Address: Location type'), true, $defaultLocationType, null, $locationTypes, FALSE));
     $spec->addSpecification(new Specification('address_update_existing', 'Boolean', E::ts('Address: update existing'), false, 0, null, null, FALSE));
+
   }
   
   /**
@@ -170,7 +174,7 @@ class ContactActionUtils {
   public static function createPhone($contact_id, ParameterBagInterface $parameters, ParameterBagInterface $configuration) {
     $existingPhoneId = false;  
     if ($configuration->getParameter('phone_update_existing')) {
-      $existingPhoneId = self::findExistingPhone($contact_id, $configuration->getParameter('phone_location_type'));
+      $existingPhoneId = self::findExistingPhone($contact_id, $configuration->getParameter('phone_location_type'), $configuration->getParameter('phone_is_primary'));
     }
     
     // Create phone
@@ -178,6 +182,9 @@ class ContactActionUtils {
       $phoneParams = array();
       if ($existingPhoneId) {
         $phoneParams['id'] = $existingPhoneId;
+      }
+      if ($configuration->doesParameterExists('phone_is_primary') && $configuration->getParameter('phone_is_primary')) {
+        $phoneParams['is_primary'] = 1;
       }
       $phoneParams['contact_id'] = $contact_id;
       $phoneParams['location_type_id'] = $configuration->getParameter('phone_location_type');
@@ -197,19 +204,18 @@ class ContactActionUtils {
    *
    * @return array|bool
    */
-  public static function findExistingPhone($contact_id, $location_type_id) {
+  public static function findExistingPhone($contact_id, $location_type_id, $is_primary) {
     // First find the phone with the location type and is_primary = 1
-    $existingPhoneParams = array();
-    $existingPhoneParams['contact_id'] = $contact_id;
-    if ($location_type_id > 0) {
-      $existingPhoneParams['location_type_id'] = $location_type_id;
-    }
-    $existingPhoneParams['is_primary'] = 1;
-    $existingPhoneParams['return'] = 'id';
-    try {
-      return civicrm_api3('Phone', 'getvalue', $existingPhoneParams);
-    } catch (\Exception $e) {
-      // Do nothing
+    if ($is_primary) {
+      $existingPhoneParams = [];
+      $existingPhoneParams['contact_id'] = $contact_id;
+      $existingPhoneParams['is_primary'] = 1;
+      $existingPhoneParams['return'] = 'id';
+      try {
+        return civicrm_api3('Phone', 'getvalue', $existingPhoneParams);
+      } catch (\Exception $e) {
+        // Do nothing
+      }
     }
     $existingPhoneParams = array();
     $existingPhoneParams['contact_id'] = $contact_id;
@@ -232,6 +238,7 @@ class ContactActionUtils {
     $locationTypes = self::getLocationTypes();
     reset($locationTypes);
     $defaultLocationType = key($locationTypes);
+    $spec->addSpecification(new Specification('phone_is_primary', 'Boolean', E::ts('Phone: is primary'), false, 0, null, null, FALSE));
     $spec->addSpecification(new Specification('phone_location_type', 'Integer', E::ts('Phone: Location type'), true, $defaultLocationType, null, $locationTypes, FALSE));
     $spec->addSpecification(new Specification('phone_update_existing', 'Boolean', E::ts('Phone: update existing'), false, 0, null, null, FALSE));
   }
@@ -250,7 +257,7 @@ class ContactActionUtils {
   public static function createEmail($contact_id, ParameterBagInterface $parameters, ParameterBagInterface $configuration) {
     $existingEmailId = false;  
     if ($configuration->getParameter('email_update_existing')) {
-      $existingEmailId = self::findExistingEmail($contact_id, $configuration->getParameter('email_location_type'));
+      $existingEmailId = self::findExistingEmail($contact_id, $configuration->getParameter('email_location_type'), $configuration->getParameter('email_is_primary'));
     }
     
     // Create email
@@ -258,6 +265,9 @@ class ContactActionUtils {
       $emailParams = array();
       if ($existingEmailId) {
         $emailParams['id'] = $existingEmailId;
+      }
+      if ($configuration->doesParameterExists('email_is_primary') && $configuration->getParameter('email_is_primary')) {
+        $emailParams['is_primary'] = 1;
       }
       $emailParams['contact_id'] = $contact_id;
       $emailParams['location_type_id'] = $configuration->getParameter('email_location_type');
@@ -277,19 +287,18 @@ class ContactActionUtils {
    *
    * @return array|bool
    */
-  public static function findExistingEmail($contact_id, $location_type_id) {
+  public static function findExistingEmail($contact_id, $location_type_id, $is_primary) {
     // First find the email with the location type and is_primary = 1
-    $existingEmailParams = array();
-    $existingEmailParams['contact_id'] = $contact_id;
-    if ($location_type_id > 0) {
-      $existingEmailParams['location_type_id'] = $location_type_id;
-    }
-    $existingEmailParams['is_primary'] = 1;
-    $existingEmailParams['return'] = 'id';
-    try {
-      return civicrm_api3('Email', 'getvalue', $existingEmailParams);
-    } catch (\Exception $e) {
-      // Do nothing
+    if ($is_primary) {
+      $existingEmailParams = [];
+      $existingEmailParams['contact_id'] = $contact_id;
+      $existingEmailParams['is_primary'] = 1;
+      $existingEmailParams['return'] = 'id';
+      try {
+        return civicrm_api3('Email', 'getvalue', $existingEmailParams);
+      } catch (\Exception $e) {
+        // Do nothing
+      }
     }
     $existingEmailParams = array();
     $existingEmailParams['contact_id'] = $contact_id;
@@ -312,6 +321,7 @@ class ContactActionUtils {
     $locationTypes = self::getLocationTypes();
     reset($locationTypes);
     $defaultLocationType = key($locationTypes);
+    $spec->addSpecification(new Specification('email_is_primary', 'Boolean', E::ts('Email: is primary'), false, 0, null, null, FALSE));
     $spec->addSpecification(new Specification('email_location_type', 'Integer', E::ts('E-mail: Location type'), true, $defaultLocationType, null, $locationTypes, FALSE));
     $spec->addSpecification(new Specification('email_update_existing', 'Boolean', E::ts('E-mail: update existing'), false, 0, null, null, FALSE));
   }
@@ -329,7 +339,6 @@ class ContactActionUtils {
   public static function getLocationTypes() {
     if (!self::$locationTypes) {
       self::$locationTypes = array();
-      self::$locationTypes[-1] = E::ts('Is Primary');
       $locationTypesApi = civicrm_api3('LocationType', 'get', array('options' => array('limit' => 0)));
       foreach($locationTypesApi['values'] as $locationType) {
         self::$locationTypes[$locationType['id']] = $locationType['display_name'];
