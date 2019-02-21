@@ -141,15 +141,7 @@ class ContactActionUtils {
   public static function createPhone($contact_id, ParameterBagInterface $parameters, ParameterBagInterface $configuration) {
     $existingPhoneId = false;  
     if ($configuration->getParameter('phone_update_existing')) {
-      // Try to find existing phone number
-      $existingPhoneParams['contact_id'] = $contact_id;
-      $existingPhoneParams['location_type_id'] = $configuration->getParameter('phone_location_type');
-      $existingPhoneParams['return'] = 'id';
-      try {
-        $existingPhoneId = civicrm_api3('Phone', 'getvalue', $existingPhoneParams);
-      } catch (\Exception $e) {
-        // Do nothing
-      }
+      $existingPhoneId = self::findExistingPhone($contact_id, $configuration->getParameter('phone_location_type'));
     }
     
     // Create phone
@@ -163,6 +155,42 @@ class ContactActionUtils {
       $phoneParams['phone'] = $parameters->getParameter('phone');
       $result = civicrm_api3('Phone', 'create', $phoneParams);
       return $result['id'];
+    }
+    return false;
+  }
+
+  /**
+   * Try to find an existing phone for this location type
+   * first see if a is_primary exists. If not then return the first one.
+   *
+   * @param $contact_id
+   * @param $location_type_id
+   *
+   * @return array|bool
+   */
+  public static function findExistingPhone($contact_id, $location_type_id) {
+    // First find the phone with the location type and is_primary = 1
+    $existingPhoneParams = array();
+    $existingPhoneParams['contact_id'] = $contact_id;
+    $existingPhoneParams['location_type_id'] = $location_type_id;
+    $existingPhoneParams['is_primary'] = 1;
+    $existingPhoneParams['return'] = 'id';
+    try {
+      return civicrm_api3('Phone', 'getvalue', $existingPhoneParams);
+    } catch (\Exception $e) {
+      // Do nothing
+    }
+    $existingPhoneParams = array();
+    $existingPhoneParams['contact_id'] = $contact_id;
+    $existingPhoneParams['location_type_id'] = $location_type_id;
+    $existingPhoneParams['return'] = 'id';
+    try {
+      $result = civicrm_api3('Phone', 'get', $existingPhoneParams);
+      foreach($result['values'] as $phone) {
+        return $phone['id'];
+      }
+    } catch (\Exception $e) {
+      // Do nothing
     }
     return false;
   }
@@ -192,15 +220,7 @@ class ContactActionUtils {
   public static function createEmail($contact_id, ParameterBagInterface $parameters, ParameterBagInterface $configuration) {
     $existingEmailId = false;  
     if ($configuration->getParameter('email_update_existing')) {
-      // Try to find existing email address
-      $existingEmailParams['contact_id'] = $contact_id;
-      $existingEmailParams['location_type_id'] = $configuration->getParameter('email_location_type');
-      $existingEmailParams['return'] = 'id';
-      try {
-        $existingEmailId = civicrm_api3('Email', 'getvalue', $existingEmailParams);
-      } catch (\Exception $e) {
-        // Do nothing
-      }
+      $existingEmailId = self::findExistingEmail($contact_id, $configuration->getParameter('email_location_type'));
     }
     
     // Create email
@@ -214,6 +234,42 @@ class ContactActionUtils {
       $emailParams['email'] = $parameters->getParameter('email');
       $result = civicrm_api3('Email', 'create', $emailParams);
       return $result['id'];
+    }
+    return false;
+  }
+
+  /**
+   * Try to find an existing email for this location type
+   * first see if a is_primary exists. If not then return the first one.
+   *
+   * @param $contact_id
+   * @param $location_type_id
+   *
+   * @return array|bool
+   */
+  public static function findExistingEmail($contact_id, $location_type_id) {
+    // First find the email with the location type and is_primary = 1
+    $existingEmailParams = array();
+    $existingEmailParams['contact_id'] = $contact_id;
+    $existingEmailParams['location_type_id'] = $location_type_id;
+    $existingEmailParams['is_primary'] = 1;
+    $existingEmailParams['return'] = 'id';
+    try {
+      return civicrm_api3('Email', 'getvalue', $existingEmailParams);
+    } catch (\Exception $e) {
+      // Do nothing
+    }
+    $existingEmailParams = array();
+    $existingEmailParams['contact_id'] = $contact_id;
+    $existingEmailParams['location_type_id'] = $location_type_id;
+    $existingEmailParams['return'] = 'id';
+    try {
+      $result = civicrm_api3('Email', 'get', $existingEmailParams);
+      foreach($result['values'] as $email) {
+        return $email['id'];
+      }
+    } catch (\Exception $e) {
+      // Do nothing
     }
     return false;
   }
