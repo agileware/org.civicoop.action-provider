@@ -16,6 +16,7 @@
       link: function($scope, $el, $attr) {
       	$scope.ts = CRM.ts(null);
       	$scope.action = {};
+      	$scope.uiFields = {};
       	
       	if (!($scope.context in actions)) {
       	  actions[$scope.context] = {};
@@ -30,6 +31,29 @@
       	then(function (data) {
       	  actions[$scope.context][$scope.name] = data;
       	  $scope.action = data;
+
+          for (var spec in $scope.action.configuration_spec) {
+            var crmUiField = {
+              'name': $scope.action.configuration_spec[spec].name,
+              'title': $scope.action.configuration_spec[spec].title
+            }
+            if ($scope.action.configuration_spec[spec].required) {
+              crmUiField.required = true;
+            }
+            $scope.action.configuration_spec[spec].crmUiField = crmUiField;
+          }
+
+          for (var spec in $scope.action.parameter_spec) {
+            var crmUiField = {
+              'name': 'input_mapper.' + $scope.action.parameter_spec[spec].name,
+              'title': $scope.action.parameter_spec[spec].title
+            }
+            if ($scope.action.parameter_spec[spec].required) {
+              crmUiField.required = true;
+            }
+            $scope.action.parameter_spec[spec].crmUiField = crmUiField;
+          }
+
       	});
       }
     };

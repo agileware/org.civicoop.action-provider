@@ -93,6 +93,9 @@ class CustomField {
     if ($customField['html_type'] == 'CheckBox') {
       $multiple = true;
     }
+    if ($customField['html_type'] == 'Multi-Select') {
+      $multiple = true;
+    }
     $default = null;
     $spec = null;
     
