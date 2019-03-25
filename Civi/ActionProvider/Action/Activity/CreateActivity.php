@@ -7,7 +7,7 @@
 namespace Civi\ActionProvider\Action\Activity;
 
 use Civi\ActionProvider\Action\AbstractAction;
-use Civi\ActionProvider\Parameter\OptionGroupSpecification;
+use Civi\ActionProvider\Parameter\OptionGroupByNameSpecification;
 use Civi\ActionProvider\Parameter\ParameterBagInterface;
 use Civi\ActionProvider\Parameter\Specification;
 use Civi\ActionProvider\Parameter\SpecificationBag;
@@ -25,8 +25,8 @@ class CreateActivity extends AbstractAction {
    */
   public function getConfigurationSpecification() {
     return new SpecificationBag([
-      new OptionGroupSpecification('activity_type', 'activity_type', E::ts('Activity Type'), TRUE),
-      new OptionGroupSpecification('activity_status', 'activity_status', E::ts('Activity Status'), TRUE),
+      new OptionGroupByNameSpecification('activity_type', 'activity_type', E::ts('Activity Type'), TRUE),
+      new OptionGroupByNameSpecification('activity_status', 'activity_status', E::ts('Activity Status'), TRUE),
       new Specification('subject', 'String', E::ts('Subject')),
     ]);
   }
