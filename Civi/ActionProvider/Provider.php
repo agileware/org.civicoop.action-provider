@@ -109,6 +109,10 @@ class Provider {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $this->addActionWithoutFiltering('FindIndividualByNameAndEmail', '\Civi\ActionProvider\Action\Contact\FindIndividualByNameAndEmail', E::ts('Find Individual by name and email'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $this->addActionWithoutFiltering('CreateUpdateIndividual', '\Civi\ActionProvider\Action\Contact\CreateUpdateIndividual', E::ts('Create or update Individual'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
