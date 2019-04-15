@@ -21,5 +21,6 @@ Version 1.2
 * Create or Update an E-mail address of an contact
 * Get e-mail address of an contact
 * Find Individual by Name and Email address
+* Get Relationship
 
 
