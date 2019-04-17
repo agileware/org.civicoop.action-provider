@@ -18,8 +18,9 @@ class AddConfigToQuickForm {
 	 *   The form.
 	 * @param AbstractAction $action
 	 *   The action
+   * @param $prefix
 	 */
-	public static function buildForm(\CRM_Core_Form $form, AbstractAction $action) {
+	public static function buildForm(\CRM_Core_Form $form, AbstractAction $action, $prefix=null) {
 		// Check whether the actionProviderElementNames is already set if so get 
 		// the variable and append the configuration for this action to it.
 		// Because we dont want to overwrite the current actionProviderElementNames.	
@@ -27,16 +28,24 @@ class AddConfigToQuickForm {
 		if (empty($elementNames)) {
 			$elementNames = array();
 		}
-		$prefix = $action->getName();
+		if (!$prefix) {
+		  $prefix = get_class($action);
+    }
+    $actionProviderElementDescriptions = array();
 		$elementNames[$prefix] = array();
 		foreach($action->getConfigurationSpecification() as $config_field) {
 			$field_name = $prefix.$config_field->getName();
+			if ($config_field->getDescription()) {
+			  $actionProviderElementDescriptions[$field_name] = $config_field->getDescription();
+      }
 			$attributes = array(
 				'class' => $prefix,
 			);	
 			
 			if (!empty($config_field->getFkEntity())) {
 				$attributes['entity'] = $config_field->getFkEntity();
+        $attributes['placeholder'] = E::ts('- Select -');
+        $attributes['select'] = array('minimumInputLength' => 0);
 				if ($config_field->isMultiple()) {
 					$attributes['multiple'] = true;
 				}
@@ -44,11 +53,12 @@ class AddConfigToQuickForm {
 				$elementNames[$prefix][] = $field_name;
 			}else if (!empty($config_field->getOptions())) {
 				$attributes['class'] .= ' crm-select2 huge';
+				$attributes['placeholder'] = E::ts('- Select -');
 				if ($config_field->isMultiple()) {
 					$attributes['multiple'] = true;
 					$options = $config_field->getOptions();
 				} else {
-					$options = array(E::ts(' - select -')) + $config_field->getOptions();
+					$options = $config_field->getOptions();
 				}
 				$form->add('select', $field_name, $config_field->getTitle(), $options, $config_field->isRequired(), $attributes);
 				$elementNames[$prefix][] = $field_name;
@@ -57,8 +67,10 @@ class AddConfigToQuickForm {
 				$form->add('text', $field_name, $config_field->getTitle(), $attributes, $config_field->isRequired());
 				$elementNames[$prefix][] = $field_name;
 			}
+
 		}
 		$form->assign('actionProviderElementNames', $elementNames);
+		$form->assign('actionProviderElementDescriptions', $actionProviderElementDescriptions);
 	}
 	
 	/**
@@ -68,11 +80,14 @@ class AddConfigToQuickForm {
 	 *   The action.
 	 * @param array $data
 	 *   The current configuration array
+   * @param prefix
 	 * @return array
 	 */
-	public static function setDefaultValues(AbstractAction $action, $data) {
+	public static function setDefaultValues(AbstractAction $action, $data, $prefix=null) {
 		$defaultValues = array();
-		$prefix = $action->getName();
+    if (!$prefix) {
+      $prefix = get_class($action);
+    }
 		foreach($action->getConfigurationSpecification() as $config_field) {
   		if (isset($data[$config_field->getName()])) {
   			$defaultValues[$prefix.$config_field->getName()] = $data[$config_field->getName()];
@@ -90,10 +105,13 @@ class AddConfigToQuickForm {
 	 *   The form.
 	 * @param AbstractAction $action
 	 *   The action
+   * @param $prefix
 	 * @return array
 	 */
-	public static function getSubmittedConfiguration(\CRM_Core_Form $form, AbstractAction $action) {
-		$prefix = $action->getName();	
+	public static function getSubmittedConfiguration(\CRM_Core_Form $form, AbstractAction $action, $prefix = null) {
+    if (!$prefix) {
+      $prefix = get_class($action);
+    }
 		$submitted_configuration = array();
 		$submittedValues = $form->getVar('_submitValues');
 		foreach($action->getConfigurationSpecification() as $config_field) {
