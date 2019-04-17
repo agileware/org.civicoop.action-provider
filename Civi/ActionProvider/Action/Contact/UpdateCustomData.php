@@ -27,11 +27,10 @@ class UpdateCustomData extends AbstractAction {
       if (stripos($spec->getName(), 'custom_')!==0) {
         continue;
       }
-      if ($parameters->getParameter($spec->getName())) {
+      if ($parameters->doesParameterExists($spec->getName())) {
         $apiParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
       }
     }
-    
     $result = civicrm_api3('Contact', 'create', $apiParams);
   }
   
