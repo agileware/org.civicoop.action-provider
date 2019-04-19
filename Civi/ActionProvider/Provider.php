@@ -133,6 +133,10 @@ class Provider {
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG
     ));
+    $this->addActionWithoutFiltering('UpdateActivityStatus', '\Civi\ActionProvider\Action\Activity\UpdateActivityStatus',E::ts('Update activity status') , array(
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG
+    ));
     $this->addActionWithoutFiltering('DeleteActivity', '\Civi\ActionProvider\Action\Activity\DeleteActivity', E::ts('Delete activity'), array(
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG

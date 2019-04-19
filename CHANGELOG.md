@@ -1,17 +1,17 @@
 Version 1.2
 ===========
 
-** Renamed actions**
+**Renamed actions**
 
 * Renamed the Create/Update Group action from Create to GroupCreate. If you are using the _Create/Update Group_ action you have to reconfigure it.
 
-** Other Major changes **
+**Other Major changes**
 
 * Refactor of the action provider, so that list of available actions only contains the title, name and not the instaciated class (with all the loaded configuration, such as groups, option values etc..)
 * Create Address actions now also contains parameters for street name, housenumber and housenumber suffix
 * Added OptionGroupByNameSpecification for parameter and configuration specification where the name of the option value is used rather than the value.
 
-** New actions**
+**New actions**
 
 * Create Contribution
 * Send E-mail
@@ -22,5 +22,5 @@ Version 1.2
 * Get e-mail address of an contact
 * Find Individual by Name and Email address
 * Get Relationship
-
+* Update Activity Status
 
