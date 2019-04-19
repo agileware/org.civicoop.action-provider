@@ -23,4 +23,5 @@ Version 1.2
 * Find Individual by Name and Email address
 * Get Relationship
 * Update Activity Status
+* Create PDF
 
