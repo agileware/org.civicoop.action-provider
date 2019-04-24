@@ -1,7 +1,5 @@
 # action-provider
 
-**This extension is in an prototype stage**
-
 This extension provides a base class for actions. An action is something other extensions could reuse and which is executable.
 At its own this extension does not do something but it might be used by other extensions.
 
@@ -25,7 +23,7 @@ install it with the command-line tool [cv](https://github.com/civicrm/cv).
 
 ```bash
 cd <extension-dir>
-cv dl action-provider@https://lab.civicrm.org/jaapjansma/action-provider/repository/master/archive.zip
+cv dl action-provider@https://lab.civicrm.org/extensions/action-provider/repository/master/archive.zip
 ```
 
 ## Installation (CLI, Git)
@@ -34,11 +32,15 @@ Sysadmins and developers may clone the [Git](https://en.wikipedia.org/wiki/Git) 
 install it with the command-line tool [cv](https://github.com/civicrm/cv).
 
 ```bash
-git clone https://lab.civicrm.org/jaapjansma/action-provider.git
+git clone https://lab.civicrm.org/extensions/action-provider.git
 cv en action_provider
 ```
 
-## Roadmap
+## Developer documentation
 
-1. Implement an interface and implement the interface in the form-processor extension.
-2. Add a set of action which could be reused to this extension
+* [How to create an action](docs/howto_create_an_action.md)
+* How to use the action provider in your extension (not yet written)
+* How to use the batch functionality in your extension (not yet written)
+
+
+## Roadmap

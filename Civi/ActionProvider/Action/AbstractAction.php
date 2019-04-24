@@ -54,6 +54,11 @@ abstract class AbstractAction implements \JsonSerializable {
 	protected $provider;
 
   /**
+   * @var name of the current batcj
+   */
+	protected $currentBatch;
+
+  /**
    * @var AbstractCondition
    */
   private $condition;
@@ -135,7 +140,31 @@ abstract class AbstractAction implements \JsonSerializable {
     $output = $this->createParameterBag();
     $this->doAction($parameters, $output);
 		return $output;
-	} 
+	}
+
+  /**
+   * This function initialize a batch.
+   *
+   * @param $batchName
+   */
+	public function initializeBatch($batchName) {
+    $this->currentBatch = $batchName;
+  }
+
+  /**
+   * This function finishes a batch and is called when a batch with actions is finished.
+   *
+   * @param $batchName
+   * @param bool
+   *   Whether this was the last batch.
+   */
+  public function finishBatch($batchName, $isLastBatch=false) {
+    // Child classes could override this function
+    // E.g. merge files in a directory
+    $this->currentBatch = null;
+  }
+
+
 	
 	/**
 	 * @return bool

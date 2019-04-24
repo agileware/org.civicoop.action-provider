@@ -48,6 +48,12 @@ class Provider {
    *   Contains all possible conditions.
    */
 	protected $allConditions = array();
+
+  /**
+   * @var AbstractAction[]
+   *   Contains all instanciated actions.
+   */
+	protected $batchActions = array();
 	
 	public function __construct() {
 	  $this->addActionWithoutFiltering('SetValue', '\Civi\ActionProvider\Action\Generic\SetValue', E::ts('Set Value'), array(
@@ -325,6 +331,41 @@ class Provider {
 		}
 		return null;
 	}
+
+  /**
+   * Returns an action and store the instance to use in batch mode
+   *
+   * @return \Civi\ActionProvider\Action\AbstractAction|null when action is not found.
+   */
+  public function getBatchActionByName($name, $configuration, $batchName) {
+    if (!isset($this->batchActions[$batchName])) {
+      $this->batchActions[$batchName] = array();
+    }
+    if (!isset($this->batchActions[$batchName][$name])) {
+      $this->batchActions[$batchName][$name] = $this->getActionByName($name);
+      if (!$this->batchActions[$batchName][$name]) {
+        return null;
+      }
+      $this->batchActions[$batchName][$name]->getConfiguration()->fromArray($configuration);
+      $this->batchActions[$batchName][$name]->initializeBatch($batchName);
+    }
+    return $this->batchActions[$batchName][$name];
+  }
+
+  /**
+   * Finish a batch
+   *
+   * @param $batchName
+   * @param bool $isLastBatch
+   */
+  public function finishBatch($batchName, $isLastBatch=false) {
+    if (isset($this->batchActions[$batchName])) {
+      foreach($this->batchActions[$batchName] as $actionName => $action) {
+        $action->finishBatch($batchName, $isLastBatch);
+        unset($this->batchActions[$batchName][$actionName]);
+      }
+    }
+  }
 
   /**
    * Returns all available conditins

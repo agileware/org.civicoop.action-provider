@@ -14,11 +14,12 @@ class FileWriter {
    *
    * @param $contents
    * @param $filename
+   * @param $subDir
    * @return string
    *   The full file path.
    */
-  public static function writeFile($contents, $filename) {
-    $basePath = \CRM_Core_Config::singleton()->templateCompileDir . 'action_provider';
+  public static function writeFile($contents, $filename, $subDir) {
+    $basePath = \CRM_Core_Config::singleton()->templateCompileDir . $subDir;
     \CRM_Utils_File::createDir($basePath);
     \CRM_Utils_File::restrictAccess($basePath.'/');
     $fullFilePath = $basePath.'/'. $filename;

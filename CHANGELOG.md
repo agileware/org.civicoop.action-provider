@@ -1,5 +1,18 @@
+Version 1.3
+-----------
+
+*Major Changes*
+
+* Added batch processing of actions. Also added the start and finish of a batch to the action provider class.
+
+*Changed actions*
+
+* The create PDF action now supports batching and it also returns the filename and url of the generated PDF.
+
+*New actions*
+
 Version 1.2
-===========
+-----------
 
 **Renamed actions**
 

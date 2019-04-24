@@ -5,6 +5,8 @@ class CRM_ActionProvider_Page_DownloadFile extends CRM_Core_Page {
 
   public function run() {
     $fileName = CRM_Utils_Request::retrieve('filename', 'String', $this, FALSE);
+    $downloadName = CRM_Utils_Request::retrieve('downloadname', 'String', $this, FALSE);
+    $subdir = CRM_Utils_Request::retrieve('subdir', 'String', $this, FALSE);
     if (empty($fileName)) {
       CRM_Core_Error::statusBounce("Cannot access file");
     }
@@ -13,7 +15,7 @@ class CRM_ActionProvider_Page_DownloadFile extends CRM_Core_Page {
       CRM_Core_Error::statusBounce("Malformed filename");
     }
 
-    $basePath = CRM_Core_Config::singleton()->templateCompileDir . 'action_provider';
+    $basePath = CRM_Core_Config::singleton()->templateCompileDir . $subdir;
     $path = $basePath.'/'.$fileName;
     $mimeType = mime_content_type($path);
 
@@ -27,7 +29,7 @@ class CRM_ActionProvider_Page_DownloadFile extends CRM_Core_Page {
     }
 
     CRM_Utils_System::download(
-      $fileName,
+      $downloadName,
       $mimeType,
       $buffer,
       NULL,
