@@ -151,6 +151,10 @@ class Provider {
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $this->addActionWithoutFiltering('GetActivityContact', '\Civi\ActionProvider\Action\Activity\GetActivityContact', E::ts('Get contact IDs from an activity'), array(
+      AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $this->addActionWithoutFiltering('Send', '\Civi\ActionProvider\Action\BulkMail\Send',E::ts('Send Bulk Mail') , array(
       AbstractAction::SEND_MESSAGES_TO_CONTACTS,
       'bulk_mail'

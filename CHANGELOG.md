@@ -11,6 +11,8 @@ Version 1.3
 
 *New actions*
 
+* Get contact IDs from an activity
+
 Version 1.2
 -----------
 
