@@ -4,6 +4,7 @@ Version 1.3
 *Major Changes*
 
 * Added batch processing of actions. Also added the start and finish of a batch to the action provider class.
+* Added a `getHelpText` method for retrieving a a help text for each action
 
 *Changed actions*
 

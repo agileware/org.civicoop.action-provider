@@ -242,6 +242,18 @@ abstract class AbstractAction implements \JsonSerializable {
 			}
 		}
 	}
+
+  /**
+   * Returns a help text for this action.
+   *
+   * The help text is shown to the administrator who is configuring the action.
+   * Override this function in a child class if your action has a help text.
+   *
+   * @return string|false
+   */
+	public function getHelpText() {
+	  return false;
+  }
 	
 	/**
 	 * Creates a parameterBag object.
@@ -261,6 +273,7 @@ abstract class AbstractAction implements \JsonSerializable {
 		$return['parameter_spec'] = $this->getParameterSpecification()->toArray();
 		$return['configuration_spec'] = $this->getConfigurationSpecification()->toArray();
 		$return['output_spec'] = $this->getOutputSpecification()->toArray();
+    $return['help_text'] = $this->getHelpText();
 		$return['default_configuration'] = null;
 		if ($this->getDefaultConfiguration()) {
 			$return['default_configuration'] = $this->getDefaultConfiguration()->toArray();
