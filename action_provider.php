@@ -14,8 +14,7 @@ function action_provider_civicrm_container($container) {
 		// Only add our container when it does not exists.
 		// This way other extensions might override the container method.
 		$actionProviderDefinition = new Definition('Civi\ActionProvider\Container');
-		$actionProviderDefinition->setFactoryClass('Civi\ActionProvider\Container');
-		$actionProviderDefinition->setFactoryMethod('getInstance');
+		$actionProviderDefinition->setFactory(['Civi\ActionProvider\Container', 'getinstance']);
 		$container->setDefinition('action_provider', $actionProviderDefinition);
 	}
 }
