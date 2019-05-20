@@ -131,6 +131,10 @@ class Provider {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $this->addActionWithoutFiltering('UploadCustomFileField', '\Civi\ActionProvider\Action\Contact\UploadCustomFileField',E::ts('Upload file to a custom field for a contact') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $this->addActionWithoutFiltering('FindOrCreateContactByEmail', '\Civi\ActionProvider\Action\Contact\FindOrCreateContactByEmail', E::ts('Find or create contact by e-mail') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,

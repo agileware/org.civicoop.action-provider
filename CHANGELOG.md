@@ -2,6 +2,7 @@ Version 1.4 (not yet released)
 -----------
 
 * Changed the implementation of the civicrm_container hook.
+* Added action to upload files
 
 Version 1.3
 -----------
