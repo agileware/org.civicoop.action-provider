@@ -31,27 +31,9 @@ class SpecificationBag implements \IteratorAggregate  {
 			  throw new InvalidParameterException($spec->getName(). ' is required');
 			}
 
-      if($parameters->doesParameterExists($spec->getName()) && $spec->isMultiple()) {
-        $values = $parameters->getParameter($spec->getName());
-        if (is_array($values)) {
-          foreach ($values as $value) {
-            if ($value && \CRM_Utils_Type::validate($value, $spec->getDataType(), FALSE) === NULL) {
-              throw new InvalidParameterException($spec->getName(). ' is invalid');
-            }
-          }
-        } else {
-          if ($values && \CRM_Utils_Type::validate($values, $spec->getDataType(), FALSE) === NULL) {
-            throw new InvalidParameterException($spec->getName(). ' is invalid');
-          }
-        }
-      } elseif($parameters->doesParameterExists($spec->getName()) && !$spec->isMultiple()) {
+      if($parameters->doesParameterExists($spec->getName())) {
         $value = $parameters->getParameter($spec->getName());
-        if (is_array($value)) {
-          throw new InvalidParameterException($spec->getName(). ' requires a single value a multiple value is given');
-        }
-        if ($value && \CRM_Utils_Type::validate($value, $spec->getDataType(), FALSE) === NULL) {
-          throw new InvalidParameterException($spec->getName(). ' is invalid');
-        }
+        $spec->validate($value);
       }
 		}
 		return true;

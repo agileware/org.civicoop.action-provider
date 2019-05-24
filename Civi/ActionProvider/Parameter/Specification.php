@@ -2,6 +2,7 @@
 
 namespace Civi\ActionProvider\Parameter;
 
+use Civi\ActionProvider\Exception\InvalidParameterException;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class Specification {
@@ -285,6 +286,37 @@ class Specification {
       $ret[$key] = $this->$method();
     }
     return $ret;
+  }
+
+  /**
+   * Validate a value
+   *
+   * @param $value
+   *
+   * @throws \CRM_Core_Exception
+   * @throws \Civi\ActionProvider\Exception\InvalidParameterException
+   */
+  public function validate($value) {
+    if ($this->isMultiple()) {
+      if (is_array($value)) {
+        foreach ($value as $v) {
+          if ($v && \CRM_Utils_Type::validate($v, $this->getDataType(), FALSE) === NULL) {
+            throw new InvalidParameterException($this->getName(). ' is invalid');
+          }
+        }
+      } else {
+        if ($value && \CRM_Utils_Type::validate($value, $this->getDataType(), FALSE) === NULL) {
+          throw new InvalidParameterException($this->getName(). ' is invalid');
+        }
+      }
+    } else {
+      if (is_array($value)) {
+        throw new InvalidParameterException($this->getName(). ' requires a single value a multiple value is given');
+      }
+      if ($value && \CRM_Utils_Type::validate($value, $this->getDataType(), FALSE) === NULL) {
+        throw new InvalidParameterException($this->getName(). ' is invalid');
+      }
+    }
   }
 	
 }

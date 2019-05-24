@@ -3,6 +3,7 @@
 namespace Civi\ActionProvider\Action\Contact;
 
 use \Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\Parameter\FileSpecification;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
@@ -24,33 +25,55 @@ class UploadCustomFileField extends AbstractAction {
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $contact_id = $parameters->getParameter('contact_id');
     $customFieldId = $this->configuration->getParameter('custom_field');
+    $file = $parameters->getParameter('file');
+    $deleteCurrentFile = false;
+    $uploadNewOne = true;
+    $updateCustomField = false;
+    if (empty($file)) {
+      $deleteCurrentFile = true;
+      $uploadNewOne = false;
+    } elseif (!isset($file['id'])) {
+      $deleteCurrentFile = true;
+    } elseif (isset($file['id'])) {
+      $uploadNewOne = false;
+    }
     try {
       $currentFile = civicrm_api3('Contact', 'getvalue', [
         'id' => $contact_id,
         'return' => 'custom_' . $customFieldId
       ]);
-      if ($currentFile) {
+      if (isset($file['id']) && $currentFile && $file['id'] != $currentFile) {
+        $deleteCurrentFile = true;
+        $updateCustomField = $file['id'];
+      }
+      if ($currentFile && $deleteCurrentFile) {
         civicrm_api3('Attachment', 'delete', array('id' => $currentFile));
       }
     } catch (\Exception $e) {
       // Do nothing
     }
-    $customField = civicrm_api3('CustomField', 'getsingle', array('id' => $customFieldId));
-    $attachmentParams = array(
-      'entity_table' => 'civicrm_contact',
-      'entity_id' => $contact_id,
-      'name' => $parameters->getParameter('file_name'),
-      'content' => base64_decode($parameters->getParameter('file_content')),
-      'mime_type' => $parameters->getParameter('file_mime_type'),
-      'check_permissions' => false,
-    );
-    $result = civicrm_api3('Attachment', 'create', $attachmentParams);
-    civicrm_api3('Contact', 'create', array(
-      'id' => $contact_id,
-      'custom_'.$customFieldId => $result['id']
-    ));
+
+
+    if ($uploadNewOne) {
+      $attachmentParams = [
+        'entity_table' => 'civicrm_contact',
+        'entity_id' => $contact_id,
+        'name' => $file['name'],
+        'content' => base64_decode($file['content']),
+        'mime_type' => $file['mime_type'],
+        'check_permissions' => FALSE,
+      ];
+      $result = civicrm_api3('Attachment', 'create', $attachmentParams);
+      $updateCustomField = $result['id'];
+    }
+    if ($updateCustomField) {
+      civicrm_api3('Contact', 'create', [
+        'id' => $contact_id,
+        'custom_' . $customFieldId => $updateCustomField,
+      ]);
+    }
   }
-  
+
   /**
    * Returns the specification of the configuration options for the actual action.
    * 
@@ -93,9 +116,7 @@ class UploadCustomFileField extends AbstractAction {
   public function getParameterSpecification() {
     $specs = new SpecificationBag();
     $specs->addSpecification(new Specification('contact_id', 'Integer', E::ts('Contact ID'), true));
-    $specs->addSpecification(new Specification('file_name', 'String', E::ts('Filename'), true));
-    $specs->addSpecification(new Specification('file_mime_type', 'String', E::ts('File mime type'), true));
-    $specs->addSpecification(new Specification('file_content', 'String', E::ts('File content (base64 decoded)'), true));
+    $specs->addSpecification(new FileSpecification('file', E::ts('File'), false));
     return $specs;
   }
   
