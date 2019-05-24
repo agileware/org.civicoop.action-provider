@@ -56,6 +56,8 @@ class Provider {
 	protected $batchActions = array();
 	
 	public function __construct() {
+    $this->addActionWithoutFiltering('OptionValueToLabel', '\Civi\ActionProvider\Action\Generic\OptionValueToLabel', E::ts('Show option value(s) as their Label(s)'), array(
+      AbstractAction::DATA_MANIPULATION_TAG));
 	  $this->addActionWithoutFiltering('SetValue', '\Civi\ActionProvider\Action\Generic\SetValue', E::ts('Set Value'), array(
 	    AbstractAction::DATA_MANIPULATION_TAG));
     $this->addActionWithoutFiltering('SetDateValue', '\Civi\ActionProvider\Action\Generic\SetDateValue', E::ts('Set date value'), array(

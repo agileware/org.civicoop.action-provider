@@ -3,6 +3,7 @@ Version 1.4 (not yet released)
 
 * Changed the implementation of the civicrm_container hook.
 * Added action to upload files
+* Added action to retrieve the labels from option values
 
 Version 1.3
 -----------
