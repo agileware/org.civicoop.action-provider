@@ -37,7 +37,8 @@ class CreatePdf extends AbstractAction {
       return;
     }
     $this->messages[] = $processedMessage;
-    $pdfContents = \CRM_Utils_PDF_Utils::html2pdf(array($processedMessage), $fileNameWithoutContactId, TRUE);
+    $text = array($processedMessage);
+    $pdfContents = \CRM_Utils_PDF_Utils::html2pdf($text, $fileNameWithoutContactId, TRUE);
 
     if ($this->currentBatch && $this->zip) {
       $this->zip->addFromString($filenameWithContactId, $pdfContents);
