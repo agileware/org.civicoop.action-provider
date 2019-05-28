@@ -54,6 +54,8 @@ class CreateOrUpdateEvent extends AbstractAction {
       new Specification('description', 'String', E::ts('Description'), false, null, null, null, FALSE),
       new Specification('start_date', 'Timestamp', E::ts('Start date'), true, null, null, null, FALSE),
       new Specification('end_date', 'Timestamp', E::ts('End date'), false, null, null, null, FALSE),
+      new Specification('is_active', 'Boolean', E::ts('Is active'), false, 1, null, null, FALSE),
+      new Specification('is_public', 'Boolean', E::ts('Is public'), false, 0, null, null, FALSE),
     ));
     
     $customGroups = civicrm_api3('CustomGroup', 'get', array('extends' => 'Event', 'is_active' => 1, 'options' => array('limit' => 0)));
@@ -135,6 +137,12 @@ class CreateOrUpdateEvent extends AbstractAction {
     if ($locBlockId) {
       $apiParams['loc_block_id'] = $locBlockId;
       $apiParams['is_show_location'] = '1';
+    }
+    if ($parameters->doesParameterExists('is_active')) {
+      $apiParams['is_active'] = $parameters->getParameter('is_active');
+    }
+    if ($parameters->doesParameterExists('is_public')) {
+      $apiParams['is_public'] = $parameters->getParameter('is_public');
     }
 
     foreach($this->getParameterSpecification() as $spec) {

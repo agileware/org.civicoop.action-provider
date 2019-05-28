@@ -129,6 +129,10 @@ class Provider {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $this->addActionWithoutFiltering('CreateUpdateOrganization', '\Civi\ActionProvider\Action\Contact\CreateUpdateOrganization', E::ts('Create or update Organization'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $this->addActionWithoutFiltering('UpdateCustomData', '\Civi\ActionProvider\Action\Contact\UpdateCustomData',E::ts('Update custom data for a contact') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
@@ -186,6 +190,10 @@ class Provider {
     ));
     $this->addActionWithoutFiltering('GetEvent', '\Civi\ActionProvider\Action\Event\GetEvent',E::ts('Get event data') , array(
       AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
+    $this->addActionWithoutFiltering('EventUploadCustomFileField', '\Civi\ActionProvider\Action\Event\UploadCustomFileField',E::ts('Upload file to a custom field for an event') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
     ));
     $this->addActionWithoutFiltering('DeleteEvent', '\Civi\ActionProvider\Action\Event\DeleteEvent',E::ts('Delete event') , array(
       AbstractAction::DATA_MANIPULATION_TAG,
