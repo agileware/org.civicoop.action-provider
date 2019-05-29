@@ -56,7 +56,7 @@ class UploadCustomFileField extends AbstractAction {
 
     if ($uploadNewOne) {
       $attachmentParams = [
-        'entity_table' => 'civicrm_event',
+        'field_name' => 'custom_'.$customFieldId,
         'entity_id' => $event_id,
         'name' => $file['name'],
         'content' => base64_decode($file['content']),
@@ -64,7 +64,7 @@ class UploadCustomFileField extends AbstractAction {
         'check_permissions' => FALSE,
       ];
       $result = civicrm_api3('Attachment', 'create', $attachmentParams);
-      $updateCustomField = $result['id'];
+      $updateCustomField = false; //Code above updates the custom field.
     }
     if ($updateCustomField) {
       civicrm_api3('Event', 'create', [
