@@ -99,12 +99,12 @@ class ContactActionUtils {
       $addressParams['name'] = $parameters->getParameter('name');
       $hasAddressParams = true;
     }
-    if ($parameters->getParameter('supplemental_address_1')) {
-      $addressParams['supplemental_address_1'] = $parameters->getParameter('supplemental_address_1');
-      $hasAddressParams = true;
-    }
     if ($parameters->getParameter('street_address')) {
       $addressParams['street_address'] = $parameters->getParameter('street_address');
+      $hasAddressParams = true;
+    }
+    if ($parameters->getParameter('supplemental_address_1')) {
+      $addressParams['supplemental_address_1'] = $parameters->getParameter('supplemental_address_1');
       $hasAddressParams = true;
     }
     if ($parameters->getParameter('street_name')) {
@@ -125,6 +125,10 @@ class ContactActionUtils {
     }
     if ($parameters->getParameter('city')) {
       $addressParams['city'] = $parameters->getParameter('city');
+      $hasAddressParams = true;
+    }
+    if ($parameters->getParameter('state')) {
+      $addressParams['state_province_id'] = $parameters->getParameter('state');
       $hasAddressParams = true;
     }
     if ($parameters->getParameter('country_id')) {
@@ -157,14 +161,15 @@ class ContactActionUtils {
    */
   public static function createAddressParameterSpecification(SpecificationBag $spec) {
     $spec->addSpecification(new Specification('name', 'String', E::ts('Address name'), false));
-    $spec->addSpecification(new Specification('supplemental_address_1', 'String', E::ts('Supplemental address 1'), false));
     $spec->addSpecification(new Specification('street_address', 'String', E::ts('Street and housenumber'), false));
+    $spec->addSpecification(new Specification('supplemental_address_1', 'String', E::ts('Supplemental address 1'), false));
     $spec->addSpecification(new Specification('street_name', 'String', E::ts('Street name'), false));
     $spec->addSpecification(new Specification('street_number', 'String', E::ts('Housenumber'), false));
     $spec->addSpecification(new Specification('street_unit', 'String', E::ts('Street Unit'), false));
     $spec->addSpecification(new Specification('postal_code', 'String', E::ts('Postal code'), false));
     $spec->addSpecification(new Specification('city', 'String', E::ts('City'), false));
-    $spec->addSpecification(new Specification('country_id', 'Integer', E::ts('Country ID'), false));
+    $spec->addSpecification(new Specification('state_province_id', 'Integer', E::ts('State/Province ID'), false, null, 'StateProvince'));
+    $spec->addSpecification(new Specification('country_id', 'Integer', E::ts('Country ID'), false, null, 'Country'));
   }
   
   
