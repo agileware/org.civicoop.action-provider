@@ -6,6 +6,7 @@ Version 1.4 (not yet released)
 * Added action to upload files for an event
 * Added action to create an organization
 * Added action to retrieve the labels from option values
+* Added action to repeat an event
 
 Version 1.3
 -----------
