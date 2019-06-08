@@ -191,6 +191,9 @@ class Provider {
     $this->addActionWithoutFiltering('CreateRecurringEvent', '\Civi\ActionProvider\Action\Event\CreateRecurringEvent', E::ts('Repeat an event') , array(
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $this->addActionWithoutFiltering('GetRecurringEvent', '\Civi\ActionProvider\Action\Event\GetRecurringEvent', E::ts('Get event repetition') , array(
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $this->addActionWithoutFiltering('GetEvent', '\Civi\ActionProvider\Action\Event\GetEvent',E::ts('Get event data') , array(
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));

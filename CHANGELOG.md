@@ -7,6 +7,7 @@ Version 1.4 (not yet released)
 * Added action to create an organization
 * Added action to retrieve the labels from option values
 * Added action to repeat an event
+* Added action to get repetition of an event
 * Added action to create a case
 
 Version 1.3

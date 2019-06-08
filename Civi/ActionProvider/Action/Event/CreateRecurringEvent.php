@@ -43,7 +43,7 @@ class CreateRecurringEvent extends AbstractAction {
     $specs->addSpecification(new Specification('event_id', 'Integer', E::ts('Event ID'), true, false));
     $specs->addSpecification(new Specification('unit', 'String', E::ts('Frequency Unit'), true, false, null, \CRM_Core_SelectValues::getRecurringFrequencyUnits()));
     $specs->addSpecification(new Specification('interval', 'Integer', E::ts('Frequency Interval'), true, 1));
-    $specs->addSpecification(new Specification('start_date', 'Timestamp', E::ts('Start Repating from'), true, null));
+    $specs->addSpecification(new Specification('start_date', 'Timestamp', E::ts('Start from (default to start of event)'), false, null));
     $specs->addSpecification(new Specification('start_action_offset', 'Integer', E::ts('Ends after'), false, null));
     $specs->addSpecification(new Specification('repeat_absolute_date', 'Date', E::ts('End on'), false, null));
     $specs->addSpecification(new Specification('start_action_condition', 'String', E::ts('Repeats On (day of weeks)'), false, null, null, $weekDays, true));
@@ -110,9 +110,16 @@ class CreateRecurringEvent extends AbstractAction {
     $params['entity_table'] = 'civicrm_event';
     $params['used_for'] = 'civicrm_event';
     $config = \CRM_Core_Config::singleton();
-    $startDate = new \DateTime(\CRM_Utils_Date::customFormat($parameters->getParameter('start_date'), '%Y-%m-%d %H:%i'));
-    $params['repetition_start_date'] = \CRM_Utils_Date::customFormat($parameters->getParameter('start_date'), $config->dateformatFull);
-    $params['repetition_start_date_time'] = $startDate->format('H:i');
+    if ($parameters->doesParameterExists('start_date')) {
+      $startDate = new \DateTime(\CRM_Utils_Date::customFormat($parameters->getParameter('start_date'), '%Y-%m-%d %H:%i'));
+      $params['repetition_start_date'] = \CRM_Utils_Date::customFormat($parameters->getParameter('start_date'), $config->dateformatFull);
+      $params['repetition_start_date_time'] = $startDate->format('H:i');
+    } else {
+      $startDate = civicrm_api3('Event', 'getvalue', array('id' => $event_id, 'return' => 'start_date'));
+      $startDate = new \DateTime($startDate);
+      $params['repetition_start_date'] = \CRM_Utils_Date::customFormat($startDate->format('Ymd His'), $config->dateformatFull);
+      $params['repetition_start_date_time'] = $startDate->format('H:i');
+    }
     $params['ends'] = $parameters->getParameter('ends');
     if ($parameters->doesParameterExists('start_action_offset') && $parameters->getParameter('start_action_offset')) {
       $params['ends'] = 1;
@@ -133,11 +140,100 @@ class CreateRecurringEvent extends AbstractAction {
     $recurobj = new \CRM_Core_BAO_RecurringEntity();
     $dbParams = $recurobj->mapFormValuesToDB($params);
 
-/*var_dump($params);
-var_dump($dbParams);
-exit();*/
-    //@Todo Find existing schedule.
+    $this->removeCurrentActionSchedule($event_id);
+    $actionScheduleObj = \CRM_Core_BAO_ActionSchedule::add($dbParams);
 
+    $recursion = new \CRM_Core_BAO_RecurringEntity();
+    $recursion->dateColumns = $params['dateColumns'];
+    $recursion->scheduleId = $actionScheduleObj->id;
+
+    if (!empty($params['intervalDateColumns'])) {
+      $recursion->intervalDateColumns = $params['intervalDateColumns'];
+    }
+    $recursion->entity_id = $params['entity_id'];
+    $recursion->entity_table = $params['entity_table'];
+    $linkedEntities = $this->getLinkedEntities($event_id);
+    if (!empty($linkedEntities)) {
+      $recursion->linkedEntities = $linkedEntities;
+    }
+
+    $recursion->generate();
+  }
+
+  /**
+   * Remove a current schedule
+   *
+   * @param $event_id
+   */
+  protected function removeCurrentActionSchedule($event_id) {
+    $sql = "SELECT id FROM civicrm_action_schedule WHERE used_for = 'civicrm_event' AND 'entity_value' = %1";
+    $sqlParams[1] = arary($event_id, 'Integer');
+    $id = \CRM_Core_DAO::singleValueQuery($sql, $sqlParams);
+    \CRM_Core_BAO_ActionSchedule::del($id);
+
+    //If entity has any pre delete function, consider that first
+    if (\CRM_Utils_Array::value('pre_delete_func', \CRM_Core_BAO_RecurringEntity::$_recurringEntityHelper['civicrm_event']) &&
+      \CRM_Utils_Array::value('helper_class', \CRM_Core_BAO_RecurringEntity::$_recurringEntityHelper['civicrm_event'])
+    ) {
+      $preDeleteResult = call_user_func_array(\CRM_Core_BAO_RecurringEntity::$_recurringEntityHelper['civicrm_event']['pre_delete_func'], array($event_id));
+      if (!empty($preDeleteResult)) {
+        call_user_func(array(\CRM_Core_BAO_RecurringEntity::$_recurringEntityHelper['civicrm_event']['helper_class'], $preDeleteResult));
+      }
+    }
+    //Ready to execute delete on entities if it has delete function set
+    if (\CRM_Utils_Array::value('delete_func', \CRM_Core_BAO_RecurringEntity::$_recurringEntityHelper['civicrm_event']) &&
+      \CRM_Utils_Array::value('helper_class', \CRM_Core_BAO_RecurringEntity::$_recurringEntityHelper['civicrm_event'])
+    ) {
+      //Check if pre delete function has some ids to be deleted
+      if (!empty(\CRM_Core_BAO_RecurringEntity::$_entitiesToBeDeleted)) {
+        foreach (\CRM_Core_BAO_RecurringEntity::$_entitiesToBeDeleted as $eid) {
+          $result = civicrm_api3(
+            'Event',
+            \CRM_Core_BAO_RecurringEntity::$_recurringEntityHelper['civicrm_event']['delete_func'],
+            array(
+              'sequential' => 1,
+              'id' => $eid,
+            )
+          );
+          if ($result['error']) {
+            throw new \Exception('Error during creating of repeating events');
+          }
+        }
+      }
+      else {
+        $getRelatedEntities = \CRM_Core_BAO_RecurringEntity::getEntitiesFor($event_id, 'civicrm_event', FALSE);
+        foreach ($getRelatedEntities as $key => $value) {
+          $result = civicrm_api3(
+            'Event',
+            \CRM_Core_BAO_RecurringEntity::$_recurringEntityHelper['civicrm_event']['delete_func'],
+            array(
+              'sequential' => 1,
+              'id' => $value['id'],
+            )
+          );
+          if ($result['error']) {
+            throw new \Exception('Error during creating of repeating events');
+          }
+        }
+      }
+    }
+
+    // find all entities from the recurring set. At this point we 'll get entities which were not deleted
+    // for e.g due to participants being present. We need to delete them from recurring tables anyway.
+    $pRepeatingEntities = \CRM_Core_BAO_RecurringEntity::getEntitiesFor($event_id, 'civicrm_event');
+    foreach ($pRepeatingEntities as $val) {
+      \CRM_Core_BAO_RecurringEntity::delEntity($val['id'], $val['table'], TRUE);
+    }
+  }
+
+  /**
+   * Returns a list with linked entities
+   *
+   * @param $event_id
+   *
+   * @return array
+   */
+  protected function getLinkedEntities($event_id) {
     $linkedEntities = array(
       array(
         'table' => 'civicrm_price_set_entity',
@@ -176,123 +272,7 @@ exit();*/
         'isRecurringEntityRecord' => TRUE,
       ),
     );
-
-    $actionScheduleObj = \CRM_Core_BAO_ActionSchedule::add($dbParams);
-
-    $excludeDateList = array();
-    if (\CRM_Utils_Array::value('exclude_date_list', $params) && \CRM_Utils_Array::value('parent_entity_id', $params) && $actionScheduleObj->entity_value) {
-      //Since we get comma separated values lets get them in array
-      $excludeDates = explode(",", $params['exclude_date_list']);
-
-      //Check if there exists any values for this option group
-      $optionGroupIdExists = \CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup',
-        'civicrm_event_repeat_exclude_dates_' . $params['parent_entity_id'],
-        'id',
-        'name'
-      );
-      if ($optionGroupIdExists) {
-        \CRM_Core_BAO_OptionGroup::del($optionGroupIdExists);
-      }
-      $optionGroupParams = array(
-        'name' => 'civicrm_event_repeat_exclude_dates_' . $actionScheduleObj->entity_value,
-        'title' => 'civicrm_event recursion',
-        'is_reserved' => 0,
-        'is_active' => 1,
-      );
-      $opGroup = \CRM_Core_BAO_OptionGroup::add($optionGroupParams);
-      if ($opGroup->id) {
-        $oldWeight = 0;
-        $fieldValues = array('option_group_id' => $opGroup->id);
-        foreach ($excludeDates as $val) {
-          $optionGroupValue = array(
-            'option_group_id' => $opGroup->id,
-            'label' => \CRM_Utils_Date::processDate($val),
-            'value' => \CRM_Utils_Date::processDate($val),
-            'name' => $opGroup->name,
-            'description' => 'Used for recurring civicrm_event',
-            'weight' => \CRM_Utils_Weight::updateOtherWeights('CRM_Core_DAO_OptionValue', $oldWeight, \CRM_Utils_Array::value('weight', $params), $fieldValues),
-            'is_active' => 1,
-          );
-          $excludeDateList[] = $optionGroupValue['value'];
-          \CRM_Core_BAO_OptionValue::create($optionGroupValue);
-        }
-      }
-    }
-    //Delete relations if any from recurring entity tables before inserting new relations for this entity id
-    if ($params['entity_id']) {
-      //If entity has any pre delete function, consider that first
-      if (\CRM_Utils_Array::value('pre_delete_func', \CRM_Core_BAO_RecurringEntity::$_recurringEntityHelper[$params['entity_table']]) &&
-        \CRM_Utils_Array::value('helper_class', \CRM_Core_BAO_RecurringEntity::$_recurringEntityHelper[$params['entity_table']])
-      ) {
-        $preDeleteResult = call_user_func_array(\CRM_Core_BAO_RecurringEntity::$_recurringEntityHelper[$params['entity_table']]['pre_delete_func'], array($params['entity_id']));
-        if (!empty($preDeleteResult)) {
-          call_user_func(array(\CRM_Core_BAO_RecurringEntity::$_recurringEntityHelper[$params['entity_table']]['helper_class'], $preDeleteResult));
-        }
-      }
-      //Ready to execute delete on entities if it has delete function set
-      if (\CRM_Utils_Array::value('delete_func', \CRM_Core_BAO_RecurringEntity::$_recurringEntityHelper[$params['entity_table']]) &&
-        \CRM_Utils_Array::value('helper_class', \CRM_Core_BAO_RecurringEntity::$_recurringEntityHelper[$params['entity_table']])
-      ) {
-        //Check if pre delete function has some ids to be deleted
-        if (!empty(\CRM_Core_BAO_RecurringEntity::$_entitiesToBeDeleted)) {
-          foreach (\CRM_Core_BAO_RecurringEntity::$_entitiesToBeDeleted as $eid) {
-            $result = civicrm_api3(
-              'Event',
-              \CRM_Core_BAO_RecurringEntity::$_recurringEntityHelper[$params['entity_table']]['delete_func'],
-              array(
-                'sequential' => 1,
-                'id' => $eid,
-              )
-            );
-            if ($result['error']) {
-              throw new \Exception('Error during creating of repeating events');
-            }
-          }
-        }
-        else {
-          $getRelatedEntities = \CRM_Core_BAO_RecurringEntity::getEntitiesFor($params['entity_id'], $params['entity_table'], FALSE);
-          foreach ($getRelatedEntities as $key => $value) {
-            $result = civicrm_api3(
-              'Event',
-              \CRM_Core_BAO_RecurringEntity::$_recurringEntityHelper[$params['entity_table']]['delete_func'],
-              array(
-                'sequential' => 1,
-                'id' => $value['id'],
-              )
-            );
-            if ($result['error']) {
-              throw new \Exception('Error during creating of repeating events');
-            }
-          }
-        }
-      }
-
-      // find all entities from the recurring set. At this point we 'll get entities which were not deleted
-      // for e.g due to participants being present. We need to delete them from recurring tables anyway.
-      $pRepeatingEntities = \CRM_Core_BAO_RecurringEntity::getEntitiesFor($params['entity_id'], $params['entity_table']);
-      foreach ($pRepeatingEntities as $val) {
-        \CRM_Core_BAO_RecurringEntity::delEntity($val['id'], $val['table'], TRUE);
-      }
-    }
-
-    $recursion = new \CRM_Core_BAO_RecurringEntity();
-    $recursion->dateColumns = $params['dateColumns'];
-    $recursion->scheduleId = $actionScheduleObj->id;
-
-    if (!empty($excludeDateList)) {
-      $recursion->excludeDates = $excludeDateList;
-      $recursion->excludeDateRangeColumns = $params['excludeDateRangeColumns'];
-    }
-    if (!empty($params['intervalDateColumns'])) {
-      $recursion->intervalDateColumns = $params['intervalDateColumns'];
-    }
-    $recursion->entity_id = $params['entity_id'];
-    $recursion->entity_table = $params['entity_table'];
-    if (!empty($linkedEntities)) {
-      $recursion->linkedEntities = $linkedEntities;
-    }
-
-    $recursion->generate();
+    return $linkedEntities;
   }
   
 }
