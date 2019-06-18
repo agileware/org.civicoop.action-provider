@@ -9,6 +9,7 @@ Version 1.4 (not yet released)
 * Added action to repeat an event (custom fields work since civicrm 5.15)
 * Added action to get repetition of an event
 * Added action to create a case
+* Added action to concat (meger) a date and a time field into one
 
 Version 1.3
 -----------
