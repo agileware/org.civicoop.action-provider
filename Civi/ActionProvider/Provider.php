@@ -217,6 +217,9 @@ class Provider {
     $this->addActionWithoutFiltering('SendEmailToParticipants', '\Civi\ActionProvider\Action\Event\SendEmailToParticipants', E::ts('Send e-mail to participants'), array(
       AbstractAction::SEND_MESSAGES_TO_CONTACTS,
     ));
+    $this->addActionWithoutFiltering('UpdateEventStatus', '\Civi\ActionProvider\Action\Event\UpdateEventStatus', E::ts('Update Event Status') , array(
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $this->addActionWithoutFiltering('GetRelationship', '\Civi\ActionProvider\Action\Relationship\GetRelationship',E::ts('Get relationship') , array(
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,

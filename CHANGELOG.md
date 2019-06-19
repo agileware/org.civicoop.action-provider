@@ -10,6 +10,7 @@ Version 1.4 (not yet released)
 * Added action to get repetition of an event
 * Added action to create a case
 * Added action to concat (meger) a date and a time field into one
+* Added action to update an event status
 
 Version 1.3
 -----------
