@@ -129,15 +129,9 @@ class GetEvent extends AbstractAction {
           $output->setParameter($spec->getName(), $event[$fieldName]);
         }
       }
-
-      // Get Address ID
       try {
-        $event = civicrm_api3('Event', 'getsingle', ['id' => $parameters->getParameter('event_id')]);
-        $locationInUseByOtherEvents = civicrm_api3('Event', 'getcount', array('loc_block_id' => $event['loc_block_id']));
-        if ($locationInUseByOtherEvents == 1) {
-          $loc = civicrm_api3('LocBlock', 'getsingle', ['id' => $event['loc_block_id']]);
-          $output->setParameter('address_id', $loc['address_id']);
-        }
+        $loc = civicrm_api3('LocBlock', 'getsingle', ['id' => $event['loc_block_id']]);
+        $output->setParameter('address_id', $loc['address_id']);
       } catch (\Exception $e) {
         // Do nothing
       }
