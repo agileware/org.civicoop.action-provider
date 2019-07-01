@@ -54,7 +54,7 @@ class FindIndividualByNameAndEmail extends AbstractAction {
       WHERE contact.is_deleted = 0 AND contact.is_deceased = 0 AND contact.contact_type = 'Individual'
       AND contact.first_name = %2 AND contact.last_name = %3
       
-      ORDER BY weight
+      ORDER BY weight ASC
     ";
 
     $sqlParams[1] = array($parameters->getParameter('email'), 'String');

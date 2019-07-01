@@ -163,7 +163,7 @@ class GetRelationship extends AbstractAction {
       $relationshipFindParams['is_active'] = '0';
       try {
         $relationship = civicrm_api3('Relationship', 'getsingle', $relationshipFindParams);
-        $relationship;
+        return $relationship;
       } catch (\Exception $e) {
         // Do nothing
       }

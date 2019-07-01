@@ -76,19 +76,21 @@ class CreateOrUpdateRelationship extends CreateRelationship {
    * @throws \Exception
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
+    $relationship_type_id = $this->relationshipTypeIds[$this->configuration->getParameter('relationship_type_id')];
     $relationship_id = false;
     $alsoUpdateInactiveOne = false;
     if ($this->configuration->doesParameterExists('also_update_inactive') && $this->configuration->getParameter('also_update_inactive')) {
       $alsoUpdateInactiveOne = true;
     }
-    $relationship_id = $this->findExistingRelationshipId($parameters->getParameter('contact_id_a'), $parameters->getParameter('contact_id_b'), $this->relationshipTypes[$parameters->getParameter('relationship_type_id')], $alsoUpdateInactiveOne);
+    $relationship_id = $this->findExistingRelationshipId($parameters->getParameter('contact_id_a'), $parameters->getParameter('contact_id_b'), $relationship_type_id, $alsoUpdateInactiveOne);
     if ($relationship_id) {
       $relationshipParams['id'] = $relationship_id;
     }
+
     // Get the contact and the event.
     $relationshipParams['contact_id_a'] = $parameters->getParameter('contact_id_a');
     $relationshipParams['contact_id_b'] = $parameters->getParameter('contact_id_b');
-    $relationshipParams['relationship_type_id'] = $this->relationshipTypeIds[$this->configuration->getParameter('relationship_type_id')];
+    $relationshipParams['relationship_type_id'] = $relationship_type_id;
     $relationshipParams['is_active'] = '1';
     if ($this->configuration->getParameter('set_start_date') && !$relationship_id) {
       $today = new \DateTime();
@@ -97,7 +99,6 @@ class CreateOrUpdateRelationship extends CreateRelationship {
     if ($relationship_id) {
       $relationshipParams['end_date'] = 'null';
     }
-
     $relationshipParams['custom'] = array();
     foreach($this->getParameterSpecification() as $spec) {
       if (stripos($spec->getName(), 'custom_')!==0) {
@@ -119,6 +120,7 @@ class CreateOrUpdateRelationship extends CreateRelationship {
       $output->setParameter('id', $relationship->id);
     } catch (\Exception $e) {
       // Do nothing.
+      echo $e;
     }
   }
 
