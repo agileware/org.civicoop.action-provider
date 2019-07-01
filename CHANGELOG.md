@@ -11,6 +11,7 @@ Version 1.4 (not yet released)
 * Added action to create a case
 * Added action to concat (meger) a date and a time field into one
 * Added action to update an event status
+* Added action to get membership data by membership id
 
 Version 1.3
 -----------

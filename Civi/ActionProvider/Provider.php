@@ -256,6 +256,10 @@ class Provider {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $this->addActionWithoutFiltering('GetMembershipById', '\Civi\ActionProvider\Action\Membership\GetMembershipById',E::ts('Get membership by ID') , array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $this->addActionWithoutFiltering('GetMembershipType', '\Civi\ActionProvider\Action\Membership\GetMembershipType',E::ts('Get membership type data') , array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
