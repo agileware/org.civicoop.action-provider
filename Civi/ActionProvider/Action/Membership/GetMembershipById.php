@@ -7,10 +7,10 @@
 namespace Civi\ActionProvider\Action\Membership;
 
 use Civi\ActionProvider\Action\AbstractAction;
-use Civi\ActionProvider\Action\Membership\Parameter\MembershipTypeSpecification;
 use Civi\ActionProvider\Parameter\ParameterBagInterface;
 use Civi\ActionProvider\Parameter\Specification;
 use Civi\ActionProvider\Parameter\SpecificationBag;
+use \Civi\ActionProvider\Utils\CustomField;
 
 use CRM_ActionProvider_ExtensionUtil as E;
 
