@@ -4,6 +4,7 @@ namespace Civi\ActionProvider\Action\Event;
 
 use \Civi\ActionProvider\Action\AbstractAction;
 use Civi\ActionProvider\Action\Contact\ContactActionUtils;
+use Civi\ActionProvider\Exception\ExecutionException;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
@@ -129,7 +130,7 @@ class CreateRecurringEvent extends AbstractAction {
       $params['repeat_absolute_date'] = \CRM_Utils_Date::customFormat($parameters->getParameter('repeat_absolute_date'), $config->dateformatFull);
     } else {
       // Invalid configuration
-      return;
+      throw new ExecutionException('Invalid parameters');
     }
 
     // CRM-16568 - check if parent exist for the event.
@@ -140,7 +141,11 @@ class CreateRecurringEvent extends AbstractAction {
     $recurobj = new \CRM_Core_BAO_RecurringEntity();
     $dbParams = $recurobj->mapFormValuesToDB($params);
 
-    $this->removeCurrentActionSchedule($event_id);
+    try {
+      $this->removeCurrentActionSchedule($event_id);
+    } catch (\Exception $e) {
+      // Do nothing
+    }
     $actionScheduleObj = \CRM_Core_BAO_ActionSchedule::add($dbParams);
 
     $recursion = new \CRM_Core_BAO_RecurringEntity();
@@ -167,7 +172,7 @@ class CreateRecurringEvent extends AbstractAction {
    */
   protected function removeCurrentActionSchedule($event_id) {
     $sql = "SELECT id FROM civicrm_action_schedule WHERE used_for = 'civicrm_event' AND 'entity_value' = %1";
-    $sqlParams[1] = arary($event_id, 'Integer');
+    $sqlParams[1] = array($event_id, 'Integer');
     $id = \CRM_Core_DAO::singleValueQuery($sql, $sqlParams);
     \CRM_Core_BAO_ActionSchedule::del($id);
 
