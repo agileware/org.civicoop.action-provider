@@ -31,8 +31,10 @@ class SendEmailToParticipants extends AbstractAction {
     if ($parameters->doesParameterExists('with_status')) {
       $status = $parameters->getParameter('with_status');
       if (is_array($status)) {
-        $participantParams['status_id']['IN'] = $status;
-      } else {
+        if (count($status)) {
+          $participantParams['status_id']['IN'] = $status;
+        }
+      } elseif ($status) {
         $participantParams['status_id'] = $status;
       }
     }
