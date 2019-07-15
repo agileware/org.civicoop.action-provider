@@ -1,4 +1,4 @@
-Version 1.4 (not yet released)
+Version 1.4
 -----------
 
 * Changed the implementation of the civicrm_container hook.
