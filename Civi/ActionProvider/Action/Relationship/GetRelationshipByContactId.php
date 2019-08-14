@@ -14,7 +14,7 @@ use \Civi\ActionProvider\Utils\CustomField;
 
 use CRM_ActionProvider_ExtensionUtil as E;
 
-class GetRelationship extends AbstractAction {
+class GetRelationshipByContactId extends AbstractAction {
 
   protected $relationshipTypes = array();
   protected $relationshipTypeIds = array();
@@ -25,7 +25,7 @@ class GetRelationship extends AbstractAction {
     $this->relationshipTypes = array();
     $this->relationshipTypeIds = array();
     foreach($relationshipTypesApi['values'] as $relType) {
-      $this->relationshipTypes[$relType['name_a_b']] = $relType['label_a_b'];
+      //$this->relationshipTypes[$relType['name_a_b']] = $relType['label_a_b'];
       $this->relationshipTypeIds[$relType['name_a_b']] = $relType['id'];
     }
 
@@ -39,6 +39,7 @@ class GetRelationship extends AbstractAction {
   public function getConfigurationSpecification() {
     return new SpecificationBag(array(
       new Specification('relationship_type_id', 'String', E::ts('Relationship type'), true, null, null, $this->relationshipTypes, False),
+      new Specification('contact_id_side', 'String', E::ts('Contact is'), true, null, null, ['a' => E::ts('Contact A'), 'b' => E::ts('Contact B')], False),
       new Specification('inactive', 'Boolean', E::ts('Also return inactive relationships'), false, 0, null, null, false)
     ));
   }
@@ -62,8 +63,7 @@ class GetRelationship extends AbstractAction {
        * @param array $options
        * @param bool $multiple
        */
-      new Specification('contact_id_a', 'Integer', E::ts('Contact ID A'), true, null, null, null, FALSE),
-      new Specification('contact_id_b', 'Integer', E::ts('Contact ID B'), true, null, null, null, FALSE),
+      new Specification('contact_id', 'Integer', E::ts('Contact ID'), true, null, null, null, FALSE),
     ));
   }
 
@@ -143,12 +143,16 @@ class GetRelationship extends AbstractAction {
    *
    * @return array|false
    */
-  protected function findExistingRelationshipId($contact_id_a, $contact_id_b, $type_id, $also_inactive=false) {
+  protected function findExistingRelationshipId($side, $contact_id, $type_id, $also_inactive=false) {
     $relationshipFindParams = array();
-    $relationshipFindParams['contact_id_a'] = $contact_id_a;
-    $relationshipFindParams['contact_id_b'] = $contact_id_b;
+    if ($side == 'a') {
+      $relationshipFindParams['contact_id_a'] = $contact_id;
+    } else {
+      $relationshipFindParams['contact_id_b'] = $contact_id;
+    }
     $relationshipFindParams['relationship_type_id'] = $type_id;
     $relationshipFindParams['is_active'] = '1';
+    $relationshipFindParams['options']['limit'] = 1;
     try {
       $relationship = civicrm_api3('Relationship', 'getsingle', $relationshipFindParams);
       return $relationship;
@@ -157,10 +161,14 @@ class GetRelationship extends AbstractAction {
     }
     if ($also_inactive) {
       $relationshipFindParams = array();
-      $relationshipFindParams['contact_id_a'] = $contact_id_a;
-      $relationshipFindParams['contact_id_b'] = $contact_id_b;
+      if ($side == 'a') {
+        $relationshipFindParams['contact_id_a'] = $contact_id;
+      } else {
+        $relationshipFindParams['contact_id_b'] = $contact_id;
+      }
       $relationshipFindParams['relationship_type_id'] = $type_id;
       $relationshipFindParams['is_active'] = '0';
+      $relationshipFindParams['options']['limit'] = 1;
       try {
         $relationship = civicrm_api3('Relationship', 'getsingle', $relationshipFindParams);
         return $relationship;
@@ -186,7 +194,9 @@ class GetRelationship extends AbstractAction {
     if ($this->configuration->doesParameterExists('inactive') && $this->configuration->getParameter('inactive')) {
       $inactiveOnes = true;
     }
-    $relationship = $this->findExistingRelationshipId($parameters->getParameter('contact_id_a'), $parameters->getParameter('contact_id_b'), $this->relationshipTypeIds[$this->configuration->getParameter('relationship_type_id')], $inactiveOnes);
+    $side = $this->configuration->getParameter('contact_id_side');
+    $relationshipTypeId = $this->relationshipTypeIds[$this->configuration->getParameter('relationship_type_id')];
+    $relationship = $this->findExistingRelationshipId($side, $parameters->getParameter('contact_id'), $relationshipTypeId, $inactiveOnes);
     if ($relationship) {
       foreach($relationship as $field => $value) {
         if (stripos($field, 'custom_') !== 0) {

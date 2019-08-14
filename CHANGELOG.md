@@ -1,6 +1,8 @@
 Version 1.5 (not yet released)
 ------------------------------
 
+* Added action Get Relationship By Contact ID
+* Fixed issue with the Get Relationship action
 
 Version 1.4
 -----------
