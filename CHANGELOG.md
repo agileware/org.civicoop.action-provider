@@ -1,6 +1,7 @@
 Version 1.6 (not yet released)
 
-* Update related membership when create relationship or create/update relationship action is performed. 
+* Update related membership when create relationship or create/update relationship action is performed.
+* Added action Get Contact By Custom Field. 
 
 Version 1.5
 ------------------------------
