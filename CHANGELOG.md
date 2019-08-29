@@ -1,10 +1,11 @@
-Version 1.6 (not yet released)
+Version 1.6
+-----------
 
 * Update related membership when create relationship or create/update relationship action is performed.
 * Added action Get Contact By Custom Field. 
 
 Version 1.5
-------------------------------
+-----------
 
 * Added action Get Relationship By Contact ID
 * Fixed issue with the Get Relationship action
