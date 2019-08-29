@@ -1,3 +1,7 @@
+Version 1.6 (not yet released)
+
+* Update related membership when create relationship or create/update relationship action is performed. 
+
 Version 1.5
 ------------------------------
 

@@ -116,7 +116,7 @@ class CreateOrUpdateRelationship extends CreateRelationship {
 
     try {
       // Do not use api as the api checks for an existing relationship.
-      $relationship = \CRM_Contact_BAO_Relationship::add($relationshipParams);
+      $relationship = \CRM_Contact_BAO_Relationship::create($relationshipParams);
       $output->setParameter('id', $relationship->id);
     } catch (\Exception $e) {
       // Do nothing.
