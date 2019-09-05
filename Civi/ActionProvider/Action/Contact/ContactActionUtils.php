@@ -14,16 +14,16 @@ use CRM_ActionProvider_ExtensionUtil as E;
  *  - create/update email
  *  - create/update address
  *  - create/update phone
- */ 
+ */
 class ContactActionUtils {
-  
+
   private static $locationTypes = false;
-  
+
   /**
    * Create an address for a contact.
    */
   public static function createAddressForContact($contact_id, ParameterBagInterface $parameters, ParameterBagInterface $configuration) {
-    $existingAddressId = false;  
+    $existingAddressId = false;
     if ($configuration->getParameter('address_update_existing')) {
       $existingAddressId = self::findExistingAddress($contact_id, $configuration->getParameter('address_location_type'), $configuration->getParameter('address_is_primary'));
     }
@@ -127,8 +127,8 @@ class ContactActionUtils {
       $addressParams['city'] = $parameters->getParameter('city');
       $hasAddressParams = true;
     }
-    if ($parameters->getParameter('state')) {
-      $addressParams['state_province_id'] = $parameters->getParameter('state');
+    if ($parameters->getParameter('state_province_id')) {
+      $addressParams['state_province_id'] = $parameters->getParameter('state_province_id');
       $hasAddressParams = true;
     }
     if ($parameters->getParameter('country_id')) {
@@ -142,7 +142,7 @@ class ContactActionUtils {
 
     return false;
   }
-  
+
   /**
    * Update the configuration specification for create address.
    */
@@ -155,7 +155,7 @@ class ContactActionUtils {
     $spec->addSpecification(new Specification('address_update_existing', 'Boolean', E::ts('Address: update existing'), false, 0, null, null, FALSE));
 
   }
-  
+
   /**
    * Update the parameter specification for create address.
    */
@@ -171,17 +171,17 @@ class ContactActionUtils {
     $spec->addSpecification(new Specification('state_province_id', 'Integer', E::ts('State/Province ID'), false, null, 'StateProvince'));
     $spec->addSpecification(new Specification('country_id', 'Integer', E::ts('Country ID'), false, null, 'Country'));
   }
-  
-  
+
+
   /**
    * Create a phone for a contact.
    */
   public static function createPhone($contact_id, ParameterBagInterface $parameters, ParameterBagInterface $configuration) {
-    $existingPhoneId = false;  
+    $existingPhoneId = false;
     if ($configuration->getParameter('phone_update_existing')) {
       $existingPhoneId = self::findExistingPhone($contact_id, $configuration->getParameter('phone_location_type'), $configuration->getParameter('phone_is_primary'));
     }
-    
+
     // Create phone
     if ($parameters->getParameter('phone')) {
       $phoneParams = array();
@@ -235,7 +235,7 @@ class ContactActionUtils {
     }
     return false;
   }
-  
+
   /**
    * Update the configuration specification for create phone.
    */
@@ -247,24 +247,24 @@ class ContactActionUtils {
     $spec->addSpecification(new Specification('phone_location_type', 'Integer', E::ts('Phone: Location type'), true, $defaultLocationType, null, $locationTypes, FALSE));
     $spec->addSpecification(new Specification('phone_update_existing', 'Boolean', E::ts('Phone: update existing'), false, 0, null, null, FALSE));
   }
-  
+
   /**
    * Update the parameter specification for create phone.
    */
   public static function createPhoneParameterSpecification(SpecificationBag $spec) {
     $spec->addSpecification(new Specification('phone', 'String', E::ts('Phonenumber'), false));
   }
-  
-  
+
+
   /**
    * Create an e-mail address for a contact.
    */
   public static function createEmail($contact_id, ParameterBagInterface $parameters, ParameterBagInterface $configuration) {
-    $existingEmailId = false;  
+    $existingEmailId = false;
     if ($configuration->getParameter('email_update_existing')) {
       $existingEmailId = self::findExistingEmail($contact_id, $configuration->getParameter('email_location_type'), $configuration->getParameter('email_is_primary'));
     }
-    
+
     // Create email
     if ($parameters->getParameter('email')) {
       $emailParams = array();
@@ -318,7 +318,7 @@ class ContactActionUtils {
     }
     return false;
   }
-  
+
   /**
    * Update the configuration specification for create email.
    */
@@ -330,14 +330,14 @@ class ContactActionUtils {
     $spec->addSpecification(new Specification('email_location_type', 'Integer', E::ts('E-mail: Location type'), true, $defaultLocationType, null, $locationTypes, FALSE));
     $spec->addSpecification(new Specification('email_update_existing', 'Boolean', E::ts('E-mail: update existing'), false, 0, null, null, FALSE));
   }
-  
+
   /**
    * Update the parameter specification for create email.
    */
   public static function createEmailParameterSpecification(SpecificationBag $spec) {
     $spec->addSpecification(new Specification('email', 'String', E::ts('E-mail'), false));
   }
-  
+
   /**
    * Returns the location types
    */
@@ -351,5 +351,5 @@ class ContactActionUtils {
     }
     return self::$locationTypes;
   }
-  
+
 }

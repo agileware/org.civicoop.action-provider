@@ -9,18 +9,18 @@ use \CRM_ActionProvider_ExtensionUtil as E;
 
 /**
  * Singleton and conatiner class with all the actions.
- * 
- * This class could be overriden by child classes in an extension to provide a context aware container 
- * for the actions. 
+ *
+ * This class could be overriden by child classes in an extension to provide a context aware container
+ * for the actions.
  */
 class Provider {
-	
+
 	/**
 	 * @var array
 	 *   All the actions which are available for use in this context.
 	 */
 	protected $availableActions = array();
-	
+
 	/**
 	 * @var array
 	 *   All the actions including the inactive ones.
@@ -54,7 +54,7 @@ class Provider {
    *   Contains all instanciated actions.
    */
 	protected $batchActions = array();
-	
+
 	public function __construct() {
     $this->addActionWithoutFiltering('OptionValueToLabel', '\Civi\ActionProvider\Action\Generic\OptionValueToLabel', E::ts('Show option value(s) as their Label(s)'), array(
       AbstractAction::DATA_MANIPULATION_TAG));
@@ -111,6 +111,10 @@ class Provider {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $this->addActionWithoutFiltering('GetStateProvinceId', '\Civi\ActionProvider\Action\Contact\GetStateProvinceId', E::ts('Get state/province ID by name'), array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $this->addActionWithoutFiltering('GetAddressById', '\Civi\ActionProvider\Action\Contact\GetAddressById', E::ts('Get address by ID'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
@@ -120,10 +124,6 @@ class Provider {
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
     $this->addActionWithoutFiltering('FindIndividualByNameAndEmail', '\Civi\ActionProvider\Action\Contact\FindIndividualByNameAndEmail', E::ts('Find Individual by name and email'), array(
-      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
-      AbstractAction::DATA_RETRIEVAL_TAG,
-    ));
-    $this->addActionWithoutFiltering('FindContactByCustomField', '\Civi\ActionProvider\Action\Contact\FindByCustomField', E::ts('Find contact by custom field'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
@@ -305,7 +305,7 @@ class Provider {
 		$this->availableActions = array_filter($this->allActions, array($this, 'filterActions'));
     $this->availableConditions = array_filter($this->allConditions, array($this, 'filterConditions'));
 	}
-	
+
 	/**
 	 * Returns all available actions
 	 */
@@ -322,12 +322,12 @@ class Provider {
     }
     return $titles;
   }
-	
+
 	/**
 	 * Adds an action to the list of available actions.
-	 * 
+	 *
 	 * This function might be used by extensions to add their own actions to the system.
-	 * 
+	 *
 	 * @param String $name
    * @param String $className
    * @param String $title
@@ -357,10 +357,10 @@ class Provider {
     $this->acttionTags[$name] = $tags;
     return $this;
   }
-	
+
 	/**
 	 * Returns an action by its name.
-	 * 
+	 *
 	 * @return \Civi\ActionProvider\Action\AbstractAction|null when action is not found.
 	 */
 	public function getActionByName($name) {
@@ -445,21 +445,21 @@ class Provider {
     }
     return null;
   }
-	
+
 	/**
 	 * Returns a new ParameterBag
-	 * 
+	 *
 	 * This function exists so we can encapsulate the creation of a ParameterBag to the provider.
-	 * 
+	 *
 	 * @return ParameterBagInterface
 	 */
 	public function createParameterBag() {
 		return new ParameterBag();
 	}
-	
+
 	/**
 	 * Returns a new parameter bag based on the given mapping.
-	 * 
+	 *
 	 * @param ParameterBagInterface $parameterBag
 	 * @param array $mapping
 	 * @return ParameterBagInterface
@@ -473,14 +473,14 @@ class Provider {
 		}
 		return $mappedParameterBag;
 	}
-	
+
 	/**
 	 * Filter the actions array and keep certain actions.
-	 * 
+	 *
 	 * This function might be override in a child class to filter out certain actions which do
-	 * not make sense in that context. E.g. for example CiviRules has already a AddContactToGroup action 
+	 * not make sense in that context. E.g. for example CiviRules has already a AddContactToGroup action
 	 * so it does not make sense to use the one provided by us.
-	 * 
+	 *
 	 * @param string
 	 *   The action to filter.
 	 * @return bool
@@ -504,5 +504,5 @@ class Provider {
   protected function filterConditions(\Civi\ActionProvider\Condition\AbstractCondition $condition) {
     return true;
   }
-	
+
 }

@@ -25,8 +25,6 @@ class CustomField {
     switch ($type) {
       case 'Int':
       case 'ContactReference':
-      case 'StateProvince':
-      case 'Country':
         $type = 'Integer';
         break;
       case 'File':

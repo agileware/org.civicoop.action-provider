@@ -129,7 +129,7 @@ class CreateRelationship extends AbstractAction {
     }
     try {
       // Do not use api as the api checks for an existing relationship.
-      $relationship = \CRM_Contact_BAO_Relationship::create($relationshipParams);
+      $relationship = \CRM_Contact_BAO_Relationship::add($relationshipParams);
       $output->setParameter('id', $relationship->id);
     } catch (\Exception $e) {
       // Do nothing.
