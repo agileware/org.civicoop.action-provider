@@ -3,6 +3,7 @@ Version 1.5
 
 * Added action Get Relationship By Contact ID
 * Added action Get State/Province ID by name
+* Added action Add Tag to Contact
 * Fixed issue with the Get Relationship action
 
 Version 1.4
