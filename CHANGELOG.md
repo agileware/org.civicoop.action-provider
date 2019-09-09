@@ -1,5 +1,9 @@
+Version 1.8 (not yet released)
+-----------
+
+
 Version 1.7
-------------------------------
+-----------
 
 * Added action Get State/Province ID by name
 * Added action Add Tag to Contact
