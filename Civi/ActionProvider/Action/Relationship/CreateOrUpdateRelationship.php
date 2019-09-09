@@ -117,7 +117,21 @@ class CreateOrUpdateRelationship extends CreateRelationship {
     try {
       // Do not use api as the api checks for an existing relationship.
       $relationship = \CRM_Contact_BAO_Relationship::add($relationshipParams);
-      $output->setParameter('id', $relationship->id);
+      $relationship_id = $relationship->id;
+
+      // Update the related memberships
+      $contact_ids = [
+        'contactTarget' => $relationshipParams['contact_id_b'],
+        'contact' => $relationshipParams['contact_id_a'],
+      ];
+      // When the relationship end date is set to 'null' related memberships are deleted
+      if ($relationshipParams['end_date'] == 'null') {
+        $relationshipParams['end_date'] = null;
+      }
+      $action = !empty($relationshipParams['id']) ? \CRM_Core_Action::UPDATE : \CRM_Core_Action::ADD;
+      \CRM_Contact_BAO_Relationship::relatedMemberships($relationshipParams['contact_id_a'], $relationshipParams, $contact_ids, $action, TRUE);
+
+      $output->setParameter('id', $relationship_id);
     } catch (\Exception $e) {
       // Do nothing.
       echo $e;

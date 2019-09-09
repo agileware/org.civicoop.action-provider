@@ -1,9 +1,21 @@
-Version 1.5
+Version 1.7
 ------------------------------
 
-* Added action Get Relationship By Contact ID
 * Added action Get State/Province ID by name
 * Added action Add Tag to Contact
+* Fixed issue with action create and create/update relationship and related memberships
+
+Version 1.6
+-----------
+
+* Update related membership when create relationship or create/update relationship action is performed.
+* Added action Get Contact By Custom Field.
+
+
+Version 1.5
+-----------
+
+* Added action Get Relationship By Contact ID
 * Fixed issue with the Get Relationship action
 
 Version 1.4
