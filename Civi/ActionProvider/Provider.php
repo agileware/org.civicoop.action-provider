@@ -175,6 +175,10 @@ class Provider {
       AbstractAction::SEND_MESSAGES_TO_CONTACTS,
       'bulk_mail'
     ));
+    $this->addActionWithoutFiltering('AddAttachmentToBulkMail', '\Civi\ActionProvider\Action\BulkMail\AddAttachment', E::ts('Add attachment to Bulk Mail'), array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $this->addActionWithoutFiltering('UpdateParticipantStatus', '\Civi\ActionProvider\Action\Event\UpdateParticipantStatus',E::ts('Update participant status') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
