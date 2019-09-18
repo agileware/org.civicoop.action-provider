@@ -25,7 +25,7 @@ class GetRelationshipByContactId extends AbstractAction {
     $this->relationshipTypes = array();
     $this->relationshipTypeIds = array();
     foreach($relationshipTypesApi['values'] as $relType) {
-      //$this->relationshipTypes[$relType['name_a_b']] = $relType['label_a_b'];
+      $this->relationshipTypes[$relType['name_a_b']] = $relType['label_a_b'];
       $this->relationshipTypeIds[$relType['name_a_b']] = $relType['id'];
     }
 
