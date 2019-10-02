@@ -300,6 +300,10 @@ class Provider {
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ));
+    $this->addActionWithoutFiltering('CreateCase', '\Civi\ActionProvider\Action\CiviCase\CreateCase', E::ts('Create case'), array(
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ));
 
 		$conditions = array(
 		  new \Civi\ActionProvider\Condition\ParameterIsEmpty(),
