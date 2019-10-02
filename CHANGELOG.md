@@ -3,6 +3,7 @@ Version 1.8 (not yet released)
 
 * Added Latitude and Longitude fields to address actions.
 * New action: 'Add attachment to bulk mail'.
+* Added create a case action.
 
 Version 1.7
 -----------
