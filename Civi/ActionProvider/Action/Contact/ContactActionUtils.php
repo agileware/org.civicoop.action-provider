@@ -44,6 +44,7 @@ class ContactActionUtils {
     if ($is_primary) {
       $existingAddressParams = [];
       $existingAddressParams['contact_id'] = $contact_id;
+      $existingAddressParams['location_type_id'] = $location_type_id;
       $existingAddressParams['is_primary'] = 1;
       $existingAddressParams['return'] = 'id';
       try {
@@ -224,6 +225,7 @@ class ContactActionUtils {
     if ($is_primary) {
       $existingPhoneParams = [];
       $existingPhoneParams['contact_id'] = $contact_id;
+      $existingPhoneParams['location_type_id'] = $location_type_id;
       $existingPhoneParams['is_primary'] = 1;
       $existingPhoneParams['return'] = 'id';
       try {
@@ -307,6 +309,7 @@ class ContactActionUtils {
     if ($is_primary) {
       $existingEmailParams = [];
       $existingEmailParams['contact_id'] = $contact_id;
+      $existingEmailParams['location_type_id'] = $location_type_id;
       $existingEmailParams['is_primary'] = 1;
       $existingEmailParams['return'] = 'id';
       try {

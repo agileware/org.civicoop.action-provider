@@ -127,6 +127,10 @@ class Provider {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $this->addActionWithoutFiltering('FindByExternalId', '\Civi\ActionProvider\Action\Contact\FindByExternalId', E::ts('Find contact by external id'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $this->addActionWithoutFiltering('FindContactByCustomField', '\Civi\ActionProvider\Action\Contact\FindByCustomField', E::ts('Find contact by custom field'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
