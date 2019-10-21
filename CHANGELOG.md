@@ -5,6 +5,7 @@ Version 1.8 (not yet released)
 * New action: 'Add attachment to bulk mail'.
 * Added create a case action.
 * Added action to find contact by external id.
+* Added action to create a membership with the type as a parameter.
 
 Version 1.7
 -----------

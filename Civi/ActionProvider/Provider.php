@@ -276,6 +276,10 @@ class Provider {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $this->addActionWithoutFiltering('CreateOrUpdateMembershipWithTypeParameter', '\Civi\ActionProvider\Action\Membership\CreateOrUpdateMembershipWithTypeParameter',E::ts('Create or update an membership (with type as parameter)') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $this->addActionWithoutFiltering('GetMembershipById', '\Civi\ActionProvider\Action\Membership\GetMembershipById',E::ts('Get membership by ID') , array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
