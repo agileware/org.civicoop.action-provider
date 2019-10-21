@@ -151,6 +151,10 @@ class Provider {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $this->addActionWithoutFiltering('MarkContactAsDeceased', '\Civi\ActionProvider\Action\Contact\MarkContactAsDeceased',E::ts('Mark contact as deceased') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $this->addActionWithoutFiltering('UploadCustomFileField', '\Civi\ActionProvider\Action\Contact\UploadCustomFileField',E::ts('Upload file to a custom field for a contact') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,

@@ -6,6 +6,7 @@ Version 1.8 (not yet released)
 * Added create a case action.
 * Added action to find contact by external id.
 * Added action to create a membership with the type as a parameter.
+* Added action to mark a contact as deceased.
 
 Version 1.7
 -----------
