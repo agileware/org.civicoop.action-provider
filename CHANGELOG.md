@@ -7,6 +7,8 @@ Version 1.8 (not yet released)
 * Added action to find contact by external id.
 * Added action to create a membership with the type as a parameter.
 * Added action to mark a contact as deceased.
+* Added action to create soft contribution.
+* Added custom fields to create contribution action.
 
 Version 1.7
 -----------

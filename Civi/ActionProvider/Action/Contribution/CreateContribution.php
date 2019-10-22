@@ -13,6 +13,7 @@ use Civi\ActionProvider\Parameter\ParameterBagInterface;
 
 use Civi\ActionProvider\Parameter\Specification;
 use Civi\ActionProvider\Parameter\SpecificationBag;
+use Civi\ActionProvider\Utils\CustomField;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class CreateContribution extends AbstractAction {
@@ -46,6 +47,15 @@ class CreateContribution extends AbstractAction {
       $contribution_params['campaign_id'] = $parameters->getParameter('campaign_id');
     }
 
+    foreach($this->getParameterSpecification() as $spec) {
+      if (stripos($spec->getName(), 'custom_')!==0) {
+        continue;
+      }
+      if ($parameters->doesParameterExists($spec->getName())) {
+        $contribution_params[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
+      }
+    }
+
     $result = civicrm_api3('Contribution', 'Create', $contribution_params);
 
     $output->setParameter('contribution_id', $result['id']);
@@ -55,7 +65,7 @@ class CreateContribution extends AbstractAction {
    * @return \Civi\ActionProvider\Parameter\SpecificationBag
    */
   public function getOutputSpecification() {
-    return parent::getOutputSpecification(array(
+    return new SpecificationBag(array(
       new Specification('contribution_id', 'Integer', E::ts('Contribution ID'), false),
     ));
   }
@@ -79,14 +89,25 @@ class CreateContribution extends AbstractAction {
    * @return SpecificationBag
    */
   public function getParameterSpecification() {
-    \CRM_Utils_Type::dataTypes();
-    return new SpecificationBag(array(
+    $specs = new SpecificationBag(array(
       new Specification('contact_id', 'Integer', E::ts('Contact ID'), true),
       new Specification('amount', 'Float', E::ts('Amount'), true),
       new Specification('campaign_id', 'Integer', E::ts('Campaign'), false),
       new OptionGroupSpecification('currency', 'currencies_enabled', E::ts('Currency'), FALSE),
       new Specification('source', 'String', E::ts('Source'), false),
     ));
+
+    $customGroups = civicrm_api3('CustomGroup', 'get', array('extends' => 'Contribution', 'is_active' => 1, 'options' => array('limit' => 0)));
+    foreach($customGroups['values'] as $customGroup) {
+      $customFields = civicrm_api3('CustomField', 'get', array('custom_group_id' => $customGroup['id'], 'is_active' => 1, 'options' => array('limit' => 0)));
+      foreach($customFields['values'] as $customField) {
+        $spec = CustomField::getSpecFromCustomField($customField, $customGroup['title'].': ', false);
+        if ($spec) {
+          $specs->addSpecification($spec);
+        }
+      }
+    }
+    return $specs;
   }
 
 }
