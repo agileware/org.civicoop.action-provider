@@ -9,6 +9,7 @@ Version 1.8 (not yet released)
 * Added action to mark a contact as deceased.
 * Added action to create soft contribution.
 * Added custom fields to create contribution action.
+* Added condition contact has subtype.
 
 Version 1.7
 -----------
