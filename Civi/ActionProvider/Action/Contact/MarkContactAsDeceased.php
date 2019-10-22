@@ -25,7 +25,13 @@ class MarkContactAsDeceased extends AbstractAction {
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    $params['id'] = $parameters->getParameter('contact_id');
+    $contact_id = $parameters->getParameter('contact_id');
+    $contact = civicrm_api3('Contact', 'getsingle', array('id' => $contact_id));
+    $params['id'] = $contact_id;
+    // If we don't add the contact type parameters
+    // the is deceased action will also reset the contact sub type.
+    $params['contact_type'] = $contact['contact_type'];
+    $params['contact_sub_type'] = $contact['contact_sub_type'];
     $params['is_deceased'] = 1;
     if ($parameters->doesParameterExists('deceased_date')){
       $params['deceased_date'] = $parameters->getParameter('deceased_date');
