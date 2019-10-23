@@ -1,4 +1,4 @@
-Version 1.8 (not yet released)
+Version 1.8
 -----------
 
 * Added Latitude and Longitude fields to address actions.
