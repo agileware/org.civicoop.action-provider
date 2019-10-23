@@ -328,6 +328,7 @@ class Provider {
       new \Civi\ActionProvider\Condition\ParametersMatch(),
       new \Civi\ActionProvider\Condition\ParametersDontMatch(),
       new \Civi\ActionProvider\Condition\ContactHasSubtype(),
+      new \Civi\ActionProvider\Condition\ContactHasTag(),
     );
 
     foreach($conditions as $condition) {

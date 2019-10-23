@@ -1,7 +1,7 @@
 Version 1.9 (not yet released)
 -----------
 
-*nothing changed yet*
+* Added condition Contact Has Tag.
 
 Version 1.8
 -----------

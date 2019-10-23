@@ -25,12 +25,13 @@ class AddTagToContact extends AbstractAction {
       $result = civicrm_api3('Tag', 'create', ['name' => $tag, 'used_for' => 'Contacts']);
       $tag_id = $result['id'];
     }
-
-    civicrm_api3('EntityTag', 'create', [
-      'tag_id' => $tag_id,
-      'entity_id' => $parameters->getParameter('contact_id'),
-      'entity_table' => 'civicrm_contact',
-    ]);
+    if ($tag_id) {
+      civicrm_api3('EntityTag', 'create', [
+        'tag_id' => $tag_id,
+        'entity_id' => $parameters->getParameter('contact_id'),
+        'entity_table' => 'civicrm_contact',
+      ]);
+    }
   }
 
   public function getConfigurationSpecification() {
