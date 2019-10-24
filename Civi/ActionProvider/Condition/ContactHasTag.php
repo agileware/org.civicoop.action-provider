@@ -114,7 +114,7 @@ class ContactHasTag extends AbstractCondition {
   protected function contactHasAllTags($contact_id, $tag_ids) {
     $isValid = 0;
 
-    $tags = CRM_Core_BAO_EntityTag::getTag($contact_id);
+    $tags = \CRM_Core_BAO_EntityTag::getTag($contact_id);
     foreach($tag_ids as $tag_id) {
       if (in_array($tag_id, $tags)) {
         $isValid++;
@@ -137,7 +137,7 @@ class ContactHasTag extends AbstractCondition {
   protected function contactHasOneOfTags($contact_id, $tag_ids) {
     $isValid = false;
 
-    $tags = CRM_Core_BAO_EntityTag::getTag($contact_id);
+    $tags = \CRM_Core_BAO_EntityTag::getTag($contact_id);
     foreach($tag_ids as $tag_id) {
       if (in_array($tag_id, $tags)) {
         $isValid = true;

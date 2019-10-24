@@ -27,7 +27,7 @@ class AddTagToContact extends AbstractAction {
     }
     if ($tag_id) {
       // Check whether the contact already has this tag.
-      $tags = CRM_Core_BAO_EntityTag::getTag($parameters->getParameter('contact_id'));
+      $tags = \CRM_Core_BAO_EntityTag::getTag($parameters->getParameter('contact_id'));
       if (!in_array($tag_id, $tags)) {
         civicrm_api3('EntityTag', 'create', [
           'tag_id' => $tag_id,
