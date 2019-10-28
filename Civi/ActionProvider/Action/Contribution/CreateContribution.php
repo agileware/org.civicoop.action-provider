@@ -33,7 +33,7 @@ class CreateContribution extends AbstractAction {
 
     // Create a contribution
     $contribution_params['financial_type_id'] = $this->configuration->getParameter('financial_type_id');
-    $contribution_params['status_id'] = $this->configuration->getParameter('contribution_status');
+    $contribution_params['contribution_status_id'] = $this->configuration->getParameter('contribution_status');
     $contribution_params['payment_instrument_id'] = $this->configuration->getParameter('payment_instrument');
     $contribution_params['contact_id'] = $contact_id;
     if ($parameters->doesParameterExists('currency')) {
