@@ -2,6 +2,8 @@ Version 1.9 (not yet released)
 -----------
 
 * Added condition Contact Has Tag.
+* Added contribution recur id parameter to create contribution action.
+* Added receive data parameter to create contribution action.
 
 Version 1.8
 -----------

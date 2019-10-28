@@ -46,6 +46,12 @@ class CreateContribution extends AbstractAction {
     if ($parameters->doesParameterExists('campaign_id')) {
       $contribution_params['campaign_id'] = $parameters->getParameter('campaign_id');
     }
+    if ($parameters->doesParameterExists('contribution_recur_id')) {
+      $contribution_params['contribution_recur_id'] = $parameters->getParameter('contribution_recur_id');
+    }
+    if ($parameters->doesParameterExists('receive_date')) {
+      $contribution_params['receive_date'] = $parameters->getParameter('receive_date');
+    }
 
     foreach($this->getParameterSpecification() as $spec) {
       if (stripos($spec->getName(), 'custom_')!==0) {
@@ -93,6 +99,8 @@ class CreateContribution extends AbstractAction {
       new Specification('contact_id', 'Integer', E::ts('Contact ID'), true),
       new Specification('amount', 'Float', E::ts('Amount'), true),
       new Specification('campaign_id', 'Integer', E::ts('Campaign'), false),
+      new Specification('contribution_recur_id', 'Integer', E::ts('Contribution Recur ID'), false),
+      new Specification('receive_date', 'Date', E::ts('Receive date'), false),
       new OptionGroupSpecification('currency', 'currencies_enabled', E::ts('Currency'), FALSE),
       new Specification('source', 'String', E::ts('Source'), false),
     ));
