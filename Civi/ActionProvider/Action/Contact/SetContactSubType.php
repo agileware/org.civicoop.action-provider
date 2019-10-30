@@ -30,6 +30,9 @@ class SetContactSubType extends AbstractAction {
     $params['id'] = $contact_id;
     $params['contact_type'] = $contact['contact_type'];
     $params['contact_sub_type'] = $contact['contact_sub_type'];
+    if (empty($params['contact_sub_type'])) {
+      $params['contact_sub_type'] = array();
+    }
     $contact_sub_type = $this->configuration->getParameter('contact_sub_type');
     if ($contact_sub_type) {
       $params['contact_sub_type'][] = $contact_sub_type;
