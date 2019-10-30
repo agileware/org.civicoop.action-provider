@@ -24,22 +24,50 @@ class CheckParameters extends AbstractCondition {
   public function isConditionValid(ParameterBagInterface $parameterBag) {
     $function = $this->configuration->getParameter('function');
     $parameters = $parameterBag->getParameter('parameters');
+
+    switch ($function) {
+      case 'all are not empty':
+        return $this->allAreNotEmpty($parameters);
+        break;
+      case 'one of is not empty':
+        return $this->oneOfIsNotEmpty($parameters);
+        break;
+      case 'all are empty':
+        return $this->allAreEmpty($parameters);
+        break;
+    }
+    return true;
+  }
+
+  private function allAreEmpty($parameters) {
     foreach($parameters as $parameter) {
       $value = $parameter->getParameter('parameter');
-      switch ($function) {
-        case 'are not empty':
-          if (empty($value)) {
-            return false;
-          }
-          break;
-        case 'are empty':
-          if (!empty($value)) {
-            return false;
-          }
-          break;
+      if (!empty($value)) {
+        return false;
       }
     }
     return true;
+  }
+
+  private function allAreNotEmpty($parameters) {
+    foreach($parameters as $parameter) {
+      $value = $parameter->getParameter('parameter');
+      if (empty($value)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private function oneOfIsNotEmpty($parameters) {
+    $allAreEmpty = false;
+    foreach($parameters as $parameter) {
+      $value = $parameter->getParameter('parameter');
+      if (!empty($value)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -49,9 +77,10 @@ class CheckParameters extends AbstractCondition {
    */
   public function getConfigurationSpecification() {
     return new SpecificationBag(array(
-      new Specification('function', 'String', E::ts('Condition'), true, 'are not empty', null, array(
-        'are not empty' => E::ts('Are not empty'),
-        'are empty' => E::ts('Are empty'),
+      new Specification('function', 'String', E::ts('Condition'), true, 'all are not empty', null, array(
+        'all are not empty' => E::ts('All are not empty'),
+        'one of is not empty' => E::ts('One of is empty'),
+        'all are empty' => E::ts('All are empty'),
       ))
     ));
   }
