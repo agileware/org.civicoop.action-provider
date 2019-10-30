@@ -33,8 +33,8 @@ class SetContactSubType extends AbstractAction {
     $contact_sub_type = $this->configuration->getParameter('contact_sub_type');
     if ($contact_sub_type) {
       $params['contact_sub_type'][] = $contact_sub_type;
+      civicrm_api3('Contact', 'Create', $params);
     }
-    civicrm_api3('Contact', 'Create', $params);
   }
 
   /**
@@ -48,7 +48,7 @@ class SetContactSubType extends AbstractAction {
     $contactSubTypesApi = civicrm_api3('ContactType', 'get', array('options' => array('limit' => 0)));
     $contactSubTypes[''] = E::ts(' - Select - ');
     foreach($contactSubTypesApi['values'] as $contactSubType) {
-      if ($contactSubType['parent_id']) {
+      if (isset($contactSubType['parent_id']) && $contactSubType['parent_id']) {
         $contactSubTypes[$contactSubType['name']] = $contactSubType['label'];
       }
     }
