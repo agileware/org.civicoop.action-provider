@@ -6,18 +6,21 @@ use \Civi\ActionProvider\Exception\InvalidParameterException;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class SpecificationBag implements \IteratorAggregate  {
-	
+
+  /**
+   * @var array SpecificationInterface[]
+   */
 	protected $parameterSpecifications = array();
-	
+
 	public function __construct($specifcations = array()) {
 		foreach($specifcations as $spec) {
 			$this->parameterSpecifications[$spec->getName()] = $spec;
 		}
 	}
-	
+
 	/**
 	 * Validates the parameters.
-	 * 
+	 *
 	 * @param ParameterBagInterface $parameters
 	 * @param SpecificationBag $specification
 	 *
@@ -38,23 +41,23 @@ class SpecificationBag implements \IteratorAggregate  {
 		}
 		return true;
 	}
-	
+
 	/**
-	 * @param Specification $specification
+	 * @param SpecificationInterface $specification
 	 *   The specification object.
 	 * @return SpecificationBag
 	 */
-	public function addSpecification(Specification $specification) {
+	public function addSpecification(SpecificationInterface $specification) {
 		$this->parameterSpecifications[$specification->getName()] = $specification;
 		return $this;
 	}
-	
+
 	/**
-	 * @param Specification $specification
+	 * @param SpecificationInterface $specification
 	 *   The specification object.
 	 * @return SpecificationBag
 	 */
-	public function removeSpecification(Specification $specification) {
+	public function removeSpecification(SpecificationInterface $specification) {
 		foreach($this->parameterSpecifications as $key => $spec) {
 			if ($spec == $specification) {
 				unset($this->parameterSpecifications[$key]);
@@ -62,7 +65,7 @@ class SpecificationBag implements \IteratorAggregate  {
 		}
 		return $this;
 	}
-	
+
 	/**
 	 * @param string $name
 	 *   The name of the parameter.
@@ -76,11 +79,11 @@ class SpecificationBag implements \IteratorAggregate  {
 		}
 		return $this;
 	}
-	
+
 	/**
 	 * @param string $name
 	 *   The name of the parameter.
-	 * @return Specification|null
+	 * @return SpecificationInterface|null
 	 */
 	public function getSpecificationByName($name) {
 		foreach($this->parameterSpecifications as $key => $spec) {
@@ -90,14 +93,14 @@ class SpecificationBag implements \IteratorAggregate  {
 		}
 		return null;
 	}
-	
+
 	public function getIterator() {
     return new \ArrayIterator($this->parameterSpecifications);
   }
-	
+
 	/**
 	 * Converts the object to an array.
-	 * 
+	 *
 	 * @return array
 	 */
 	public function toArray() {
@@ -107,5 +110,5 @@ class SpecificationBag implements \IteratorAggregate  {
 		}
 		return $return;
 	}
-	
+
 }

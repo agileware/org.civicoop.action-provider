@@ -7,6 +7,8 @@ Version 1.9 (not yet released)
 * Added action to set value from a parameter.
 * Added action to set contact sub type.
 * Added action to link contribution to membership.
+* Added possibility to create a specification collection for conditions.
+* Added condition to check multiple parameters.
 
 Version 1.8
 -----------

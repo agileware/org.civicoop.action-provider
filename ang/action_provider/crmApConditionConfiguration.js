@@ -45,6 +45,25 @@
           });
         });
 
+        $scope.addItemToCollection = function addItemToCollection(specification) {
+          console.log($scope.configuration);
+          if (!$scope.configuration.parameter_mapping) {
+            $scope.configuration.parameter_mapping = {};
+          }
+          if (!$scope.configuration.parameter_mapping[specification.name]) {
+            $scope.configuration.parameter_mapping[specification.name] = [];
+          }
+          console.log($scope.configuration);
+          $scope.configuration.parameter_mapping[specification.name].push({});
+        };
+
+        $scope.removeItem = function removeItem(item, specification) {
+          var index = $scope.configuration.parameter_mapping[specification.name].indexOf(item);
+          if (index >= 0) {
+            $scope.configuration.parameter_mapping[specification.name].splice(index, 1);
+          }
+        };
+
         if ($scope.action in actions[$scope.context]) {
           $scope.actionObject = actions[$scope.context][$scope.action];
         } else {

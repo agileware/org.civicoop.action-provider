@@ -56,7 +56,7 @@
 <div ng-if="fields" class="crm-block crm-form-block"  ng-form="input_mapper">
 	<h3>{{ts('Parameters')}}</h3>
 	<ng-repeat ng-repeat="spec in condition.parameter_spec">
-		<div crm-ui-field="{name: 'input_mapper.'+spec.name, title: spec.title, required: spec.required}">
+		<div crm-ui-field="{name: 'input_mapper.'+spec.name, title: spec.title, required: spec.required}" ng-if="spec.type == 'specification'">
 			<select
 					style="width: 90%;"
 					crm-ui-id="input_mapper.{{spec.name}}"
@@ -69,7 +69,42 @@
 				<option value=""></option>
 			</select>
 		</div>
-	</ng-repeat>
+
+    <div ng-if="spec.type == 'collection'">
+      <table>
+        <thead>
+        <th ng-repeat="collection_spec in spec.specification_bag">
+          {{collection_spec.title}}
+        </th>
+        <th></th>
+        </thead>
+        <tbody>
+        <tr ng-repeat="collection_config in configuration.parameter_mapping[spec.name]" ng-class-even="'crm-entity even-row even'" ng-class-odd="'crm-entity odd-row odd'">
+          <td ng-repeat="collection_spec in spec.specification_bag">
+            <div crm-ui-field="{name: 'input_mapper.'+collection_spec.name}" ng-if="collection_spec.type == 'specification'">
+              <select
+                style="width: 90%;"
+                crm-ui-id="input_mapper.{{collection_spec.name}}"
+                name="{{collection_spec.name}}"
+                ui-jq="select2"
+                ui-options="{allowClear: true}"
+                ng-model="collection_config.parameter_mapping[collection_spec.name]"
+                ng-required="collection_spec.required"
+                ng-options="field.name as field.label for field in fields">
+                <option value=""></option>
+              </select>
+            </div>
+          </td>
+          <td>
+            <a crm-icon="fa-trash" class="crm-hover-button" ng-click="removeItem(collection_config, spec)" title="{{ts('Remove')}}">{{ts('Remove')}}</a>
+          </td>
+        </tr>
+        </tbody>
+        <button crm-icon="fa-plus" ng-click="addItemToCollection(spec)">{{ts('Add item')}}</button>
+      </table>
+    </div>
+
+  </ng-repeat>
 </div>
 
 <div ng-if="fields" class="crm-block crm-form-block"  ng-form="output_mapper">

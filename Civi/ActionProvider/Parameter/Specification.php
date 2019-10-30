@@ -5,8 +5,8 @@ namespace Civi\ActionProvider\Parameter;
 use Civi\ActionProvider\Exception\InvalidParameterException;
 use CRM_ActionProvider_ExtensionUtil as E;
 
-class Specification {
-	
+class Specification implements SpecificationInterface {
+
 	 /**
    * @var mixed
    */
@@ -43,12 +43,12 @@ class Specification {
    * @var string
    */
   protected $fkEntity;
-  
+
   /**
    * @var string
    */
   protected $apiFieldName;
-	
+
   /**
    * @param string $name
    * @param string $dataType
@@ -57,7 +57,7 @@ class Specification {
    * @param mixed $defaultValue
    * @param string|null $fkEntity
    * @param array $options
-   * @param bool $multiple 
+   * @param bool $multiple
    */
   public function __construct($name, $dataType = 'String', $title='', $required = false, $defaultValue = null, $fkEntity = null, $options = null, $multiple = false) {
     $this->setName($name);
@@ -68,7 +68,7 @@ class Specification {
 		$this->setFkEntity($fkEntity);
 		$this->setOptions($options);
 		$this->setMultiple($multiple);
-    
+
     if ($this->dataType == 'Boolean') {
       $this->options = array(
         '0' => E::ts('No'),
@@ -76,14 +76,14 @@ class Specification {
       );
     }
   }
-	
+
   /**
    * @return mixed
    */
   public function getDefaultValue() {
     return $this->defaultValue;
   }
-	
+
   /**
    * @param mixed $defaultValue
    *
@@ -93,14 +93,14 @@ class Specification {
     $this->defaultValue = $defaultValue;
     return $this;
   }
-	
+
   /**
    * @return string
    */
   public function getName() {
     return $this->name;
   }
-	
+
   /**
    * @param string $name
    *
@@ -110,14 +110,14 @@ class Specification {
     $this->name = $name;
     return $this;
   }
-  
+
   /**
    * @return string
    */
   public function getApiFieldName() {
     return $this->apiFieldName;
   }
-  
+
   /**
    * @param string $name
    *
@@ -127,14 +127,14 @@ class Specification {
     $this->apiFieldName = $name;
     return $this;
   }
-	
+
   /**
    * @return string
    */
   public function getTitle() {
     return $this->title;
   }
-	
+
   /**
    * @param string $title
    *
@@ -144,14 +144,14 @@ class Specification {
     $this->title = $title;
     return $this;
   }
-	
+
   /**
    * @return string
    */
   public function getDescription() {
     return $this->description;
   }
-	
+
   /**
    * @param string $description
    *
@@ -161,14 +161,14 @@ class Specification {
     $this->description = $description;
     return $this;
   }
-	
+
   /**
    * @return bool
    */
   public function isRequired() {
     return $this->required;
   }
-	
+
   /**
    * @param bool $required
    *
@@ -178,14 +178,14 @@ class Specification {
     $this->required = $required;
     return $this;
   }
-	
+
   /**
    * @return string
    */
   public function getDataType() {
     return $this->dataType;
   }
-	
+
   /**
    * @param $dataType
    *
@@ -199,7 +199,7 @@ class Specification {
     $this->dataType = $dataType;
     return $this;
   }
-	
+
 	  /**
    * Add valid types that are not not part of \CRM_Utils_Type::dataTypes
    *
@@ -210,14 +210,14 @@ class Specification {
     $extraTypes = array_combine($extraTypes, $extraTypes);
     return array_merge(\CRM_Utils_Type::dataTypes(), $extraTypes);
   }
-	
+
 	 /**
    * @return array
    */
   public function getOptions() {
     return $this->options;
   }
-	
+
   /**
    * @param array $options
    *
@@ -227,21 +227,21 @@ class Specification {
     $this->options = $options;
     return $this;
   }
-	
+
   /**
    * @param $option
    */
   public function addOption($option) {
     $this->options[] = $option;
   }
-	
+
 	/**
    * @return bool
    */
   public function isMultiple() {
     return $this->multiple;
   }
-	
+
   /**
    * @param bool $multiple
    *
@@ -251,14 +251,14 @@ class Specification {
     $this->multiple = $multiple;
     return $this;
   }
-	
+
   /**
    * @return string
    */
   public function getFkEntity() {
     return $this->fkEntity;
   }
-	
+
   /**
    * @param string $fkEntity
    *
@@ -268,7 +268,14 @@ class Specification {
     $this->fkEntity = $fkEntity;
     return $this;
   }
-	
+
+  /**
+   * @return String
+   */
+  public function getType() {
+    return 'specification';
+  }
+
 	public function toArray() {
     $ret = array();
     foreach (get_class_methods($this) as $method) {
@@ -281,7 +288,7 @@ class Specification {
       if (!$var) {
         continue;
       }
-      
+
       $key = strtolower(preg_replace('/(?=[A-Z])/', '_$0', $var));
       $ret[$key] = $this->$method();
     }
@@ -292,7 +299,7 @@ class Specification {
    * Validate a value
    *
    * @param $value
-   *
+   * @return bool
    * @throws \CRM_Core_Exception
    * @throws \Civi\ActionProvider\Exception\InvalidParameterException
    */
@@ -317,6 +324,7 @@ class Specification {
         throw new InvalidParameterException($this->getName(). ' is invalid');
       }
     }
+    return true;
   }
-	
+
 }

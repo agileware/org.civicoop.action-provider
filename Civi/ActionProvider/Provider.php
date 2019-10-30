@@ -5,6 +5,7 @@ namespace Civi\ActionProvider;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\ParameterBag;
 use Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\Parameter\SpecificationBag;
 use \CRM_ActionProvider_ExtensionUtil as E;
 
 /**
@@ -337,6 +338,7 @@ class Provider {
       new \Civi\ActionProvider\Condition\ParameterHasValue(),
       new \Civi\ActionProvider\Condition\ParametersMatch(),
       new \Civi\ActionProvider\Condition\ParametersDontMatch(),
+      new \Civi\ActionProvider\Condition\CheckParameters(),
       new \Civi\ActionProvider\Condition\ContactHasSubtype(),
       new \Civi\ActionProvider\Condition\ContactHasTag(),
     );
@@ -511,7 +513,15 @@ class Provider {
 	public function createdMappedParameterBag(ParameterBagInterface $parameterBag, $mapping) {
 		$mappedParameterBag = $this->createParameterBag();
 		foreach($mapping as $mappedField => $field) {
-			if ($parameterBag->doesParameterExists($field)) {
+		  if (is_array($field)) {
+        $subParameterBags = array();
+		    foreach($field as $subField) {
+		      if (isset($subField['parameter_mapping'])) {
+            $subParameterBags[] = $this->createdMappedParameterBag($parameterBag, $subField['parameter_mapping']);
+          }
+        }
+		    $mappedParameterBag->setParameter($mappedField, $subParameterBags);
+      } elseif ($parameterBag->doesParameterExists($field)) {
 				$mappedParameterBag->setParameter($mappedField, $parameterBag->getParameter($field));
 			}
 		}
