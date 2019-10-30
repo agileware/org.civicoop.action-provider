@@ -4,7 +4,7 @@
  * @license AGPL-3.0
  */
 
-namespace Civi\SepaMembership\ActionProvider\Action;
+namespace Civi\ActionProvider\Action\Contribution;
 
 use Civi\ActionProvider\Action\AbstractAction;
 use Civi\ActionProvider\Parameter\ParameterBagInterface;
