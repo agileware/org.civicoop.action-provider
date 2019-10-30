@@ -6,6 +6,7 @@ Version 1.9 (not yet released)
 * Added receive data parameter to create contribution action.
 * Added action to set value from a parameter.
 * Added action to set contact sub type.
+* Added action to link contribution to membership.
 
 Version 1.8
 -----------
