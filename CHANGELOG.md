@@ -5,6 +5,7 @@ Version 1.9 (not yet released)
 * Added contribution recur id parameter to create contribution action.
 * Added receive data parameter to create contribution action.
 * Added action to set value from a parameter.
+* Added action to set contact sub type.
 
 Version 1.8
 -----------
