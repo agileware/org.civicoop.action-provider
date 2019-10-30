@@ -53,11 +53,9 @@ class SetContactSubType extends AbstractAction {
       }
     }
 
-    $specs = new SpecificationBag(array(
+    return new SpecificationBag(array(
       new Specification('contact_sub_type', 'String', E::ts('Contact sub type'), false, null, null, $contactSubTypes, FALSE),
     ));
-
-    return $specs;
   }
 
   /**
