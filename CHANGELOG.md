@@ -9,6 +9,7 @@ Version 1.9 (not yet released)
 * Added action to link contribution to membership.
 * Added possibility to create a specification collection for conditions.
 * Added condition to check multiple parameters.
+* Added action to find or create a campaign.
 
 Version 1.8
 -----------

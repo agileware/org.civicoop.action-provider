@@ -170,6 +170,10 @@ class Provider {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $this->addActionWithoutFiltering('FindOrCreateCampaign', '\Civi\ActionProvider\Action\Campaign\FindOrCreateCampaign',E::ts('Find or create a campaign') , array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $this->addActionWithoutFiltering('CreateActivity', '\Civi\ActionProvider\Action\Activity\CreateActivity',E::ts('Create or update activity') , array(
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG
