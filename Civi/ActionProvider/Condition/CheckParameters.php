@@ -79,7 +79,7 @@ class CheckParameters extends AbstractCondition {
     return new SpecificationBag(array(
       new Specification('function', 'String', E::ts('Condition'), true, 'all are not empty', null, array(
         'all are not empty' => E::ts('All are not empty'),
-        'one of is not empty' => E::ts('One of is empty'),
+        'one of is not empty' => E::ts('One of is not empty'),
         'all are empty' => E::ts('All are empty'),
       ))
     ));
