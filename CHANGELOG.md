@@ -10,6 +10,8 @@ Version 1.9 (not yet released)
 * Added possibility to create a specification collection for conditions.
 * Added condition to check multiple parameters.
 * Added action to find or create a campaign.
+* Fixed issue with custom token
+
 
 Version 1.8
 -----------
