@@ -1,3 +1,8 @@
+Version 1.8.1
+-------------
+
+* Fixed issue with custom token
+
 Version 1.8
 -----------
 
