@@ -95,13 +95,13 @@ class CreateOrUpdateMembership extends AbstractAction {
     $apiParams['contact_id'] = $parameters->getParameter('contact_id');
     $apiParams['membership_type_id'] = $membership_type;
     if ($parameters->doesParameterExists('start_date')) {
-      $mandate_params['start_date'] = $parameters->getParameter('start_date');
+      $apiParams['start_date'] = $parameters->getParameter('start_date');
     }
     if ($parameters->doesParameterExists('end_date')) {
-      $mandate_params['end_date'] = $parameters->getParameter('end_date');
+      $apiParams['end_date'] = $parameters->getParameter('end_date');
     }
     if ($parameters->doesParameterExists('start_date')) {
-      $mandate_params['join_date'] = $parameters->getParameter('join_date');
+      $apiParams['join_date'] = $parameters->getParameter('join_date');
     }
 
     foreach($this->getParameterSpecification() as $spec) {
