@@ -11,6 +11,7 @@ Version 1.9 (not yet released)
 * Added condition to check multiple parameters.
 * Added action to find or create a campaign.
 * Added parameters: join date, start date, end date to the create membership actions.
+* Fixed issue with custom token
 
 Version 1.8
 -----------
