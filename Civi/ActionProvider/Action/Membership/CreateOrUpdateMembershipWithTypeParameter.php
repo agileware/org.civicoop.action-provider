@@ -43,6 +43,9 @@ class CreateOrUpdateMembershipWithTypeParameter extends AbstractAction {
       new Specification('membership_id', 'Integer', E::ts('Membership ID'), false, null, null, null, FALSE),
       new Specification('membership_type', 'Integer', E::ts('Membership Type'), true, null),
       new Specification('contact_id', 'Integer', E::ts('Contact ID'), true, null, null, null, FALSE),
+      new Specification('join_date', 'Date', E::ts('Join date'), false),
+      new Specification('start_date', 'Date', E::ts('Start date'), false),
+      new Specification('end_date', 'Date', E::ts('End date'), false),
     ));
 
     $customGroups = civicrm_api3('CustomGroup', 'get', array('extends' => 'Membership', 'is_active' => 1, 'options' => array('limit' => 0)));
@@ -90,6 +93,15 @@ class CreateOrUpdateMembershipWithTypeParameter extends AbstractAction {
     }
     $apiParams['contact_id'] = $parameters->getParameter('contact_id');
     $apiParams['membership_type_id'] = $membership_type;
+    if ($parameters->doesParameterExists('start_date')) {
+      $mandate_params['start_date'] = $parameters->getParameter('start_date');
+    }
+    if ($parameters->doesParameterExists('end_date')) {
+      $mandate_params['end_date'] = $parameters->getParameter('end_date');
+    }
+    if ($parameters->doesParameterExists('start_date')) {
+      $mandate_params['join_date'] = $parameters->getParameter('join_date');
+    }
 
     foreach($this->getParameterSpecification() as $spec) {
       if (stripos($spec->getName(), 'custom_')!==0) {
