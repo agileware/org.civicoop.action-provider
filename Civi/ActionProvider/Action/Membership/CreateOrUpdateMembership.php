@@ -100,7 +100,7 @@ class CreateOrUpdateMembership extends AbstractAction {
     if ($parameters->doesParameterExists('end_date')) {
       $apiParams['end_date'] = $parameters->getParameter('end_date');
     }
-    if ($parameters->doesParameterExists('start_date')) {
+    if ($parameters->doesParameterExists('join_date')) {
       $apiParams['join_date'] = $parameters->getParameter('join_date');
     }
 
