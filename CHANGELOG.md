@@ -12,6 +12,7 @@ Version 1.9 (not yet released)
 * Added action to find or create a campaign.
 * Added parameters: join date, start date, end date to the create membership actions.
 * Fixed issue with custom token
+* Added action to update an membership.
 
 Version 1.8
 -----------

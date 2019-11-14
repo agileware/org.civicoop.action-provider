@@ -295,6 +295,10 @@ class Provider {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $this->addActionWithoutFiltering('UpdateMembership', '\Civi\ActionProvider\Action\Membership\UpdateMembership',E::ts('Update an membership') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $this->addActionWithoutFiltering('GetMembershipById', '\Civi\ActionProvider\Action\Membership\GetMembershipById',E::ts('Get membership by ID') , array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
