@@ -11,14 +11,14 @@ use \Civi\ActionProvider\Parameter\Specification;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class CreateUpdateOrganization extends AbstractAction {
-  
+
   /**
    * Run the action
-   * 
+   *
    * @param ParameterInterface $parameters
    *   The parameters to this action.
    * @param ParameterBagInterface $output
-   *   The parameters this action can send back 
+   *   The parameters this action can send back
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
@@ -32,10 +32,16 @@ class CreateUpdateOrganization extends AbstractAction {
       $params['contact_sub_type'] = $contact_sub_type;
     }
     $params['organization_name'] = $parameters->getParameter('organization_name');
+    if ($parameters->doesParameterExists('source')) {
+      $params['source'] = $parameters->getParameter('source');
+    }
+    if ($parameters->doesParameterExists('created_date')) {
+      $params['created_date'] = $parameters->getParameter('created_date');
+    }
     $result = civicrm_api3('Contact', 'create', $params);
     $contact_id = $result['id'];
     $output->setParameter('contact_id', $contact_id);
-    
+
     // Create address
     $address_id = ContactActionUtils::createAddressForContact($contact_id, $parameters, $this->configuration);
     if ($address_id) {
@@ -47,7 +53,7 @@ class CreateUpdateOrganization extends AbstractAction {
     if ($email_id) {
       $output->setParameter('email_id', $email_id);
     }
-    
+
     // Create phone
     $phone_id = ContactActionUtils::createPhone($contact_id, $parameters, $this->configuration);
     if ($phone_id) {
@@ -55,10 +61,10 @@ class CreateUpdateOrganization extends AbstractAction {
     }
 
   }
-  
+
   /**
    * Returns the specification of the configuration options for the actual action.
-   * 
+   *
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
@@ -68,21 +74,21 @@ class CreateUpdateOrganization extends AbstractAction {
     foreach($contactSubTypesApi['values'] as $contactSubType) {
       $contactSubTypes[$contactSubType['name']] = $contactSubType['label'];
     }
-  
+
     $spec = new SpecificationBag(array(
       new Specification('contact_sub_type', 'String', E::ts('Contact sub type'), false, null, null, $contactSubTypes, FALSE),
     ));
-    
+
     ContactActionUtils::createAddressConfigurationSpecification($spec);
     ContactActionUtils::createEmailConfigurationSpecification($spec);
     ContactActionUtils::createPhoneConfigurationSpecification($spec);
-    
+
     return $spec;
   }
-  
+
   /**
    * Returns the specification of the parameters of the actual action.
-   * 
+   *
    * @return SpecificationBag
    */
   public function getParameterSpecification() {
@@ -91,18 +97,20 @@ class CreateUpdateOrganization extends AbstractAction {
     $spec = new SpecificationBag(array(
       $contactIdSpec,
       new Specification('organization_name', 'String', E::ts('Organization name'), false),
+      new Specification('source', 'String', E::ts('Source'), false),
+      new Specification('created_date', 'Date', E::ts('Created Date'), false),
     ));
     ContactActionUtils::createAddressParameterSpecification($spec);
     ContactActionUtils::createEmailParameterSpecification($spec);
     ContactActionUtils::createPhoneParameterSpecification($spec);
     return $spec;
   }
-  
+
   /**
    * Returns the specification of the output parameters of this action.
-   * 
+   *
    * This function could be overriden by child classes.
-   * 
+   *
    * @return SpecificationBag
    */
   public function getOutputSpecification() {
@@ -113,5 +121,5 @@ class CreateUpdateOrganization extends AbstractAction {
       new Specification('phone_id', 'Integer', E::ts('Phone ID'), false),
     ));
   }
-  
+
 }
