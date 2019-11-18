@@ -26,7 +26,7 @@ class SetEmployer extends AbstractAction {
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $params['id'] = $parameters->getParameter('contact_id');
-    $params['employer_id'] = $this->configuration->getParameter('employer_id');
+    $params['employer_id'] = $parameters->getParameter('employer_id');
     civicrm_api3('Contact', 'Create', $params);
   }
 
