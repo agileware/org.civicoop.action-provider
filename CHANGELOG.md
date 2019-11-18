@@ -14,6 +14,7 @@ Version 1.9 (not yet released)
 * Fixed issue with custom token
 * Added action to update an membership.
 * Added parameters: source and created date to the actions create individual, household and organization.
+* Added action to set employer.
 
 Version 1.8
 -----------
