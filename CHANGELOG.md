@@ -9,6 +9,7 @@ Version 1.9 (not yet released)
 * Find or create a campaign
 * Update membership
 * Set employer
+* Modify Value with Regular Expression
 
 **New conditions**
 
