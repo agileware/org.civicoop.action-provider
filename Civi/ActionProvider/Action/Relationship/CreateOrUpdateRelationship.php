@@ -28,6 +28,43 @@ class CreateOrUpdateRelationship extends CreateRelationship {
   }
 
   /**
+   * Returns the specification of the configuration options for the actual action.
+   *
+   * @return SpecificationBag
+   * @throws \Exception
+   */
+  public function getParameterSpecification() {
+    $specs = new SpecificationBag(array(
+      /**
+       * The parameters given to the Specification object are:
+       * @param string $name
+       * @param string $dataType
+       * @param string $title
+       * @param bool $required
+       * @param mixed $defaultValue
+       * @param string|null $fkEntity
+       * @param array $options
+       * @param bool $multiple
+       */
+      new Specification('contact_id_a', 'Integer', E::ts('Contact ID A'), true, null, null, null, FALSE),
+      new Specification('contact_id_b', 'Integer', E::ts('Contact ID B'), true, null, null, null, FALSE),
+      new Specification('description', 'String', E::ts('Description'), false),
+    ));
+
+    $customGroups = civicrm_api3('CustomGroup', 'get', array('extends' => 'Relationship', 'is_active' => 1, 'options' => array('limit' => 0)));
+    foreach($customGroups['values'] as $customGroup) {
+      $customFields = civicrm_api3('CustomField', 'get', array('custom_group_id' => $customGroup['id'], 'is_active' => 1, 'options' => array('limit' => 0)));
+      foreach($customFields['values'] as $customField) {
+        $spec = CustomField::getSpecFromCustomField($customField, $customGroup['title'].': ', false);
+        if ($spec) {
+          $specs->addSpecification($spec);
+        }
+      }
+    }
+    return $specs;
+  }
+
+  /**
    * Find existing relationship
    *
    * @param $contact_id_a
@@ -98,6 +135,9 @@ class CreateOrUpdateRelationship extends CreateRelationship {
     }
     if ($relationship_id) {
       $relationshipParams['end_date'] = 'null';
+    }
+    if ($parameters->doesParameterExists('description')) {
+      $relationshipParams['description'] = $parameters->getParameter('description');
     }
     $relationshipParams['custom'] = array();
     foreach($this->getParameterSpecification() as $spec) {

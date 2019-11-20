@@ -10,6 +10,7 @@ Version 1.9 (not yet released)
 * Update membership
 * Set employer
 * Modify Value with Regular Expression
+* Find organization by name
 
 **New conditions**
 
@@ -51,6 +52,15 @@ _Create membership action_
 * New parameter join date
 * New parameter start date
 * New parameter end date
+
+_Create relationship action_
+* New parameter description
+* New parameter start date
+* New parameter end date
+
+_Create/update relationship action_
+* New parameter description
+
 
 **Other changes**
 

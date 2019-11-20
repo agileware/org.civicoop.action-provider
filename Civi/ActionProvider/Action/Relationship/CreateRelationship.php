@@ -64,6 +64,9 @@ class CreateRelationship extends AbstractAction {
        */
       new Specification('contact_id_a', 'Integer', E::ts('Contact ID A'), true, null, null, null, FALSE),
       new Specification('contact_id_b', 'Integer', E::ts('Contact ID B'), true, null, null, null, FALSE),
+      new Specification('start_date', 'Date', E::ts('Start date'), false),
+      new Specification('end_date', 'Date', E::ts('End date'), false),
+      new Specification('description', 'String', E::ts('Description'), false),
     ));
 
     $customGroups = civicrm_api3('CustomGroup', 'get', array('extends' => 'Relationship', 'is_active' => 1, 'options' => array('limit' => 0)));
@@ -111,6 +114,16 @@ class CreateRelationship extends AbstractAction {
     if ($this->configuration->getParameter('set_start_date')) {
       $today = new \DateTime();
       $relationshipParams['start_date'] = $today->format('Ymd');
+    } else {
+      if ($parameters->doesParameterExists('start_date')) {
+        $relationshipParams['start_date'] = $parameters->getParameter('start_date');
+      }
+      if ($parameters->doesParameterExists('end_date')) {
+        $relationshipParams['end_date'] = $parameters->getParameter('end_date');
+      }
+    }
+    if ($parameters->doesParameterExists('description')) {
+      $relationshipParams['description'] = $parameters->getParameter('description');
     }
 
     $relationshipParams['custom'] = array();
