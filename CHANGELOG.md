@@ -1,20 +1,59 @@
 Version 1.9 (not yet released)
 -----------
 
-* Added condition Contact Has Tag.
-* Added contribution recur id parameter to create contribution action.
-* Added receive data parameter to create contribution action.
-* Added action to set value from a parameter.
-* Added action to set contact sub type.
-* Added action to link contribution to membership.
-* Added possibility to create a specification collection for conditions.
-* Added condition to check multiple parameters.
-* Added action to find or create a campaign.
-* Added parameters: join date, start date, end date to the create membership actions.
+**New actions**
+
+* Set value from parameter
+* Set contact subtype
+* Link contribution to membership
+* Find or create a campaign
+* Update membership
+* Set employer
+
+**New conditions**
+
+* Contact Has Tag.
+* Check multiple parameters
+
+**Changed actions**
+
+_Create update individual_
+* New parameter source
+* New parameter created date
+* New parameter do not mail
+* New parameter do not email
+* New parameter do not phone
+* New parameter do not sms
+
+_Create update household_
+* New parameter source
+* New parameter created date
+* New parameter do not mail
+* New parameter do not email
+* New parameter do not phone
+* New parameter do not sms
+
+_Create update organization_
+* New parameter source
+* New parameter created date
+* New parameter do not mail
+* New parameter do not email
+* New parameter do not phone
+* New parameter do not sms
+
+_Create contribution action_
+* New parameter contribution recur id
+* New parameter receive date
+
+_Create membership action_
+* New parameter join date
+* New parameter start date
+* New parameter end date
+
+**Other changes**
+
+* Collection specification on conditions.
 * Fixed issue with custom token
-* Added action to update an membership.
-* Added parameters: source and created date to the actions create individual, household and organization.
-* Added action to set employer.
 
 Version 1.8
 -----------

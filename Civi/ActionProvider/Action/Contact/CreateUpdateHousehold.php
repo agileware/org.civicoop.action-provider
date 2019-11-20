@@ -38,6 +38,18 @@ class CreateUpdateHousehold extends AbstractAction {
     if ($parameters->doesParameterExists('created_date')) {
       $params['created_date'] = $parameters->getParameter('created_date');
     }
+    if ($parameters->doesParameterExists('do_not_mail')) {
+      $params['do_not_mail'] = $parameters->getParameter('do_not_mail') ? '1' : '0';
+    }
+    if ($parameters->doesParameterExists('do_not_email')) {
+      $params['do_not_email'] = $parameters->getParameter('do_not_email') ? '1' : '0';
+    }
+    if ($parameters->doesParameterExists('do_not_phone')) {
+      $params['do_not_phone'] = $parameters->getParameter('do_not_phone') ? '1' : '0';
+    }
+    if ($parameters->doesParameterExists('do_not_sms')) {
+      $params['do_not_sms'] = $parameters->getParameter('do_not_sms') ? '1' : '0';
+    }
     $result = civicrm_api3('Contact', 'create', $params);
     $contact_id = $result['id'];
     $output->setParameter('contact_id', $contact_id);
@@ -104,6 +116,10 @@ class CreateUpdateHousehold extends AbstractAction {
       new Specification('household_name', 'String', E::ts('Household name'), false),
       new Specification('source', 'String', E::ts('Source'), false),
       new Specification('created_date', 'Date', E::ts('Created Date'), false),
+      new Specification('do_not_mail', 'Boolean', E::ts('Do not mail'), false),
+      new Specification('do_not_email', 'Boolean', E::ts('Do not e-mail'), false),
+      new Specification('do_not_phone', 'Boolean', E::ts('Do not Phone'), false),
+      new Specification('do_not_sms', 'Boolean', E::ts('Do not SMS'), false),
     ));
     ContactActionUtils::createAddressParameterSpecification($spec);
     ContactActionUtils::createEmailParameterSpecification($spec);
