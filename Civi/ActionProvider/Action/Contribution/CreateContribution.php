@@ -49,6 +49,9 @@ class CreateContribution extends AbstractAction {
     if ($parameters->doesParameterExists('contribution_recur_id')) {
       $contribution_params['contribution_recur_id'] = $parameters->getParameter('contribution_recur_id');
     }
+    if ($parameters->doesParameterExists('trxn_id')) {
+      $contribution_params['trxn_id'] = $parameters->getParameter('trxn_id');
+    }
     if ($parameters->doesParameterExists('receive_date')) {
       $contribution_params['receive_date'] = $parameters->getParameter('receive_date');
     }
@@ -103,6 +106,7 @@ class CreateContribution extends AbstractAction {
       new Specification('receive_date', 'Date', E::ts('Receive date'), false),
       new OptionGroupSpecification('currency', 'currencies_enabled', E::ts('Currency'), FALSE),
       new Specification('source', 'String', E::ts('Source'), false),
+      new Specification('trxn_id', 'String', E::ts('Transaction ID'), false),
     ));
 
     $customGroups = civicrm_api3('CustomGroup', 'get', array('extends' => 'Contribution', 'is_active' => 1, 'options' => array('limit' => 0)));
