@@ -365,4 +365,16 @@ class ContactActionUtils {
     return self::$locationTypes;
   }
 
+  public static function setCreatedDate($id, $created_date) {
+    $year = substr($created_date, 0, 4);
+    $month = substr($created_date, 4, 2);
+    $day = substr($created_date, 6, 2);
+    $createdDate = new \DateTime();
+    $createdDate->setDate($year, $month, $day);
+    \CRM_Core_DAO::executeQuery("UPDATE civicrm_contact SET created_date = %1 WHERE id = %2", array(
+      1 => array($createdDate->format('Y-m-d'), 'String'),
+      2 => array($id, 'Integer'),
+    ));
+  }
+
 }

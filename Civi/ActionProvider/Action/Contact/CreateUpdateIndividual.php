@@ -52,6 +52,11 @@ class CreateUpdateIndividual extends AbstractAction {
     $contact_id = $result['id'];
     $output->setParameter('contact_id', $contact_id);
 
+    // Set created date.
+    if ($parameters->doesParameterExists('created_date')) {
+      ContactActionUtils::setCreatedDate($contact_id, $parameters->getParameter('created_date'));
+    }
+
     // Create address
     $address_id = ContactActionUtils::createAddressForContact($contact_id, $parameters, $this->configuration);
     if ($address_id) {
@@ -69,7 +74,6 @@ class CreateUpdateIndividual extends AbstractAction {
     if ($phone_id) {
       $output->setParameter('phone_id', $phone_id);
     }
-
   }
 
   /**
