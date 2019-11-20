@@ -61,6 +61,8 @@ class Provider {
       AbstractAction::DATA_MANIPULATION_TAG));
 	  $this->addActionWithoutFiltering('SetValue', '\Civi\ActionProvider\Action\Generic\SetValue', E::ts('Set Value'), array(
 	    AbstractAction::DATA_MANIPULATION_TAG));
+	  $this->addActionWithoutFiltering('RegexReplaceValue', '\Civi\ActionProvider\Action\Generic\RegexReplaceValue', E::ts('Modify Value with Regular Expression'), array(
+	    AbstractAction::DATA_MANIPULATION_TAG));
     $this->addActionWithoutFiltering('SetParameterValue', '\Civi\ActionProvider\Action\Generic\SetParameterValue', E::ts('Set Value from parameter'), array(
       AbstractAction::DATA_MANIPULATION_TAG));
     $this->addActionWithoutFiltering('SetDateValue', '\Civi\ActionProvider\Action\Generic\SetDateValue', E::ts('Set date value'), array(
