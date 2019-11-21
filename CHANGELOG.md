@@ -45,6 +45,7 @@ _Create update organization_
 
 _Create contribution action_
 * New parameter contribution recur id
+* New parameter note
 * New parameter receive date
 * New parameter trxn_id
 

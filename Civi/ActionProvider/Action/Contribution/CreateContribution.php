@@ -55,6 +55,9 @@ class CreateContribution extends AbstractAction {
     if ($parameters->doesParameterExists('receive_date')) {
       $contribution_params['receive_date'] = $parameters->getParameter('receive_date');
     }
+    if ($parameters->doesParameterExists('note')) {
+      $contribution_params['note'] = $parameters->getParameter('note');
+    }
 
     foreach($this->getParameterSpecification() as $spec) {
       if (stripos($spec->getName(), 'custom_')!==0) {
@@ -106,6 +109,7 @@ class CreateContribution extends AbstractAction {
       new Specification('receive_date', 'Date', E::ts('Receive date'), false),
       new OptionGroupSpecification('currency', 'currencies_enabled', E::ts('Currency'), FALSE),
       new Specification('source', 'String', E::ts('Source'), false),
+      new Specification('note', 'String', E::ts('Note'), false),
       new Specification('trxn_id', 'String', E::ts('Transaction ID'), false),
     ));
 
