@@ -4,13 +4,14 @@ Version 1.9 (not yet released)
 **New actions**
 
 * Set value from parameter
+* Modify Value with Regular Expression
 * Set contact subtype
-* Link contribution to membership
+* Set employer
+* Find organization by name
 * Find or create a campaign
 * Update membership
-* Set employer
-* Modify Value with Regular Expression
-* Find organization by name
+* Create contribution (with parameters)
+* Link contribution to membership
 
 **New conditions**
 
