@@ -11,6 +11,7 @@ Version 1.9 (not yet released)
 * Find or create a campaign
 * Update membership
 * Create contribution (with parameters)
+* Update contribution
 * Link contribution to membership
 
 **New conditions**
