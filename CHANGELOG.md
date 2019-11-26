@@ -1,4 +1,4 @@
-Version 1.9 (not yet released)
+Version 1.9
 -----------
 
 **New actions**
