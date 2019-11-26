@@ -136,13 +136,14 @@ class ContactActionUtils {
       $addressParams['country_id'] = $parameters->getParameter('country_id');
       $hasAddressParams = true;
     }
+    if ($parameters->doesParameterExists('manual_geo_cde')) {
+      $addressParams['manual_geo_code'] = $parameters->getParameter('manual_geo_code') ? '1' : '0';
+    }
     if ($parameters->doesParameterExists('latitude')) {
       $addressParams['geo_code_1'] = $parameters->getParameter('latitude');
-      $addressParams['manual_geo_code'] = '1';
     }
     if ($parameters->doesParameterExists('longitude')) {
       $addressParams['geo_code_2'] = $parameters->getParameter('longitude');
-      $addressParams['manual_geo_code'] = '1';
     }
     if ($hasAddressParams) {
       $result = civicrm_api3('Address', 'create', $addressParams);
@@ -179,6 +180,7 @@ class ContactActionUtils {
     $spec->addSpecification(new Specification('city', 'String', E::ts('City'), false));
     $spec->addSpecification(new Specification('state_province_id', 'Integer', E::ts('State/Province ID'), false, null, 'StateProvince'));
     $spec->addSpecification(new Specification('country_id', 'Integer', E::ts('Country ID'), false, null, 'Country'));
+    $spec->addSpecification(new Specification('manual_geo_code', 'Boolean', E::ts('Manual Geo Code'), false, false));
     $spec->addSpecification(new Specification('latitude', 'Float', E::ts('Latitude'), false, null, null));
     $spec->addSpecification(new Specification('longitude', 'Float', E::ts('Longitude'), false, null, null));
   }
