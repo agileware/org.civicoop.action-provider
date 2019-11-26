@@ -1,3 +1,8 @@
+Version 1.8.2
+-------------
+
+* Added manual geocode option to address actions.
+
 Version 1.8.1
 -------------
 
