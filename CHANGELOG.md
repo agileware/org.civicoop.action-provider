@@ -64,11 +64,11 @@ _Create relationship action_
 _Create/update relationship action_
 * New parameter description
 
-
 **Other changes**
 
 * Collection specification on conditions.
-* Fixed issue with custom token
+* Fixed issue with custom token.
+* Added manual geo coding to all actions which creates an address.
 
 Version 1.8
 -----------
