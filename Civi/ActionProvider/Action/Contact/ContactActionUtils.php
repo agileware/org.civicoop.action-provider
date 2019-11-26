@@ -136,7 +136,7 @@ class ContactActionUtils {
       $addressParams['country_id'] = $parameters->getParameter('country_id');
       $hasAddressParams = true;
     }
-    if ($parameters->doesParameterExists('manual_geo_cde')) {
+    if ($parameters->doesParameterExists('manual_geo_code')) {
       $addressParams['manual_geo_code'] = $parameters->getParameter('manual_geo_code') ? '1' : '0';
     }
     if ($parameters->doesParameterExists('latitude')) {
