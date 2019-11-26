@@ -64,6 +64,11 @@ _Create relationship action_
 _Create/update relationship action_
 * New parameter description
 
+_Send bulk mail action_
+* New parameter Template Options (could be used to store mosaico template).
+* Changed Group ID parameter to multiple so that a bulk mail could be send to multiple groups.
+
+
 **Other changes**
 
 * Collection specification on conditions.

@@ -7,6 +7,7 @@
 namespace Civi\ActionProvider\Action\BulkMail;
 
 use \Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\Exception\ExecutionException;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
@@ -47,7 +48,8 @@ class Send extends AbstractAction {
       new Specification('name', 'String', E::ts('Name'), true, null, null, null, False),
       new Specification('subject', 'String', E::ts('Subject'), true, null, null, null, False),
       new Specification('body_html', 'Text', E::ts('HTML Body'), true, null, null, null, FALSE),
-      new Specification('group_id', 'Integer', E::ts('Select group'), true, null, 'Group', null, FALSE),
+      new Specification('template_options', 'Text', E::ts('Template Options'), true, null, null, null, FALSE),
+      new Specification('group_id', 'Integer', E::ts('Select group'), true, null, 'Group', null, TRUE),
       new Specification('sender_contact_id', 'Integer', E::ts('Sender Contact ID'), true)
     ));
     return $specs;
@@ -79,6 +81,14 @@ class Send extends AbstractAction {
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $sender_contact = civicrm_api3('Contact', 'getsingle', array('id' => $parameters->getParameter('sender_contact_id')));
 
+    $groupIds = $parameters->getParameter('group_id');
+    if (!is_array($groupIds)) {
+      $groupIds = array($groupIds);
+    }
+    if (!count($groupIds)) {
+      throw new ExecutionException('No receivers selected (group_id is empty)');
+    }
+
     $apiParams['name'] = $parameters->getParameter('name');
     $apiParams['subject'] = $parameters->getParameter('subject');
     $apiParams['body_html'] = $parameters->getParameter('body_html');
@@ -91,15 +101,22 @@ class Send extends AbstractAction {
       $apiParams['from_email']  = $sender_contact['email'];
       $apiParams['replyto_email'] = $sender_contact['email'];
     }
+    if ($parameters->doesParameterExists('template_options')) {
+      $apiParams['template_options'] = $parameters->getParameter('template_options');
+    }
     $mailing = civicrm_api3('Mailing', 'Create', $apiParams);
-    $apiGroupParams['group_type'] = 'Include';
-    $apiGroupParams['entity_table'] = 'civicrm_group';
-    $apiGroupParams['entity_id'] = $parameters->getParameter('group_id');
-    $apiGroupParams['mailing_id'] = $mailing['id'];
-    civicrm_api3('MailingGroup', 'create', $apiGroupParams);
+
+    foreach($groupIds as $groupId) {
+      $apiGroupParams['group_type'] = 'Include';
+      $apiGroupParams['entity_table'] = 'civicrm_group';
+      $apiGroupParams['entity_id'] = $groupId;
+      $apiGroupParams['mailing_id'] = $mailing['id'];
+      civicrm_api3('MailingGroup', 'create', $apiGroupParams);
+    }
+
     // Now send the mailing
     $now = new \DateTime();
-   $now->setTimezone(new \DateTimeZone('UTC'));
+    $now->setTimezone(new \DateTimeZone('UTC'));
     $mailingSendParams['id'] = $mailing['id'];
     $mailingSendParams['scheduled_date'] = $now->format('Ymd His');
     civicrm_api3('Mailing', 'submit', $mailingSendParams);
