@@ -23,6 +23,8 @@ class AddTagToContact extends AbstractAction {
       $tag_id = civicrm_api3('Tag', 'getvalue', ['return' => 'id', 'name' => $tag, 'used_for' => 'Contacts']);
     } catch (\Exception $e) {
       $result = civicrm_api3('Tag', 'create', ['name' => $tag, 'used_for' => 'Contacts']);
+      // We need to flush the cache other wise we cannot add the tag to the contact.
+      \CRM_Utils_System::flushCache();
       $tag_id = $result['id'];
     }
     if ($tag_id) {

@@ -1,3 +1,10 @@
+Version 1.10 (not yet released)
+------------
+
+**New actions**
+
+* Get Membership Type by Organization
+
 Version 1.9
 -----------
 

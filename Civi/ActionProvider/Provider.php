@@ -317,6 +317,10 @@ class Provider {
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $this->addActionWithoutFiltering('GetMembershipTypeByOrganization', '\Civi\ActionProvider\Action\Membership\GetMembershipTypeByOrganization',E::ts('Get membership type by organization') , array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $this->addActionWithoutFiltering('MessageTemplateByName', '\Civi\ActionProvider\Action\Communication\MessageTemplateByName', E::ts('Find message template by name'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG
