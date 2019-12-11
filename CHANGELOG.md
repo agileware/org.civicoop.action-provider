@@ -5,6 +5,10 @@ Version 1.10 (not yet released)
 
 * Get Membership Type by Organization
 
+**Changed actions**
+
+* Link Contribution to Membership: added option to set the membership to pending.
+
 Version 1.9
 -----------
 

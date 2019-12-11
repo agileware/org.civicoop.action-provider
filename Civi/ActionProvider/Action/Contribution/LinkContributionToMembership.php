@@ -29,6 +29,15 @@ class LinkContributionToMembership extends AbstractAction {
     $apiParams['contribution_id'] = $parameters->getParameter('contribution_id');
     $apiParams['membership_id'] = $parameters->getParameter('membership_id');
     civicrm_api3('MembershipPayment', 'create', $apiParams);
+
+    if ($this->configuration->getParameter('set_pending')) {
+      $pendingMembershipStatusId = \CRM_Core_PseudoConstant::getKey('CRM_Member_BAO_Membership', 'status_id', 'Pending');
+      $membershipApiParams['status_id'] = $pendingMembershipStatusId;
+      $membershipApiParams['skipStatusCal'] = TRUE;
+      $membershipApiParams['is_pay_later'] = 1;
+      $membershipApiParams['id'] = $parameters->getParameter('membership_id');
+      civicrm_api3('Membership', 'create', $membershipApiParams);
+    }
   }
 
   /**
@@ -38,7 +47,9 @@ class LinkContributionToMembership extends AbstractAction {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
-    return new SpecificationBag(array());
+    return new SpecificationBag(array(
+      new Specification('set_pending', 'Boolean', E::ts('Set membership to pending'), false, false)
+    ));
   }
 
   /**
