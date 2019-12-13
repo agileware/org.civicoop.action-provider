@@ -4,6 +4,8 @@ Version 1.10 (not yet released)
 **New actions**
 
 * Get Membership Type by Organization
+* Map Value
+* Format Value
 
 **Changed actions**
 
