@@ -1,6 +1,11 @@
 Version 1.11 (not yet released)
 ------------
 
+**Changed actions**
+
+* Create contribution: fixed issue with incorrect total amount and civicrm version 5.20
+* Create contribution (with parameters): fixed issue with incorrect total amount and civicrm version 5.20
+
 Version 1.10
 ------------
 

@@ -39,7 +39,7 @@ class CreateContribution extends AbstractAction {
     if ($parameters->doesParameterExists('currency')) {
       $contribution_params['currency'] = $parameters->getParameter('currency');
     }
-    $contribution_params['total_amount'] = (float) $parameters->getParameter('amount');
+    $contribution_params['total_amount'] = \CRM_Utils_Money::format((float) $parameters->getParameter('amount'));
     if ($parameters->doesParameterExists('source')) {
       $contribution_params['source'] = $parameters->getParameter('source');
     }
