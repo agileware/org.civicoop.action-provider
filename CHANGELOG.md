@@ -1,3 +1,9 @@
+Version 1.12
+------------
+
+* Create membership: added source parameter
+* Create membership (with parameters): added source parameter
+
 Version 1.11
 ------------
 

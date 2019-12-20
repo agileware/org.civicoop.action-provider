@@ -46,6 +46,7 @@ class CreateOrUpdateMembershipWithTypeParameter extends AbstractAction {
       new Specification('join_date', 'Date', E::ts('Join date'), false),
       new Specification('start_date', 'Date', E::ts('Start date'), false),
       new Specification('end_date', 'Date', E::ts('End date'), false),
+      new Specification('source', 'String', E::ts('Source'), false),
     ));
 
     $customGroups = civicrm_api3('CustomGroup', 'get', array('extends' => 'Membership', 'is_active' => 1, 'options' => array('limit' => 0)));
@@ -101,6 +102,9 @@ class CreateOrUpdateMembershipWithTypeParameter extends AbstractAction {
     }
     if ($parameters->doesParameterExists('join_date')) {
       $apiParams['join_date'] = $parameters->getParameter('join_date');
+    }
+    if ($parameters->doesParameterExists('source')) {
+      $apiParams['source'] = $parameters->getParameter('source');
     }
 
     foreach($this->getParameterSpecification() as $spec) {
