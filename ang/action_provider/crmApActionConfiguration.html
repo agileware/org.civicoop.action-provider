@@ -1,5 +1,6 @@
-<div class="crm-block crm-form-block">
+<div class="crm-block">
 
+  <h3 class="widget-header" ng-if="action.configuration_spec.length">{{ts('Configuration')}}</h3>
     <ng-repeat ng-repeat="spec in action.configuration_spec">
         <div crm-ui-field="spec.crmUiField"
              ng-if="spec.options">
@@ -52,8 +53,8 @@
         <div class="description" ng-bind-html="spec.description" ng-if="spec.description"></div>
     </ng-repeat>
 
-    <div class="crm-block crm-form-block" ng-form="input_mapper" ng-if="fields">
-        <h3>{{ts('Parameter Mapping')}}</h3>
+    <div class="crm-block" ng-form="input_mapper" ng-if="fields">
+        <h3 class="widget-header">{{ts('Parameter Mapping')}}</h3>
         <ng-repeat ng-repeat="spec in action.parameter_spec">
             <div crm-ui-field="spec.crmUiField">
                 <select
