@@ -1,3 +1,8 @@
+Version 1.13 (not yet released)
+------------
+
+* Sorted action titles
+
 Version 1.12
 ------------
 

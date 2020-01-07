@@ -400,6 +400,7 @@ class Provider {
         $titles[$actionName] = $this->actionTitles[$actionName];
       }
     }
+	  asort($titles);
     return $titles;
   }
 
