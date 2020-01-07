@@ -1,7 +1,7 @@
-# Howto create a update participant status action
+# Howto create an action in your own extension.
 
 In this tutorial I will explain how you could develop an action which does update an existing participant record.
-It is also possible to create an action in [your own extension](howto_create_an_action_in_an_extension.md) but that would be dealt with in another tutorial.
+And we will add this action to your own extension. We assume that you already have an extension called _myextension_.
 
 ## Contents
 
@@ -18,9 +18,11 @@ It is also possible to create an action in [your own extension](howto_create_an_
 ## Required functionality
 
 The action should update an existing participant record.
-Based on the provided event_id and contact_id the participant record is updated to the status configured by the site administrator.
+Based on the provided event_id and contact_id the participant record is updated to the status configured by the site
+administrator.
 
-In _action-provider_ terminology this means we need _status_ as a _configuration option_ and _event_id_ and _contact_id_ as _parameter options_.
+In _action-provider_ terminology this means we need _status_ as a _configuration option_ and _event_id_
+and _contact_id_ as _parameter options_.
 
 The action would not return anything.
 
@@ -28,7 +30,7 @@ The action would not return anything.
 
 ## Create an action class
 
-Start with a file in the directory _Civi\ActionProvider\Actions\Event\UpdateParticipantStatus.php_
+Start with a file in the directory _Civi\Myextension\Actions\UpdateParticipantStatus.php_
 This file will contain the action class which is extended from the abstract action.
 
 ### Create the class
@@ -37,27 +39,27 @@ This file will contain the action class which is extended from the abstract acti
 
   <?php
 
-  namespace Civi\ActionProvider\Action\Event;
+  namespace Civi\Myextension\Actions;
 
   use \Civi\ActionProvider\Action\AbstractAction;
   use \Civi\ActionProvider\Parameter\ParameterBagInterface;
   use \Civi\ActionProvider\Parameter\SpecificationBag;
   use \Civi\ActionProvider\Parameter\Specification;
 
-  use CRM_ActionProvider_ExtensionUtil as E;
+  use CRM_Myextension_ExtensionUtil as E;
 
   class UpdateParticipantStatus extends AbstractAction {
   }
 
 ```
 
-Above code will create the class, every action has to extend the _AbstractAction_ class. As you can see we use namespace and use statements.
-The use statement are required for the next step and are a kind of _include_ or _require_ statement.
+Above code will create the class, every action has to extend the _AbstractAction_ class. As you can see we use namespace
+and use statements. The use statement are required for the next step and are a kind of _include_ or _require_ statement.
 
 ### Specify the configuration options
 
-In this step we define the configuration option of the action. A configuration option is something which should be set by the
-site administrator.
+In this step we define the configuration option of the action. A configuration option is something which should be set
+by the site administrator.
 
 We do this by returning a _specification bag_ in which all configuration fields are specified.
 
@@ -95,14 +97,15 @@ In our case we have only one configuration option and that is the new status.
 
 ```
 
-In the code above we define a field which has the name _status_ an Integer Type, the human title is a translated string, it is a reuiqred option, no default value, and the list of options are retrieved from the _ParticipantStatus_ entity.
+In the code above we define a field which has the name _status_ an Integer Type, the human title is a translated string,
+it is a required option, no default value, and the list of options are retrieved from the _ParticipantStatus_ entity.
 
 ### Specify the parameter options
 
-In this step we specify which parameters the action has. This is similair to the configuration specification.
-The difference between a parameter and a configuration is that a configuration is set by a site administrator
-whilst a parameter is coming from an other action, an input etc. Depending on the situation in which the action is used
-e.g. when used in the [form-processor](https://lab.civicrm.org/extensions/form-processor) a parameter could be mapped to an input of a
+In this step we specify which parameters the action has. This is similar to the configuration specification. The difference
+between a parameter and a configuration is that a configuration is set by a site administrator whilst a parameter is coming
+from an other action, an input etc. Depending on the situation in which the action is used e.g. when used in the
+[form-processor](https://lab.civicrm.org/extensions/form-processor) a parameter could be mapped to an input of a
 form processor or to an output of previous action.
 
 In our specific example we have the event_id and the contact_id as parameters.
@@ -142,9 +145,8 @@ In our specific example we have the event_id and the contact_id as parameters.
 
 ### Specify the output of the action
 
-In this step we specify which fields an action outputs.
-This is similair to the specification of configuration and parameters.
-In this particilair example we dont output anything.
+In this step we specify which fields an action outputs. This is similar to the specification of configuration and
+parameters. In this particular example we dont output anything.
 
 ```php
 
@@ -169,11 +171,11 @@ In this particilair example we dont output anything.
 
 ### The actual action
 
-In this step the actual action is developed. So what we have to do here is to look up
-a participant record for certain event and contact and set the status to configured status.
+In this step the actual action is developed. So what we have to do here is to look up a participant record for certain
+event and contact and set the status to configured status.
 
-The first thing which is important here is to note that the action-provider does validate the incoming parameters and configuration
-options. So we can assume those are valid.
+The first thing which is important here is to note that the action-provider does validate the incoming parameters and
+configuration options. So we can assume those are valid.
 
 Also note that we throw an Exception when no participant record could be found.
 
@@ -231,33 +233,45 @@ Also note that we throw an Exception when no participant record could be found.
 
 Now we have defined our action class. The last thing we have to do is to make it known to the action provider.
 
-What we have to do to is to add our class to the action provider class in _Civi\ActionProvider\Provider.php_:
+### Check the info.xml
 
-When we do that we give our action a name, a title and we provide some tags for the action.
+First we need to check whether the info.xml contains the class loader for files in the (sub)directory Civi.
+
+Open your info.xml file and check whether the following lines are present. If they are not present add them just before `<civix>`.
+
+```xml
+  <classloader>
+    <psr4 prefix="Civi\" path="Civi" />
+  </classloader>
+```
+
+### Create a compiler pass class
+
+Next step is to create a compiler pass class. You can use this class to add multiple actions.
+
+!!! Note The compiler pass class is a class which is called just before the action provider is instantiated. Meaning that
+we can easily add actions, alter existing actions etc.
+
+Create a file in _Civi\Myextension\CompilerPass.php_ and add the following code:
 
 ```php
+  <?php
 
-  namespace Civi\ActionProvider;
-  // ...
+  namespace Civi\Myextension;
 
-  class Provider {
+  use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+  use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-    // ...
+  use CRM_Myextension_ExtensionUtil as E;
 
-    public function __construct() {
-      // ..
-      $this->addAction('UpdateParticipantStatus', '\Civi\ActionProvider\Action\Event\UpdateParticipantStatus', E::ts('Update participant status'), array(
-        AbstractAction::SINGLE_CONTACT_ACTION,
-        AbstractAction::DATA_MANIPULATION
-      ));
-      // ...
+  class CompilerPass implements CompilerPassInterface {
+
+    public function process(ContainerBuilder $container) {
+      if ($container->hasDefinition('action_provider')) {
+        $typeFactoryDefinition = $container->getDefinition('action_provider');
+        $typeFactoryDefinition->addMethodCall('addAction', array('MyExtensionUpdateParticipantStatus', 'Civi\Myextension\Actions\UpdateParticipantStatus', E::ts('Update participant status (My Extension)'), array()));
+      }
     }
-
-    // ...
-
   }
 
 ```
-
-The only thing we do is add our action to the constructor.
-If you implement actions in [your own extension](howto_create_an_action_in_an_extension.md) this would be done in a different way.
