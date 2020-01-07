@@ -4,9 +4,8 @@
 	  <div ng-if="spec.options" crm-ui-field="{name: spec.name, title: spec.title, required: spec.required}">
       <select
         style="width: 90%;"
-        crm-ui-select
+        crm-ui-select="{allowClear: true, minimumInputLength: 0}"
         crm-ui-id="{{spec.name}}"
-        ui-options="{allowClear: true}"
         name="{{spec.name}}"
         ng-if="!spec.multiple"
         ng-model="configuration.configuration[spec.name]"
@@ -16,21 +15,20 @@
       </select>
       <select
         style="width: 90%;"
-        crm-ui-select
+        crm-ui-select="{allowClear: true, minimumInputLength: 0}"
         crm-ui-id="{{spec.name}}"
         name="{{spec.name}}"
         ng-if="spec.multiple"
         ng-model="configuration.configuration[spec.name]"
         ng-required="spec.required"
         multiple="multiple"
-        ui-options="{allowClear: true}"
       >
         <option ng-repeat="(key,value) in spec.options" value="{{key}}">{{value}}</option>
       </select>
     </div>
 	  <div ng-if="spec.fk_entity" crm-ui-field="{name: spec.name, title: spec.title, required: spec.required}">
-			<input
-        crm-entityref="{entity: spec.fk_entity, select: {allowClear: true, placeholder: spec.title}}"
+			<input class="huge"
+        crm-entityref="{entity: spec.fk_entity, select: {allowClear: true, placeholder: spec.title, minimumInputLength: 0}}"
         name="{{spec.name}}"
         crm-ui-id="{{spec.name}}"
         ng-model="configuration.configuration[spec.name]"
@@ -43,7 +41,7 @@
         crm-ui-id="{{spec.name}}"
         name="{{spec.name}}"
         ng-model="configuration.configuration[spec.name]"
-        class="big crm-form-text"
+        class="huge crm-form-text"
         ng-required="spec.required"
       />
 	  </div>
