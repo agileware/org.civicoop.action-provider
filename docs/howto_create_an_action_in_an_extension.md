@@ -250,7 +250,7 @@ Open your info.xml file and check whether the following lines are present. If th
 Next step is to create a compiler pass class. You can use this class to add multiple actions.
 
 !!! Note The compiler pass class is a class which is called just before the action provider is instantiated. Meaning that
-we can easily add actions, alter existing actions etc.
+we can easily add actions, alter existing actions etc. See [Symfony Documenation on how the Compiler Pass works](https://symfony.com/doc/3.4/components/dependency_injection/compilation.html#components-di-separate-compiler-passes)
 
 Create a file in _Civi\Myextension\CompilerPass.php_ and add the following code:
 
