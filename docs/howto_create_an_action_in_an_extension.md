@@ -268,8 +268,8 @@ Create a file in _Civi\Myextension\CompilerPass.php_ and add the following code:
 
     public function process(ContainerBuilder $container) {
       if ($container->hasDefinition('action_provider')) {
-        $typeFactoryDefinition = $container->getDefinition('action_provider');
-        $typeFactoryDefinition->addMethodCall('addAction', array('MyExtensionUpdateParticipantStatus', 'Civi\Myextension\Actions\UpdateParticipantStatus', E::ts('Update participant status (My Extension)'), array()));
+        $actionProviderDefinition = $container->getDefinition('action_provider');
+        $actionProviderDefinition->addMethodCall('addAction', array('MyExtensionUpdateParticipantStatus', 'Civi\Myextension\Actions\UpdateParticipantStatus', E::ts('Update participant status (My Extension)'), array()));
       }
     }
   }
