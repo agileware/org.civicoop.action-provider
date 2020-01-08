@@ -113,7 +113,7 @@
 	      ui-jq="select2"
 	      ui-options="{allowClear: true}"
 	      ng-model="configuration.output_mapping[spec.name]"
-	      ng-options="field.name as field.label for field in fields"
+	      ng-options="field as field.label for field in fields track by field.name"
       >
 	      <option value=""></option>
       </select>
