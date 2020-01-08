@@ -275,3 +275,17 @@ Create a file in _Civi\Myextension\CompilerPass.php_ and add the following code:
   }
 
 ```
+
+The last step is to let CiviCRM know about the compiler pass class. We do this by using the [hook_civicrm_container](https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_container/)
+
+In the file _myextension.php_ add the following function:
+
+```php
+
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+function myextension_civicrm_container(ContainerBuilder $container) {
+  $container->addCompilerPass(new Civi\Myextension\CompilerPass());
+}
+
+```
