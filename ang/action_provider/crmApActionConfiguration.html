@@ -59,7 +59,7 @@
                         crm-ui-select="{allowClear: true, minimumInputLength: 0}"
                         name="{{spec.name}}"
                         ng-model="mapping[spec.name]"
-                        ng-options="field.name as field.label for field in fields"
+                        ng-options="field as field.label for field in fields track by field.name"
                         ng-required="spec.required"
                     <option value=""></option>
                 </select>
