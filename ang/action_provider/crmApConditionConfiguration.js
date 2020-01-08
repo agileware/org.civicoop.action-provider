@@ -46,14 +46,12 @@
         });
 
         $scope.addItemToCollection = function addItemToCollection(specification) {
-          console.log($scope.configuration);
           if (!$scope.configuration.parameter_mapping) {
             $scope.configuration.parameter_mapping = {};
           }
           if (!$scope.configuration.parameter_mapping[specification.name]) {
             $scope.configuration.parameter_mapping[specification.name] = [];
           }
-          console.log($scope.configuration);
           $scope.configuration.parameter_mapping[specification.name].push({});
         };
 
