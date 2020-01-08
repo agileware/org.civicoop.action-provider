@@ -23,12 +23,7 @@ class FindByExternalId extends AbstractAction {
 	 * @return void
 	 */
 	protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-		$contact_type = civicrm_api3('ContactType', 'getsingle', array('id' => $this->configuration->getParameter('contact_type')));
-		$contact_sub_type = false;
-		if (isset($contact_type['parent_id']) && $contact_type['parent_id'] > 0) {
-			$contact_sub_type = $contact_type;
-			$contact_type = civicrm_api3('ContactType', 'getsingle', array('id' => $contact_sub_type['parent_id']));
-		}
+    $contact_type = ContactActionUtils::getContactType($this->configuration->getParameter('contact_type'));
 		$apiParams = array();
     if ($parameters->doesParameterExists('external_identifier') && $parameters->getParameter('external_identifier')) {
       $apiParams['external_identifier'] = $parameters->getParameter('external_identifier');
@@ -37,9 +32,9 @@ class FindByExternalId extends AbstractAction {
 		  throw new InvalidParameterException(E::ts("No parameter given"));
     }
 
-    $apiParams['contact_type'] = $contact_type['name'];
-    if ($contact_sub_type) {
-      $apiParams['contact_sub_type'] = $contact_sub_type['name'];
+    $apiParams['contact_type'] = $contact_type['contact_type']['name'];
+    if ($contact_type['contact_sub_type']) {
+      $apiParams['contact_sub_type'] = $contact_type['contact_sub_type']['name'];
     }
     $apiParams['return'] = 'id';
     try {

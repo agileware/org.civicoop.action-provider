@@ -379,4 +379,23 @@ class ContactActionUtils {
     ));
   }
 
+  /**
+   * @param $contactTypeId
+   * @return array
+   * @throws \CiviCRM_API3_Exception
+   */
+  public static function getContactType($contactTypeId) {
+    $contactType = civicrm_api3('ContactType', 'getsingle', ['id' => $contactTypeId]);
+    $contactSubType = FALSE;
+    if (isset($contactType['parent_id']) && $contactType['parent_id'] > 0) {
+      $contactSubType = $contactType;
+      $contactType = civicrm_api3('ContactType', 'getsingle', ['id' => $contactSubType['parent_id']]);
+    }
+    return [
+      'contact_type' => $contactType,
+      'contact_sub_type' => $contactSubType,
+    ];
+  }
+
+
 }

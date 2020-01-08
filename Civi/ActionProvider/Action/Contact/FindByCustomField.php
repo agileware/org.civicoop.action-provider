@@ -34,16 +34,10 @@ class FindByCustomField extends AbstractAction {
     }
 
     if ($this->configuration->getParameter('contact_type')) {
-      $contact_type = civicrm_api3('ContactType', 'getsingle', ['id' => $this->configuration->getParameter('contact_type')]);
-      $contact_sub_type = FALSE;
-      if (isset($contact_type['parent_id']) && $contact_type['parent_id'] > 0) {
-        $contact_sub_type = $contact_type;
-        $contact_type = civicrm_api3('ContactType', 'getsingle', ['id' => $contact_sub_type['parent_id']]);
-      }
-
-      $apiParams['contact_type'] = $contact_type['name'];
-      if ($contact_sub_type) {
-        $apiParams['contact_sub_type'] = $contact_sub_type['name'];
+      $contact_type = ContactActionUtils::getContactType($this->configuration->getParameter('contact_type'));
+      $apiParams['contact_type'] = $contact_type['contact_type']['name'];
+      if ($contact_type['contact_sub_type']) {
+        $apiParams['contact_sub_type'] = $contact_type['contact_sub_type']['name'];
       }
     }
 
