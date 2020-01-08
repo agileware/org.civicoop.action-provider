@@ -54,7 +54,7 @@
         <h3 class="widget-header">{{ts('Parameter Mapping')}}</h3>
         <ng-repeat ng-repeat="spec in action.parameter_spec">
             <div crm-ui-field="spec.crmUiField">
-                <select class="huge40"
+                <select class="huge"
                         crm-ui-id="input_mapper.{{spec.name}}"
                         crm-ui-select="{allowClear: true, minimumInputLength: 0}"
                         name="{{spec.name}}"
