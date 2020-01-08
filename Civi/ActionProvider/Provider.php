@@ -365,6 +365,7 @@ class Provider {
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ));
+    $this->addActionWithoutFiltering('ValidateChecksum', '\Civi\ActionProvider\Action\Contact\ValidateChecksum', E::ts('Validate checksum'), []);
 
 		$conditions = array(
 		  new \Civi\ActionProvider\Condition\ParameterIsEmpty(),
