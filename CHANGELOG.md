@@ -1,7 +1,9 @@
 Version 1.13 (not yet released)
 ------------
 
-* Sorted action titles
+* Find contact by email or create with email and first/last name
+* Find or create contact by email and first/last name
+* Validate checksum
 
 Version 1.12
 ------------
