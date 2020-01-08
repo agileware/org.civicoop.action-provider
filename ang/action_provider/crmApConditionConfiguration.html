@@ -107,7 +107,7 @@
 	<ng-repeat ng-repeat="spec in actionObject.output_spec">
 	  <div crm-ui-field="{name: 'output_mapper.'+spec.name, title: spec.title}">
 	    <select
-	     	style="width: 90%;"
+	     	class="huge"
 	     	crm-ui-id="output_mapper.{{spec.name}}"
 	      name="{{spec.name}}"
 	      ui-jq="select2"
