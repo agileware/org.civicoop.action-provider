@@ -5,6 +5,8 @@ Version 1.13 (not yet released)
 * Find or create contact by email and first/last name
 * Validate checksum
 * Add 'details' parameter to CreateActivity action 
+* Add action to retrieve the currently active/associated contact 
+* Add 'set preferred communication method' action 
 
 Version 1.12
 ------------
