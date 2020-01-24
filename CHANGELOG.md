@@ -4,6 +4,7 @@ Version 1.13 (not yet released)
 * Find contact by email or create with email and first/last name
 * Find or create contact by email and first/last name
 * Validate checksum
+* Add 'details' parameter to CreateActivity action 
 
 Version 1.12
 ------------
