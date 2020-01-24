@@ -184,6 +184,10 @@ class Provider {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $this->addActionWithoutFiltering('SetPreferredCommunicationMethod', '\Civi\ActionProvider\Action\Contact\SetPreferredCommunicationMethod',E::ts("Edit contact's preferred communication methods") , array(
+        AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+        AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $this->addActionWithoutFiltering('FindOrCreateContactByEmail', '\Civi\ActionProvider\Action\Contact\FindOrCreateContactByEmail', E::ts('Find or create contact by e-mail') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
