@@ -44,6 +44,7 @@ class CreateActivity extends AbstractAction {
       new Specification('activity_date', 'Timestamp', E::ts('Activity Date'), TRUE),
       new Specification('id', 'Integer', E::ts('Activity ID'), false),
       new Specification('campaign_id', 'Integer', E::ts('Campaign'), false),
+      new Specification('details', 'Text', E::ts('Details'), false),
     ]);
 
     $customGroups = civicrm_api3('CustomGroup', 'get', [
