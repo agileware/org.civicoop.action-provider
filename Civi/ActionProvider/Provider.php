@@ -285,7 +285,11 @@ class Provider {
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $this->addActionWithoutFiltering('CreateOrUpdateRelationship', '\Civi\ActionProvider\Action\Relationship\CreateOrUpdateRelationship',E::ts('Creat/Update relationship') , array(
+    $this->addActionWithoutFiltering('CreateOrUpdateRelationship', '\Civi\ActionProvider\Action\Relationship\CreateOrUpdateRelationship',E::ts('Create/Update relationship') , array(
+      AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('CreateRelationship', '\Civi\ActionProvider\Action\Relationship\CreateRelationshipWithTypeParameter',E::ts('Create relationship (with relationship type parameter)') , array(
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
