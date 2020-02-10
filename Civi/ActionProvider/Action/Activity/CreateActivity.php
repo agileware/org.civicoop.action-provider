@@ -112,6 +112,9 @@ class CreateActivity extends AbstractAction {
     if ($parameters->doesParameterExists('campaign_id')) {
       $activityParams['campaign_id'] = $parameters->getParameter('campaign_id');
     }
+    if ($parameters->doesParameterExists('details')) {
+      $activityParams['details'] = $parameters->getParameter('details');
+    }
 
     foreach($this->getParameterSpecification() as $spec) {
       if (stripos($spec->getName(), 'custom_')!==0) {
