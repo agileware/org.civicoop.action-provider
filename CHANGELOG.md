@@ -8,6 +8,7 @@ Version 1.13 (not yet released)
 * Add action to retrieve the currently active/associated contact
 * Add 'set preferred communication method' action
 * Add 'Create relationship (with relationship type parameter)' action
+* Changed Upload Custom File Field and Add Attachment action so it also accepts a URL for the attachment.
 
 Version 1.12
 ------------

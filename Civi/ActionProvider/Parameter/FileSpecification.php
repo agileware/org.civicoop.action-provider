@@ -24,13 +24,13 @@ class FileSpecification extends Specification {
       return;
     }
     if (!is_array($value)) {
-      throw new InvalidParameterException($this->getName() . ' is invalid. The file type expects an array with the keys: name, mime_type, content or with an id');
+      throw new InvalidParameterException($this->getName() . ' is invalid. The file type expects an array with the keys: name, mime_type, content/url or with an id');
     }
     if (!isset($value['id'])) {
-      if (!isset($value['name']) || !isset($value['mime_type']) || !isset($value['content'])) {
-        throw new InvalidParameterException($this->getName() . ' is invalid. The file type expects an array with the keys: name, mime_type, content or with an id');
+      if (!isset($value['name']) || !isset($value['mime_type']) || (!isset($value['content']) && !isset($value['url']))) {
+        throw new InvalidParameterException($this->getName() . ' is invalid. The file type expects an array with the keys: name, mime_type, content/url or with an id');
       }
     }
   }
-	
+
 }
