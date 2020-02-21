@@ -377,7 +377,7 @@ class Provider {
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ));
-    $this->addActionWithoutFiltering('MailingEventSubscribe', '\Civi\ActionProvider\Action\MailingEvent\MailingEventSubscribe', E::ts('Add mailing subscription'), array(
+    $this->addActionWithoutFiltering('MailingEventSubscribe', '\Civi\ActionProvider\Action\MailingEvent\MailingEventSubscribe', E::ts('Subscribe to mailing list'), array(
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ));

@@ -24,7 +24,7 @@ class MailingEventSubscribe extends AbstractAction {
    */
   public function getConfigurationSpecification() {
     return new SpecificationBag([
-      new Specification('group_id', 'Integer', E::ts('Subscribe to group'), FALSE, NULL, 'Group'),
+      new Specification('group_id', 'Integer', E::ts('Subscribe to mailing list'), FALSE, NULL, 'Group'),
     ]);
   }
 
