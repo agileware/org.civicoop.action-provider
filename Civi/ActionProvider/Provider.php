@@ -377,6 +377,14 @@ class Provider {
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ));
+    $this->addActionWithoutFiltering('MailingEventSubscribe', '\Civi\ActionProvider\Action\MailingEvent\MailingEventSubscribe', E::ts('Subscribe to mailing list'), array(
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ));
+    $this->addActionWithoutFiltering('MailingEventConfirm', '\Civi\ActionProvider\Action\MailingEvent\MailingEventConfirm', E::ts('Confirm mailing list subscription'), array(
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ));
     $this->addActionWithoutFiltering('ValidateChecksum', '\Civi\ActionProvider\Action\Contact\ValidateChecksum', E::ts('Validate checksum'), []);
     $this->addActionWithoutFiltering('FindByEmailOrCreateEmailName', '\Civi\ActionProvider\Action\Contact\FindByEmailOrCreateEmailName', E::ts('Find By Email or Create By Email and Names'), []);
     $this->addActionWithoutFiltering('FindOrCreateContactByEmailAndName', '\Civi\ActionProvider\Action\Contact\FindOrCreateContactByEmailAndName', E::ts('Find or Create By Email and Names'), []);
