@@ -24,7 +24,8 @@ class ValidateChecksum extends AbstractAction {
    * @throws
 	 */
 	protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    $output->setParameter('contact_id', $parameters['cid']);
+	  $contactId = $parameters->getParameter('cid');
+    $output->setParameter('contact_id', $contactId);
 	}
 
 	/**
@@ -54,7 +55,9 @@ class ValidateChecksum extends AbstractAction {
    * @throws InvalidParameterException
    */
 	public function validateParameters(ParameterBagInterface $parameters) {
-	  $valid = \CRM_Contact_BAO_Contact_Utils::validChecksum($parameters['cid'], $parameters['cs']);
+	  $contactId = $parameters->getParameter('cid');
+	  $checksum = $parameters->getParameter('cs');
+	  $valid = \CRM_Contact_BAO_Contact_Utils::validChecksum($contactId, $checksum);
 	  if (!$valid) {
 	    throw new InvalidParameterException(E::ts('Invalid checksum, can not access contact data.'));
     }
