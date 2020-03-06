@@ -4,6 +4,13 @@ Version 1.13 (not yet released)
 * Find contact by email or create with email and first/last name
 * Find or create contact by email and first/last name
 * Validate checksum
+* Add 'details' parameter to CreateActivity action
+* Add action to retrieve the currently active/associated contact
+* Add 'set preferred communication method' action
+* Add 'Create relationship (with relationship type parameter)' action
+* Add 'Subscribe to mailing list' action
+* Add 'Confirm mailing list subscription' action
+* Changed Upload Custom File Field and Add Attachment action so it also accepts a URL for the attachment.
 
 Version 1.12
 ------------

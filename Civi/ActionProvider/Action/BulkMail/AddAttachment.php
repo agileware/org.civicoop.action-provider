@@ -34,11 +34,21 @@ class AddAttachment extends AbstractAction {
       return;
     }
 
+    $content = '';
+    if (isset($file['content'])) {
+      $content = base64_decode($file['content']);
+    } elseif (isset($file['url'])) {
+      $content = file_get_contents($file['url']);
+    }
+    if (empty($content)) {
+      return;
+    }
+
     $attachmentParams = [
       'entity_table' => 'civicrm_mailing',
       'entity_id' => $mailing_id,
       'name' => $file['name'],
-      'content' => base64_decode($file['content']),
+      'content' => $content,
       'mime_type' => $file['mime_type'],
       'check_permissions' => FALSE,
     ];

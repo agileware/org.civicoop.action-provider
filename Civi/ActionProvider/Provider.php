@@ -132,6 +132,10 @@ class Provider {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $this->addActionWithoutFiltering('GetLoggedInContactId', '\Civi\ActionProvider\Action\Contact\GetCurrentUserContactID', E::ts('Get contact ID of the currently logged in user'), array(
+        AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+        AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $this->addActionWithoutFiltering('FindIndividualByNameAndEmail', '\Civi\ActionProvider\Action\Contact\FindIndividualByNameAndEmail', E::ts('Find Individual by name and email'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
@@ -179,6 +183,10 @@ class Provider {
     $this->addActionWithoutFiltering('UploadCustomFileField', '\Civi\ActionProvider\Action\Contact\UploadCustomFileField',E::ts('Upload file to a custom field for a contact') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('SetPreferredCommunicationMethod', '\Civi\ActionProvider\Action\Contact\SetPreferredCommunicationMethod',E::ts("Edit contact's preferred communication methods") , array(
+        AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+        AbstractAction::DATA_MANIPULATION_TAG,
     ));
     $this->addActionWithoutFiltering('FindOrCreateContactByEmail', '\Civi\ActionProvider\Action\Contact\FindOrCreateContactByEmail', E::ts('Find or create contact by e-mail') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
@@ -277,7 +285,11 @@ class Provider {
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $this->addActionWithoutFiltering('CreateOrUpdateRelationship', '\Civi\ActionProvider\Action\Relationship\CreateOrUpdateRelationship',E::ts('Creat/Update relationship') , array(
+    $this->addActionWithoutFiltering('CreateOrUpdateRelationship', '\Civi\ActionProvider\Action\Relationship\CreateOrUpdateRelationship',E::ts('Create/Update relationship') , array(
+      AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('CreateRelationship', '\Civi\ActionProvider\Action\Relationship\CreateRelationshipWithTypeParameter',E::ts('Create relationship (with relationship type parameter)') , array(
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
@@ -364,6 +376,16 @@ class Provider {
     $this->addActionWithoutFiltering('CreateCase', '\Civi\ActionProvider\Action\CiviCase\CreateCase', E::ts('Create case'), array(
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ));
+    $this->addActionWithoutFiltering('MailingEventSubscribe', '\Civi\ActionProvider\Action\MailingEvent\MailingEventSubscribe', E::ts('Subscribe to mailing list'), array(
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::SEND_MESSAGES_TO_CONTACTS,
+    ));
+    $this->addActionWithoutFiltering('MailingEventConfirm', '\Civi\ActionProvider\Action\MailingEvent\MailingEventConfirm', E::ts('Confirm mailing list subscription'), array(
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::SEND_MESSAGES_TO_CONTACTS,
     ));
     $this->addActionWithoutFiltering('ValidateChecksum', '\Civi\ActionProvider\Action\Contact\ValidateChecksum', E::ts('Validate checksum'), []);
     $this->addActionWithoutFiltering('FindByEmailOrCreateEmailName', '\Civi\ActionProvider\Action\Contact\FindByEmailOrCreateEmailName', E::ts('Find By Email or Create By Email and Names'), []);
