@@ -12,6 +12,7 @@ Version 1.13 (not yet released)
 * Add 'Confirm mailing list subscription' action
 * Add 'Link contribution to participant' action
 * Changed Upload Custom File Field and Add Attachment action so it also accepts a URL for the attachment.
+* Add "Calculate value (binary arithmetic operation)" action
 
 Version 1.12
 ------------
