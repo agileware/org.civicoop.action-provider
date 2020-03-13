@@ -67,7 +67,7 @@ class Provider {
 	    AbstractAction::DATA_MANIPULATION_TAG));
     $this->addActionWithoutFiltering('SetParameterValue', '\Civi\ActionProvider\Action\Generic\SetParameterValue', E::ts('Set Value from parameter'), array(
       AbstractAction::DATA_MANIPULATION_TAG));
-    $this->addActionWithoutFiltering('CalculateValue', '\Civi\ActionProvider\Action\Generic\CalculateValue', E::ts('Calculate values from two operands and a selectable operator.'), array(
+    $this->addActionWithoutFiltering('CalculateValue', '\Civi\ActionProvider\Action\Generic\CalculateValue', E::ts('Calculate value (binary arithmetic operation)'), array(
       AbstractAction::DATA_MANIPULATION_TAG));
     $this->addActionWithoutFiltering('FormatValue', '\Civi\ActionProvider\Action\Generic\FormatValue', E::ts('Format Value'), array(
         AbstractAction::DATA_MANIPULATION_TAG));
