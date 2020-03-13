@@ -13,7 +13,7 @@ use Civi\ActionProvider\Parameter\SpecificationBag;
 
 use CRM_ActionProvider_ExtensionUtil as E;
 
-class LinkContributionToMembership extends AbstractAction {
+class LinkContributionToParticipant extends AbstractAction {
 
   /**
    * Run the action
@@ -27,17 +27,8 @@ class LinkContributionToMembership extends AbstractAction {
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $apiParams['contribution_id'] = $parameters->getParameter('contribution_id');
-    $apiParams['membership_id'] = $parameters->getParameter('membership_id');
-    civicrm_api3('MembershipPayment', 'create', $apiParams);
-
-    if ($this->configuration->getParameter('set_pending')) {
-      $pendingMembershipStatusId = \CRM_Core_PseudoConstant::getKey('CRM_Member_BAO_Membership', 'status_id', 'Pending');
-      $membershipApiParams['status_id'] = $pendingMembershipStatusId;
-      $membershipApiParams['skipStatusCal'] = TRUE;
-      $membershipApiParams['is_pay_later'] = 1;
-      $membershipApiParams['id'] = $parameters->getParameter('membership_id');
-      civicrm_api3('Membership', 'create', $membershipApiParams);
-    }
+    $apiParams['participant_id'] = $parameters->getParameter('participant_id');
+    civicrm_api3('ParticipantPayment', 'create', $apiParams);
   }
 
   /**
@@ -47,9 +38,7 @@ class LinkContributionToMembership extends AbstractAction {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
-    return new SpecificationBag(array(
-      new Specification('set_pending', 'Boolean', E::ts('Set membership to pending'), false, false)
-    ));
+    return new SpecificationBag(array());
   }
 
   /**
@@ -59,8 +48,8 @@ class LinkContributionToMembership extends AbstractAction {
    */
   public function getParameterSpecification() {
     return new SpecificationBag(array(
-      new Specification('membership_id', 'Integer', E::ts('Membership ID'), true),
       new Specification('contribution_id', 'Integer', E::ts('Contribution ID'), true),
+      new Specification('participant_id', 'Integer', E::ts('Participant ID'), true),
     ));
   }
 
