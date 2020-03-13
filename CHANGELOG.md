@@ -1,4 +1,4 @@
-Version 1.13 (not yet released)
+Version 1.13
 ------------
 
 * Find contact by email or create with email and first/last name
