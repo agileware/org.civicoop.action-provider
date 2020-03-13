@@ -97,7 +97,7 @@ class CalculateValue extends AbstractAction {
       $operand1 = $configuration->getParameter('operand1');
     }
     // Overwrite with first operand from parameters if given.
-    if ($parameters->doesParameterExists('operand2')) {
+    if ($parameters->doesParameterExists('operand1')) {
       $operand1 = $parameters->getParameter('operand1');
     }
 
@@ -150,7 +150,7 @@ class CalculateValue extends AbstractAction {
       $operand1 = $this->configuration->getParameter('operand1');
     }
     // Overwrite with first operand from parameters if given.
-    if ($parameters->doesParameterExists('operand2')) {
+    if ($parameters->doesParameterExists('operand1')) {
       $operand1 = $parameters->getParameter('operand1');
     }
 
