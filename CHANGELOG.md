@@ -1,6 +1,7 @@
 Version 1.14 (not yet released)
 ------------
 
+* Add "Modify date value" action
 
 Version 1.13
 ------------
