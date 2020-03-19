@@ -291,7 +291,7 @@ class Provider {
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $this->addActionWithoutFiltering('CreateRelationship', '\Civi\ActionProvider\Action\Relationship\CreateRelationshipWithTypeParameter',E::ts('Create relationship (with relationship type parameter)') , array(
+    $this->addActionWithoutFiltering('CreateRelationshipWithTypeParameter', '\Civi\ActionProvider\Action\Relationship\CreateRelationshipWithTypeParameter',E::ts('Create relationship (with relationship type parameter)') , array(
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
