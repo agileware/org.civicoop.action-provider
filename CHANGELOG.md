@@ -1,7 +1,8 @@
-Version 1.14 (not yet released)
+Version 1.14
 ------------
 
 * Add "Modify date value" action
+* Fixed issue with Create Relationship action.
 
 Version 1.13
 ------------
