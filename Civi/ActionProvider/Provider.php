@@ -402,6 +402,7 @@ class Provider {
       AbstractAction::SEND_MESSAGES_TO_CONTACTS,
     ));
     $this->addActionWithoutFiltering('ValidateChecksum', '\Civi\ActionProvider\Action\Contact\ValidateChecksum', E::ts('Validate checksum'), []);
+    $this->addActionWithoutFiltering('SaveMaxContactId', '\Civi\ActionProvider\Action\Contact\SaveMaxContactId', E::ts('Save maximum contact ID'), []);
     $this->addActionWithoutFiltering('FindByEmailOrCreateEmailName', '\Civi\ActionProvider\Action\Contact\FindByEmailOrCreateEmailName', E::ts('Find By Email or Create By Email and Names'), []);
     $this->addActionWithoutFiltering('FindOrCreateContactByEmailAndName', '\Civi\ActionProvider\Action\Contact\FindOrCreateContactByEmailAndName', E::ts('Find or Create By Email and Names'), []);
 

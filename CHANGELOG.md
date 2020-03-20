@@ -2,6 +2,7 @@ Version 1.14 (not yet released)
 ------------
 
 * Add "Modify date value" action
+* Add "Save Max Contact ID" action
 
 Version 1.13
 ------------
