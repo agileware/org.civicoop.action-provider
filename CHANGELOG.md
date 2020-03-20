@@ -1,8 +1,12 @@
-Version 1.14 (not yet released)
+Version 1.15 (not yet released)
+------------
+
+Version 1.14
 ------------
 
 * Add "Modify date value" action
 * Add "Save Max Contact ID" action
+* Fixed issue with Create Relationship action.
 
 Version 1.13
 ------------
