@@ -50,7 +50,10 @@ class Send extends AbstractAction {
       new Specification('body_html', 'Text', E::ts('HTML Body'), true, null, null, null, FALSE),
       new Specification('template_options', 'Text', E::ts('Template Options'), true, null, null, null, FALSE),
       new Specification('group_id', 'Integer', E::ts('Select group'), true, null, 'Group', null, TRUE),
-      new Specification('sender_contact_id', 'Integer', E::ts('Sender Contact ID'), true)
+      new Specification('sender_contact_id', 'Integer', E::ts('Sender Contact ID'), true),
+      new Specification('from_name', 'String', E::ts('From name'), false, null, null, null, False),
+      new Specification('from_email', 'String', E::ts('From E-mail'), false, null, null, null, False),
+      new Specification('replyto_email', 'String', E::ts('Reply to'), false, null, null, null, False),
     ));
     return $specs;
   }
@@ -96,10 +99,19 @@ class Send extends AbstractAction {
     $apiParams['header_id'] = 'null';
     $apiParams['footer_id'] = 'null';
     if (isset($sender_contact['email'])) {
-      $apiParams['from_email']  = $sender_contact['email'];
       $apiParams['from_name']  = $sender_contact['display_name'];
       $apiParams['from_email']  = $sender_contact['email'];
       $apiParams['replyto_email'] = $sender_contact['email'];
+    }
+    if ($parameters->doesParameterExists('from_name') && $parameters->getParameter('from_name')) {
+      $apiParams['from_name'] = $parameters->getParameter('from_name');
+    }
+    if ($parameters->doesParameterExists('from_name') && $parameters->getParameter('from_email')) {
+      $apiParams['from_email'] = $parameters->getParameter('from_email');
+      $apiParams['replyto_email'] = $parameters->getParameter('from_email');
+    }
+    if ($parameters->doesParameterExists('from_name') && $parameters->getParameter('from_name')) {
+      $apiParams['replyto_email'] = $parameters->getParameter('replyto_email');
     }
     if ($parameters->doesParameterExists('template_options')) {
       $apiParams['template_options'] = $parameters->getParameter('template_options');

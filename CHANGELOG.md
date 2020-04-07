@@ -1,6 +1,8 @@
 Version 1.15 (not yet released)
 ------------
 
+* Added parameters _From E-mail_, _From Name_ and _Reply To_ to the action **Send Bulk mail**
+
 Version 1.14
 ------------
 
