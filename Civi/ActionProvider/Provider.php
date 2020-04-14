@@ -383,6 +383,10 @@ class Provider {
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ));
+    $this->addActionWithoutFiltering('MoveContribution', '\Civi\ActionProvider\Action\Contribution\MoveContribution', E::ts('Move contribution to another contact'), array(
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ));
     $this->addActionWithoutFiltering('AddTagToContact', '\Civi\ActionProvider\Action\Tag\AddTagToContact', E::ts('Add tag to contact'), array(
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
