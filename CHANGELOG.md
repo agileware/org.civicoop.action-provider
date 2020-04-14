@@ -1,4 +1,4 @@
-Version 1.16 (not yet released)
+Version 1.16
 ------------
 
 * Added action 'Move contribution to another contact'.
