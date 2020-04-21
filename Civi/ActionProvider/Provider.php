@@ -283,6 +283,10 @@ class Provider {
     $this->addActionWithoutFiltering('UpdateEventStatus', '\Civi\ActionProvider\Action\Event\UpdateEventStatus', E::ts('Update Event Status') , array(
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $this->addActionWithoutFiltering('GetRelationshipTypeIdByName', '\Civi\ActionProvider\Action\Relationship\GetRelationshipTypeIdByName',E::ts('Get relationship type ID by name') , array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $this->addActionWithoutFiltering('GetRelationship', '\Civi\ActionProvider\Action\Relationship\GetRelationship',E::ts('Get relationship') , array(
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
