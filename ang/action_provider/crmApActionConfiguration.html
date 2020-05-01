@@ -25,6 +25,7 @@
             >
                 <option ng-repeat="(key,value) in spec.options" value="{{key}}">{{value}}</option>
             </select>
+            <div class="description" ng-bind-html="spec.description" ng-if="spec.description"></div>
         </div>
         <div crm-ui-field="spec.crmUiField"
              ng-if="spec.fk_entity">
@@ -35,6 +36,7 @@
                     ng-model="configuration[spec.name]"
                     ng-required="spec.required"
             />
+            <div class="description" ng-bind-html="spec.description" ng-if="spec.description"></div>
         </div>
         <div crm-ui-field="spec.crmUiField"
              ng-if="!spec.options && !spec.fk_entity">
@@ -46,8 +48,9 @@
                     ng-required="spec.required"
                     type="text"
             />
+            <div class="description" ng-bind-html="spec.description" ng-if="spec.description"></div>
         </div>
-        <div class="description" ng-bind-html="spec.description" ng-if="spec.description"></div>
+
     </ng-repeat>
 
     <div class="crm-block" ng-form="input_mapper" ng-if="fields">
@@ -61,8 +64,22 @@
                         ng-model="mapping[spec.name]"
                         ng-options="field as field.label for field in fields track by field.name"
                         ng-required="spec.required"
+                        ng-if="!spec.multiple"
                     <option value=""></option>
                 </select>
+
+                <select class="huge"
+                        crm-ui-id="input_mapper.{{spec.name}}"
+                        crm-ui-select="{allowClear: true, minimumInputLength: 0}"
+                        name="{{spec.name}}"
+                        ng-model="mapping[spec.name]"
+                        ng-options="field as field.label for field in fields track by field.name"
+                        ng-required="spec.required"
+                        ng-if="spec.multiple"
+                        multiple="multiple"
+                <option value=""></option>
+                </select>
+                <div class="description" ng-bind-html="spec.description" ng-if="spec.description"></div>
             </div>
         </ng-repeat>
     </div>

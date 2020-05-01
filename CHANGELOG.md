@@ -2,6 +2,8 @@ Version 1.17 (not yet released)
 ------------
 
 * Added action 'Get relationship type ID by name'.
+* A parameter mapping could be mapped to multiple fields. This is useful for Activity Target Contact(s).
+* Changed the Create or Update Activity action so that it accepts subject as parameter. It also accepts multiple activity targets.
 
 Version 1.16
 ------------

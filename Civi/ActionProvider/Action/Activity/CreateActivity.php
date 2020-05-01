@@ -24,10 +24,12 @@ class CreateActivity extends AbstractAction {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
+    $subject = new Specification('subject', 'String', E::ts('Default Subject'));
+    $subject->setDescription(E::ts('Subject when you don\'t get use a parameter for the subejct.'));
     return new SpecificationBag([
       new OptionGroupByNameSpecification('activity_type', 'activity_type', E::ts('Activity Type'), TRUE),
       new OptionGroupByNameSpecification('activity_status', 'activity_status', E::ts('Activity Status'), TRUE),
-      new Specification('subject', 'String', E::ts('Subject')),
+      $subject,
     ]);
   }
 
@@ -37,13 +39,16 @@ class CreateActivity extends AbstractAction {
    * @return SpecificationBag
    */
   public function getParameterSpecification() {
+    $subject = new Specification('subject', 'String', E::ts('Subject'));
+    $subject->setDescription(E::ts('Use this field when you want to set the subject from another field.'));
     $bag = new SpecificationBag([
-      new Specification('source_contact_id', 'Integer', E::ts('Source Contact ID'), TRUE),
-      new Specification('target_contact_id', 'Integer', E::ts('Target Contact ID'), TRUE),
-      new Specification('assignee_contact_id', 'Integer', E::ts('Assignee Contact ID'), FALSE),
+      new Specification('source_contact_id', 'Integer', E::ts('Source Contact ID'), TRUE,null, null, null, false),
+      new Specification('target_contact_id', 'Integer', E::ts('Target Contact ID'), TRUE,null, null, null, true),
+      new Specification('assignee_contact_id', 'Integer', E::ts('Assignee Contact ID'), FALSE, null, null, null, false),
       new Specification('activity_date', 'Timestamp', E::ts('Activity Date'), TRUE),
       new Specification('id', 'Integer', E::ts('Activity ID'), false),
       new Specification('campaign_id', 'Integer', E::ts('Campaign'), false),
+      $subject,
       new Specification('details', 'Text', E::ts('Details'), false),
     ]);
 
@@ -96,7 +101,9 @@ class CreateActivity extends AbstractAction {
     // Get the contact and the event.
     $activityParams['activity_type_id'] = $this->configuration->getParameter('activity_type');
     $activityParams['status_id'] = $this->configuration->getParameter('activity_status');
-    if ($this->configuration->getParameter('subject')) {
+    if ($parameters->doesParameterExists('subject')) {
+      $activityParams['subject'] = $parameters->getParameter('subject');
+    } elseif ($this->configuration->getParameter('subject')) {
       $activityParams['subject'] = $this->configuration->getParameter('subject');
     }
 

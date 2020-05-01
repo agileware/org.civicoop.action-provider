@@ -601,6 +601,8 @@ class Provider {
 		    foreach($field as $subField) {
 		      if (isset($subField['parameter_mapping'])) {
             $subParameterBags[] = $this->createdMappedParameterBag($parameterBag, $subField['parameter_mapping']);
+          } elseif ($parameterBag->doesParameterExists($subField)) {
+            $subParameterBags[] = $parameterBag->getParameter($subField);
           }
         }
 		    $mappedParameterBag->setParameter($mappedField, $subParameterBags);
