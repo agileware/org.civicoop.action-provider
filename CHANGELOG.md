@@ -1,4 +1,4 @@
-Version 1.17 (not yet released)
+Version 1.17
 ------------
 
 * Added action 'Get relationship type ID by name'.
