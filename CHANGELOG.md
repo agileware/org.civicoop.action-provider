@@ -1,4 +1,4 @@
-Version 1.18 (not yet released)
+Version 1.18
 ------------
 
 * Added action Get Participant Data by Id.
