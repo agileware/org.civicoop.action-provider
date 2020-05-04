@@ -273,6 +273,14 @@ class Provider {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $this->addActionWithoutFiltering('GetParticipantById', '\Civi\ActionProvider\Action\Event\GetParticipantById',E::ts('Get participant data by ID') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
+    $this->addActionWithoutFiltering('UpdateParticipantById', '\Civi\ActionProvider\Action\Event\UpdateParticipantById',E::ts('Update participant by ID') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $this->addActionWithoutFiltering('DeleteParticipant', '\Civi\ActionProvider\Action\Event\DeleteParticipant', E::ts('Delete participant'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,

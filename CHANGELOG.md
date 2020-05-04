@@ -1,6 +1,9 @@
 Version 1.18 (not yet released)
 ------------
 
+* Added action Get Participant Data by Id.
+* Added action Update Participant by Id.
+
 Version 1.17
 ------------
 
