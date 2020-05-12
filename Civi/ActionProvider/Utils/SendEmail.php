@@ -18,9 +18,13 @@ class SendEmail {
 
   private $case_id;
 
+  private $participant_id;
+
   private $contribution_id;
 
   private $activity_id;
+
+  private $attachments;
 
   public function __construct($from_email=null, $from_name=null) {
     $this->from_email = $from_email;
@@ -29,6 +33,10 @@ class SendEmail {
 
   public function  setCaseId($case_id) {
     $this->case_id = $case_id;
+  }
+
+  public function setParticipantId($participant_id) {
+    $this->participant_id = $participant_id;
   }
 
   public function setContributionId($contribution_id) {
@@ -91,7 +99,6 @@ class SendEmail {
       $from = $this->from_email;
     }
 
-    $domain     = \CRM_Core_BAO_Domain::getDomain();
     $result     = NULL;
     if (!$body_text) {
       $body_text = \CRM_Utils_String::htmlToText($body_html);
@@ -101,32 +108,25 @@ class SendEmail {
     foreach($contactIds as $contactId) {
       $contact_params = array(array('contact_id', '=', $contactId, 0, 0));
       list($contact, $_) = \CRM_Contact_BAO_Query::apiQuery($contact_params);
-
-      //CRM-4524
       $contact = reset($contact);
-
       if (!$contact || is_a($contact, 'CRM_Core_Error')) {
         throw new \Exception('Could not find contact with ID: ' . $contact_params['contact_id']);
       }
-
-      //CRM-5734
-
-      // get tokens to be replaced
-      $tokens = array_merge_recursive(\CRM_Utils_Token::getTokens($body_text),
-        \CRM_Utils_Token::getTokens($body_html),
-        \CRM_Utils_Token::getTokens($subject));
-
+      $contactData = array();
       if ($this->case_id) {
-        $contact['case_id'] = $this->case_id;
+        $contactData['case_id'] = $this->case_id;
       }
       if ($this->contribution_id) {
-        $contact['contribution_id'] = $this->contribution_id;
+        $contactData['contribution_id'] = $this->contribution_id;
       }
       if ($this->activity_id) {
-        $contact['activity_id'] = $this->activity_id;
+        $contactData['activity_id'] = $this->activity_id;
       }
       if ($extra_data) {
-        $contact['extra_data'] = $extra_data;
+        $contactData['extra_data'] = $extra_data;
+      }
+      if ($this->participant_id) {
+        $contactData['extra_data']['participant']['id'] = $this->participant_id;
       }
 
       if ($contact['do_not_email'] || empty($contact['email']) || \CRM_Utils_Array::value('is_deceased', $contact) || $contact['on_hold']) {
@@ -141,34 +141,10 @@ class SendEmail {
         $email = $contact['email'];
         $toName = $contact['display_name'];
       }
-
-      $tokenValues[$contact['contact_id']] = $contact;
-      \CRM_Utils_Hook::tokenValues($tokenValues, array($contact['contact_id']), NULL, $tokens);
-      $contact = $tokenValues[$contact['contact_id']];
-      // call token hook
-      $hookTokens = array();
-      \CRM_Utils_Hook::tokens($hookTokens);
-      $categories = array_keys($hookTokens);
-
-      // do replacements in text and html body
-      $type = array('html', 'text');
-      foreach ($type as $key => $value) {
-        $bodyType = "body_{$value}";
+      $type = array('body_html', 'body_text', 'subject');
+      foreach ($type as $key => $bodyType) {
         if ($$bodyType) {
-          if ($this->contribution_id) {
-            try {
-              $contribution = civicrm_api3('Contribution', 'getsingle', ['id' => $this->contribution_id]);
-              $$bodyType = \CRM_Utils_Token::replaceContributionTokens($$bodyType, $contribution, TRUE, $tokens);
-            } catch (\Exception $e) {
-              // Do nothing
-            }
-          }
-
-          $$bodyType = \CRM_Utils_Token::replaceDomainTokens($$bodyType, $domain, TRUE, $tokens, TRUE);
-          $$bodyType = \CRM_Utils_Token::replaceContactTokens($$bodyType, $contact, FALSE, $tokens, FALSE, TRUE);
-          $$bodyType = \CRM_Utils_Token::replaceComponentTokens($$bodyType, $contact, $tokens, TRUE);
-          $$bodyType = \CRM_Utils_Token::replaceHookTokens($$bodyType, $contact, $categories, TRUE);
-          \CRM_Utils_Token::replaceGreetingTokens($$bodyType, $contact, $contact['contact_id']);
+          $$bodyType = Tokens::replaceTokens($contactId, $$bodyType, $contactData);
         }
       }
       $html = $body_html;
@@ -180,24 +156,13 @@ class SendEmail {
         }
       }
 
-      // do replacements in message subject
-      $messageSubject = \CRM_Utils_Token::replaceDomainTokens($subject, $domain, true, $tokens);
-      $messageSubject = \CRM_Utils_Token::replaceContactTokens($messageSubject, $contact, false, $tokens);
-      $messageSubject = \CRM_Utils_Token::replaceComponentTokens($messageSubject, $contact, $tokens, true);
-      $messageSubject = \CRM_Utils_Token::replaceHookTokens($messageSubject, $contact, $categories, true);
-      \CRM_Utils_Token::replaceGreetingTokens($messageSubject, $contact, $contact['contact_id']);
-
-      if (defined('CIVICRM_MAIL_SMARTY') && CIVICRM_MAIL_SMARTY) {
-        $messageSubject = $smarty->fetch("string:{$messageSubject}");
-      }
-
       // set up the parameters for CRM_Utils_Mail::send
       $mailParams = array(
         'groupName' => 'E-mail from API',
         'from' => $from,
         'toName' => $toName,
         'toEmail' => $email,
-        'subject' => $messageSubject,
+        'subject' => $subject,
       );
 
       if (!$html || $contact['preferred_mail_format'] == 'Text' || $contact['preferred_mail_format'] == 'Both') {
@@ -210,6 +175,11 @@ class SendEmail {
       if ($this->from_email) {
         $mailParams['replyTo'] = $this->reply_to_email;
       }
+
+      if (is_array($this->attachments)) {
+        $mailParams['attachments'] = $this->attachments;
+      }
+
       $result = \CRM_Utils_Mail::send($mailParams);
       if (!$result) {
         throw new \Exception('Error sending e-mail to ' . $contact['display_name'] . ' <' . $email . '> ');
@@ -230,9 +200,9 @@ class SendEmail {
         'source_contact_id' => $contactId,
         'activity_type_id' => $activityTypeID,
         'activity_date_time' => date('YmdHis'),
-        'subject' => $messageSubject,
+        'subject' => $subject,
         'details' => $details,
-        'status_id' => "Completed",
+        'status_id' => 2, //Completed
       );
       if ($this->sender_contact_id) {
         $activityParams['source_contact_id'] = $this->sender_contact_id;
@@ -257,6 +227,8 @@ class SendEmail {
         \CRM_Case_BAO_Case::processCaseActivity($caseActivity);
       }
 
+      $this->processAttachments($activity->id);
+
       $returnValues[$contactId] = array(
         'contact_id' => $contactId,
         'send' => 1,
@@ -264,6 +236,44 @@ class SendEmail {
       );
     }
     return $returnValues;
+  }
+
+  /**
+   * Add an attachment
+   *
+   * @param $filename
+   * @param $cleanName
+   * @param $mimeType
+   */
+  public function addAttachment($fullPath, $cleanName, $mimeType) {
+    $this->attachments[] = array(
+      'fullPath' => $fullPath,
+      'cleanName' => $cleanName,
+      'mime_type' => $mimeType
+    );
+  }
+
+  /**
+   * Add the attachments to the e-mail activity
+   *
+   * @param $activity_id
+   */
+  protected function processAttachments($activity_id) {
+    if (is_array($this->attachments)) {
+      foreach($this->attachments as $attachment) {
+        try {
+          $result = civicrm_api3('Attachment', 'create', array(
+            'entity_table' => 'civicrm_activity',
+            'entity_id' => $activity_id,
+            'name' => $attachment['cleanName'],
+            'mime_type' => $attachment['mime_type'],
+            'options' => array('move-file' => $attachment['fullPath']),
+          ));
+        } catch (\CiviCRM_API3_Exception $ex) {
+          // Do nothing
+        }
+      }
+    }
   }
 
 }

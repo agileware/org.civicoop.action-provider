@@ -12,6 +12,7 @@ use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use Civi\ActionProvider\Parameter\SpecificationBag;
 use Civi\ActionProvider\Parameter\Specification;
 use Civi\ActionProvider\Utils\Files;
+use Civi\ActionProvider\Utils\Tokens;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class CreatePdf extends AbstractAction {
@@ -26,16 +27,24 @@ class CreatePdf extends AbstractAction {
   protected $pdfLetterActivityType;
 
   public function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
+    $participantId = $parameters->getParameter('participant_id');
     $message = $parameters->getParameter('message');
     $contactId = $parameters->getParameter('contact_id');
     $filename = $this->configuration->getParameter('filename');
     $fileNameWithoutContactId = $filename . '.pdf';
     $filenameWithContactId = $filename . '_' . $contactId . '.pdf';
+    $contact = [];
+    if ($participantId) {
+      $contact['extra_data']['participant']['id'] = $participantId;
+    }
 
-    $processedMessage = $this->getProcessedMessage($contactId, $message);
+    $processedMessage = Tokens::replaceTokens($contactId, $message, $contact);
     if ($processedMessage === false) {
       return;
     }
+    //time being hack to strip '&nbsp;'
+    //from particular letter line, CRM-6798
+    \CRM_Contact_Form_Task_PDFLetterCommon::formatMessage($processedMessage);
     $this->messages[] = $processedMessage;
     $text = array($processedMessage);
     $pdfContents = \CRM_Utils_PDF_Utils::html2pdf($text, $fileNameWithoutContactId, TRUE);
@@ -93,55 +102,6 @@ class CreatePdf extends AbstractAction {
       ]);
     }
     return $this->pdfLetterActivityType;
-  }
-
-  /**
-   * Returns a processed message. Meaning that all tokens are replaced with their value.
-   * This message could then be used to generate the PDF.
-   *
-   * @param $contactId
-   * @param $message
-   * @return string
-   */
-  protected function getProcessedMessage($contactId, $message) {
-    $tokenCategories = self::getTokenCategories();
-    //time being hack to strip '&nbsp;'
-    //from particular letter line, CRM-6798
-    \CRM_Contact_Form_Task_PDFLetterCommon::formatMessage($message);
-    $messageToken = \CRM_Utils_Token::getTokens($message);
-
-    $returnProperties = array();
-    if (isset($messageToken['contact'])) {
-      foreach ($messageToken['contact'] as $key => $value) {
-        $returnProperties[$value] = 1;
-      }
-    }
-
-    $params = array('contact_id' => $contactId);
-    list($contact) = \CRM_Utils_Token::getTokenDetails($params,
-      $returnProperties,
-      false,
-      false,
-      NULL,
-      $messageToken,
-      null
-    );
-
-    if (civicrm_error($contact)) {
-      return false;
-    }
-
-    $tokenHtml = \CRM_Utils_Token::replaceContactTokens($message, $contact[$contactId], TRUE, $messageToken);
-    $tokenHtml = \CRM_Utils_Token::replaceHookTokens($tokenHtml, $contact[$contactId], $tokenCategories, TRUE);
-
-    if (defined('CIVICRM_MAIL_SMARTY') && CIVICRM_MAIL_SMARTY) {
-      $smarty = \CRM_Core_Smarty::singleton();
-      // also add the contact tokens to the template
-      $smarty->assign_by_ref('contact', $contact);
-      $tokenHtml = $smarty->fetch("string:$tokenHtml");
-    }
-
-    return $tokenHtml;
   }
 
   /**
@@ -222,6 +182,7 @@ class CreatePdf extends AbstractAction {
     return new SpecificationBag(array(
       new Specification('contact_id', 'Integer', E::ts('Contact ID'), true),
       new Specification('message', 'String', E::ts('Message'), true),
+      new Specification('participant_id', 'Integer', E::ts('Participant ID'), false),
     ));
   }
 
@@ -267,20 +228,6 @@ class CreatePdf extends AbstractAction {
       The input for this action is a contact ID and the message. You can use the <em>Find Message Template by name</em> action
       to retrieve the message.
     ");
-  }
-
-  /**
-   * Get the categories required for rendering tokens.
-   *
-   * @return array
-   */
-  protected static function getTokenCategories() {
-    if (!isset(\Civi::$statics[__CLASS__]['token_categories'])) {
-      $tokens = array();
-      \CRM_Utils_Hook::tokens($tokens);
-      \Civi::$statics[__CLASS__]['token_categories'] = array_keys($tokens);
-    }
-    return \Civi::$statics[__CLASS__]['token_categories'];
   }
 
   /**

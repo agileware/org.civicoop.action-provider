@@ -1,6 +1,8 @@
 Version 1.19 (not yet released)
 ------------
 
+* Added action to Send PDF By E-mail.
+
 Version 1.18
 ------------
 

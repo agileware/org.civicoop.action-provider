@@ -371,6 +371,10 @@ class Provider {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::SEND_MESSAGES_TO_CONTACTS
     ));
+    $this->addActionWithoutFiltering('SendPdfByEmail', '\Civi\ActionProvider\Action\Communication\SendPdfByEmail', E::ts('Send PDF By E-mail'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::SEND_MESSAGES_TO_CONTACTS
+    ));
     $this->addActionWithoutFiltering('CreateContribution', '\Civi\ActionProvider\Action\Contribution\CreateContribution', E::ts('Create contribution'), array(
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
