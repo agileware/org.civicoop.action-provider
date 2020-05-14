@@ -12,11 +12,11 @@ use CRM_ActionProvider_ExtensionUtil as E;
  * Helper class to add a configuration specification from custom field
  */
 class CustomField {
-  
+
   static $customGroupNames = array();
-  
+
   static $customFields = array();
-  
+
   /**
    * Gets the data type of the custom field.
    */
@@ -40,10 +40,10 @@ class CustomField {
 
     return $type;
   }
-  
+
   /**
    * Returns the name of the custom group
-   * 
+   *
    * @param int $custom_group_id
    * @return string
    */
@@ -53,10 +53,10 @@ class CustomField {
     }
     return self::$customGroupNames[$custom_group_id];
   }
-  
+
   /**
    * Returns a formatted name as custom_CustomGroupName_CustomFieldName
-   * 
+   *
    * @param int $custom_field_id
    * @return string
    */
@@ -64,27 +64,27 @@ class CustomField {
     if (!isset(self::$customFields[$custom_field_id])) {
       self::$customFields[$custom_field_id] = civicrm_api3('CustomField', 'getsingle', array('id' => $custom_field_id));
     }
-    
+
     $custom_group_name = self::getCustomGroupName(self::$customFields[$custom_field_id]['custom_group_id']);
-    $name = 'custom_'.$custom_group_name.'_'.self::$customFields[$custom_field_id]['name'];  
+    $name = 'custom_'.$custom_group_name.'_'.self::$customFields[$custom_field_id]['name'];
     return $name;
   }
-  
+
   /**
    * Converts a specifcation object to a custom field.
-   * 
+   *
    * @param array
    *   The custom field data
    * @param string
    * @param bool
-   *   When this param is true then the required state is taken over from the custom field. 
+   *   When this param is true then the required state is taken over from the custom field.
    *   Other wise the field is not required.
    * @return Specification|null
    */
   public static function getSpecFromCustomField($customField, $titlePrefix='', $useRequiredFromCustomField=false) {
     self::$customFields[$customField['id']] = $customField;
-    
-    $name = self::getCustomFieldName($customField['id']); 
+
+    $name = self::getCustomFieldName($customField['id']);
     $apiFieldName = 'custom_'.$customField['id'];
     $type = self::getTypeForCustomField($customField);
     $title = trim($titlePrefix.$customField['label']);
@@ -98,7 +98,7 @@ class CustomField {
     }
     $default = null;
     $spec = null;
-    
+
     if (isset($customField['option_group_id']) && $customField['option_group_id']) {
       $spec = new OptionGroupSpecification($name, $customField['option_group_id'], $title, $is_required, $default, $multiple);
     } elseif($type) {
@@ -106,9 +106,10 @@ class CustomField {
     }
     if ($spec) {
       $spec->setApiFieldName($apiFieldName);
+      return $spec;
     }
-    
-    return $spec;
+    return null;
+
   }
-  
+
 }

@@ -1,6 +1,7 @@
 Version 1.19 (not yet released)
 ------------
 
+* Fixed #8 - saving output mapping of a condition.
 * Added action to Send PDF By E-mail.
 
 Version 1.18
