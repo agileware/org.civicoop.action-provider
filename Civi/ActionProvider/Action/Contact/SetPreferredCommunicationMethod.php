@@ -65,7 +65,9 @@ class SetPreferredCommunicationMethod extends AbstractAction {
    */
   protected function getCurrentCommunicationMethods($contact_id) {
     $current_methods = \civicrm_api3('Contact', 'getValue', ['id' => $contact_id, 'return' => 'preferred_communication_method']);
-    if (!is_array($current_methods)) {
+    if ($current_methods === '' || $current_methods === null) {
+      $current_methods = [];
+    } elseif (!is_array($current_methods)) {
       $current_methods = explode(',', (string) $current_methods);
     }
     return $current_methods;
@@ -83,7 +85,7 @@ class SetPreferredCommunicationMethod extends AbstractAction {
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     // the default way of getting the contact is this:
-    $contact_id = $this->getParameter('contact_id');
+    $contact_id = $parameters->getParameter('contact_id');
     $value      = $this->configuration->getParameter('value');
     $mode       = $this->configuration->getParameter('mode');
 
