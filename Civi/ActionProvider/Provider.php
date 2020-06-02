@@ -226,6 +226,9 @@ class Provider {
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $this->addActionWithoutFiltering('GetMostRecentActivity', '\Civi\ActionProvider\Action\Activity\GetMostRecentActivity', E::ts('Get most recent activity of a contact'), array(
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $this->addActionWithoutFiltering('Send', '\Civi\ActionProvider\Action\BulkMail\Send',E::ts('Send Bulk Mail') , array(
       AbstractAction::SEND_MESSAGES_TO_CONTACTS,
       'bulk_mail'
