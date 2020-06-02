@@ -5,6 +5,7 @@ Version 1.19 (not yet released)
 * Added action to Send PDF By E-mail.
 * Added action to set/update a contact's preferred communication methods
 * Added action to Get the Most recent activity
+* Create activity takes now an activity type as a parameter or as a configuration option 
 
 Version 1.18
 ------------
