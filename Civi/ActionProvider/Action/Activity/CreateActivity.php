@@ -27,7 +27,7 @@ class CreateActivity extends AbstractAction {
     $subject = new Specification('subject', 'String', E::ts('Default Subject'));
     $subject->setDescription(E::ts('Subject when you don\'t get use a parameter for the subejct.'));
     return new SpecificationBag([
-      new OptionGroupByNameSpecification('activity_type', 'activity_type', E::ts('Activity Type'), TRUE),
+      new OptionGroupByNameSpecification('activity_type', 'activity_type', E::ts('Activity Type'), FALSE),
       new OptionGroupByNameSpecification('activity_status', 'activity_status', E::ts('Activity Status'), TRUE),
       $subject,
     ]);
@@ -45,6 +45,7 @@ class CreateActivity extends AbstractAction {
       new Specification('source_contact_id', 'Integer', E::ts('Source Contact ID'), TRUE,null, null, null, false),
       new Specification('target_contact_id', 'Integer', E::ts('Target Contact ID'), TRUE,null, null, null, true),
       new Specification('assignee_contact_id', 'Integer', E::ts('Assignee Contact ID'), FALSE, null, null, null, false),
+      new Specification('activity_type_id', 'Integer', E::ts('Activity Type'), FALSE, null, null, null, FALSE),
       new Specification('activity_date', 'Timestamp', E::ts('Activity Date'), TRUE),
       new Specification('id', 'Integer', E::ts('Activity ID'), false),
       new Specification('campaign_id', 'Integer', E::ts('Campaign'), false),
@@ -99,7 +100,7 @@ class CreateActivity extends AbstractAction {
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     // Get the contact and the event.
-    $activityParams['activity_type_id'] = $this->configuration->getParameter('activity_type');
+
     $activityParams['status_id'] = $this->configuration->getParameter('activity_status');
     if ($parameters->doesParameterExists('subject')) {
       $activityParams['subject'] = $parameters->getParameter('subject');
@@ -121,6 +122,11 @@ class CreateActivity extends AbstractAction {
     }
     if ($parameters->doesParameterExists('details')) {
       $activityParams['details'] = $parameters->getParameter('details');
+    }
+    if ($parameters->doesParameterExists('activity_type_id')) {
+      $activityParams['activity_type_id'] = $parameters->getParameter('activity_type_id');
+    } elseif ($activityParams['activity_type_id'] = $this->configuration->doesParameterExists('activity_type')) {
+      $activityParams['activity_type_id'] = $this->configuration->getParameter('activity_type');
     }
 
     foreach($this->getParameterSpecification() as $spec) {
