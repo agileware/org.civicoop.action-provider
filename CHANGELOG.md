@@ -4,6 +4,7 @@ Version 1.19 (not yet released)
 * Fixed #8 - saving output mapping of a condition.
 * Added action to Send PDF By E-mail.
 * Added action to set/update a contact's preferred communication methods
+* Added action to Get the Most recent activity
 
 Version 1.18
 ------------
