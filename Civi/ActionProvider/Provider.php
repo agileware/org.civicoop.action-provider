@@ -619,11 +619,8 @@ class Provider {
           } elseif ($parameterBag->doesParameterExists($subField)) {
 		        $parameter = $parameterBag->getParameter($subField);
 		        if(is_array($parameter)) {
-		          // the value of this parameter is already an array, that makes it
-              // impossible to create an array containing all the single values of
-              // multiple parameters. So just return the value of this parameter.
-              $subParameterBags = $parameterBag->getParameter($subField);
-              break; // and finish - next values and earlier values are ignored
+		          // flatten the array.
+              $subParameterBags = array_merge($subParameterBags,$parameterBag->getParameter($subField));
             } else {
               $subParameterBags[] = $parameterBag->getParameter($subField);
             }
