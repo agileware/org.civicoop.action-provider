@@ -617,7 +617,13 @@ class Provider {
 		      if (isset($subField['parameter_mapping'])) {
             $subParameterBags[] = $this->createdMappedParameterBag($parameterBag, $subField['parameter_mapping']);
           } elseif ($parameterBag->doesParameterExists($subField)) {
-            $subParameterBags[] = $parameterBag->getParameter($subField);
+		        $parameter = $parameterBag->getParameter($subField);
+		        if(is_array($parameter)) {
+		          // flatten the array.
+              $subParameterBags = array_merge($subParameterBags,$parameterBag->getParameter($subField));
+            } else {
+              $subParameterBags[] = $parameterBag->getParameter($subField);
+            }
           }
         }
 		    $mappedParameterBag->setParameter($mappedField, $subParameterBags);
