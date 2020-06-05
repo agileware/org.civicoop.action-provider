@@ -3,6 +3,7 @@
 namespace Civi\ActionProvider\Action\Contact;
 
 use \Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\Exception\InvalidParameterException;
 use Civi\ActionProvider\Parameter\OptionGroupSpecification;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
@@ -31,8 +32,12 @@ class CreateUpdateIndividual extends AbstractAction {
     if ($contact_sub_type) {
       $params['contact_sub_type'] = $contact_sub_type;
     }
-    $params['first_name'] = $parameters->getParameter('first_name');
-    $params['last_name'] = $parameters->getParameter('last_name');
+    if ($parameters->doesParameterExists('first_name')) {
+      $params['first_name'] = $parameters->getParameter('first_name');
+    }
+    if ($parameters->doesParameterExists('last_name')) {
+      $params['last_name'] = $parameters->getParameter('last_name');
+    }
     if ($parameters->getParameter('middle_name')) {
       $params['middle_name'] = $parameters->getParameter('middle_name');
     }
@@ -155,5 +160,20 @@ class CreateUpdateIndividual extends AbstractAction {
       new Specification('phone_id', 'Integer', E::ts('Phone ID'), false),
     ));
   }
+
+  /**
+   * @return bool
+   * @throws \Civi\ActionProvider\Exception\InvalidParameterException
+   */
+  protected function validateParameters(ParameterBagInterface $parameters) {
+    $return = parent::validateParameters($parameters);
+    if (!$parameters->doesParameterExists('contact_id')) {
+      if (!$parameters->doesParameterExists('first_name') && !$parameters->doesParameterExists('last_name')) {
+        throw new InvalidParameterException("Please provide a valid first name or last name.");
+      }
+    }
+    return $return;
+  }
+
 
 }
