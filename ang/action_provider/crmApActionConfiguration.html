@@ -12,6 +12,7 @@
                     ng-required="spec.required"
                     class="huge"
             >
+                <option value=""></option>
                 <option ng-repeat="(key,value) in spec.options" value="{{key}}">{{value}}</option>
             </select>
             <select class="huge"
@@ -64,7 +65,7 @@
                         ng-model="mapping[spec.name]"
                         ng-options="field as field.label for field in fields track by field.name"
                         ng-required="spec.required"
-                        ng-if="!spec.multiple"
+                        ng-if="!spec.multiple">
                     <option value=""></option>
                 </select>
 
@@ -76,8 +77,7 @@
                         ng-options="field as field.label for field in fields track by field.name"
                         ng-required="spec.required"
                         ng-if="spec.multiple"
-                        multiple="multiple"
-                <option value=""></option>
+                        multiple="multiple">
                 </select>
                 <div class="description" ng-bind-html="spec.description" ng-if="spec.description"></div>
             </div>
