@@ -7,6 +7,7 @@ Version 1.19 (not yet released)
 * Added action to Get the Most recent activity (!16)
 * Create activity takes now an activity type as a parameter or as a configuration option (!17)
 * Fixed a regression bug with updating custom multiple select field (!19).
+* Fixed issue with Custom File Upload for events.
 
 Version 1.18
 ------------

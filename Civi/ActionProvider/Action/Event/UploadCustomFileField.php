@@ -12,14 +12,14 @@ use \Civi\ActionProvider\Utils\CustomField;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class UploadCustomFileField extends AbstractAction {
-  
+
   /**
    * Run the action
-   * 
+   *
    * @param ParameterInterface $parameters
    *   The parameters to this action.
    * @param ParameterBagInterface $output
-   *   The parameters this action can send back 
+   *   The parameters this action can send back
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
@@ -53,13 +53,22 @@ class UploadCustomFileField extends AbstractAction {
       // Do nothing
     }
 
+    $content = '';
+    if (isset($file['content'])) {
+      $content = base64_decode($file['content']);
+    } elseif (isset($file['url'])) {
+      $content = file_get_contents($file['url']);
+    }
+    if (empty($content)) {
+      return;
+    }
 
     if ($uploadNewOne) {
       $attachmentParams = [
         'field_name' => 'custom_'.$customFieldId,
         'entity_id' => $event_id,
         'name' => $file['name'],
-        'content' => base64_decode($file['content']),
+        'content' => $content,
         'mime_type' => $file['mime_type'],
         'check_permissions' => FALSE,
       ];
@@ -76,7 +85,7 @@ class UploadCustomFileField extends AbstractAction {
 
   /**
    * Returns the specification of the configuration options for the actual action.
-   * 
+   *
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
@@ -104,10 +113,10 @@ class UploadCustomFileField extends AbstractAction {
       new Specification('custom_field', 'Integer', E::ts('File field'), true, null, null, $fileFields, false),
     ]);
   }
-  
+
   /**
    * Returns the specification of the parameters of the actual action.
-   * 
+   *
    * @return SpecificationBag
    */
   public function getParameterSpecification() {
@@ -116,17 +125,17 @@ class UploadCustomFileField extends AbstractAction {
     $specs->addSpecification(new FileSpecification('file', E::ts('File'), false));
     return $specs;
   }
-  
+
   /**
    * Returns the specification of the output parameters of this action.
-   * 
+   *
    * This function could be overriden by child classes.
-   * 
+   *
    * @return SpecificationBag
    */
   public function getOutputSpecification() {
     return new SpecificationBag();
   }
-    
-  
+
+
 }
