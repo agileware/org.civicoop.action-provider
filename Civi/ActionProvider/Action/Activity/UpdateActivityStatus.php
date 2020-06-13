@@ -8,6 +8,7 @@ namespace Civi\ActionProvider\Action\Activity;
 
 use Civi\ActionProvider\Action\AbstractAction;
 use Civi\ActionProvider\Parameter\OptionGroupByNameSpecification;
+use Civi\ActionProvider\Parameter\OptionGroupSpecification;
 use Civi\ActionProvider\Parameter\ParameterBagInterface;
 use Civi\ActionProvider\Parameter\Specification;
 use Civi\ActionProvider\Parameter\SpecificationBag;
@@ -24,7 +25,9 @@ class UpdateActivityStatus extends AbstractAction {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
-    return new SpecificationBag([]);
+    return new SpecificationBag([
+      new OptionGroupSpecification('status_id', 'activity_status', E::ts('Activity Status'), false, null, true)
+    ]);
   }
 
   /**
@@ -64,7 +67,11 @@ class UpdateActivityStatus extends AbstractAction {
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     // Get the contact and the event.
     $activityParams['id'] = $parameters->getParameter('id');
-    $activityParams['status_id'] = $parameters->getParameter('status_id');
+    if ($parameters->getParameter('status_id')) {
+      $activityParams['status_id'] = $parameters->getParameter('status_id');
+    } else {
+      $activityParams['status_id'] = $this->configuration->getParameter('status_id');
+    }
     try {
       // Do not use api as the api checks for an existing relationship.
       civicrm_api3('Activity', 'Create', $activityParams);
