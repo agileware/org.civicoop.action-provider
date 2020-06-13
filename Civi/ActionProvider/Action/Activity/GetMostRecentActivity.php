@@ -13,6 +13,7 @@
 namespace Civi\ActionProvider\Action\Activity;
 
 use Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\Exception\ExecutionException;
 use Civi\ActionProvider\Parameter\OptionGroupSpecification;
 use Civi\ActionProvider\Parameter\ParameterBagInterface;
 use Civi\ActionProvider\Parameter\Specification;
@@ -33,6 +34,7 @@ class GetMostRecentActivity extends AbstractAction {
     $bag->addSpecification(new OptionGroupSpecification('record_type', 'activity_contacts', E::ts('Record type'), false, null, true));
     $bag->addSpecification(new OptionGroupSpecification('activity_type_id', 'activity_type', E::ts('Activity Type'), false, null, true));
     $bag->addSpecification(new OptionGroupSpecification('status_id', 'activity_status', E::ts('Activity Status'), false, null, true));
+    $bag->addSpecification(new Specification('error', 'Boolean', E::ts('Error on no activity found'), false, false));
     return $bag;
   }
 
@@ -77,6 +79,7 @@ class GetMostRecentActivity extends AbstractAction {
     $record_type_ids = $this->configuration->getParameter('record_type');
     $activity_type_ids = $this->configuration->getParameter('activity_type');
     $status_ids = $this->configuration->getParameter('status_id');
+    $error = $this->configuration->getParameter('error');
     $sql =<<< SQL
     SELECT activity_id
     FROM civicrm_activity_contact ac
@@ -97,6 +100,9 @@ SQL;
     $activity_id = \CRM_Core_DAO::singleValueQuery($sql,[
       1 => [$id,'Integer']
     ]);
+    if ($error && empty($activity_id)) {
+      throw new ExecutionException(E::ts('Could not find an activity'));
+    }
     $output->setParameter('activity_id', $activity_id);
     $output->setParameter('contact_id', $id);
   }
