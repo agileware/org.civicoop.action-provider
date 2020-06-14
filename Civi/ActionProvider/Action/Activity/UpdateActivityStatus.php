@@ -26,7 +26,7 @@ class UpdateActivityStatus extends AbstractAction {
    */
   public function getConfigurationSpecification() {
     return new SpecificationBag([
-      new OptionGroupSpecification('status_id', 'activity_status', E::ts('Activity Status'), false, null, true)
+      new OptionGroupSpecification('status_id', 'activity_status', E::ts('Activity Status'), false)
     ]);
   }
 
@@ -37,7 +37,7 @@ class UpdateActivityStatus extends AbstractAction {
    */
   public function getParameterSpecification() {
     $bag = new SpecificationBag([
-      new Specification('id', 'Integer', E::ts('Activity ID'), false),
+      new Specification('id', 'Integer', E::ts('Activity ID'), true),
       new Specification('status_id', 'Integer', E::ts('Status ID'), false),
     ]);
     return $bag;
@@ -74,7 +74,7 @@ class UpdateActivityStatus extends AbstractAction {
     }
     try {
       // Do not use api as the api checks for an existing relationship.
-      civicrm_api3('Activity', 'Create', $activityParams);
+      $result = civicrm_api3('Activity', 'Create', $activityParams);
     } catch (\Exception $e) {
       // Do nothing.
     }
