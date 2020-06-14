@@ -8,6 +8,7 @@ Version 1.19 (not yet released)
 * Create activity takes now an activity type as a parameter or as a configuration option (!17)
 * Fixed a regression bug with updating custom multiple select field (!19).
 * Fixed issue with Custom File Upload for events.
+* Added action to find contact by e-mail.
 
 Version 1.18
 ------------
