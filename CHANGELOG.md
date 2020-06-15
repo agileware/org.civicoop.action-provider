@@ -1,4 +1,4 @@
-Version 1.19 (not yet released)
+Version 1.19
 ------------
 
 * Fixed #8 - saving output mapping of a condition.
