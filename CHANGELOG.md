@@ -9,6 +9,7 @@ Version 1.19 (not yet released)
 * Fixed a regression bug with updating custom multiple select field (!19).
 * Fixed issue with Custom File Upload for events.
 * Added action to find contact by e-mail.
+* Added action to get the membership status data.
 
 Version 1.18
 ------------

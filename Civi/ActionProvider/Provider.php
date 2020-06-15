@@ -361,6 +361,10 @@ class Provider {
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $this->addActionWithoutFiltering('GetMembershipStatus', '\Civi\ActionProvider\Action\Membership\GetMembershipStatus',E::ts('Get membership status data') , array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $this->addActionWithoutFiltering('GetMembershipTypeByOrganization', '\Civi\ActionProvider\Action\Membership\GetMembershipTypeByOrganization',E::ts('Get membership type by organization') , array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
