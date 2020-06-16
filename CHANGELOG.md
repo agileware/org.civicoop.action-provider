@@ -1,7 +1,6 @@
 Version 1.20 (not yet released)
 ------------
-
-
+* Added action to explode a list into an array.
 
 Version 1.19
 ------------
