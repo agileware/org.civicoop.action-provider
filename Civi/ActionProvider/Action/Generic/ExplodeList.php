@@ -67,7 +67,12 @@ class ExplodeList extends AbstractAction {
         new Specification(
           'value',
           'String',
-          E::ts('Value')
+          E::ts('Value'),
+          FALSE,
+          NULL,
+          NULL,
+          NULL,
+          TRUE
         ),
       ]
     );
