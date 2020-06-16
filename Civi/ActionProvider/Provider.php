@@ -451,6 +451,7 @@ class Provider {
       new \Civi\ActionProvider\Condition\ParametersMatch(),
       new \Civi\ActionProvider\Condition\ParametersDontMatch(),
       new \Civi\ActionProvider\Condition\CheckParameters(),
+      new \Civi\ActionProvider\Condition\ArrayParameterContains(),
       new \Civi\ActionProvider\Condition\ContactHasSubtype(),
       new \Civi\ActionProvider\Condition\ContactHasTag(),
     );
