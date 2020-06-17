@@ -1,4 +1,9 @@
-Version 1.19 (not yet released)
+Version 1.20 (not yet released)
+------------
+* Added action to explode a list into an array.
+* Added condition to check whether an array contains a specific value.
+
+Version 1.19
 ------------
 
 * Fixed #8 - saving output mapping of a condition.

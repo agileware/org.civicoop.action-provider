@@ -81,6 +81,14 @@ class Provider {
         AbstractAction::DATA_MANIPULATION_TAG,
       )
     );
+    $this->addActionWithoutFiltering(
+      'ExplodeList',
+      '\Civi\ActionProvider\Action\Generic\ExplodeList',
+      E::ts('Explode List'),
+      array(
+        AbstractAction::DATA_MANIPULATION_TAG,
+      )
+    );
     $this->addActionWithoutFiltering('ConcatDateTimeValue', '\Civi\ActionProvider\Action\Generic\ConcatDateTimeValue', E::ts('Concat (merge) a date and a time field to one field'), array(
       AbstractAction::DATA_MANIPULATION_TAG));
     $this->addActionWithoutFiltering('AddToGroup', '\Civi\ActionProvider\Action\Group\AddToGroup', E::ts('Add to Group'), array(
@@ -447,6 +455,7 @@ class Provider {
       new \Civi\ActionProvider\Condition\ParametersMatch(),
       new \Civi\ActionProvider\Condition\ParametersDontMatch(),
       new \Civi\ActionProvider\Condition\CheckParameters(),
+      new \Civi\ActionProvider\Condition\ArrayParameterContains(),
       new \Civi\ActionProvider\Condition\ContactHasSubtype(),
       new \Civi\ActionProvider\Condition\ContactHasTag(),
     );
