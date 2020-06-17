@@ -16,6 +16,7 @@ Version 1.19
 * Added action to find contact by e-mail.
 * Added action to get the membership status data.
 * Added action Contact Has Subtype
+* Added action to remove a subtype from a contact.
 
 Version 1.18
 ------------

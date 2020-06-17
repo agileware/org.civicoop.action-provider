@@ -12,7 +12,7 @@ use Civi\ActionProvider\Parameter\Specification;
 use Civi\ActionProvider\Parameter\SpecificationBag;
 use CRM_ActionProvider_ExtensionUtil as E;
 
-class SetContactSubType extends AbstractAction {
+class RemoveContactSubType extends AbstractAction {
 
   /**
    * Run the action
@@ -34,8 +34,9 @@ class SetContactSubType extends AbstractAction {
       $params['contact_sub_type'] = array();
     }
     $contact_sub_type = $this->configuration->getParameter('contact_sub_type');
-    if ($contact_sub_type && !in_array($contact_sub_type, $params['contact_sub_type'])) {
-      $params['contact_sub_type'][] = $contact_sub_type;
+    $key = array_search($contact_sub_type, $params['contact_sub_type']);
+    if ($contact_sub_type && $key !== false) {
+      unset($params['contact_sub_type'][$key]);
       civicrm_api3('Contact', 'Create', $params);
     }
   }

@@ -194,6 +194,10 @@ class Provider {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $this->addActionWithoutFiltering('RemoveContactSubType', '\Civi\ActionProvider\Action\Contact\RemoveContactSubType',E::ts('Remove contact subtype') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $this->addActionWithoutFiltering('ContactHasSubType', '\Civi\ActionProvider\Action\Contact\ContactHasSubType',E::ts('Contact Has subtype') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
