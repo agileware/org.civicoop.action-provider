@@ -186,6 +186,10 @@ class Provider {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $this->addActionWithoutFiltering('ContactHasSubType', '\Civi\ActionProvider\Action\Contact\ContactHasSubType',E::ts('Contact Has subtype') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $this->addActionWithoutFiltering('SetContactEmployer', '\Civi\ActionProvider\Action\Contact\SetEmployer',E::ts('Set employer') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,

@@ -10,6 +10,7 @@ Version 1.19 (not yet released)
 * Fixed issue with Custom File Upload for events.
 * Added action to find contact by e-mail.
 * Added action to get the membership status data.
+* Added action Contact Has Subtype
 
 Version 1.18
 ------------
