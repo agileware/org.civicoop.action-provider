@@ -2,6 +2,8 @@ Version 1.20 (not yet released)
 ------------
 * Added action to explode a list into an array.
 * Added condition to check whether an array contains a specific value.
+* Added action Contact Has Subtype
+* Added action to remove a subtype from a contact.
 
 Version 1.19
 ------------
@@ -15,8 +17,6 @@ Version 1.19
 * Fixed issue with Custom File Upload for events.
 * Added action to find contact by e-mail.
 * Added action to get the membership status data.
-* Added action Contact Has Subtype
-* Added action to remove a subtype from a contact.
 
 Version 1.18
 ------------
