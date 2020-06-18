@@ -333,6 +333,10 @@ class Provider {
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $this->addActionWithoutFiltering('UpdateRelationshipById', '\Civi\ActionProvider\Action\Relationship\UpdateRelationshipById',E::ts('Update relationship by ID') , array(
+      AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $this->addActionWithoutFiltering('CreateRelationshipWithTypeParameter', '\Civi\ActionProvider\Action\Relationship\CreateRelationshipWithTypeParameter',E::ts('Create relationship (with relationship type parameter)') , array(
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,

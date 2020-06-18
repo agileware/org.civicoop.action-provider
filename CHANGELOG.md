@@ -4,6 +4,7 @@ Version 1.20 (not yet released)
 * Added condition to check whether an array contains a specific value.
 * Added action Contact Has Subtype
 * Added action to remove a subtype from a contact.
+* Added action to update an existing relationship with an ID.
 
 Version 1.19
 ------------
