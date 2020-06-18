@@ -437,6 +437,14 @@ class Provider {
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ));
+    $this->addActionWithoutFiltering('GetCaseDataById', '\Civi\ActionProvider\Action\CiviCase\GetCaseDataById', E::ts('Get case data by Case ID'), array(
+      AbstractAction::DATA_RETRIEVAL_TAG,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ));
+    $this->addActionWithoutFiltering('FindContactWithRoleOnCase', '\Civi\ActionProvider\Action\CiviCase\FindContactWithRoleOnCase', E::ts('Get contact with a role on the case'), array(
+      AbstractAction::DATA_RETRIEVAL_TAG,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ));
     $this->addActionWithoutFiltering('CreateCase', '\Civi\ActionProvider\Action\CiviCase\CreateCase', E::ts('Create case'), array(
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG

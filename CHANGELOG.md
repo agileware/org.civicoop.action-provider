@@ -5,6 +5,9 @@ Version 1.20 (not yet released)
 * Added action Contact Has Subtype
 * Added action to remove a subtype from a contact.
 * Added action to update an existing relationship with an ID.
+* Added action to Find Contact with Role on the Case.
+* Added action to get case data.
+* Added Case ID as a parameter to the create/update activity action.
 
 Version 1.19
 ------------
