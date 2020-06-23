@@ -96,43 +96,43 @@ class ContactActionUtils {
     if ($configuration->doesParameterExists('address_is_primary') && $configuration->getParameter('address_is_primary')) {
       $addressParams['is_primary'] = 1;
     }
-    if ($parameters->getParameter('name')) {
+    if ($parameters->doesParameterExists('name')) {
       $addressParams['name'] = $parameters->getParameter('name');
       $hasAddressParams = true;
     }
-    if ($parameters->getParameter('street_address')) {
+    if ($parameters->doesParameterExists('street_address')) {
       $addressParams['street_address'] = $parameters->getParameter('street_address');
       $hasAddressParams = true;
     }
-    if ($parameters->getParameter('supplemental_address_1')) {
+    if ($parameters->doesParameterExists('supplemental_address_1')) {
       $addressParams['supplemental_address_1'] = $parameters->getParameter('supplemental_address_1');
       $hasAddressParams = true;
     }
-    if ($parameters->getParameter('street_name')) {
+    if ($parameters->doesParameterExists('street_name')) {
       $addressParams['street_name'] = $parameters->getParameter('street_name');
       $hasAddressParams = true;
     }
-    if ($parameters->getParameter('street_number')) {
+    if ($parameters->doesParameterExists('street_number')) {
       $addressParams['street_number'] = $parameters->getParameter('street_number');
       $hasAddressParams = true;
     }
-    if ($parameters->getParameter('street_unit')) {
+    if ($parameters->doesParameterExists('street_unit')) {
       $addressParams['street_unit'] = $parameters->getParameter('street_unit');
       $hasAddressParams = true;
     }
-    if ($parameters->getParameter('postal_code')) {
+    if ($parameters->doesParameterExists('postal_code')) {
       $addressParams['postal_code'] = $parameters->getParameter('postal_code');
       $hasAddressParams = true;
     }
-    if ($parameters->getParameter('city')) {
+    if ($parameters->doesParameterExists('city')) {
       $addressParams['city'] = $parameters->getParameter('city');
       $hasAddressParams = true;
     }
-    if ($parameters->getParameter('state_province_id')) {
+    if ($parameters->doesParameterExists('state_province_id')) {
       $addressParams['state_province_id'] = $parameters->getParameter('state_province_id');
       $hasAddressParams = true;
     }
-    if ($parameters->getParameter('country_id')) {
+    if ($parameters->doesParameterExists('country_id')) {
       $addressParams['country_id'] = $parameters->getParameter('country_id');
       $hasAddressParams = true;
     }

@@ -5,6 +5,7 @@ Version 1.20 (not yet released)
 * Added action Contact Has Subtype
 * Added action to remove a subtype from a contact.
 * Added action to update an existing relationship with an ID.
+* Fixed issue with clearing address fields on Create/Update address.
 
 Version 1.19
 ------------
