@@ -51,6 +51,7 @@ class CreateActivity extends AbstractAction {
       new Specification('campaign_id', 'Integer', E::ts('Campaign'), false),
       $subject,
       new Specification('details', 'Text', E::ts('Details'), false),
+      new Specification('case_id', 'Integer', E::ts('Case ID'), false),
     ]);
 
     $customGroups = civicrm_api3('CustomGroup', 'get', [
@@ -127,6 +128,9 @@ class CreateActivity extends AbstractAction {
       $activityParams['activity_type_id'] = $parameters->getParameter('activity_type_id');
     } elseif ($activityParams['activity_type_id'] = $this->configuration->doesParameterExists('activity_type')) {
       $activityParams['activity_type_id'] = $this->configuration->getParameter('activity_type');
+    }
+    if ($parameters->doesParameterExists('case_id')) {
+      $activityParams['case_id'] = $parameters->getParameter('case_id');
     }
 
     foreach($this->getParameterSpecification() as $spec) {
