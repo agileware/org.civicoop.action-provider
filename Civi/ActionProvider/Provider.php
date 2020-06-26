@@ -118,6 +118,10 @@ class Provider {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $this->addActionWithoutFiltering('ShareAddress', '\Civi\ActionProvider\Action\Contact\ShareAddress', E::ts('Create a shared address'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $this->addActionWithoutFiltering('CreateUpdateAddress', '\Civi\ActionProvider\Action\Contact\CreateUpdateAddress', E::ts('Create or update address of a contact'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
