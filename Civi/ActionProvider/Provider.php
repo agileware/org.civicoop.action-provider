@@ -118,10 +118,6 @@ class Provider {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
-    $this->addActionWithoutFiltering('ShareAddress', '\Civi\ActionProvider\Action\Contact\ShareAddress', E::ts('Create a shared address'), array(
-      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
-      AbstractAction::DATA_MANIPULATION_TAG,
-    ));
     $this->addActionWithoutFiltering('CreateUpdateAddress', '\Civi\ActionProvider\Action\Contact\CreateUpdateAddress', E::ts('Create or update address of a contact'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
@@ -131,6 +127,10 @@ class Provider {
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
     $this->addActionWithoutFiltering('UsePrimaryAddressOfContact', '\Civi\ActionProvider\Action\Contact\UsePrimaryAddressOfContact', E::ts('Use primary address of another contact'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $this->addActionWithoutFiltering('UsePrimaryAddressOfRelatedContact', '\Civi\ActionProvider\Action\Contact\UsePrimaryAddressOfRelatedContact', E::ts('Use primary address of related contact'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));

@@ -9,7 +9,7 @@ Version 1.20 (not yet released)
 * Added action to Find Contact with Role on the Case.
 * Added action to get case data.
 * Added Case ID as a parameter to the create/update activity action.
-* Added action for Creating a shared address
+* Added action for Using Primary address of a related contact
 
 Version 1.19
 ------------

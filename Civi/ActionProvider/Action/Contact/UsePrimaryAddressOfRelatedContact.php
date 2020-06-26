@@ -14,7 +14,23 @@ use \Civi\ActionProvider\Parameter\Specification;
 
 use CRM_ActionProvider_ExtensionUtil as E;
 
-class UsePrimaryAddressOfContact extends AbstractAction {
+class UsePrimaryAddressOfRelatedContact extends AbstractAction {
+
+  protected $relationshipTypes = array();
+  protected $relationshipTypeIds = array();
+
+  public function __construct() {
+    parent::__construct();
+    $relationshipTypesApi = civicrm_api3('RelationshipType', 'get', array('is_active' => 1, 'options' => array('limit' => 0)));
+    $this->relationshipTypes = array();
+    $this->relationshipTypeIds = array();
+    foreach($relationshipTypesApi['values'] as $relType) {
+      $this->relationshipTypes['a_b_'.$relType['name_a_b']] = $relType['label_a_b'];
+      $this->relationshipTypes['b_a_'.$relType['name_a_b']] = $relType['label_b_a'];
+      $this->relationshipTypeIds['a_b_'.$relType['name_a_b']] = $relType['id'];
+      $this->relationshipTypeIds['b_a_'.$relType['name_b_a']] = $relType['id'];
+    }
+  }
 
   /**
    * Run the action
@@ -28,7 +44,6 @@ class UsePrimaryAddressOfContact extends AbstractAction {
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $contact_id = $parameters->getParameter('contact_id');
     $existingAddressId = false;
-    $is_create_relationships = $this->configuration->getParameter('create_relationships');
     if ($this->configuration->getParameter('update_existing')) {
       // Try to find existing address
       $existingAddressParams['contact_id'] = $contact_id;
@@ -41,8 +56,31 @@ class UsePrimaryAddressOfContact extends AbstractAction {
       }
     }
 
-    // Find address of contact
-    $master_contact_id = $parameters->getParameter('master_contact_id');
+    $relationship_type_ids = $this->configuration->getParameter('relationship_type_id');
+    foreach($relationship_type_ids as $relationship_type_id) {
+      $dir = substr($relationship_type_id, 0, 4);
+      $relationshipParams = array();
+      $relationshipParams['relationship_type_id'] = $this->relationshipTypeIds[$relationship_type_id];
+      $relationshipParams['is_active'] = 1;
+      if ($dir == 'a_b_') {
+        $relationshipParams['contact_id_a'] = $contact_id;
+        $relationshipParams['return'] = 'contact_id_b';
+      } else {
+        $relationshipParams['contact_id_b'] = $contact_id;
+        $relationshipParams['return'] = 'contact_id_a';
+      }
+      try {
+        $master_contact_id = civicrm_api3('Relationship', 'getvalue', $relationshipParams);
+        break;
+      } catch (\CiviCRM_API3_Exception $ex) {
+        // Do nothing
+      }
+    }
+
+    if (!$master_contact_id) {
+      return;
+    }
+
     try {
       $master_address = civicrm_api3('Address', 'getsingle', [
         'contact_id' => $master_contact_id,
@@ -71,7 +109,7 @@ class UsePrimaryAddressOfContact extends AbstractAction {
       $addressParams['contact_id'] = $contact_id;
       $addressParams['master_id'] = $master_address['id'];
       $addressParams['location_type_id'] = $this->configuration->getParameter('location_type');
-      $addressParams['update_current_employer'] = $is_create_relationships ? '1' : '0';
+      $addressParams['update_current_employer'] = '0'; // Do not create relationships when we add the shared address.
       if (empty($existingAddressId) || $this->configuration->getParameter('update_existing')) {
         $result = civicrm_api3('Address', 'create', $addressParams);
         $output->setParameter('id', $result['id']);
@@ -87,15 +125,15 @@ class UsePrimaryAddressOfContact extends AbstractAction {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
-    $specs = new SpecificationBag();
+    $specs = new SpecificationBag([
+      new Specification('relationship_type_id', 'String', E::ts('Relationship type'), true, null, null, $this->relationshipTypes, true),
+    ]);
+
     $locationTypes = ContactActionUtils::getLocationTypes();
     reset($locationTypes);
     $defaultLocationType = key($locationTypes);
     $specs->addSpecification(new Specification('location_type', 'Integer', E::ts('Location type'), true, $defaultLocationType, null, $locationTypes, FALSE));
     $specs->addSpecification(new Specification('update_existing', 'Boolean', E::ts('Update existing'), false, 0, null, null, FALSE));
-    $createRelationshipSpec = new Specification('create_relationships', 'Boolean', E::ts('Address: Automatically create relationships'), false, true, null, null, FALSE);
-    $createRelationshipSpec->setDescription(E::ts('CiviCRM can create relationships automatically when you create an shared address. Such as household member, employer of etc.'));
-    $specs->addSpecification($createRelationshipSpec);
     return $specs;
   }
 
@@ -106,11 +144,8 @@ class UsePrimaryAddressOfContact extends AbstractAction {
    */
   public function getParameterSpecification() {
     $contact_id = new Specification('contact_id', 'Integer', E::ts('Contact ID'), false);
-    $master_contact_id = new Specification('master_contact_id', 'Integer', E::ts('Master Contact ID'), false);
-    $master_contact_id->setDescription(E::ts('This is the contact from which the primary address is going to be used.'));
     $specs = new SpecificationBag(array(
-      $contact_id,
-      $master_contact_id
+      $contact_id
     ));
     return $specs;
   }
