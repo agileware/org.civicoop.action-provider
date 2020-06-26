@@ -26,6 +26,7 @@ class ContactActionUtils {
     $existingAddressId = false;
     if ($configuration->getParameter('address_update_existing')) {
       $existingAddressId = self::findExistingAddress($contact_id, $configuration->getParameter('address_location_type'), $configuration->getParameter('address_is_primary'));
+      $existingAddressId = self::findMasterAddress($existingAddressId);
     }
     return self::createAddress($existingAddressId, $contact_id, $parameters, $configuration);
   }
@@ -68,6 +69,29 @@ class ContactActionUtils {
   }
 
   /**
+   * Find the master address id.
+   *
+   * @param $addressId
+   *
+   * @return mixed
+   * @throws \CiviCRM_API3_Exception
+   */
+  public static function findMasterAddress($addressId) {
+    try {
+      $master_id = civicrm_api3('Address', 'getvalue', [
+        'return' => 'master_id',
+        'id' => $addressId
+      ]);
+      if ($master_id) {
+        return self::findMasterAddress($master_id);
+      }
+    } catch (\CiviCRM_API3_Exception $ex) {
+      // Do nothing
+    }
+    return $addressId;
+  }
+
+  /**
    * Create an address
    * @param $existingAddressId
    * @param int|null $contact_id
@@ -84,9 +108,9 @@ class ContactActionUtils {
     if ($existingAddressId) {
       $addressParams['id'] = $existingAddressId;
     }
-    if ($contact_id) {
+    if ($contact_id && !$existingAddressId) {
       $addressParams['contact_id'] = $contact_id;
-    } else {
+    } elseif (!$contact_id) {
       $addressParams['contact_id'] = 'null';
     }
     $addressParams['master_id'] = 'null';
