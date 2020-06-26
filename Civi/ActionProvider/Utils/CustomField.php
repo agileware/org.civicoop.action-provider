@@ -36,6 +36,9 @@ class CustomField {
       case 'Link':
         $type = 'String';
         break;
+      case 'StateProvince':
+        $type = 'String';
+        break;
     }
 
     return $type;

@@ -120,6 +120,9 @@ class GetCaseDataById extends AbstractAction {
           case 'Link':
             $type = 'String';
             break;
+          case 'StateProvince':
+            $type = 'String';
+            break;
         }
 
         $spec = new Specification($field['name'], $type, $field['title'], false, null, null, $options, false);
