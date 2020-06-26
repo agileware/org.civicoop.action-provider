@@ -209,6 +209,8 @@ class ContactActionUtils {
       $phoneParams['phone'] = $parameters->getParameter('phone');
       $result = civicrm_api3('Phone', 'create', $phoneParams);
       return $result['id'];
+    } elseif ($existingPhoneId) {
+      civicrm_api3('Phone', 'delete', ['id' => $existingPhoneId]);
     }
     return false;
   }
@@ -293,6 +295,8 @@ class ContactActionUtils {
       $emailParams['email'] = $parameters->getParameter('email');
       $result = civicrm_api3('Email', 'create', $emailParams);
       return $result['id'];
+    } elseif ($existingEmailId) {
+      civicrm_api3('Email', 'delete', ['id' => $existingEmailId]);
     }
     return false;
   }
