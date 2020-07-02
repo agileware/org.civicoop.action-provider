@@ -10,6 +10,7 @@ Version 1.20 (not yet released)
 * Added action to get case data.
 * Added Case ID as a parameter to the create/update activity action.
 * Added action for Using Primary address of a related contact
+* Added Mix of Not Empty/Empty to condition Parameters are (not) empty.
 
 Version 1.19
 ------------
