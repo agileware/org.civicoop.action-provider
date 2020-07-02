@@ -24,6 +24,7 @@ class CheckParameters extends AbstractCondition {
   public function isConditionValid(ParameterBagInterface $parameterBag) {
     $function = $this->configuration->getParameter('function');
     $parameters = $parameterBag->getParameter('parameters');
+    $parameters2 = $parameterBag->getParameter('parameters2');
 
     switch ($function) {
       case 'all are not empty':
@@ -34,6 +35,12 @@ class CheckParameters extends AbstractCondition {
         break;
       case 'all are empty':
         return $this->allAreEmpty($parameters);
+        break;
+      case 'mix':
+        return $this->allAreNotEmpty($parameters) && $this->allAreEmpty($parameters2);
+        break;
+      case 'mix':
+        return $this->oneOfIsNotEmpty($parameters) && $this->allAreEmpty($parameters2);
         break;
     }
     return true;
@@ -76,12 +83,16 @@ class CheckParameters extends AbstractCondition {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
+    $functionSpec = new Specification('function', 'String', E::ts('Condition'), true, 'all are not empty', null, array(
+      'all are not empty' => E::ts('All are not empty'),
+      'one of is not empty' => E::ts('One of is not empty'),
+      'all are empty' => E::ts('All are empty'),
+      'mix' => E::ts('Mix of empty/not empty'),
+      'mix2' => E::ts('Mix of empty/some not empty'),
+    ));
+    $functionSpec->setDescription(E::ts('When you use <em>All are not empty</em>, <em>One of is not empty</em>, or <em>All are not empty</em> the use Parameters 1. <br />If you use <em>Mix of empty/not empty</em> the use Parameters 1 for the Is not empty values and Parameters 2 for the is empty values'));
     return new SpecificationBag(array(
-      new Specification('function', 'String', E::ts('Condition'), true, 'all are not empty', null, array(
-        'all are not empty' => E::ts('All are not empty'),
-        'one of is not empty' => E::ts('One of is not empty'),
-        'all are empty' => E::ts('All are empty'),
-      ))
+      $functionSpec,
     ));
   }
 
@@ -94,8 +105,11 @@ class CheckParameters extends AbstractCondition {
     $parametersBag = new SpecificationBag(array(
       new Specification('parameter', 'String', E::ts('Parameter'), true, null, null, null, true),
     ));
+    $parameterCollection1 = new SpecificationCollection('parameters', E::ts('Parameters (1)'), $parametersBag, 1);
+    $parameterCollection2 = new SpecificationCollection('parameters2', E::ts('Parameters (2)'), $parametersBag, 0);
     return new SpecificationBag(array(
-      new SpecificationCollection('parameters', E::ts('Parameters'), $parametersBag, 1),
+      $parameterCollection1,
+      $parameterCollection2,
     ));
   }
 
