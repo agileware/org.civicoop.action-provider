@@ -11,6 +11,7 @@ Version 1.20 (not yet released)
 * Added Case ID as a parameter to the create/update activity action.
 * Added action for Using Primary address of a related contact
 * Added Mix of Not Empty/Empty to condition Parameters are (not) empty.
+* Added Job Title to Create or Update Individual.
 
 Version 1.19
 ------------
