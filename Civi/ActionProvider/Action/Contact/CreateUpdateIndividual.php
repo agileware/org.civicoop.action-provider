@@ -41,6 +41,9 @@ class CreateUpdateIndividual extends AbstractAction {
     if ($parameters->getParameter('middle_name')) {
       $params['middle_name'] = $parameters->getParameter('middle_name');
     }
+    if ($parameters->getParameter('job_title')) {
+      $params['job_title'] = $parameters->getParameter('job_title');
+    }
     if ($parameters->getParameter('birth_date')) {
       $params['birth_date'] = $parameters->getParameter('birth_date');
     }
@@ -130,6 +133,7 @@ class CreateUpdateIndividual extends AbstractAction {
       new Specification('first_name', 'String', E::ts('First name'), false),
       new Specification('last_name', 'String', E::ts('Last name'), false),
       new Specification('middle_name', 'String', E::ts('Middle name'), false),
+      new Specification('job_title', 'String', E::ts('Job Title'), false),
       new Specification('birth_date', 'Date', E::ts('Birth date'), false),
       new OptionGroupSpecification('gender_id', 'gender', E::ts('Gender'), false),
       new Specification('source', 'String', E::ts('Source'), false),
