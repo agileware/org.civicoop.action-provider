@@ -12,6 +12,7 @@ Version 1.20 (not yet released)
 * Added action for Using Primary address of a related contact
 * Added Mix of Not Empty/Empty to condition Parameters are (not) empty.
 * Added Job Title to Create or Update Individual.
+* Implemented functionality to group parameter fields. (Requires also an update to form processor and/or search action designer)
 
 Version 1.19
 ------------

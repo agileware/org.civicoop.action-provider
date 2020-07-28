@@ -2,10 +2,13 @@
 
 namespace Civi\ActionProvider\Utils;
 
+use Civi\ActionProvider\Parameter\ParameterBag;
 use \Civi\ActionProvider\Parameter\Specification;
 use \Civi\ActionProvider\Parameter\OptionGroupSpecification;
 
 
+use Civi\ActionProvider\Parameter\SpecificationBag;
+use Civi\ActionProvider\Parameter\SpecificationGroup;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 /**
@@ -112,7 +115,58 @@ class CustomField {
       return $spec;
     }
     return null;
+  }
 
+  /**
+   * Returns a specification for custom groups and fields
+   *
+   * @param $customGroupId
+   * @param $customGroupName
+   * @param $customGroupTitle
+   *
+   * @return \Civi\ActionProvider\Parameter\SpecificationGroup
+   * @throws \CiviCRM_API3_Exception
+   */
+  public static function getSpecForCustomGroup($customGroupId, $customGroupName, $customGroupTitle) {
+    $customFields = civicrm_api3('CustomField', 'get', [
+      'custom_group_id' => $customGroupId,
+      'is_active' => 1,
+      'options' => ['limit' => 0],
+    ]);
+    $customGroupSpecBag = new SpecificationBag();
+    foreach ($customFields['values'] as $customField) {
+      $spec = self::getSpecFromCustomField($customField, '', FALSE);
+      if ($spec) {
+        $customGroupSpecBag->addSpecification($spec);
+      }
+    }
+    return new SpecificationGroup($customGroupName, $customGroupTitle, $customGroupSpecBag);
+  }
+
+  /**
+   * Returns an array with the api parameters for the custom fields.
+   *
+   * @param \Civi\ActionProvider\Parameter\ParameterBag $parameters
+   * @param \Civi\ActionProvider\Parameter\SpecificationBag $parameterSpecification
+   *
+   * @return array
+   */
+  public static function getCustomFieldsApiParameter(ParameterBag $parameters, SpecificationBag $parameterSpecification) {
+    $apiParams = array();
+    foreach($parameterSpecification as $spec) {
+      if ($spec instanceof SpecificationGroup) {
+        foreach($spec->getSpecificationBag() as $subSpec) {
+          if (stripos($subSpec->getName(), 'custom_')===0 && $parameters->doesParameterExists($subSpec->getName())) {
+            $apiParams[$subSpec->getApiFieldName()] = $parameters->getParameter($subSpec->getName());
+          }
+        }
+      } elseif (stripos($spec->getName(), 'custom_')===0) {
+        if ($parameters->doesParameterExists($spec->getName())) {
+          $apiParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
+        }
+      }
+    }
+    return $apiParams;
   }
 
 }

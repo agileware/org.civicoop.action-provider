@@ -11,6 +11,7 @@ use Civi\ActionProvider\Parameter\OptionGroupByNameSpecification;
 use Civi\ActionProvider\Parameter\ParameterBagInterface;
 use Civi\ActionProvider\Parameter\Specification;
 use Civi\ActionProvider\Parameter\SpecificationBag;
+use Civi\ActionProvider\Parameter\SpecificationGroup;
 use Civi\ActionProvider\Utils\CustomField;
 
 use CRM_ActionProvider_ExtensionUtil as E;
@@ -60,17 +61,7 @@ class CreateActivity extends AbstractAction {
       'options' => ['limit' => 0],
     ]);
     foreach ($customGroups['values'] as $customGroup) {
-      $customFields = civicrm_api3('CustomField', 'get', [
-        'custom_group_id' => $customGroup['id'],
-        'is_active' => 1,
-        'options' => ['limit' => 0],
-      ]);
-      foreach ($customFields['values'] as $customField) {
-        $spec = CustomField::getSpecFromCustomField($customField, $customGroup['title'] . ': ', FALSE);
-        if ($spec) {
-          $bag->addSpecification($spec);
-        }
-      }
+      $bag->addSpecification(CustomField::getSpecForCustomGroup($customGroup['id'], $customGroup['name'], $customGroup['title']));
     }
 
     return $bag;
@@ -133,14 +124,7 @@ class CreateActivity extends AbstractAction {
       $activityParams['case_id'] = $parameters->getParameter('case_id');
     }
 
-    foreach($this->getParameterSpecification() as $spec) {
-      if (stripos($spec->getName(), 'custom_')!==0) {
-        continue;
-      }
-      if ($parameters->doesParameterExists($spec->getName())) {
-        $activityParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
-      }
-    }
+    $activityParams = array_merge($activityParams, CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification()));
 
     try {
       // Do not use api as the api checks for an existing relationship.

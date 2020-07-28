@@ -14,44 +14,47 @@
         mapping: '=?',
       },
       link: function($scope, $el, $attr) {
+        var getCrmUiField = function(spec) {
+          var crmUiField = {
+            'name': spec.name,
+            'title': spec.title
+          };
+          if (spec.required) {
+            crmUiField.required = true;
+          }
+          return crmUiField;
+        };
+
       	$scope.ts = CRM.ts(null);
       	$scope.action = {};
       	$scope.uiFields = {};
-      	
+
       	if (!($scope.context in actions)) {
       	  actions[$scope.context] = {};
       	}
-      	
+
       	if ($scope.name in actions[$scope.context]) {
       	  $scope.action = actions[$scope.context][$scope.name];
       	  return;
       	}
-      	
+
       	crmApi('ActionProvider', 'getaction', {name: $scope.name, context: $scope.context}).
       	then(function (data) {
       	  actions[$scope.context][$scope.name] = data;
       	  $scope.action = data;
 
           for (var spec in $scope.action.configuration_spec) {
-            var crmUiField = {
-              'name': $scope.action.configuration_spec[spec].name,
-              'title': $scope.action.configuration_spec[spec].title
-            }
-            if ($scope.action.configuration_spec[spec].required) {
-              crmUiField.required = true;
-            }
-            $scope.action.configuration_spec[spec].crmUiField = crmUiField;
+            $scope.action.configuration_spec[spec].crmUiField = getCrmUiField($scope.action.configuration_spec[spec]);
           }
 
-          for (var spec in $scope.action.parameter_spec) {
-            var crmUiField = {
-              'name': 'input_mapper.' + $scope.action.parameter_spec[spec].name,
-              'title': $scope.action.parameter_spec[spec].title
+          for (var parameterSpec in $scope.action.parameter_spec) {
+            if ($scope.action.parameter_spec[parameterSpec].type == 'group') {
+              for (var subParameterSpec in $scope.action.parameter_spec[parameterSpec].specification_bag) {
+                $scope.action.parameter_spec[parameterSpec].specification_bag[subParameterSpec].crmUiField = getCrmUiField($scope.action.parameter_spec[parameterSpec].specification_bag[subParameterSpec]);
+              }
+            } else {
+              $scope.action.parameter_spec[parameterSpec].crmUiField = getCrmUiField($scope.action.parameter_spec[parameterSpec]);
             }
-            if ($scope.action.parameter_spec[spec].required) {
-              crmUiField.required = true;
-            }
-            $scope.action.parameter_spec[spec].crmUiField = crmUiField;
           }
 
       	});

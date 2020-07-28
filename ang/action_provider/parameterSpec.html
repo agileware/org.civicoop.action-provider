@@ -1,0 +1,24 @@
+<div crm-ui-field="spec.crmUiField">
+  <select class="huge"
+          crm-ui-id="input_mapper.{{spec.name}}"
+          crm-ui-select="{allowClear: true, minimumInputLength: 0}"
+          name="{{spec.name}}"
+          ng-model="mapping[spec.name]"
+          ng-options="field as field.label for field in fields track by field.name"
+          ng-required="spec.required"
+          ng-if="!spec.multiple">
+    <option value=""></option>
+  </select>
+
+  <select class="huge"
+          crm-ui-id="input_mapper.{{spec.name}}"
+          crm-ui-select="{allowClear: true, minimumInputLength: 0}"
+          name="{{spec.name}}"
+          ng-model="mapping[spec.name]"
+          ng-options="field as field.label for field in fields track by field.name"
+          ng-required="spec.required"
+          ng-if="spec.multiple"
+          multiple="multiple">
+  </select>
+  <div class="description" ng-bind-html="spec.description" ng-if="spec.description"></div>
+</div>
