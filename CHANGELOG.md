@@ -1,5 +1,6 @@
-Version 1.20 (not yet released)
+Version 1.20
 ------------
+
 * Added action to explode a list into an array.
 * Added condition to check whether an array contains a specific value.
 * Added action Contact Has Subtype
