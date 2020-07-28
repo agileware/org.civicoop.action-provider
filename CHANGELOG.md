@@ -13,6 +13,7 @@ Version 1.20 (not yet released)
 * Added Mix of Not Empty/Empty to condition Parameters are (not) empty.
 * Added Job Title to Create or Update Individual.
 * Implemented functionality to group parameter fields. (Requires also an update to form processor and/or search action designer)
+* Refactored action list and named the actions in a consequent manner.
 
 Version 1.19
 ------------
