@@ -30,6 +30,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('OverrideMembershipStatus', '\Civi\ActionProvider\Action\Membership\OverrideStatus',E::ts('Membership: Override Status') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $provider->addAction('GetMembershipById', '\Civi\ActionProvider\Action\Membership\GetMembershipById',E::ts('Membership: Get by ID') , array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,

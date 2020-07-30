@@ -1,6 +1,8 @@
 Version 1.21 (not yet released)
 ------------
 
+* Added action to override membership status.
+
 Version 1.20
 ------------
 
