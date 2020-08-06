@@ -2,6 +2,7 @@ Version 1.21 (not yet released)
 ------------
 
 * Added action to override membership status.
+* Added action CiviCase: Update custom data
 
 Version 1.20
 ------------
