@@ -18,21 +18,6 @@ class CreateCase extends AbstractAction
      * @return SpecificationBag
      */
     public function getConfigurationSpecification() {
-        /*
-        $cmsUsers = civicrm_api3('Contact', 'get', [
-            'uf_user' => 1,
-            'return' => ["display_name", "email"],
-        ]);
-        if ($cmsUsers['is_error'] || empty($cmsUsers['values'])) {
-            $caseManagerOptions = null;
-        } else {
-            $caseManagerOptions = [];
-            foreach ($cmsUsers['values'] as $user) {
-                $nameAndEmail = "${user['display_name']} <${user['email']}>";
-                $caseManagerOptions[$user['contact_id']] = $nameAndEmail;
-            }
-        }
-        */
         /**
          * The parameters given to the Specification object are:
          * @param string $name
@@ -48,7 +33,6 @@ class CreateCase extends AbstractAction
             [
                 new Specification('case_type_id', 'Integer', E::ts('Case Type'), true, null, 'CaseType', null, FALSE),
                 new Specification('subject', 'String', E::ts('Subject'), true, null, null, null, FALSE),
-                //new Specification('creator_id', 'Integer', E::ts('Case Manager'), true, null, null, $caseManagerOptions, FALSE),
                 new Specification('creator_id', 'Integer', E::ts('Case Manager'), true, null, 'Contact', null, FALSE),
             ]
         );

@@ -53,22 +53,14 @@ class UpdateCustomData extends AbstractAction {
     $specs->addSpecification(new Specification('case_id', 'Integer', E::ts('Case ID'), true));
     
     $customGroups = civicrm_api3('CustomGroup', 'get', array('is_active' => 1, 'is_multiple' => 0, 'options' => array('limit' => 0)));
-    foreach($customGroups['values'] as $customGroup) {
-      if (!in_array($customGroup['extends'], array('Case'))) {
-        continue;
-      }
-      
-      $customFields = civicrm_api3('CustomField', 'get', array('custom_group_id' => $customGroup['id'], 'is_active' => 1, 'options' => array('limit' => 0)));
-      foreach($customFields['values'] as $customField) {
-        if (isset($customField['is_view']) && $customField['is_view']) {
-          continue;
-        }
 
-        $spec = CustomField::getSpecFromCustomField($customField, $customGroup['title'].': ', false);
-        if ($spec) {
-          $specs->addSpecification($spec);
-        }
-      }
+    $customGroups = civicrm_api3('CustomGroup', 'get', [
+      'extends' => 'Case',
+      'is_active' => 1,
+      'options' => ['limit' => 0],
+    ]);
+    foreach ($customGroups['values'] as $customGroup) {
+      $specs->addSpecification(CustomField::getSpecForCustomGroup($customGroup['id'], $customGroup['name'], $customGroup['title']));
     }
     return $specs;
   }

@@ -2,7 +2,9 @@ Version 1.21 (not yet released)
 ------------
 
 * Added action to override membership status.
-* Added action CiviCase: Update custom data
+* Added action "CiviCase: Update custom data"
+* Added action "Activity: Upload Attachement"
+* Added action "CiviCase: Upload file to custom field"
 
 Version 1.20
 ------------

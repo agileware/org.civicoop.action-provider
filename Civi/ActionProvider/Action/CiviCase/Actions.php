@@ -34,6 +34,10 @@ class Actions {
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ));
+    $provider->addAction('CaseUploadCustomFileField', '\Civi\ActionProvider\Action\CiviCase\UploadCustomFileField',E::ts('CiviCase: Upload file to a custom field for a case') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
   }
 
 }

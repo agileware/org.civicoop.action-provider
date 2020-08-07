@@ -41,6 +41,9 @@ class Actions {
     $provider->addAction('GetMostRecentActivity', '\Civi\ActionProvider\Action\Activity\GetMostRecentActivity', E::ts('Activity: Get most recent activity of a contact'), array(
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $provider->addAction('ActivityUploadAttachment', '\Civi\ActionProvider\Action\Activity\UploadAttachment', E::ts('Activity: Upload attachment'), array(
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
   }
 
 }
