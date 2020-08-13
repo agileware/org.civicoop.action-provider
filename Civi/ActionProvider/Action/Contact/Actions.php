@@ -132,6 +132,9 @@ class Actions {
     $provider->addAction('ValidateChecksum', '\Civi\ActionProvider\Action\Contact\ValidateChecksum', E::ts('Contact: Validate checksum'), [
       AbstractAction::DATA_RETRIEVAL_TAG,  AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ]);
+    $provider->addAction('GenerateChecksum', '\Civi\ActionProvider\Action\Contact\GenerateChecksum', E::ts('Contact: Generate checksum'), [
+      AbstractAction::DATA_RETRIEVAL_TAG,  AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ]);
     $provider->addAction('SaveMaxContactId', '\Civi\ActionProvider\Action\Contact\SaveMaxContactId', E::ts('Contact: Get maximum contact ID'), [
       AbstractAction::DATA_RETRIEVAL_TAG
     ]);

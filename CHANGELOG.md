@@ -1,6 +1,7 @@
 Version 1.22 (not yet released)
 ------------
 
+* Added action "Contact: Generate Checksum" 
 
 Version 1.21
 ------------
