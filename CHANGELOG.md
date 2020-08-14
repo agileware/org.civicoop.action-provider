@@ -1,7 +1,7 @@
-Version 1.23 (not yet released)
-------------
+Version 1.22.1
+--------------
 
-
+* Fixed issue with Generate Checksum action.
 
 Version 1.22
 ------------

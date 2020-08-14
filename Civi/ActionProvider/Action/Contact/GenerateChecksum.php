@@ -26,7 +26,7 @@ class GenerateChecksum extends AbstractAction {
 	protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
 	  $contactId = $parameters->getParameter('contact_id');
     $checksum = \CRM_Contact_BAO_Contact_Utils::generateChecksum($contactId);
-    $output->setParameter('checksum', $checksum);
+    $output->setParameter('cs', $checksum);
 	}
 
 	/**
