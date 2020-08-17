@@ -1,7 +1,7 @@
-Version 1.23 (not yet released)
-------------
+Version 1.22.2
+--------------
 
-
+* Fixed issue with CiviCase: update custom data
 
 Version 1.22.1
 --------------
@@ -11,7 +11,7 @@ Version 1.22.1
 Version 1.22
 ------------
 
-* Added action "Contact: Generate Checksum" 
+* Added action "Contact: Generate Checksum"
 
 Version 1.21
 ------------
