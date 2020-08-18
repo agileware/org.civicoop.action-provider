@@ -1,3 +1,8 @@
+Version 1.17.1
+--------------
+
+* Fixed issue with get relationship type id by name.
+
 Version 1.17
 ------------
 
