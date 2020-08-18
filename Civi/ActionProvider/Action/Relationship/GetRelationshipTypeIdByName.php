@@ -28,7 +28,7 @@ class GetRelationshipTypeIdByName extends AbstractAction {
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $sql = "SELECT id FROM civicrm_relationship_type WHERE name_a_b = %1 OR name_b_a = %1 LIMIT 0,1";
     $sqlParams[1] = [$parameters->getParameter('name'), 'String'];
-    $id = \CRM_Core_DAO::executeQuery($sql, $sqlParams);
+    $id = \CRM_Core_DAO::singleValueQuery($sql, $sqlParams);
     $output->setParameter('id', $id);
   }
 
