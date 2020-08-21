@@ -3,6 +3,7 @@
 namespace Civi\ActionProvider\Utils;
 
 use Civi\ActionProvider\Parameter\ParameterBag;
+use Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\Specification;
 use \Civi\ActionProvider\Parameter\OptionGroupSpecification;
 
@@ -146,12 +147,12 @@ class CustomField {
   /**
    * Returns an array with the api parameters for the custom fields.
    *
-   * @param \Civi\ActionProvider\Parameter\ParameterBag $parameters
+   * @param \Civi\ActionProvider\Parameter\ParameterBagInterface $parameters
    * @param \Civi\ActionProvider\Parameter\SpecificationBag $parameterSpecification
    *
    * @return array
    */
-  public static function getCustomFieldsApiParameter(ParameterBag $parameters, SpecificationBag $parameterSpecification) {
+  public static function getCustomFieldsApiParameter(ParameterBagInterface $parameters, SpecificationBag $parameterSpecification) {
     $apiParams = array();
     foreach($parameterSpecification as $spec) {
       if ($spec instanceof SpecificationGroup) {
