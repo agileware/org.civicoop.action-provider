@@ -7,6 +7,7 @@
 namespace Civi\ActionProvider\Action\Relationship;
 
 use \Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\Action\AbstractGetSingleAction;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
@@ -15,7 +16,7 @@ use \Civi\ActionProvider\Utils\CustomField;
 use Civi\ActionProvider\Utils\Fields;
 use CRM_ActionProvider_ExtensionUtil as E;
 
-class GetRelationship extends AbstractAction {
+class GetRelationship extends AbstractGetSingleAction {
 
   protected $relationshipTypes = array();
   protected $relationshipTypeIds = array();
@@ -65,19 +66,6 @@ class GetRelationship extends AbstractAction {
       new Specification('contact_id_a', 'Integer', E::ts('Contact ID A'), true, null, null, null, FALSE),
       new Specification('contact_id_b', 'Integer', E::ts('Contact ID B'), true, null, null, null, FALSE),
     ));
-  }
-
-  /**
-   * Returns the specification of the output parameters of this action.
-   *
-   * This function could be overriden by child classes.
-   *
-   * @return SpecificationBag
-   */
-  public function getOutputSpecification() {
-    $bag = new SpecificationBag();
-    Fields::getFieldsForEntity($bag,'Relationship', 'get', array());
-    return $bag;
   }
 
   /**
@@ -135,22 +123,28 @@ class GetRelationship extends AbstractAction {
     }
     $relationship = $this->findExistingRelationshipId($parameters->getParameter('contact_id_a'), $parameters->getParameter('contact_id_b'), $this->relationshipTypeIds[$this->configuration->getParameter('relationship_type_id')], $inactiveOnes);
     if ($relationship) {
-      foreach($relationship as $field => $value) {
-        if (stripos($field, 'custom_') !== 0) {
-          $output->setParameter($field, $value);
-        } else {
-          $custom_id = substr($field, 7);
-          if (is_numeric($custom_id)) {
-            $fieldName = CustomField::getCustomFieldName($custom_id);
-            if (is_array($value)) {
-              // The keys of the array contains the values of the selected options.
-              $value = array_keys($value);
-            }
-            $output->setParameter($fieldName, $value);
-          }
-        }
-      }
+      $this->setOutputFromEntity($relationship, $output);
     }
+  }
+
+  /**
+   * Returns the name of the entity.
+   *
+   * @return string
+   */
+  protected function getApiEntity() {
+    return 'Relationship';
+  }
+
+  /**
+   * Returns the ID from the parameter array
+   *
+   * @param \Civi\ActionProvider\Parameter\ParameterBagInterface $parameters
+   *
+   * @return int
+   */
+  protected function getIdFromParamaters(ParameterBagInterface $parameters) {
+    return $parameters->getParameter('contact_id');
   }
 
 }

@@ -3,6 +3,7 @@
 namespace Civi\ActionProvider\Action\Contact;
 
 use \Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\Action\AbstractGetSingleAction;
 use \Civi\ActionProvider\Action\Contact\ContactActionUtils;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
@@ -13,8 +14,27 @@ use \Civi\ActionProvider\Utils\CustomField;
 use Civi\ActionProvider\Utils\Fields;
 use CRM_ActionProvider_ExtensionUtil as E;
 
-class GetAddress extends AbstractAction {
+class GetAddress extends AbstractGetSingleAction {
 
+  /**
+   * Returns the name of the entity.
+   *
+   * @return string
+   */
+  protected function getApiEntity() {
+    return 'Address';
+  }
+
+  /**
+   * Returns the ID from the parameter array
+   *
+   * @param \Civi\ActionProvider\Parameter\ParameterBagInterface $parameters
+   *
+   * @return int
+   */
+  protected function getIdFromParamaters(ParameterBagInterface $parameters) {
+    return $parameters->getParameter('contact_id');
+  }
   /**
    * Run the action
    *
@@ -30,10 +50,7 @@ class GetAddress extends AbstractAction {
     $existingAddressParams['location_type_id'] = $this->configuration->getParameter('location_type_id');
     try {
       $existingAddress = civicrm_api3('Address', 'getsingle', $existingAddressParams);
-      foreach($existingAddress as $field => $value) {
-        $output->setParameter($field, $value);
-      }
-
+      $this->setOutputFromEntity($existingAddress, $output);
     } catch (\Exception $e) {
       // Do nothing
     }
@@ -62,19 +79,6 @@ class GetAddress extends AbstractAction {
     return new SpecificationBag(array(
       new Specification('contact_id', 'Integer', E::ts('Contact ID'), true),
     ));
-  }
-
-  /**
-   * Returns the specification of the output parameters of this action.
-   *
-   * This function could be overriden by child classes.
-   *
-   * @return SpecificationBag
-   */
-  public function getOutputSpecification() {
-    $bag = new SpecificationBag();
-    Fields::getFieldsForEntity($bag,'Address', 'get', array());
-    return $bag;
   }
 
 }

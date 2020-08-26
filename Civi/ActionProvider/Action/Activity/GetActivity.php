@@ -6,25 +6,33 @@
 
 namespace Civi\ActionProvider\Action\Activity;
 
-use Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\Action\AbstractGetSingleAction;
 use Civi\ActionProvider\Parameter\ParameterBagInterface;
 use Civi\ActionProvider\Parameter\Specification;
 use Civi\ActionProvider\Parameter\SpecificationBag;
-use Civi\ActionProvider\Utils\CustomField;
 
-use Civi\ActionProvider\Utils\Fields;
 use CRM_ActionProvider_ExtensionUtil as E;
 
-class GetActivity extends AbstractAction {
+class GetActivity extends AbstractGetSingleAction {
 
   /**
-   * Returns the specification of the configuration options for the actual
-   * action.
+   * Returns the name of the entity.
    *
-   * @return SpecificationBag
+   * @return string
    */
-  public function getConfigurationSpecification() {
-    return new SpecificationBag();
+  protected function getApiEntity() {
+    return 'Activity';
+  }
+
+  /**
+   * Returns the ID from the parameter array
+   *
+   * @param \Civi\ActionProvider\Parameter\ParameterBagInterface $parameters
+   *
+   * @return int
+   */
+  protected function getIdFromParamaters(ParameterBagInterface $parameters) {
+    return $parameters->getParameter('id');
   }
 
   /**
@@ -37,48 +45,6 @@ class GetActivity extends AbstractAction {
       new Specification('id', 'Integer', E::ts('Activity ID'), true),
     ]);
     return $bag;
-  }
-
-  /**
-   * Returns the specification of the output parameters of this action.
-   *
-   * This function could be overriden by child classes.
-   *
-   * @return SpecificationBag
-   */
-  public function getOutputSpecification() {
-    $bag = new SpecificationBag();
-    Fields::getFieldsForEntity($bag, 'Activity', 'get', array());
-    return $bag;
-  }
-
-  /**
-   * Run the action
-   *
-   * @param ParameterBagInterface $parameters
-   *   The parameters to this action.
-   * @param ParameterBagInterface $output
-   *   The parameters this action can send back
-   * @return void
-   * @throws \Exception
-   */
-  protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    $activityParams['id'] = $parameters->getParameter('id');
-    try {
-      // Do not use api as the api checks for an existing relationship.
-      $activity = civicrm_api3('Activity', 'getsingle', $activityParams);
-      foreach($activity as $field => $value) {
-        if (stripos($field, 'custom_') !== 0) {
-          $output->setParameter($field, $value);
-        } else {
-          $custom_id = substr($field, 7);
-          $fieldName = CustomField::getCustomFieldName($custom_id);
-          $output->setParameter($fieldName, $value);
-        }
-      }
-    } catch (\Exception $e) {
-      // Do nothing.
-    }
   }
 
 

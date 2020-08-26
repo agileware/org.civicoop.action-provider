@@ -3,6 +3,7 @@
 namespace Civi\ActionProvider\Action\Event;
 
 use \Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\Action\AbstractGetSingleAction;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
@@ -13,15 +14,26 @@ use Civi\ActionProvider\Utils\Fields;
 use Civi\DataProcessor\DataSpecification\CustomFieldSpecification;
 use CRM_ActionProvider_ExtensionUtil as E;
 
-class GetEvent extends AbstractAction {
+class GetEvent extends AbstractGetSingleAction {
 
   /**
-   * Returns the specification of the configuration options for the actual action.
+   * Returns the name of the entity.
    *
-   * @return SpecificationBag
+   * @return string
    */
-  public function getConfigurationSpecification() {
-    return new SpecificationBag(array());
+  protected function getApiEntity() {
+    return 'Event';
+  }
+
+  /**
+   * Returns the ID from the parameter array
+   *
+   * @param \Civi\ActionProvider\Parameter\ParameterBagInterface $parameters
+   *
+   * @return int
+   */
+  protected function getIdFromParamaters(ParameterBagInterface $parameters) {
+    return $parameters->getParameter('event_id');
   }
 
   /**
@@ -45,62 +57,6 @@ class GetEvent extends AbstractAction {
       new Specification('event_id', 'Integer', E::ts('Event ID'), false, null, null, null, FALSE),
     ));
     return $specs;
-  }
-
-  /**
-   * Returns the specification of the output parameters of this action.
-   *
-   * This function could be overriden by child classes.
-   *
-   * @return SpecificationBag
-   */
-  public function getOutputSpecification() {
-    $bag = new SpecificationBag();
-    Fields::getFieldsForEntity($bag,'Event', 'get', array());
-    return $bag;
-  }
-
-  /**
-   * Run the action
-   *
-   * @param ParameterInterface $parameters
-   *   The parameters to this action.
-   * @param ParameterBagInterface $output
-   *   The parameters this action can send back
-   * @return void
-   */
-  protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    // Get the contact and the event.
-    $event_id = $parameters->getParameter('event_id');
-
-    if (!$event_id) {
-      return;
-    }
-
-    try {
-      $event = civicrm_api3('Event', 'getsingle', array('id' => $event_id));
-
-      foreach($this->getOutputSpecification() as $spec) {
-        $fieldName = $spec->getName();
-        if (stripos($fieldName, 'custom_') === 0) {
-          $fieldName = $spec->getApiFieldName();
-        }
-        if (stripos($fieldName, 'custom_') === 0 && isset($event[$fieldName.'_id'])) {
-          $fieldName = $fieldName . '_id';
-        }
-        if (isset($event[$fieldName])) {
-          $output->setParameter($spec->getName(), $event[$fieldName]);
-        }
-      }
-      try {
-        $loc = civicrm_api3('LocBlock', 'getsingle', ['id' => $event['loc_block_id']]);
-        $output->setParameter('address_id', $loc['address_id']);
-      } catch (\Exception $e) {
-        // Do nothing
-      }
-    } catch (\Exception $e) {
-      // Do nothing
-    }
   }
 
 
