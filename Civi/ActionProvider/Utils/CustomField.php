@@ -32,7 +32,7 @@ class CustomField {
         $type = 'Integer';
         break;
       case 'File':
-        $type = null;
+        $type = 'Integer';
         break;
       case 'Memo':
         $type = 'Text';

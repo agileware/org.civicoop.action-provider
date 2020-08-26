@@ -1,6 +1,8 @@
 Version 1.23 (not yet released)
 ------------
 
+* Added action to retrieve the Download file link
+
 Version 1.22.2
 --------------
 
