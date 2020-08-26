@@ -12,6 +12,7 @@ use Civi\ActionProvider\Parameter\Specification;
 use Civi\ActionProvider\Parameter\SpecificationBag;
 use Civi\ActionProvider\Utils\CustomField;
 
+use Civi\ActionProvider\Utils\Fields;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class GetActivity extends AbstractAction {
@@ -47,26 +48,7 @@ class GetActivity extends AbstractAction {
    */
   public function getOutputSpecification() {
     $bag = new SpecificationBag();
-
-    $customGroups = civicrm_api3('CustomGroup', 'get', [
-      'extends' => 'Activity',
-      'is_active' => 1,
-      'options' => ['limit' => 0],
-    ]);
-    foreach ($customGroups['values'] as $customGroup) {
-      $customFields = civicrm_api3('CustomField', 'get', [
-        'custom_group_id' => $customGroup['id'],
-        'is_active' => 1,
-        'options' => ['limit' => 0],
-      ]);
-      foreach ($customFields['values'] as $customField) {
-        $spec = CustomField::getSpecFromCustomField($customField, $customGroup['title'] . ': ', FALSE);
-        if ($spec) {
-          $bag->addSpecification($spec);
-        }
-      }
-    }
-
+    Fields::getFieldsForEntity($bag, 'Activity', 'get', array());
     return $bag;
   }
 

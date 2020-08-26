@@ -2,6 +2,7 @@ Version 1.23 (not yet released)
 ------------
 
 * Added action to retrieve the Download file link
+* Made output specification for get action more generic and reusable.
 
 Version 1.22.2
 --------------

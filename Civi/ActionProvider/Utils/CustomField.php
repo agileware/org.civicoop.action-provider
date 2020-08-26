@@ -26,26 +26,7 @@ class CustomField {
    */
   public static function getTypeForCustomField($field) {
     $type = $field['data_type'];
-    switch ($type) {
-      case 'Int':
-      case 'ContactReference':
-        $type = 'Integer';
-        break;
-      case 'File':
-        $type = 'Integer';
-        break;
-      case 'Memo':
-        $type = 'Text';
-        break;
-      case 'Link':
-        $type = 'String';
-        break;
-      case 'StateProvince':
-        $type = 'String';
-        break;
-    }
-
-    return $type;
+    return Type::convertCrmType($type);
   }
 
   /**

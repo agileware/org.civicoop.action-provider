@@ -9,6 +9,7 @@ use \Civi\ActionProvider\Parameter\Specification;
 use \Civi\ActionProvider\Parameter\OptionGroupSpecification;
 use \Civi\ActionProvider\Utils\CustomField;
 
+use Civi\ActionProvider\Utils\Fields;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class GetParticipantById extends AbstractAction {
@@ -55,38 +56,7 @@ class GetParticipantById extends AbstractAction {
    */
   public function getOutputSpecification() {
     $bag = new SpecificationBag();
-    $contact_fields = civicrm_api3('Participant', 'getfields', array('action' => 'get', 'options' => array('limit' => 0)));
-    foreach($contact_fields['values'] as $field) {
-      if (empty($field['type'])) {
-        continue;
-      }
-      $type = \CRM_Utils_Type::typeToString($field['type']);
-      if (empty($type)) {
-        continue;
-      }
-      switch ($type) {
-        case 'Int':
-          $type = 'Integer';
-          break;
-      }
-      if (stripos($field['name'], 'custom_') === 0) {
-        $fieldId = substr($field['name'], 7);
-        $name = CustomField::getCustomFieldName($fieldId);
-        $title = $field['groupTitle'].' :: '.$field['title'];
-        $fieldSpec = new Specification($name, $type, $title, FALSE);
-        $fieldSpec->setApiFieldName($field['name']);
-      } else {
-        $fieldSpec = new Specification(
-          $field['name'],
-          $type,
-          $field['title'],
-          FALSE
-        );
-        $fieldSpec->setApiFieldName($field['name']);
-      }
-      $bag->addSpecification($fieldSpec);
-    }
-
+    Fields::getFieldsForEntity($bag,'Participant', 'get', array());
     return $bag;
   }
 

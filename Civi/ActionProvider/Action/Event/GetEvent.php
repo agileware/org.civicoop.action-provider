@@ -9,26 +9,27 @@ use \Civi\ActionProvider\Parameter\Specification;
 use \Civi\ActionProvider\Parameter\OptionGroupSpecification;
 use \Civi\ActionProvider\Utils\CustomField;
 
+use Civi\ActionProvider\Utils\Fields;
 use Civi\DataProcessor\DataSpecification\CustomFieldSpecification;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class GetEvent extends AbstractAction {
-  
+
   /**
    * Returns the specification of the configuration options for the actual action.
-   * 
+   *
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
     return new SpecificationBag(array());
   }
-  
+
   /**
    * Returns the specification of the configuration options for the actual action.
-   * 
+   *
    * @return SpecificationBag
    */
-  public function getParameterSpecification() { 
+  public function getParameterSpecification() {
     $specs = new SpecificationBag(array(
       /**
        * The parameters given to the Specification object are:
@@ -55,45 +56,7 @@ class GetEvent extends AbstractAction {
    */
   public function getOutputSpecification() {
     $bag = new SpecificationBag();
-    $event_fields = civicrm_api3('Event', 'getfields', array('action' => 'get', 'options' => array('limit' => 0)));
-    foreach($event_fields['values'] as $field) {
-      if (empty($field['type'])) {
-        continue;
-      }
-      $type = \CRM_Utils_Type::typeToString($field['type']);
-      if (empty($type)) {
-        continue;
-      }
-      switch ($type) {
-        case 'Int':
-          $type = 'Integer';
-          break;
-      }
-      if (stripos($field['name'], 'custom_') === 0) {
-        $customFieldId = str_replace("custom_", "", $field['name']);
-        $fieldName = CustomField::getCustomFieldName($customFieldId);
-        $fieldSpec = new Specification(
-          $fieldName,
-          $type,
-          $field['title'],
-          false
-        );
-        $fieldSpec->setApiFieldName($field['name']);
-      } else {
-        $fieldSpec = new Specification(
-          $field['name'],
-          $type,
-          $field['title'],
-          false
-        );
-      }
-      if ($fieldSpec) {
-        $bag->addSpecification($fieldSpec);
-      }
-    }
-
-    $bag->addSpecification(new Specification('address_id', 'Integer', E::ts('Address ID')));
-
+    Fields::getFieldsForEntity($bag,'Event', 'get', array());
     return $bag;
   }
 
@@ -140,5 +103,5 @@ class GetEvent extends AbstractAction {
     }
   }
 
-  
+
 }

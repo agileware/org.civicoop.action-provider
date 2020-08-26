@@ -12,6 +12,7 @@ use Civi\ActionProvider\Parameter\Specification;
 use Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Utils\CustomField;
 
+use Civi\ActionProvider\Utils\Fields;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class GetMembershipById extends AbstractAction {
@@ -46,60 +47,7 @@ class GetMembershipById extends AbstractAction {
    */
   public function getOutputSpecification() {
     $bag = new SpecificationBag();
-    $fields = civicrm_api3('Membership', 'getfields', array('api_action' => 'get'));
-    foreach($fields['values'] as $field) {
-      if (stripos($field['name'], 'custom_') !== 0) {
-        $options = null;
-        try {
-          $option_api = civicrm_api3('Membership', 'getoptions', ['field' => $field['name']]);
-          if (isset($option_api['values']) && is_array($option_api['values'])) {
-            $options = $option_api['values'];
-          }
-        } catch (\Exception $e) {
-          // Do nothing
-        }
-
-        $type = \CRM_Utils_Type::typeToString($field['type']);
-        switch ($type) {
-          case 'Int':
-          case 'ContactReference':
-            $type = 'Integer';
-            break;
-          case 'File':
-            $type = null;
-            break;
-          case 'Memo':
-            $type = 'Text';
-            break;
-          case 'Link':
-            $type = 'String';
-            break;
-        }
-
-        $spec = new Specification($field['name'], $type, $field['title'], false, null, null, $options, false);
-        $bag->addSpecification($spec);
-      }
-    }
-
-    $customGroups = civicrm_api3('CustomGroup', 'get', [
-      'extends' => 'Membership',
-      'is_active' => 1,
-      'options' => ['limit' => 0],
-    ]);
-    foreach ($customGroups['values'] as $customGroup) {
-      $customFields = civicrm_api3('CustomField', 'get', [
-        'custom_group_id' => $customGroup['id'],
-        'is_active' => 1,
-        'options' => ['limit' => 0],
-      ]);
-      foreach ($customFields['values'] as $customField) {
-        $spec = CustomField::getSpecFromCustomField($customField, $customGroup['title'] . ': ', FALSE);
-        if ($spec) {
-          $bag->addSpecification($spec);
-        }
-      }
-    }
-
+    Fields::getFieldsForEntity($bag,'Membership', 'get', array());
     return $bag;
   }
 
