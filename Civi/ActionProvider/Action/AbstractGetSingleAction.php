@@ -80,7 +80,11 @@ abstract class AbstractGetSingleAction extends AbstractAction {
   }
 
   protected function setOutputFromEntity($entity, ParameterBagInterface $output) {
+    $fieldsToSkip = $this->getSkippedFields();
     foreach($entity as $field => $value) {
+      if (in_array($field, $fieldsToSkip)) {
+        continue;
+      }
       if (stripos($field, 'custom_') !== 0) {
         $output->setParameter($field, $value);
       } else {
