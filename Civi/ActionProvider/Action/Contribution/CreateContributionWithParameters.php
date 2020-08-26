@@ -55,10 +55,27 @@ class CreateContributionWithParameters extends AbstractAction {
     if ($parameters->doesParameterExists('receive_date')) {
       $contribution_params['receive_date'] = $parameters->getParameter('receive_date');
     }
+    if ($parameters->doesParameterExists('receipt_date')) {
+      $contribution_params['receipt_date'] = $parameters->getParameter('receipt_date');
+    }
+    if ($parameters->doesParameterExists('thankyou_date')) {
+      $contribution_params['thankyou_date'] = $parameters->getParameter('thankyou_date');
+    }
+    if ($parameters->doesParameterExists('fee_amount')) {
+      $contribution_params['fee_amount'] = \CRM_Utils_Money::format((float) $parameters->getParameter('fee_amount'));
+    }
+    if ($parameters->doesParameterExists('non_deductible_amount')) {
+      $contribution_params['non_deductible_amount'] = \CRM_Utils_Money::format((float) $parameters->getParameter('non_deductible_amount'));
+    }
+    if ($parameters->doesParameterExists('net_amount')) {
+      $contribution_params['net_amount'] = \CRM_Utils_Money::format((float) $parameters->getParameter('net_amount'));
+    }
     if ($parameters->doesParameterExists('note')) {
       $contribution_params['note'] = $parameters->getParameter('note');
     }
-
+    if ($parameters->doesParameterExists('check_number')) {
+      $contribution_params['check_number'] = $parameters->getParameter('check_number');
+    }
     foreach($this->getParameterSpecification() as $spec) {
       if (stripos($spec->getName(), 'custom_')!==0) {
         continue;
@@ -100,16 +117,22 @@ class CreateContributionWithParameters extends AbstractAction {
     $specs = new SpecificationBag(array(
       new Specification('contact_id', 'Integer', E::ts('Contact ID'), true),
       new Specification('amount', 'Float', E::ts('Amount'), true),
+      new Specification('fee_amount', 'Float', E::ts('Fee Amount'), false),
+      new Specification('net_amount', 'Float', E::ts('Net Amount'), false),
+      new Specification('non_deductible_amount', 'Float', E::ts('Non-Deductible Amount'), false),
       new Specification('financial_type_id', 'Integer', E::ts('Financial Type'), TRUE, null, 'FinancialType'),
       new OptionGroupSpecification('payment_instrument', 'payment_instrument', E::ts('Payment instrument'), TRUE),
       new OptionGroupSpecification('contribution_status', 'contribution_status', E::ts('Status of contribution'), TRUE),
       new Specification('campaign_id', 'Integer', E::ts('Campaign'), false),
       new Specification('contribution_recur_id', 'Integer', E::ts('Contribution Recur ID'), false),
       new Specification('receive_date', 'Date', E::ts('Receive date'), false),
+      new Specification('receipt_date', 'Date', E::ts('Receipt Date'), false),
+      new Specification('thankyou_date', 'Date', E::ts('Thank-you Date'), false),
       new OptionGroupSpecification('currency', 'currencies_enabled', E::ts('Currency'), FALSE),
       new Specification('source', 'String', E::ts('Source'), false),
       new Specification('note', 'String', E::ts('Note'), false),
       new Specification('trxn_id', 'String', E::ts('Transaction ID'), false),
+      new Specification('check_number', 'String', E::ts('Check Number'), false),
     ));
 
     $customGroups = civicrm_api3('CustomGroup', 'get', array('extends' => 'Contribution', 'is_active' => 1, 'options' => array('limit' => 0)));
