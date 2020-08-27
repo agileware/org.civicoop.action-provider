@@ -50,6 +50,10 @@ class Actions {
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $provider->addAction('GetCountryId', '\Civi\ActionProvider\Action\Contact\GetCountryId', E::ts('Get country ID by name/ISO code'), array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $provider->addAction('GetAddressById', '\Civi\ActionProvider\Action\Contact\GetAddressById', E::ts('Address: Get address by ID'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
