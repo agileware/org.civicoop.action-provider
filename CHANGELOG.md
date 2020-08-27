@@ -2,6 +2,7 @@ Version 1.24 (not yet released)
 ------------
 
 * Added more fields to contribution creation (fee amount, check number, receipt date, etc.)
+* Added action Get Country By Id.
 
 Version 1.23
 ------------
