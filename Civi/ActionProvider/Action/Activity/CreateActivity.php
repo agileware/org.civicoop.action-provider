@@ -47,7 +47,7 @@ class CreateActivity extends AbstractAction {
       new Specification('target_contact_id', 'Integer', E::ts('Target Contact ID'), TRUE,null, null, null, true),
       new Specification('assignee_contact_id', 'Integer', E::ts('Assignee Contact ID'), FALSE, null, null, null, false),
       new Specification('activity_type_id', 'Integer', E::ts('Activity Type'), FALSE, null, null, null, FALSE),
-      new Specification('activity_date', 'Timestamp', E::ts('Activity Date'), TRUE),
+      new Specification('activity_date', 'Timestamp', E::ts('Activity Date'), FALSE),
       new Specification('id', 'Integer', E::ts('Activity ID'), false),
       new Specification('campaign_id', 'Integer', E::ts('Campaign'), false),
       $subject,
