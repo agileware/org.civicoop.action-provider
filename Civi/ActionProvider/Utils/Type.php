@@ -19,6 +19,7 @@ class Type {
         return 'Text';
         break;
       case 'StateProvince':
+      case 'Country':
       case 'Link':
         return 'String';
         break;
