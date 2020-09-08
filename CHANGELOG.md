@@ -1,4 +1,4 @@
-Version 1.24 (not yet released)
+Version 1.24
 ------------
 
 * Added more fields to contribution creation (fee amount, check number, receipt date, etc.)
