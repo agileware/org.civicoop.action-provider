@@ -1,6 +1,7 @@
 Version 1.25 (not yet released)
 ------------
 
+* Added action to validate checksum of role on a case.
 
 Version 1.24
 ------------

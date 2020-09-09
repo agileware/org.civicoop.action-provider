@@ -38,6 +38,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('CaseValidateChecksum', '\Civi\ActionProvider\Action\CiviCase\ValidateChecksum',E::ts('CiviCase: Validate checksum of role on case') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
   }
 
 }

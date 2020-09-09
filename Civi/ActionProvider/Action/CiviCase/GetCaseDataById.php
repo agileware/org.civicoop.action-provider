@@ -38,7 +38,7 @@ class GetCaseDataById extends AbstractGetSingleAction {
    * @return array
    */
   protected function getSkippedFields() {
-    return ['contacts', 'activities'];
+    return ['contacts', 'activities', 'client_id'];
   }
 
   /**
@@ -50,6 +50,11 @@ class GetCaseDataById extends AbstractGetSingleAction {
     return new SpecificationBag([
       new Specification('case_id', 'Integer', E::ts('Case ID'), true),
     ]);
+  }
+
+  protected function setOutputFromEntity($entity, ParameterBagInterface $output) {
+    parent::setOutputFromEntity($entity, $output);
+    $output->setParameter('contact_id', reset($entity['contact_id']));
   }
 
 
