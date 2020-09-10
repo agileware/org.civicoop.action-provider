@@ -1,5 +1,7 @@
-Version 1.26 (not yet released)
+Version 1.25.2
 ------------
+
+* Fixed issue with retrieving custom field with action Get Contact By ID.
 
 Version 1.25.1
 ------------
