@@ -12,6 +12,27 @@ use CRM_ActionProvider_ExtensionUtil as E;
 class ContactDataById extends AbstractGetSingleAction {
 
   /**
+   * Run the action
+   *
+   * @param ParameterBagInterface $parameters
+   *   The parameters to this action.
+   * @param ParameterBagInterface $output
+   *   The parameters this action can send back
+   *
+   * @return void
+   */
+  protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
+    parent::doAction($parameters, $output);
+    // Get custom data
+    $custom_data = civicrm_api3('CustomValue', 'get', array('entity_id' => $parameters->getParameter('contact_id'), 'entity_table' => 'civicrm_contact'));
+    foreach($custom_data['values'] as $custom) {
+      $fieldName = CustomField::getCustomFieldName($custom['id']);
+      $output->setParameter($fieldName, $custom['latest']);
+    }
+  }
+
+
+  /**
    * Returns the name of the entity.
    *
    * @return string
