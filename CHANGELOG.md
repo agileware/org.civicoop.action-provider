@@ -1,6 +1,7 @@
-Version 1.26 (not yet released)
+Version 1.25.1
 ------------
 
+* Fixed issue with action Get Contact By ID. That action was broken.
 
 Version 1.25
 ------------

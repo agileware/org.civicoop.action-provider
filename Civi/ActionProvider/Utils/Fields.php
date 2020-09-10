@@ -29,10 +29,11 @@ class Fields {
         }
 
         $type = \CRM_Utils_Type::typeToString($field['type']);
-        $type = Type::convertCrmType($type);
-
-        $spec = new Specification($field['name'], $type, $field['title'], false, null, null, $options, false);
-        $specs->addSpecification($spec);
+        if ($type) {
+          $type = Type::convertCrmType($type);
+          $spec = new Specification($field['name'], $type, $field['title'], FALSE, NULL, NULL, $options, FALSE);
+          $specs->addSpecification($spec);
+        }
       }
     }
 
