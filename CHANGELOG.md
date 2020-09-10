@@ -1,7 +1,9 @@
-Version 1.25 (not yet released)
+Version 1.25
 ------------
 
 * Added action to validate checksum of role on a case.
+* Added action to subscribe/unsubsribe a contact to a set of groups.
+* Added action to retrieve the list subscribed groups of a contact.
 
 Version 1.24
 ------------
@@ -10,8 +12,6 @@ Version 1.24
 * Added action Get Country By Id.
 * Make Activity Date optional - defaults to 'now'
 * Fixed issue with country custom fields.
-* Added action to subscribe/unsubsribe a contact to a set of groups.
-* Added action to retrieve the list subscribed groups of a contact.
 
 Version 1.23
 ------------
