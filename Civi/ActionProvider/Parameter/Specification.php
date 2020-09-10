@@ -305,6 +305,10 @@ class Specification implements SpecificationInterface {
    */
   public function validate($value) {
     if ($this->isMultiple()) {
+      if (!is_array($value) && !empty($this->fkEntity)) {
+        // Value comes from an entity ref and is stored as comma separated string.
+        $value = explode(",", $value);
+      }
       if (is_array($value)) {
         foreach ($value as $v) {
           if ($v && \CRM_Utils_Type::validate($v, $this->getDataType(), FALSE) === NULL) {

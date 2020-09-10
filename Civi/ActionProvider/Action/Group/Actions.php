@@ -30,6 +30,14 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('UpdateGroupSubscriptions', '\Civi\ActionProvider\Action\Group\UpdateGroupSubscriptions', E::ts('Contact: Subscribe/Unsubscribe to groups.'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $provider->addAction('GetGroupSubscriptions', '\Civi\ActionProvider\Action\Group\GetGroupSubscriptions', E::ts('Contact: Get list of subscribed groups.'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $provider->addAction('CreateGroup', '\Civi\ActionProvider\Action\Group\Create', E::ts('Group: Create or update'), array(
       AbstractAction::DATA_MANIPULATION_TAG,
       'group',

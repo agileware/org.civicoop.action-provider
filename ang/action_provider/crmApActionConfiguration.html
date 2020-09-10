@@ -31,7 +31,7 @@
         <div crm-ui-field="spec.crmUiField"
              ng-if="spec.fk_entity">
             <input class="huge"
-                    crm-entityref="{entity: spec.fk_entity, select: {allowClear: true, placeholder: spec.title, minimumInputLength: 0}}"
+                    crm-entityref="{entity: spec.fk_entity, select: {allowClear: true, placeholder: spec.title, minimumInputLength: 0, multiple: spec.multiple}}"
                     crm-ui-id="{{spec.name}}"
                     name="{{spec.name}}"
                     ng-model="configuration[spec.name]"

@@ -48,7 +48,7 @@ class MapValue extends AbstractAction {
    */
   public function getParameterSpecification() {
     return new SpecificationBag([
-        new Specification('input_value', 'String', E::ts('Input Value'), true)
+        new Specification('input_value', 'String', E::ts('Input Value'), true, null, null, null, true)
     ]);
   }
 
@@ -82,6 +82,21 @@ class MapValue extends AbstractAction {
       throw new ExecutionException("Couldn't parse mapping JSON");
     }
 
+
+    if (is_array($value)) {
+      $mappedValue = [];
+      foreach($value as $v) {
+        $mappedValue[] = $this->mapValue($v, $mapping);
+      }
+    } else {
+      $mappedValue = $this->mapValue($value, $mapping);
+    }
+
+    // pass new value out
+    $output->setParameter('value', $mappedValue);
+  }
+
+  protected function mapValue($value, $mapping) {
     if (isset($mapping[$value])) {
       // value was found => map
       $value = $mapping[$value];
@@ -99,8 +114,7 @@ class MapValue extends AbstractAction {
           break;
       }
     }
-
-    // pass new value out
-    $output->setParameter('value', $value);
+    return $value;
   }
+
 }

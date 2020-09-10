@@ -10,6 +10,8 @@ Version 1.24
 * Added action Get Country By Id.
 * Make Activity Date optional - defaults to 'now'
 * Fixed issue with country custom fields.
+* Added action to subscribe/unsubsribe a contact to a set of groups.
+* Added action to retrieve the list subscribed groups of a contact.
 
 Version 1.23
 ------------
