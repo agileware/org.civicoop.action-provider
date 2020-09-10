@@ -1,3 +1,7 @@
+Version 1.26 (not yet released)
+------------
+
+
 Version 1.25
 ------------
 
