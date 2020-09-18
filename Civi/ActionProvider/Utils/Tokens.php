@@ -21,9 +21,21 @@ class Tokens {
   public static function replaceTokens($contactId, $message, $contactData=array()) {
     $tokenCategories = self::getTokenCategories();
     $messageTokens = \CRM_Utils_Token::getTokens($message);
-
-    $contact_params = [['contact_id', '=', $contactId, 0, 0]];
-    list($contact, $_) = \CRM_Contact_BAO_Query::apiQuery($contact_params);
+    $returnProperties = [
+      'sort_name' => 1,
+      'email' => 1,
+      'address' => 1,
+      'do_not_email' => 1,
+      'is_deceased' => 1,
+      'on_hold' => 1,
+      'display_name' => 1,
+    ];
+    if (is_array($messageTokens['contact'])) {
+      foreach ($messageTokens['contact'] as $prop) {
+        $returnProperties[$prop] = 1;
+      }
+    }
+    list($contact,) = \CRM_Utils_Token::getTokenDetails([$contactId], $returnProperties, FALSE, FALSE, NULL, $messageTokens);
     $contact = reset($contact);
     foreach($contactData as $key => $val) {
       $contact[$key] = $val;

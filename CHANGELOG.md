@@ -1,6 +1,11 @@
 Version 1.26 (not yet released)
 ------------
 
+Version 1.25.4
+------------
+
+* Fixed issue with tokens and send e-mail.
+
 Version 1.25.3
 ------------
 
