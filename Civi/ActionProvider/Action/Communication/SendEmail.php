@@ -42,7 +42,14 @@ class SendEmail extends AbstractAction {
       $mailer->setActivityId($parameters->getParameter('activity_id'));
     }
 
-    $mailer->send(array($parameters->getParameter('contact_id')), $parameters->getParameter('subject'), $parameters->getParameter('body_text'), $parameters->getParameter('body_html'));
+    $contact_id = array($parameters->getParameter('contact_id'));
+    $subject = $parameters->getParameter('subject');
+    $body_text = $parameters->getParameter('body_text');
+    $body_html = $parameters->getParameter('body_html');
+    $extra_data = array();
+    $cc = $this->configuration->getParameter('cc');
+    $bcc = $this->configuration->getParameter('bcc');
+    $mailer->send($contact_id, $subject, $body_text, $body_html, $extra_data, $cc, $bcc);
   }
 
   /**
@@ -58,6 +65,8 @@ class SendEmail extends AbstractAction {
     );
     return new SpecificationBag(array(
       new Specification('use_sender_as', 'String', E::ts('Use Sender Contact ID as'), true, 'none', null, $sender_options),
+      new Specification('cc', 'String', E::ts('CC'), false),
+      new Specification('bcc', 'String', E::ts('BCC'), false),
     ));
   }
 

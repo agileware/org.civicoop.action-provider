@@ -86,11 +86,13 @@ class SendEmail {
    * @param $body_text
    * @param $body_html
    * @param bool $extra_data
+   * @param false|string $cc
+   * @param false|string $bcc
    *
    * @return array
    * @throws \Exception
    */
-  public function send($contactIds, $subject, $body_text, $body_html, $extra_data=false) {
+  public function send($contactIds, $subject, $body_text, $body_html, $extra_data=false, $cc=false, $bcc=false) {
     $from = \CRM_Core_BAO_Domain::getNameAndEmail();
     $from = "$from[0] <$from[1]>";
     if ($this->from_email && $this->from_name) {
@@ -164,6 +166,12 @@ class SendEmail {
         'toEmail' => $email,
         'subject' => $subject,
       );
+      if ($cc) {
+        $mailParams['cc'] = $cc;
+      }
+      if ($bcc) {
+        $mailParams['bcc'] = $bcc;
+      }
 
       if (!$html || $contact['preferred_mail_format'] == 'Text' || $contact['preferred_mail_format'] == 'Both') {
         // render the &amp; entities in text mode, so that the links work
