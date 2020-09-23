@@ -1,4 +1,4 @@
-Version 1.26 (not yet released)
+Version 1.26
 ------------
 
 * Added CC/BCC to Send E-mail adn Send PDF actions.
