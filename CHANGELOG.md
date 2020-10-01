@@ -1,6 +1,8 @@
 Version 1.28 (not yet released)
 ------------
 
+* Added case, activity and contribution parameter to send pdf and create pdf action.
+
 Version 1.27
 ------------
 

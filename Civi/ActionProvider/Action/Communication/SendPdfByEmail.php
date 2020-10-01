@@ -35,6 +35,15 @@ class SendPdfByEmail extends AbstractAction {
     if ($participantId) {
       $contact['extra_data']['participant']['id'] = $participantId;
     }
+    if ($parameters->doesParameterExists('case_id')) {
+      $contact['case_id'] = $parameters->getParameter('case_id');
+    }
+    if ($parameters->doesParameterExists('contribution_id')) {
+      $contact['contribution_id'] = $parameters->getParameter('contribution_id');
+    }
+    if ($parameters->doesParameterExists('activity_id')) {
+      $contact['activity_id'] = $parameters->getParameter('activity_id');
+    }
 
     $processedMessage = Tokens::replaceTokens($contactId, $pdf_message, $contact);
     if ($processedMessage === false) {

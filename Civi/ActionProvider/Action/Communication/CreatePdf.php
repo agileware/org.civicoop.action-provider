@@ -37,6 +37,15 @@ class CreatePdf extends AbstractAction {
     if ($participantId) {
       $contact['extra_data']['participant']['id'] = $participantId;
     }
+    if ($parameters->doesParameterExists('case_id')) {
+      $contact['case_id'] = $parameters->getParameter('case_id');
+    }
+    if ($parameters->doesParameterExists('contribution_id')) {
+      $contact['contribution_id'] = $parameters->getParameter('contribution_id');
+    }
+    if ($parameters->doesParameterExists('activity_id')) {
+      $contact['activity_id'] = $parameters->getParameter('activity_id');
+    }
 
     $processedMessage = Tokens::replaceTokens($contactId, $message, $contact);
     if ($processedMessage === false) {
@@ -182,6 +191,9 @@ class CreatePdf extends AbstractAction {
     return new SpecificationBag(array(
       new Specification('contact_id', 'Integer', E::ts('Contact ID'), true),
       new Specification('message', 'String', E::ts('Message'), true),
+      new Specification('activity_id', 'Integer', E::ts('Activity ID'), false),
+      new Specification('contribution_id', 'Integer', E::ts('Contribution ID'), false),
+      new Specification('case_id', 'Integer', E::ts('Case ID'), false),
       new Specification('participant_id', 'Integer', E::ts('Participant ID'), false),
     ));
   }
