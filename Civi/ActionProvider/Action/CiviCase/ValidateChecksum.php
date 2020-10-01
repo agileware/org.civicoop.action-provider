@@ -79,7 +79,8 @@ class ValidateChecksum extends AbstractAction {
       $relationshipFindParams = array();
       $relationshipFindParams['relationship_type_id'] = $type_id;
       $relationshipFindParams['is_active'] = '1';
-      $relationshipFindParams['case_id'] = $case_id;
+      $relationshipFindParams['case_id'] = $case['id'];
+      $relationshipFindParams['contact_id_b'] = $parameters->getParameter('cid');
       $relationshipFindParams['options']['sort']['contact_id_b ASC'];
       $relationshipFindParams['options']['offset'] = 0;
       $relationshipFindParams['options']['limit'] = 1;

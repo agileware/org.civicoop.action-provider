@@ -1,6 +1,8 @@
 Version 1.27 (not yet released)
 ------------
 
+* Fixed issue with Validate Checksum of Role on case when a case has multiple persons with the same role.
+
 Version 1.26
 ------------
 
