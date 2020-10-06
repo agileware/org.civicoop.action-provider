@@ -1,5 +1,7 @@
-Version 1.29 (not yet released)
+Version 1.29
 ------------
+
+* Fixed issue with tokens in CreatePDF action.
 
 Version 1.28
 ------------
