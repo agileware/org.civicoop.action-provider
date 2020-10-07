@@ -1,5 +1,7 @@
-Version 1.30 (not yet released)
+Version 1.30
 ------------
+
+* Added participant to Send Email action.
 
 Version 1.29
 ------------
