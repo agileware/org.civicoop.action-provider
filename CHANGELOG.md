@@ -1,4 +1,4 @@
-Version 1.31 (not yet released)
+Version 1.31
 ------------
 
 * Added Exact Match option to action 'Contact: Get Individual by name and email'.
