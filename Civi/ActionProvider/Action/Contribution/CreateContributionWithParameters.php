@@ -76,6 +76,7 @@ class CreateContributionWithParameters extends AbstractAction {
     if ($parameters->doesParameterExists('check_number')) {
       $contribution_params['check_number'] = $parameters->getParameter('check_number');
     }
+    $contribution_params['skipLineItem'] = $this->configuration->getParameter('skipLineItem') ? true : false;
     foreach($this->getParameterSpecification() as $spec) {
       if (stripos($spec->getName(), 'custom_')!==0) {
         continue;
@@ -105,7 +106,9 @@ class CreateContributionWithParameters extends AbstractAction {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
-    return new SpecificationBag(array());
+    return new SpecificationBag(array(
+      new Specification('skipLineItem', 'Boolean', E::ts('Skip Line Item'), true, false),
+    ));
   }
 
   /**

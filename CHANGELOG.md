@@ -2,6 +2,8 @@ Version 1.31 (not yet released)
 ------------
 
 * Added Exact Match option to action 'Contact: Get Individual by name and email'.
+* Added action: Participant: Send Registration Confirmation
+* Added option to skip creation of line items at the create contribution action.
 
 Version 1.30
 ------------

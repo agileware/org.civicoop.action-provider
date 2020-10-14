@@ -69,6 +69,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('SendParticipantRegistrationMail', '\Civi\ActionProvider\Action\Event\SendParticipantRegistrationMail', E::ts('Participant: Send Registration Confirmation'), array(
+      AbstractAction::SEND_MESSAGES_TO_CONTACTS,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ));
     $provider->addAction('SendEmailToParticipants', '\Civi\ActionProvider\Action\Event\SendEmailToParticipants', E::ts('Participant: Send e-mail to participants'), array(
       AbstractAction::SEND_MESSAGES_TO_CONTACTS,
     ));

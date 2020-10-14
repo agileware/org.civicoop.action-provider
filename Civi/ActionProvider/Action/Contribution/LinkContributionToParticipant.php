@@ -29,6 +29,22 @@ class LinkContributionToParticipant extends AbstractAction {
     $apiParams['contribution_id'] = $parameters->getParameter('contribution_id');
     $apiParams['participant_id'] = $parameters->getParameter('participant_id');
     civicrm_api3('ParticipantPayment', 'create', $apiParams);
+
+    if ($this->configuration->getParameter('addLineItems')) {
+      $contribution = civicrm_api3('Contribution', 'getsingle', ['id' => $parameters->getParameter('contribution_id')]);
+      $participant = civicrm_api3('Participant', 'getsingle', ['id' => $parameters->getParameter('participant_id')]);
+      $event = civicrm_api3('Event', 'getsingle', ['id' => $participant['event_id']]);
+      $lineItemParams['entity_table'] = 'civicrm_participant';
+      $lineItemParams['entity_id'] = $parameters->getParameter('participant_id');
+      $lineItemParams['participant_count'] = 1;
+      $lineItemParams['label'] = $event['title'];
+      $lineItemParams['contribution_id'] = $parameters->getParameter('contribution_id');
+      $lineItemParams['qty'] = 1;
+      $lineItemParams['unit_price'] = $contribution['total_amount'];
+      $lineItemParams['line_total'] = $contribution['total_amount'];
+      $lineItemParams['financial_type_id'] = $contribution['financial_type_id'];
+      $result = civicrm_api3('LineItem', 'create', $lineItemParams);
+    }
   }
 
   /**
@@ -38,7 +54,9 @@ class LinkContributionToParticipant extends AbstractAction {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
-    return new SpecificationBag(array());
+    return new SpecificationBag(array(
+      new Specification('addLineItems', 'Boolean', E::ts('Add Line Item'), true, false),
+    ));
   }
 
   /**

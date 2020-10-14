@@ -76,6 +76,7 @@ class CreateContribution extends AbstractAction {
     if ($parameters->doesParameterExists('check_number')) {
       $contribution_params['check_number'] = $parameters->getParameter('check_number');
     }
+    $contribution_params['skipLineItem'] = $this->configuration->getParameter('skipLineItem') ? true : false;
     foreach($this->getParameterSpecification() as $spec) {
       if (stripos($spec->getName(), 'custom_')!==0) {
         continue;
@@ -109,6 +110,7 @@ class CreateContribution extends AbstractAction {
       new Specification('financial_type_id', 'Integer', E::ts('Financial Type'), TRUE, null, 'FinancialType'),
       new OptionGroupSpecification('payment_instrument', 'payment_instrument', E::ts('Payment instrument'), TRUE),
       new OptionGroupSpecification('contribution_status', 'contribution_status', E::ts('Status of contribution'), TRUE),
+      new Specification('skipLineItem', 'Boolean', E::ts('Skip Line Item'), true, false),
     ));
   }
 
