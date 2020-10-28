@@ -81,6 +81,7 @@ abstract class AbstractGetSingleAction extends AbstractAction {
 
   protected function setOutputFromEntity($entity, ParameterBagInterface $output) {
     $fieldsToSkip = $this->getSkippedFields();
+    $entity = $this->normalizeCustomValues($entity);
     foreach($entity as $field => $value) {
       if (in_array($field, $fieldsToSkip)) {
         continue;
@@ -91,14 +92,34 @@ abstract class AbstractGetSingleAction extends AbstractAction {
         $custom_id = substr($field, 7);
         if (is_numeric($custom_id)) {
           $fieldName = CustomField::getCustomFieldName($custom_id);
-          if (is_array($value)) {
-            // The keys of the array contains the values of the selected options.
-            $value = array_keys($value);
-          }
           $output->setParameter($fieldName, $value);
         }
       }
     }
+  }
+
+  /**
+   * This function checks for custom_xx_id and sets it to custom_xx.
+   *
+   * In some cases the civicrm api returns custom values with a looked up value instead
+   * of their ID.
+   * In the action provider we dont want to deal with the looked up values.
+   * @param $entity
+   */
+  protected function normalizeCustomValues($entity) {
+    foreach($entity as $field => $value) {
+      if (stripos($field, 'custom_') !== 0) {
+        // No a custom field
+        continue;
+      }
+      $custom_id = substr($field, 7);
+      if (substr($custom_id, -3) === '_id') {
+        $custom_id = substr($custom_id, 0, -3);
+        unset($entity[$field]);
+        $entity['custom_'.$custom_id] = $value;
+      }
+    }
+    return $entity;
   }
 
   /**

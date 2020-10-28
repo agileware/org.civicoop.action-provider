@@ -59,5 +59,18 @@ class GetEvent extends AbstractGetSingleAction {
     return $specs;
   }
 
+  protected function setOutputFromEntity($entity, ParameterBagInterface $output) {
+    parent::setOutputFromEntity($entity, $output);
+    try {
+      if (!empty($entity['loc_block_id'])) {
+        $loc = civicrm_api3('LocBlock', 'getsingle', ['id' => $entity['loc_block_id']]);
+        $output->setParameter('address_id', $loc['address_id']);
+      }
+    } catch (\Exception $e) {
+      // Do nothing
+    }
+
+  }
+
 
 }
