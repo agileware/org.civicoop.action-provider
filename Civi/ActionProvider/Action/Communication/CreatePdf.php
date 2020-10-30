@@ -62,7 +62,7 @@ class CreatePdf extends AbstractAction {
       $this->zip->addFromString($filenameWithContactId, $pdfContents);
     }
 
-    $file = $this->createActivity($contactId, $message, $pdfContents, $fileNameWithoutContactId);
+    $file = $this->createActivity($contactId, $message, $pdfContents, $fileNameWithoutContactId, $parameters->getParameter('subject'));
 
     $output->setParameter('filename', $file['name']);
     $output->setParameter('url', $file['url']);
@@ -74,16 +74,18 @@ class CreatePdf extends AbstractAction {
    * @param $message
    * @param $pdfContents
    * @param $filename
+   * @param $subject
    * @return array
    *   Returns the file array
    */
-  protected function createActivity($contactId, $message, $pdfContents, $filename) {
+  protected function createActivity($contactId, $message, $pdfContents, $filename, $subject='') {
     $activityTypeId = $this->getPdfLetterActivityTypeId();
     $activityParams = array(
       'activity_type_id' => $activityTypeId,
       'activity_date_time' => date('YmdHis'),
       'details' => $message,
       'target_contact_id' => $contactId,
+      'subject' => $subject,
     );
     $result = civicrm_api3('Activity', 'create', $activityParams);
     $attachment = civicrm_api3('Attachment', 'create', array(
@@ -195,6 +197,7 @@ class CreatePdf extends AbstractAction {
       new Specification('contribution_id', 'Integer', E::ts('Contribution ID'), false),
       new Specification('case_id', 'Integer', E::ts('Case ID'), false),
       new Specification('participant_id', 'Integer', E::ts('Participant ID'), false),
+      new Specification('subject', 'String', E::ts('Subject (for the activity)'), false),
     ));
   }
 

@@ -1,5 +1,7 @@
-Version 1.33 (not yet released)
+Version 1.33
 ------------
+
+* Create PDF action: added subject parameter for the created activity.
 
 Version 1.32
 ------------
