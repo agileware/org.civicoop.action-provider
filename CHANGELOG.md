@@ -1,4 +1,4 @@
-Version 1.34 (not yet released)
+Version 1.34
 ------------
 
 * Added condition for Comparing Parameter value (greater than, lesser then etc.).
