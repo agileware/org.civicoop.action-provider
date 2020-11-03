@@ -1,6 +1,8 @@
 Version 1.34 (not yet released)
 ------------
 
+* Added condition for Comparing Parameter value (greater than, lesser then etc.).
+
 Version 1.33
 ------------
 
