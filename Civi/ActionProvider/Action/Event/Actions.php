@@ -30,7 +30,11 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('CreateOrUpdateParticipantWithDynamicStatus', '\Civi\ActionProvider\Action\Event\CreateOrUpdateParticipantWithDynamicStatus', E::ts('Participant: Register contact for an event (with status as [arameter)') , array(
+    $provider->addAction('CreateOrUpdateParticipantWithDynamicStatus', '\Civi\ActionProvider\Action\Event\CreateOrUpdateParticipantWithDynamicStatus', E::ts('Participant: Register contact for an event (with status as parameter)') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $provider->addAction('CreateOrUpdateParticipantWithDynamicStatusRole', '\Civi\ActionProvider\Action\Event\CreateOrUpdateParticipantWithDynamicStatusRole', E::ts('Participant: Register contact for an event (with status and role as parameter)') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
