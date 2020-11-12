@@ -1,4 +1,4 @@
-Version 1.35 (not yet released)
+Version 1.35
 ------------
 
 * Added action "Participant: Register contact for an event (with status and role as parameter)"
