@@ -176,6 +176,8 @@ class Provider {
       }
       $this->batchActions[$batchName][$name]->getConfiguration()->fromArray($configuration);
       $this->batchActions[$batchName][$name]->initializeBatch($batchName);
+    } else {
+      $this->batchActions[$batchName][$name]->getConfiguration()->fromArray($configuration);
     }
     return $this->batchActions[$batchName][$name];
   }
