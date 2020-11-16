@@ -1,6 +1,9 @@
 Version 1.36 (not yet released)
 ------------
 
+* Added condition configuration for quick form implementation
+* Added mapping configuration for quick form implementation
+
 Version 1.35
 ------------
 
