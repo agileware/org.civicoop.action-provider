@@ -65,6 +65,7 @@ class SendEmail {
       if ($senderContact['email']) {
         if ($useAsReplyTo) {
           $this->reply_to_email = $senderContact['email'];
+          $this->from_name = $senderContact['display_name'];
         }
         if ($useAsFrom) {
           $this->from_email = $senderContact['email'];
@@ -94,11 +95,14 @@ class SendEmail {
    */
   public function send($contactIds, $subject, $body_text, $body_html, $extra_data=false, $cc=false, $bcc=false) {
     $from = \CRM_Core_BAO_Domain::getNameAndEmail();
-    $from = "$from[0] <$from[1]>";
     if ($this->from_email && $this->from_name) {
       $from = $this->from_name."<".$this->from_email.">";
     } elseif ($this->from_email) {
       $from = $this->from_email;
+    } elseif ($this->from_name) {
+      $from = $this->from_name ." <".$from[1].">";
+    } else {
+      $from = "$from[0] <$from[1]>";
     }
 
     $result     = NULL;
@@ -180,7 +184,7 @@ class SendEmail {
       if ($html && ($contact['preferred_mail_format'] == 'HTML' || $contact['preferred_mail_format'] == 'Both')) {
         $mailParams['html'] = $html;
       }
-      if ($this->from_email) {
+      if ($this->reply_to_email) {
         $mailParams['replyTo'] = $this->reply_to_email;
       }
 

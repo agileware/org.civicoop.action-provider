@@ -28,7 +28,7 @@ class SendEmail extends AbstractAction {
     $mailer = new \Civi\ActionProvider\Utils\SendEmail();
     if ($this->configuration->getParameter('use_sender_as') == 'from' && $parameters->doesParameterExists('sender_contact_id')) {
       $mailer->setSenderContactId($parameters->getParameter('sender_contact_id'), false, true);
-    } elseif ($this->configuration->getParameter('use_sender_as') == 'from' && $parameters->doesParameterExists('sender_contact_id')) {
+    } elseif ($this->configuration->getParameter('use_sender_as') == 'reply_to' && $parameters->doesParameterExists('sender_contact_id')) {
       $mailer->setSenderContactId($parameters->getParameter('sender_contact_id'), true, false);
     }
 

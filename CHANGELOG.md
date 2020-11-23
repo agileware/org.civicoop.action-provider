@@ -1,6 +1,7 @@
 Version 1.36 (not yet released)
 ------------
 
+* Fixed issue with reply_to email addresses on send e-mail action.
 * Added condition configuration for quick form implementation
 * Added mapping configuration for quick form implementation
 
