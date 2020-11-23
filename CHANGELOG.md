@@ -1,4 +1,4 @@
-Version 1.36 (not yet released)
+Version 1.36
 ------------
 
 * Fixed issue with reply_to email addresses on send e-mail action.
