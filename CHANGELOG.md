@@ -1,4 +1,4 @@
-Version 1.37 (not yet released)
+Version 1.37
 ------------
 
 * Added action for replacing tokens in an HTML text.
