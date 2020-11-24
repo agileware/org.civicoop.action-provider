@@ -5,6 +5,7 @@ namespace Civi\ActionProvider\Utils\UserInterface;
 use \Civi\ActionProvider\Action\AbstractAction;
 
 use Civi\ActionProvider\Condition\AbstractCondition;
+use Civi\ActionProvider\Parameter\WysiwygSpecification;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 /**
@@ -32,6 +33,8 @@ class AddConditionConfigToQuickForm {
 		if (!$prefix) {
 		  $prefix = get_class($condition);
     }
+    $actionProviderElementPreHtml = array();
+    $actionProviderElementPostHtml = array();
     $actionProviderElementDescriptions = array();
 		$elementNames[$prefix] = array();
 		foreach($condition->getConfigurationSpecification() as $config_field) {
@@ -63,6 +66,27 @@ class AddConditionConfigToQuickForm {
 				}
 				$form->add('select', $field_name, $config_field->getTitle(), $options, $config_field->isRequired(), $attributes);
 				$elementNames[$prefix][] = $field_name;
+      } elseif ($config_field instanceof WysiwygSpecification && $config_field->getWysiwyg()) {
+        $attributes = ['cols' => '80', 'rows' => '8', 'onkeyup' => "return verify(this)", 'preset' => 'civimail'];
+        $form->add('wysiwyg', $field_name, $config_field->getTitle(), $attributes, $config_field->isRequired());
+        $elementNames[$prefix][] = $field_name;
+        $actionProviderElementPreHtml[$field_name] = '<div style="overflow: hidden;"><div style="float: right;"><input class="crm-token-selector big" id="token'.$field_name.'" data-field="'.$field_name.'" /></div></div>';
+        $actionProviderElementPreHtml[$field_name] .= "
+        <script type=\"text/javascript\">
+            CRM.$(function($) {
+              var token{$field_name} = ".json_encode($config_field->getAvailableTokens()).";
+              $('input#token{$field_name}')
+              .addClass('crm-action-menu fa-code')
+              .change(function() {
+                CRM.wysiwyg.insert('#{$field_name}', $(this).val());
+                $(this).select2('val', '');
+              })
+              .crmSelect2({
+                  data: token{$field_name},
+                  placeholder: '".E::ts('Tokens')."'
+               });
+            });
+         </script>";
 			} else {
 				$attributes['class'] .= ' huge';
 				$form->add('text', $field_name, $config_field->getTitle(), $attributes, $config_field->isRequired());
@@ -72,6 +96,8 @@ class AddConditionConfigToQuickForm {
 		}
 		$form->assign('actionProviderElementNames', $elementNames);
 		$form->assign('actionProviderElementDescriptions', $actionProviderElementDescriptions);
+    $form->assign('actionProviderElementPreHtml', $actionProviderElementPreHtml);
+    $form->assign('actionProviderElementPostHtml', $actionProviderElementPostHtml);
 	}
 
 	/**

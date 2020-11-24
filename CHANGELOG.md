@@ -1,6 +1,10 @@
 Version 1.37 (not yet released)
 ------------
 
+* Added action for replacing tokens in an HTML text.
+* Added functionality to use wysiwyg editor as a configuration
+* Made configuration of an action more generic when used with search action designer (or other quick form implementations)
+
 Version 1.36
 ------------
 

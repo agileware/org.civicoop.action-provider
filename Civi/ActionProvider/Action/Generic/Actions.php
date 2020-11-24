@@ -46,6 +46,9 @@ class Actions {
     $provider->addAction('DownloadFileLink', '\Civi\ActionProvider\Action\Generic\DownloadFileLink', E::ts('Other: Link to download file'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_RETRIEVAL_TAG
     ));
+    $provider->addAction('ReplaceTokensInHTML', '\Civi\ActionProvider\Action\Generic\ReplaceTokensInHTML', E::ts('Other: Replace tokens in HTML'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG
+    ));
   }
 
 }

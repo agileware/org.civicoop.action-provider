@@ -4,21 +4,21 @@
 // http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_angularModules
 
 return array (
-  'js' => 
+  'js' =>
   array (
     0 => 'ang/action_provider.js',
     1 => 'ang/action_provider/*.js',
     2 => 'ang/action_provider/*/*.js',
   ),
-  'css' => 
+  'css' =>
   array (
     0 => 'ang/action_provider.css',
   ),
-  'partials' => 
+  'partials' =>
   array (
     0 => 'ang/action_provider',
   ),
-  'settings' => 
+  'settings' =>
   array (
   ),
 );

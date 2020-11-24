@@ -40,7 +40,22 @@
             <div class="description" ng-bind-html="spec.description" ng-if="spec.description"></div>
         </div>
         <div crm-ui-field="spec.crmUiField"
-             ng-if="!spec.options && !spec.fk_entity">
+             ng-if="!spec.options && !spec.fk_entity && spec.wysiwyg">
+            <div style="overflow: hidden;"><div style="float: right;">
+              <crm-ap-token tokens="{{spec.available_tokens}}" on-select="$broadcast('insert:{{spec.name}}', token.name)" tabindex="-1"></crm-ap-token>
+            </div></div>
+            <textarea
+              crm-ui-id="{{spec.name}}"
+              crm-ui-richtext=""
+              crm-ui-insert-rx="insert:{{spec.name}}"
+              name="{{spec.name}}"
+              ng-model="configuration[spec.name]"
+              data-preset="civimail"
+            ></textarea>
+          <div class="description" ng-bind-html="spec.description" ng-if="spec.description"></div>
+        </div>
+        <div crm-ui-field="spec.crmUiField"
+             ng-if="!spec.options && !spec.fk_entity && !spec.wysiwyg">
             <input
                     class="huge crm-form-text"
                     crm-ui-id="{{spec.name}}"
