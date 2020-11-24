@@ -50,7 +50,7 @@ class ReplaceTokensInHTML extends AbstractAction {
     if ($parameters->doesParameterExists('html')) {
       $html = $parameters->getParameter('html');
     } elseif ($this->configuration->doesParameterExists('html')) {
-      $html = $this->configuration->getParameter('html');
+      $html = html_entity_decode($this->configuration->getParameter('html'));
     }
 
     $html = Tokens::replaceTokens($contactId, $html, $contactData);
