@@ -59,7 +59,7 @@ class Tokens {
     }
     if (isset($contactData['activity_id']) && !empty($contactData['activity_id'])) {
       $activity = civicrm_api3('Activity', 'getsingle', ['id' => $contactData['activity_id']]);
-      $tokenHtml = CRM_Utils_Token::replaceEntityTokens('activity', $activity, $tokenHtml, $messageTokens);
+      $tokenHtml = \CRM_Utils_Token::replaceEntityTokens('activity', $activity, $tokenHtml, $messageTokens);
     }
     \CRM_Utils_Token::replaceGreetingTokens($tokenHtml, NULL, $contactId);
 
