@@ -1,6 +1,8 @@
 Version 1.38 (not yet released)
 ------------
 
+* Performance improvement by caching the custom fields in a code file and by providing a mechanism to cache configs.
+
 Version 1.37.1
 ------------
 

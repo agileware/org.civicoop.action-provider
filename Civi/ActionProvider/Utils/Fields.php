@@ -6,6 +6,7 @@
 
 namespace Civi\ActionProvider\Utils;
 
+use Civi\ActionProvider\ConfigContainer;
 use Civi\ActionProvider\Parameter\Specification;
 use Civi\ActionProvider\Parameter\SpecificationBag;
 
@@ -37,21 +38,18 @@ class Fields {
       }
     }
 
-    $customGroups = civicrm_api3('CustomGroup', 'get', [
-      'extends' => $entity,
-      'is_active' => 1,
-      'options' => ['limit' => 0],
-    ]);
-    foreach ($customGroups['values'] as $customGroup) {
-      $customFields = civicrm_api3('CustomField', 'get', [
-        'custom_group_id' => $customGroup['id'],
-        'is_active' => 1,
-        'options' => ['limit' => 0],
-      ]);
-      foreach ($customFields['values'] as $customField) {
-        $spec = CustomField::getSpecFromCustomField($customField, $customGroup['title'] . ': ', FALSE);
-        if ($spec) {
-          $specs->addSpecification($spec);
+    $config = ConfigContainer::getInstance();
+    $customGroups = $config->getParameter('custom_groups_per_extends');
+    foreach ($customGroups[$entity] as $customGroup) {
+      if ($customGroup['is_active']) {
+        $customFields = $config->getParameter('custom_fields_per_group');
+        foreach ($customFields[$customGroup['id']] as $customField) {
+          if ($customField['is_active']) {
+            $spec = CustomField::getSpecFromCustomField($customField, $customGroup['title'] . ': ', FALSE);
+            if ($spec) {
+              $specs->addSpecification($spec);
+            }
+          }
         }
       }
     }

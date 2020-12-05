@@ -20,6 +20,20 @@ function action_provider_civicrm_container($container) {
 }
 
 /**
+ * Implements hook_civicrm_post().
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_post/
+ *
+ * @param $op
+ * @param $objectName
+ * @param $objectId
+ * @param $objectRef
+ */
+function action_provider_civicrm_post($op, $objectName, $objectId, &$objectRef) {
+  \Civi\ActionProvider\ConfigContainer::postHook($op, $objectName, $objectId, $objectRef);
+}
+
+/**
  * Implements hook_civicrm_config().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config
