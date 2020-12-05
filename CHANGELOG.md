@@ -1,4 +1,4 @@
-Version 1.38 (not yet released)
+Version 1.38
 ------------
 
 * Performance improvement by caching the custom fields in a code file and by providing a mechanism to cache configs.
