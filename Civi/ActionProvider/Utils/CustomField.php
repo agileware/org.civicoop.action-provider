@@ -3,7 +3,6 @@
 namespace Civi\ActionProvider\Utils;
 
 use Civi\ActionProvider\ConfigContainer;
-use Civi\ActionProvider\Parameter\ParameterBag;
 use Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\Specification;
 use \Civi\ActionProvider\Parameter\OptionGroupSpecification;
@@ -11,17 +10,11 @@ use \Civi\ActionProvider\Parameter\OptionGroupSpecification;
 
 use Civi\ActionProvider\Parameter\SpecificationBag;
 use Civi\ActionProvider\Parameter\SpecificationGroup;
-use CRM_ActionProvider_ExtensionUtil as E;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Helper class to add a configuration specification from custom field
  */
 class CustomField {
-
-  static $customGroupNames = array();
-
-  static $customFields = array();
 
   /**
    * Gets the data type of the custom field.
@@ -38,9 +31,7 @@ class CustomField {
    * @return string
    */
   public static function getCustomGroupName($custom_group_id) {
-    $config = ConfigContainer::getInstance();
-    $customGroupNames = $config->getParameter('custom_group_names');
-    return $customGroupNames[$custom_group_id];
+    return ConfigContainer::getInstance()->getCustomGroupName($custom_group_id);
   }
 
   /**
@@ -50,11 +41,9 @@ class CustomField {
    * @return string
    */
   public static function getCustomFieldName($custom_field_id) {
-    $config = ConfigContainer::getInstance();
-    $customFields = $config->getParameter('custom_fields');
-
-    $custom_group_name = self::getCustomGroupName($customFields[$custom_field_id]['custom_group_id']);
-    $name = 'custom_'.$custom_group_name.'_'.$customFields[$custom_field_id]['name'];
+    $customField = ConfigContainer::getInstance()->getCustomField($custom_field_id);
+    $custom_group_name = self::getCustomGroupName($customField['custom_group_id']);
+    $name = 'custom_'.$custom_group_name.'_'.$customField['name'];
     return $name;
   }
 
@@ -70,8 +59,6 @@ class CustomField {
    * @return Specification|null
    */
   public static function getSpecFromCustomField($customField, $titlePrefix='', $useRequiredFromCustomField=false) {
-    self::$customFields[$customField['id']] = $customField;
-
     $name = self::getCustomFieldName($customField['id']);
     $apiFieldName = 'custom_'.$customField['id'];
     $type = self::getTypeForCustomField($customField);
@@ -110,10 +97,9 @@ class CustomField {
    * @throws \CiviCRM_API3_Exception
    */
   public static function getSpecForCustomGroup($customGroupId, $customGroupName, $customGroupTitle) {
-    $config = ConfigContainer::getInstance();
-    $customFieldsPerGroup = $config->getParameter('custom_fields_per_group');
+    $customFields = ConfigContainer::getInstance()->getCustomFieldsOfCustomGroup($customGroupId);
     $customGroupSpecBag = new SpecificationBag();
-    foreach ($customFieldsPerGroup[$customGroupId] as $customField) {
+    foreach ($customFields as $customField) {
       if ($customField['is_active']) {
         $spec = self::getSpecFromCustomField($customField, '', FALSE);
         if ($spec) {
@@ -148,29 +134,6 @@ class CustomField {
       }
     }
     return $apiParams;
-  }
-
-  public static function buildConfigContainer(ContainerBuilder $containerBuilder) {
-    $customGroupNames = array();
-    $customGroupPerExtends = array();
-    $customFields = array();
-    $customFieldsPerGroup = array();
-    $customGroupApi = civicrm_api3('CustomGroup', 'get', ['options' => ['limit' => 0]]);
-    foreach($customGroupApi['values'] as $customGroup) {
-      $customGroupNames[$customGroup['id']] = $customGroup['name'];
-      $customGroupPerExtends[$customGroup['extends']][] = $customGroup;
-    }
-    $customFieldsApi = civicrm_api3('CustomField', 'get', ['options' => ['limit' => 0]]);
-    foreach($customFieldsApi['values'] as $customField) {
-      $customFields[] = $customField;
-      $customFieldsPerGroup[$customField['custom_group_id']][] = $customField;
-    }
-
-    $containerBuilder->setParameter('custom_group_names', $customGroupNames);
-    $containerBuilder->setParameter('custom_groups_per_extends', $customGroupPerExtends);
-    $containerBuilder->setParameter('custom_fields_per_group', $customFieldsPerGroup);
-    $containerBuilder->setParameter('custom_fields', $customFields);
-
   }
 
 }

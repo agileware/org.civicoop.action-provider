@@ -1,5 +1,7 @@
-Version 1.39 (not yet released)
+Version 1.38.1
 ------------
+
+* Fixed regression bug with the caching of custom fields.
 
 Version 1.38
 ------------

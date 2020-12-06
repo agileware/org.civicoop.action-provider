@@ -23,20 +23,19 @@ class ConfigContainer {
   }
 
   /**
-   * @return \Symfony\Component\DependencyInjection\Container
+   * @return \Civi\ActionProvider\Config
    */
   public static function getInstance() {
     if (!self::$configContainer) {
       $file = self::getCacheFile();
-      $containerConfigCache = new ConfigCache($file, false);
-      if (!$containerConfigCache->isFresh()) {
+      if (!file_exists($file)) {
         $containerBuilder = self::createContainer();
         $containerBuilder->compile();
         $dumper = new PhpDumper($containerBuilder);
-        $containerConfigCache->write(
-          $dumper->dump(['class' => 'CachedActionProviderConfigContainer']),
-          $containerBuilder->getResources()
-        );
+        file_put_contents($file, $dumper->dump([
+          'class' => 'CachedActionProviderConfigContainer',
+          'base_class' => '\Civi\ActionProvider\Config',
+        ]));
       }
       require_once $file;
       self::$configContainer = new \CachedActionProviderConfigContainer();
@@ -49,12 +48,8 @@ class ConfigContainer {
    */
   public static function clearCache() {
     $file = self::getCacheFile();
-    $metaFile = $file.'.meta';
     if (file_exists($file)) {
       unlink($file);
-    }
-    if (file_exists($metaFile)) {
-      unlink($metaFile);
     }
   }
 
@@ -79,7 +74,8 @@ class ConfigContainer {
    * @return string
    */
   public static function getCacheFile() {
-    return \Civi::paths()->getPath("[civicrm.compile]/CachedActionProviderConfigContainer.php");
+    $envId = \CRM_Core_Config_Runtime::getId();
+    return \Civi::paths()->getPath("[civicrm.compile]/CachedActionProviderConfigContainer.{$envId}.php");
   }
 
   /**
@@ -90,7 +86,7 @@ class ConfigContainer {
   protected static function createContainer() {
     $containerBuilder = new ContainerBuilder();
 
-    CustomField::buildConfigContainer($containerBuilder);
+    Config::buildConfigContainer($containerBuilder);
 
     // Dipsatch an symfony event so that extensions could listen to this event
     // and hook int the building of the config container.
