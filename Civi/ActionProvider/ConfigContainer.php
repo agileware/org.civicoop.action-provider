@@ -74,8 +74,11 @@ class ConfigContainer {
    * @return string
    */
   public static function getCacheFile() {
+    // The envId is build based on the domain and database settings.
+    // So we cater for multisite installations and installations with one code base
+    // and multiple databases.
     $envId = \CRM_Core_Config_Runtime::getId();
-    return \Civi::paths()->getPath("[civicrm.compile]/CachedActionProviderConfigContainer.{$envId}.php");
+    return CIVICRM_TEMPLATE_COMPILEDIR."/CachedActionProviderConfigContainer.{$envId}.php";
   }
 
   /**

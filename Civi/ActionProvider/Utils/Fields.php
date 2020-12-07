@@ -38,12 +38,11 @@ class Fields {
       }
     }
 
-    $config = ConfigContainer::getInstance();
-    $customGroups = $config->getParameter('custom_groups_per_extends');
-    foreach ($customGroups[$entity] as $customGroup) {
+    $customGroups = ConfigContainer::getInstance()->getCustomGroupsForEntity($entity);
+    foreach ($customGroups as $customGroup) {
       if ($customGroup['is_active']) {
-        $customFields = $config->getParameter('custom_fields_per_group');
-        foreach ($customFields[$customGroup['id']] as $customField) {
+        $customFields = ConfigContainer::getInstance()->getCustomFieldsOfCustomGroup($customGroup['id']);
+        foreach ($customFields as $customField) {
           if ($customField['is_active']) {
             $spec = CustomField::getSpecFromCustomField($customField, $customGroup['title'] . ': ', FALSE);
             if ($spec) {

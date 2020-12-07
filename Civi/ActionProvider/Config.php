@@ -42,6 +42,31 @@ class Config extends \Symfony\Component\DependencyInjection\Container {
     return $customFieldsPerGroup[$custom_group_id];
   }
 
+  /**
+   * Returns an array of custom groups for an entity.
+   *
+   * @param $entity
+   * @return array
+   */
+  public function getCustomGroupsForEntity($entity) {
+    $customGroupExtends = $this->getParameter('custom_groups_per_extends');
+    $customGroups = isset($customGroupExtends[$entity]) ? $customGroupExtends[$entity] : [];
+    switch($entity) {
+      case 'Individual':
+      case 'Household':
+      case 'Organization':
+        $customGroups = array_merge($customGroups, isset($customGroupExtends['Contact']) ? $customGroupExtends['Contact'] : []);
+        break;
+    }
+    return $customGroups;
+  }
+
+  /**
+   * Build the container with the custom field and custom groups.
+   *
+   * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
+   * @throws \CiviCRM_API3_Exception
+   */
   public static function buildConfigContainer(ContainerBuilder $containerBuilder) {
     $customGroupNames = array();
     $customGroupPerExtends = array();

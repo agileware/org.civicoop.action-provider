@@ -1,6 +1,8 @@
 Version 1.39 (not yet released)
 ------------
 
+* Improved caching of custom fields.
+
 Version 1.38.1
 ------------
 
