@@ -13,6 +13,18 @@ use CRM_ActionProvider_ExtensionUtil as E;
 
 class CreateUpdateIndividual extends AbstractAction {
 
+  protected $contactSubTypes;
+
+  public function __construct() {
+    $this->contactSubTypes = array();
+    $contactSubTypesApi = civicrm_api3('ContactType', 'get', array('parent_id' => 'Individual', 'options' => array('limit' => 0)));
+    $this->contactSubTypes[''] = E::ts(' - Select - ');
+    foreach($contactSubTypesApi['values'] as $contactSubType) {
+      $this->contactSubTypes[$contactSubType['name']] = $contactSubType['label'];
+    }
+  }
+
+
   /**
    * Run the action
    *
@@ -27,7 +39,12 @@ class CreateUpdateIndividual extends AbstractAction {
     if ($parameters->getParameter('contact_id')) {
       $params['id'] = $parameters->getParameter('contact_id');
     }
-    $contact_sub_type = $this->configuration->getParameter('contact_sub_type');
+    $contact_sub_type = false;
+    if ($parameters->doesParameterExists('contact_sub_type')) {
+      $contact_sub_type = $parameters->getParameter('contact_sub_type');
+    } elseif ($this->configuration->doesParameterExists('contact_sub_type')) {
+      $contact_sub_type = $this->configuration->getParameter('contact_sub_type');
+    }
     $params['contact_type'] = "Individual";
     if ($contact_sub_type) {
       $params['contact_sub_type'] = $contact_sub_type;
@@ -49,6 +66,12 @@ class CreateUpdateIndividual extends AbstractAction {
     }
     if ($parameters->getParameter('gender_id')) {
       $params['gender_id'] = $parameters->getParameter('gender_id');
+    }
+    if ($parameters->getParameter('individual_prefix')) {
+      $params['individual_prefix'] = $parameters->getParameter('individual_prefix');
+    }
+    if ($parameters->getParameter('individual_suffix')) {
+      $params['individual_suffix'] = $parameters->getParameter('individual_suffix');
     }
     if ($parameters->doesParameterExists('source')) {
       $params['source'] = $parameters->getParameter('source');
@@ -102,22 +125,15 @@ class CreateUpdateIndividual extends AbstractAction {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
-    $contactSubTypes = array();
-    $contactSubTypesApi = civicrm_api3('ContactType', 'get', array('parent_id' => 'Individual', 'options' => array('limit' => 0)));
-    $contactSubTypes[''] = E::ts(' - Select - ');
-    foreach($contactSubTypesApi['values'] as $contactSubType) {
-      $contactSubTypes[$contactSubType['name']] = $contactSubType['label'];
-    }
-
-    $spec = new SpecificationBag(array(
-      new Specification('contact_sub_type', 'String', E::ts('Contact sub type'), false, null, null, $contactSubTypes, FALSE),
+    $specs = new SpecificationBag(array(
+      new Specification('contact_sub_type', 'String', E::ts('Contact sub type'), false, null, null, $this->contactSubTypes, TRUE),
     ));
 
-    ContactActionUtils::createAddressConfigurationSpecification($spec);
-    ContactActionUtils::createEmailConfigurationSpecification($spec);
-    ContactActionUtils::createPhoneConfigurationSpecification($spec);
+    ContactActionUtils::createAddressConfigurationSpecification($specs);
+    ContactActionUtils::createEmailConfigurationSpecification($specs);
+    ContactActionUtils::createPhoneConfigurationSpecification($specs);
 
-    return $spec;
+    return $specs;
   }
 
   /**
@@ -130,9 +146,12 @@ class CreateUpdateIndividual extends AbstractAction {
     $contactIdSpec->setDescription(E::ts('Leave empty to create a new Individual'));
     $spec = new SpecificationBag(array(
       $contactIdSpec,
+      new Specification('contact_sub_type', 'String', E::ts('Contact sub type'), false, null, null, $this->contactSubTypes, TRUE),
+      new OptionGroupSpecification('individual_prefix', 'individual_prefix', E::ts('Individual prefix'), false),
       new Specification('first_name', 'String', E::ts('First name'), false),
       new Specification('last_name', 'String', E::ts('Last name'), false),
       new Specification('middle_name', 'String', E::ts('Middle name'), false),
+      new OptionGroupSpecification('individual_suffix', 'individual_suffix', E::ts('Individual suffix'), false),
       new Specification('job_title', 'String', E::ts('Job Title'), false),
       new Specification('birth_date', 'Date', E::ts('Birth date'), false),
       new OptionGroupSpecification('gender_id', 'gender', E::ts('Gender'), false),

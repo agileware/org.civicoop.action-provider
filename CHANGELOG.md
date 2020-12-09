@@ -1,7 +1,8 @@
-Version 1.39 (not yet released)
+Version 1.39
 ------------
 
 * Improved caching of custom fields.
+* Added prefix, suffix and contact sub type as a parameter to the action Contact: create/update individual.
 
 Version 1.38.1
 ------------
