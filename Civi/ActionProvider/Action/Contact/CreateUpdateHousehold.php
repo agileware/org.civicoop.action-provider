@@ -12,6 +12,17 @@ use CRM_ActionProvider_ExtensionUtil as E;
 
 class CreateUpdateHousehold extends AbstractAction {
 
+  protected $contactSubTypes;
+
+  public function __construct() {
+    $this->contactSubTypes = array();
+    $contactSubTypesApi = civicrm_api3('ContactType', 'get', array('parent_id' => 'Household', 'options' => array('limit' => 0)));
+    $this->contactSubTypes[''] = E::ts(' - Select - ');
+    foreach($contactSubTypesApi['values'] as $contactSubType) {
+      $this->contactSubTypes[$contactSubType['name']] = $contactSubType['label'];
+    }
+  }
+
   /**
    * Run the action
    *
@@ -26,7 +37,12 @@ class CreateUpdateHousehold extends AbstractAction {
     if ($parameters->getParameter('contact_id')) {
       $params['id'] = $parameters->getParameter('contact_id');
     }
-    $contact_sub_type = $this->configuration->getParameter('contact_sub_type');
+    $contact_sub_type = false;
+    if ($parameters->doesParameterExists('contact_sub_type')) {
+      $contact_sub_type = $parameters->getParameter('contact_sub_type');
+    } elseif ($this->configuration->doesParameterExists('contact_sub_type')) {
+      $contact_sub_type = $this->configuration->getParameter('contact_sub_type');
+    }
     $params['contact_type'] = "Household";
     if ($contact_sub_type) {
       $params['contact_sub_type'] = $contact_sub_type;
@@ -85,15 +101,8 @@ class CreateUpdateHousehold extends AbstractAction {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
-    $contactSubTypes = array();
-    $contactSubTypesApi = civicrm_api3('ContactType', 'get', array('parent_id' => 'Household', 'options' => array('limit' => 0)));
-    $contactSubTypes[''] = E::ts(' - Select - ');
-    foreach($contactSubTypesApi['values'] as $contactSubType) {
-      $contactSubTypes[$contactSubType['name']] = $contactSubType['label'];
-    }
-
     $spec = new SpecificationBag(array(
-      new Specification('contact_sub_type', 'String', E::ts('Contact sub type'), false, null, null, $contactSubTypes, FALSE),
+      new Specification('contact_sub_type', 'String', E::ts('Contact sub type'), false, null, null, $this->contactSubTypes, TRUE),
     ));
 
     ContactActionUtils::createAddressConfigurationSpecification($spec);
@@ -113,6 +122,7 @@ class CreateUpdateHousehold extends AbstractAction {
     $contactIdSpec->setDescription(E::ts('Leave empty to create a new Individual'));
     $spec = new SpecificationBag(array(
       $contactIdSpec,
+      new Specification('contact_sub_type', 'String', E::ts('Contact sub type'), false, null, null, $this->contactSubTypes, TRUE),
       new Specification('household_name', 'String', E::ts('Household name'), false),
       new Specification('source', 'String', E::ts('Source'), false),
       new Specification('created_date', 'Date', E::ts('Created Date'), false),

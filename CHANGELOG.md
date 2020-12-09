@@ -1,11 +1,9 @@
-Version 1.40 (not yet released)
-------------
-
 Version 1.39
 ------------
 
 * Improved caching of custom fields.
 * Added prefix, suffix and contact sub type as a parameter to the action Contact: create/update individual.
+* Added contact sub type to action Contact Create Organisation and Contact Create Household.
 
 Version 1.38.1
 ------------
