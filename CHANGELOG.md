@@ -1,3 +1,6 @@
+Version 1.42 (not yet released)
+------------
+
 Version 1.41
 ------------
 
