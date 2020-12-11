@@ -1,4 +1,4 @@
-Version 1.40 (not yet released)
+Version 1.40
 ------------
 
 * Added output to the action 'Communication: Create PDF and send by e-mail'.
