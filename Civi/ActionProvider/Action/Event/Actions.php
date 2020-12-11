@@ -26,15 +26,19 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('CreateOrUpdateParticipant', '\Civi\ActionProvider\Action\Event\CreateOrUpdateParticipant',E::ts('Participant: Register contact for an event') , array(
+    $provider->addAction('CreateParticipant', '\Civi\ActionProvider\Action\Event\CreateParticipant',E::ts('Participant: Register contact for an event') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('CreateOrUpdateParticipantWithDynamicStatus', '\Civi\ActionProvider\Action\Event\CreateOrUpdateParticipantWithDynamicStatus', E::ts('Participant: Register contact for an event (with status as parameter)') , array(
+    $provider->addAction('CreateOrUpdateParticipant', '\Civi\ActionProvider\Action\Event\CreateOrUpdateParticipant',E::ts('Participant: Create/Update event registration') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('CreateOrUpdateParticipantWithDynamicStatusRole', '\Civi\ActionProvider\Action\Event\CreateOrUpdateParticipantWithDynamicStatusRole', E::ts('Participant: Register contact for an event (with status and role as parameter)') , array(
+    $provider->addAction('CreateOrUpdateParticipantWithDynamicStatus', '\Civi\ActionProvider\Action\Event\CreateOrUpdateParticipantWithDynamicStatus', E::ts('Participant: Create/Update event registration (with status as parameter)') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $provider->addAction('CreateOrUpdateParticipantWithDynamicStatusRole', '\Civi\ActionProvider\Action\Event\CreateOrUpdateParticipantWithDynamicStatusRole', E::ts('Participant: Create/Update event registration (with status and role as parameter)') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));

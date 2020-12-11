@@ -1,5 +1,9 @@
-Version 1.41 (not yet released)
+Version 1.41
 ------------
+
+* Added action 'Participant: Register contact for an event' and renamed the others to 'Participant: Create/Update event registrations'.
+  The action 'Participant: Register contact for an event' has the ability to only register a contact for an event if that person
+  is not already registered.
 
 Version 1.40
 ------------
