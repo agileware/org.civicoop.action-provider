@@ -85,6 +85,11 @@ class SendPdfByEmail extends AbstractAction {
     $cc = $this->configuration->getParameter('cc');
     $bcc = $this->configuration->getParameter('bcc');
     $mailer->send($contact_id, $subject, $body_text, $body_html, $extra_data, $cc, $bcc);
+    $file = $mailer->getAttachment($filename);
+
+    $output->setParameter('filename', $file['name']);
+    $output->setParameter('url', $file['url']);
+    $output->setParameter('path', $file['path']);
   }
 
   /**
@@ -138,7 +143,11 @@ class SendPdfByEmail extends AbstractAction {
    * @return SpecificationBag
    */
   public function getOutputSpecification() {
-    return new SpecificationBag();
+    return new SpecificationBag([
+      new Specification('filename', 'String', E::ts('Filename')),
+      new Specification('url', 'String', E::ts('Download Url')),
+      new Specification('path', 'String', E::ts('Path in filesystem')),
+    ]);
   }
 
 }

@@ -47,7 +47,9 @@ class MessageTemplateByName extends AbstractAction {
     $messageTemplateBao->is_active = 1;
     $messageTemplateBao->find();
     while($messageTemplateBao->fetch()) {
-      $messageTemplates[$messageTemplateBao->msg_title] = $messageTemplateBao->msg_title;
+      if (empty($messageTemplateBao->workflow_id)) {
+        $messageTemplates[$messageTemplateBao->msg_title] = $messageTemplateBao->msg_title;
+      }
     }
     return new SpecificationBag(array(
       new Specification('name', 'String', E::ts('Name'), true, null, null, $messageTemplates),

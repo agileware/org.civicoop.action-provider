@@ -113,7 +113,7 @@ class SendEmail {
     $returnValues = array();
     foreach($contactIds as $contactId) {
       $contact_params = array(array('contact_id', '=', $contactId, 0, 0));
-      list($contact, $_) = \CRM_Contact_BAO_Query::apiQuery($contact_params);
+      [$contact, $_] = \CRM_Contact_BAO_Query::apiQuery($contact_params);
       $contact = reset($contact);
       if (!$contact || is_a($contact, 'CRM_Core_Error')) {
         throw new \Exception('Could not find contact with ID: ' . $contact_params['contact_id']);
@@ -258,11 +258,23 @@ class SendEmail {
    * @param $mimeType
    */
   public function addAttachment($fullPath, $cleanName, $mimeType) {
-    $this->attachments[] = array(
+    $this->attachments[$cleanName] = array(
       'fullPath' => $fullPath,
       'cleanName' => $cleanName,
       'mime_type' => $mimeType
     );
+  }
+
+  /**
+   * Return the information of the attachment.
+   * This information is changed after the e-mail is send and the attachments
+   * are processed.
+   *
+   * @param $cleanName
+   * @return mixed
+   */
+  public function getAttachment($cleanName) {
+    return $this->attachments[$cleanName];
   }
 
   /**
@@ -272,7 +284,7 @@ class SendEmail {
    */
   protected function processAttachments($activity_id) {
     if (is_array($this->attachments)) {
-      foreach($this->attachments as $attachment) {
+      foreach($this->attachments as $cleanName => $attachment) {
         try {
           $result = civicrm_api3('Attachment', 'create', array(
             'entity_table' => 'civicrm_activity',
@@ -281,6 +293,7 @@ class SendEmail {
             'mime_type' => $attachment['mime_type'],
             'options' => array('move-file' => $attachment['fullPath']),
           ));
+          $this->attachments[$cleanName] = reset($result['values']);
         } catch (\CiviCRM_API3_Exception $ex) {
           // Do nothing
         }

@@ -1,6 +1,9 @@
 Version 1.40 (not yet released)
 ------------
 
+* Added output to the action 'Communication: Create PDF and send by e-mail'.
+* The action 'Communication: Get message template by name' only shows message templates and not the workflow templates.
+
 Version 1.39
 ------------
 
