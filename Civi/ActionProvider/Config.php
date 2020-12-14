@@ -83,6 +83,11 @@ class Config extends \Symfony\Component\DependencyInjection\Container {
       $customFieldsPerGroup[$customField['custom_group_id']][] = $customField;
     }
 
+    $customGroupNames = $containerBuilder->getParameterBag()->escapeValue($customGroupNames);
+    $customGroupPerExtends = $containerBuilder->getParameterBag()->escapeValue($customGroupPerExtends);
+    $customFieldsPerGroup = $containerBuilder->getParameterBag()->escapeValue($customFieldsPerGroup);
+    $customFields = $containerBuilder->getParameterBag()->escapeValue($customFields);
+
     $containerBuilder->setParameter('custom_group_names', $customGroupNames);
     $containerBuilder->setParameter('custom_groups_per_extends', $customGroupPerExtends);
     $containerBuilder->setParameter('custom_fields_per_group', $customFieldsPerGroup);
