@@ -3,6 +3,7 @@ Version 1.42 (not yet released)
 
 * Escaping configuration values of custom fields and custom groups. In case a @ or % sign is present in the help or description text
   of the custom field or custom group.
+* Fixed issue with multiple values in a custom field and AbstractGetSingleAction.
 
 Version 1.41
 ------------

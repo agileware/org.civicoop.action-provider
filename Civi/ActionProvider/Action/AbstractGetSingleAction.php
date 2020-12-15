@@ -116,7 +116,13 @@ abstract class AbstractGetSingleAction extends AbstractAction {
       if (substr($custom_id, -3) === '_id') {
         $custom_id = substr($custom_id, 0, -3);
         unset($entity[$field]);
-        $entity['custom_'.$custom_id] = $value;
+        if (is_array($value)) {
+          $entity['custom_' . $custom_id] = array_keys($value);
+        } else {
+          $entity['custom_' . $custom_id] = $value;
+        }
+      } elseif (is_numeric($custom_id) && is_array($value)) {
+        $entity['custom_' . $custom_id] = array_keys($value);
       }
     }
     return $entity;
