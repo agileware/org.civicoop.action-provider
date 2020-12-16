@@ -113,7 +113,7 @@ class SendEmail {
     $returnValues = array();
     foreach($contactIds as $contactId) {
       $contact_params = array(array('contact_id', '=', $contactId, 0, 0));
-      [$contact, $_] = \CRM_Contact_BAO_Query::apiQuery($contact_params);
+      list($contact, $_) = \CRM_Contact_BAO_Query::apiQuery($contact_params);
       $contact = reset($contact);
       if (!$contact || is_a($contact, 'CRM_Core_Error')) {
         throw new \Exception('Could not find contact with ID: ' . $contact_params['contact_id']);

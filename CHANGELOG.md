@@ -1,3 +1,8 @@
+Version 1.42.1
+------------
+
+* Fixed regression bug in action provider.
+
 Version 1.42
 ------------
 
