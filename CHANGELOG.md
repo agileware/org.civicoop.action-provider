@@ -1,5 +1,7 @@
-Version 1.43 (not yet released)
+Version 1.42.3
 ------------
+
+* Fixed regression bug with compare parameter value condition.
 
 Version 1.42.2
 ------------

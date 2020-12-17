@@ -22,7 +22,7 @@ class CompareParameterValue extends AbstractCondition {
    */
   public function isConditionValid(ParameterBagInterface $parameterBag) {
     $parameter = $parameterBag->getParameter('parameter');
-    $comparison = $this->configuration->getParameter('comparison');
+    $comparison = html_entity_decode($this->configuration->getParameter('comparison'));
     $value = $this->configuration->getParameter('value');
     switch ($comparison) {
       case '>':
