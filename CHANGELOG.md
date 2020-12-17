@@ -1,5 +1,7 @@
-Version 1.43 (not yet released)
+Version 1.42.2
 ------------
+
+* Fixed regression bug in action provider with multiple value custom fields and the AbstractGetSingleAction.
 
 Version 1.42.1
 ------------

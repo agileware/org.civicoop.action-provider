@@ -117,15 +117,40 @@ abstract class AbstractGetSingleAction extends AbstractAction {
         $custom_id = substr($custom_id, 0, -3);
         unset($entity[$field]);
         if (is_array($value)) {
-          $entity['custom_' . $custom_id] = array_keys($value);
+          $entity['custom_' . $custom_id] = $this->convertCustomFieldWithMultipleValues($value);
         } else {
           $entity['custom_' . $custom_id] = $value;
         }
       } elseif (is_numeric($custom_id) && is_array($value)) {
-        $entity['custom_' . $custom_id] = array_keys($value);
+        $entity['custom_' . $custom_id] = $this->convertCustomFieldWithMultipleValues($value);
       }
     }
     return $entity;
+  }
+
+  /**
+   * Helper function, sometimes the civicrm api returns a multi value field
+   * as custom_xx => array(
+   *   value 1 => 1,
+   * )
+   * and other times
+   * as custom_xx => array(
+   *   value 1,
+   * )
+   *
+   * Not the difference between the value in the key or in the value bit of the array.
+   *
+   * @param $value
+   *
+   * @return array
+   */
+  protected function convertCustomFieldWithMultipleValues($value) {
+    foreach($value as $k=>$v) {
+      if ($k == 0 && $v >= 1) {
+        return $value;
+      }
+    }
+    return array_keys($value);
   }
 
   /**
