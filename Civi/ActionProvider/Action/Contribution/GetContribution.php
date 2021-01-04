@@ -59,5 +59,28 @@ class GetContribution extends AbstractGetSingleAction {
     return $specs;
   }
 
+  protected function setOutputFromEntity($entity, ParameterBagInterface $output) {
+    parent::setOutputFromEntity($entity, $output);
+    try {
+      $participantId = civicrm_api3('ParticipantPayment', 'getvalue', ['contribution_id' => $this->getIdFromParamaters(), 'return' => 'participant_id']);
+      $output->setParameter('participant_id', $participantId);
+    } catch (\CiviCRM_API3_Exception $ex) {
+      // Do nothing.
+    }
+  }
+
+  /**
+   * Returns the specification of the output parameters of this action.
+   *
+   * This function could be overriden by child classes.
+   *
+   * @return SpecificationBag
+   */
+  public function getOutputSpecification() {
+    $specs = parent::getOutputSpecification();
+    $specs->addSpecification(new Specification('participant_id', 'Integer', E::ts('Participant ID')));
+    return $specs;
+  }
+
 
 }
