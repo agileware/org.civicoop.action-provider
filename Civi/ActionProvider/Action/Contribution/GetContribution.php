@@ -1,6 +1,6 @@
 <?php
 
-namespace Civi\ActionProvider\Action\Event;
+namespace Civi\ActionProvider\Action\Contribution;
 
 use \Civi\ActionProvider\Action\AbstractAction;
 use Civi\ActionProvider\Action\AbstractGetSingleAction;
