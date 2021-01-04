@@ -65,6 +65,9 @@ class UpdateContribution extends AbstractAction {
     if ($parameters->doesParameterExists('receive_date')) {
       $contribution_params['receive_date'] = $parameters->getParameter('receive_date');
     }
+    if ($parameters->doesParameterExists('receipt_date')) {
+      $contribution_params['receipt_date'] = $parameters->getParameter('receipt_date');
+    }
     if ($parameters->doesParameterExists('note')) {
       $contribution_params['note'] = $parameters->getParameter('note');
     }
@@ -117,6 +120,7 @@ class UpdateContribution extends AbstractAction {
       new Specification('campaign_id', 'Integer', E::ts('Campaign'), false),
       new Specification('contribution_recur_id', 'Integer', E::ts('Contribution Recur ID'), false),
       new Specification('receive_date', 'Date', E::ts('Receive date'), false),
+      new Specification('receipt_date', 'Date', E::ts('Receipt date'), false),
       new OptionGroupSpecification('currency', 'currencies_enabled', E::ts('Currency'), FALSE),
       new Specification('source', 'String', E::ts('Source'), false),
       new Specification('note', 'String', E::ts('Note'), false),

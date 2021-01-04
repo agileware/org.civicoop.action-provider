@@ -62,7 +62,7 @@ class GetContribution extends AbstractGetSingleAction {
   protected function setOutputFromEntity($entity, ParameterBagInterface $output) {
     parent::setOutputFromEntity($entity, $output);
     try {
-      $participantId = civicrm_api3('ParticipantPayment', 'getvalue', ['contribution_id' => $this->getIdFromParamaters(), 'return' => 'participant_id']);
+      $participantId = civicrm_api3('ParticipantPayment', 'getvalue', ['contribution_id' => $entity['id'], 'return' => 'participant_id']);
       $output->setParameter('participant_id', $participantId);
     } catch (\CiviCRM_API3_Exception $ex) {
       // Do nothing.
