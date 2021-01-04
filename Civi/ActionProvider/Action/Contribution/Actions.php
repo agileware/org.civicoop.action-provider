@@ -18,6 +18,10 @@ class Actions {
    * @param \Civi\ActionProvider\Provider $provider
    */
   public static function loadActions(Provider $provider) {
+    $provider->addAction('GetContribution', '\Civi\ActionProvider\Action\Contribution\GetContribution', E::ts('Contribution: Get data'), array(
+      AbstractAction::DATA_RETRIEVAL_TAG,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ));
     $provider->addAction('CreateContribution', '\Civi\ActionProvider\Action\Contribution\CreateContribution', E::ts('Contribution: Create'), array(
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG

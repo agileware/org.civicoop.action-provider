@@ -1,6 +1,8 @@
 Version 1.43 (not yet released)
 ------------
 
+* Added action Contribution: Get Data.
+
 Version 1.42.3
 ------------
 
