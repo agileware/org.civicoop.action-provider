@@ -1,5 +1,7 @@
-Version 1.44 (not yet released)
+Version 1.44
 ------------
+
+* Fixed issue with action Other: Show option value(s) as their Label(s) when the value is empty.
 
 Version 1.43
 ------------

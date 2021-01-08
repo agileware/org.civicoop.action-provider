@@ -77,7 +77,7 @@ class OptionValueToLabel extends AbstractAction {
         $labels[] = $label;
       }
       $output->setParameter('value', $labels);
-    } else {
+    } elseif (!empty($value)) {
       $label = civicrm_api3('OptionValue', 'getvalue', array('return' => 'label', 'value' => $value, 'option_group_id' => $option_group_id));
       $output->setParameter('value', $label);
     }
