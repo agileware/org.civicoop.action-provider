@@ -5,10 +5,9 @@
           ui-options="{dropdownAutoWidth : true, allowClear: true, minimumInputLength: 0}"
           name="{{spec.name}}"
           ng-model="mapping[spec.name]"
-          ng-options="field as field.label for field in fields track by field.name"
           ng-required="spec.required"
           ng-if="!spec.multiple">
-    <option value=""></option>
+    <option ng-repeat="field in fields track by field.name" value="{{field.name}}">{{field.label}}</option>
   </select>
 
   <select class="huge"
@@ -17,10 +16,10 @@
           ui-options="{dropdownAutoWidth : true, allowClear: true, minimumInputLength: 0}"
           name="{{spec.name}}"
           ng-model="mapping[spec.name]"
-          ng-options="field as field.label for field in fields track by field.name"
           ng-required="spec.required"
           ng-if="spec.multiple"
           multiple="multiple">
+    <option ng-repeat="field in fields track by field.name" value="{{field.name}}">{{field.label}}</option>
   </select>
   <div class="description" ng-bind-html="spec.description" ng-if="spec.description"></div>
 </div>
