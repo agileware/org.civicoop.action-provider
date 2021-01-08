@@ -5,8 +5,7 @@
         <div crm-ui-field="spec.crmUiField"
              ng-if="spec.options">
             <select crm-ui-id="{{spec.name}}"
-                    ui-jq="select2"
-                    ui-options="{dropdownAutoWidth : true, allowClear: true, minimumInputLength: 0}"
+                    crm-ui-select="{allowClear: true, minimumInputLength: 0}"
                     name="{{spec.name}}"
                     ng-if="!spec.multiple"
                     ng-model="configuration[spec.name]"
@@ -18,8 +17,7 @@
             </select>
             <select class="huge"
                     crm-ui-id="{{spec.name}}"
-                    ui-jq="select2"
-                    ui-options="{dropdownAutoWidth : true, allowClear: true, minimumInputLength: 0}"
+                    crm-ui-select="{allowClear: true, minimumInputLength: 0}"
                     name="{{spec.name}}"
                     ng-if="spec.multiple"
                     ng-model="configuration[spec.name]"
