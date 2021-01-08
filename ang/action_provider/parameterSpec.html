@@ -1,7 +1,8 @@
 <div crm-ui-field="spec.crmUiField">
   <select class="huge"
           crm-ui-id="input_mapper.{{spec.name}}"
-          crm-ui-select="{allowClear: true, minimumInputLength: 0}"
+          ui-jq="select2"
+          ui-options="{dropdownAutoWidth : true, allowClear: true, minimumInputLength: 0}"
           name="{{spec.name}}"
           ng-model="mapping[spec.name]"
           ng-options="field as field.label for field in fields track by field.name"
@@ -12,7 +13,8 @@
 
   <select class="huge"
           crm-ui-id="input_mapper.{{spec.name}}"
-          crm-ui-select="{allowClear: true, minimumInputLength: 0}"
+          ui-jq="select2"
+          ui-options="{dropdownAutoWidth : true, allowClear: true, minimumInputLength: 0}"
           name="{{spec.name}}"
           ng-model="mapping[spec.name]"
           ng-options="field as field.label for field in fields track by field.name"
