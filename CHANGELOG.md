@@ -1,5 +1,7 @@
-Version 1.45 (not yet released)
+Version 1.45
 ------------
+
+* Added action: Reuse existing file
 
 Version 1.44
 ------------
