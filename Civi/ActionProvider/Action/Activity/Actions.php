@@ -44,6 +44,11 @@ class Actions {
     $provider->addAction('ActivityUploadAttachment', '\Civi\ActionProvider\Action\Activity\UploadAttachment', E::ts('Activity: Upload attachment'), array(
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $provider->addAction('ActivityUploadCustomFileField', '\Civi\ActionProvider\Action\Activity\UploadCustomFileField',E::ts('Activity: Upload file to a custom field'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+
   }
 
 }
