@@ -2,6 +2,7 @@ Version 1.46 (not yet released)
 ------------
 
 * Improved performance of angular user interface.
+* Allow clearing selection of single-value parameters.
 
 Version 1.45
 ------------

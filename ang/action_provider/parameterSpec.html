@@ -7,6 +7,7 @@
           ng-model="mapping[spec.name]"
           ng-required="spec.required"
           ng-if="!spec.multiple">
+    <option value=""></option>
     <option ng-repeat="field in fields track by field.name" value="{{field.name}}">{{field.label}}</option>
   </select>
 
