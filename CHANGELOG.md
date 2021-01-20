@@ -1,4 +1,7 @@
-Version 1.46 (not yet released)
+Version 1.47 (not released yet)
+------------
+
+Version 1.46
 ------------
 
 * Improved performance of angular user interface.
