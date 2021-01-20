@@ -4,6 +4,7 @@ Version 1.46 (not yet released)
 * Improved performance of angular user interface.
 * Allow clearing selection of single-value parameters. (!30)
 * Added Action: Activity: Upload file to a custom field  (!29)
+* Fixed issue 9 where existing email is added to contact
 
 Version 1.45
 ------------

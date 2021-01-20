@@ -305,20 +305,22 @@ class ContactActionUtils {
       $existingEmailId = self::findExistingEmail($contact_id, $configuration->getParameter('email_location_type'), $configuration->getParameter('email_is_primary'));
     }
 
-    // Create email
     if ($parameters->getParameter('email')) {
-      $emailParams = array();
-      if ($existingEmailId) {
-        $emailParams['id'] = $existingEmailId;
+      // Create email if it does not exist yet
+      if ($existingEmailId || !self::doesEmailExists($contact_id, $parameters->getParameter('email'))) {
+        $emailParams = array();
+        if ($existingEmailId) {
+          $emailParams['id'] = $existingEmailId;
+        }
+        if ($configuration->doesParameterExists('email_is_primary') && $configuration->getParameter('email_is_primary')) {
+          $emailParams['is_primary'] = 1;
+        }
+        $emailParams['contact_id'] = $contact_id;
+        $emailParams['location_type_id'] = $configuration->getParameter('email_location_type');
+        $emailParams['email'] = $parameters->getParameter('email');
+        $result = civicrm_api3('Email', 'create', $emailParams);
+        return $result['id'];
       }
-      if ($configuration->doesParameterExists('email_is_primary') && $configuration->getParameter('email_is_primary')) {
-        $emailParams['is_primary'] = 1;
-      }
-      $emailParams['contact_id'] = $contact_id;
-      $emailParams['location_type_id'] = $configuration->getParameter('email_location_type');
-      $emailParams['email'] = $parameters->getParameter('email');
-      $result = civicrm_api3('Email', 'create', $emailParams);
-      return $result['id'];
     } elseif ($existingEmailId) {
       civicrm_api3('Email', 'delete', ['id' => $existingEmailId]);
     }
@@ -425,5 +427,28 @@ class ContactActionUtils {
     ];
   }
 
+  /**
+   * Method to check if the email already exists for the contact and location type
+   *
+   * @param $contactId
+   * @param $email
+   * @return bool
+   */
+  public static function doesEmailExists($contactId, $email) {
+    if (!empty($email) && !empty($contactId)) {
+      try {
+        $count = civicrm_api3('Email', 'getcount', [
+          'contact_id' => $contactId,
+          'email' => $email,
+        ]);
+        if ($count > 0) {
+          return TRUE;
+        }
+      }
+      catch (\CiviCRM_API3_Exception $ex) {
+      }
+    }
+    return FALSE;
+  }
 
 }
