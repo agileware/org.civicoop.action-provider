@@ -1,6 +1,8 @@
 Version 1.47 (not released yet)
 ------------
 
+* Added custom groups to the config class.
+
 Version 1.46
 ------------
 

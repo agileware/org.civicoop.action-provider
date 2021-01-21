@@ -16,6 +16,17 @@ class Config extends \Symfony\Component\DependencyInjection\Container {
    * @param int $custom_group_id
    * @return string
    */
+  public function getCustomGroup($custom_group_id) {
+    $customGroups = $this->getParameter('custom_groups');
+    return $customGroups[$custom_group_id];
+  }
+
+  /**
+   * Returns the name of the custom group
+   *
+   * @param int $custom_group_id
+   * @return string
+   */
   public function getCustomGroupName($custom_group_id) {
     $customGroupNames = $this->getParameter('custom_group_names');
     return $customGroupNames[$custom_group_id];
@@ -68,12 +79,14 @@ class Config extends \Symfony\Component\DependencyInjection\Container {
    * @throws \CiviCRM_API3_Exception
    */
   public static function buildConfigContainer(ContainerBuilder $containerBuilder) {
+    $customGroups = array();
     $customGroupNames = array();
     $customGroupPerExtends = array();
     $customFields = array();
     $customFieldsPerGroup = array();
     $customGroupApi = civicrm_api3('CustomGroup', 'get', ['options' => ['limit' => 0]]);
     foreach($customGroupApi['values'] as $customGroup) {
+      $customGroups[$customGroup['id']] = $customGroup;
       $customGroupNames[$customGroup['id']] = $customGroup['name'];
       $customGroupPerExtends[$customGroup['extends']][] = $customGroup;
     }
@@ -86,8 +99,10 @@ class Config extends \Symfony\Component\DependencyInjection\Container {
     $customGroupNames = $containerBuilder->getParameterBag()->escapeValue($customGroupNames);
     $customGroupPerExtends = $containerBuilder->getParameterBag()->escapeValue($customGroupPerExtends);
     $customFieldsPerGroup = $containerBuilder->getParameterBag()->escapeValue($customFieldsPerGroup);
+    $customGroups = $containerBuilder->getParameterBag()->escapeValue($customGroups);
     $customFields = $containerBuilder->getParameterBag()->escapeValue($customFields);
 
+    $containerBuilder->setParameter('custom_groups', $customGroups);
     $containerBuilder->setParameter('custom_group_names', $customGroupNames);
     $containerBuilder->setParameter('custom_groups_per_extends', $customGroupPerExtends);
     $containerBuilder->setParameter('custom_fields_per_group', $customFieldsPerGroup);
