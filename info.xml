@@ -13,8 +13,8 @@
     <url desc="Documentation">https://lab.civicrm.org/jaapjansma/action-provider/wikis/home</url>
     <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
   </urls>
-  <releaseDate>2021-01-21</releaseDate>
-  <version>1.48-dev</version>
+  <releaseDate>2021-01-28</releaseDate>
+  <version>1.48</version>
   <develStage>stable</develStage>
   <compatibility>
     <ver>4.7</ver>

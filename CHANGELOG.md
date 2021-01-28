@@ -1,5 +1,7 @@
-Version 1.48 (not yet released)
+Version 1.48
 ------------
+
+* Fixed issue with action get activity and the retrieval of the target and assignee contact ids.
 
 Version 1.47
 ------------

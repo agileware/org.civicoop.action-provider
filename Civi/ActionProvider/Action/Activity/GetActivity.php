@@ -47,6 +47,43 @@ class GetActivity extends AbstractGetSingleAction {
     return $bag;
   }
 
+  /**
+   * Returns the specification of the output parameters of this action.
+   *
+   * This function could be overriden by child classes.
+   *
+   * @return SpecificationBag
+   */
+  public function getOutputSpecification() {
+    $bag = parent::getOutputSpecification();
+    $target_contact_id = $bag->getSpecificationByName('target_contact_id');
+    if ($target_contact_id instanceof Specification) {
+      $target_contact_id->setMultiple(TRUE);
+    }
+    return $bag;
+  }
+
+  protected function setOutputFromEntity($entity, ParameterBagInterface $output) {
+    parent::setOutputFromEntity($entity, $output);
+
+    $sql = "SELECT DISTINCT contact_id, record_type_id FROM civicrm_activity_contact WHERE activity_id = %1 AND record_type_id IN (1,3)";
+    $sqlParams[1] = array($entity['id'], 'Integer');
+    $dao = \CRM_Core_DAO::executeQuery($sql, $sqlParams);
+    $target_contact_ids = array();
+    $assignee_contact_id = null;
+    while($dao->fetch()) {
+      if ($dao->record_type_id == 1) {
+        $assignee_contact_id = $dao->contact_id;
+      } elseif ($dao->record_type_id == 3) {
+        $target_contact_ids[] = $dao->contact_id;
+      }
+    }
+    $output->setParameter('target_contact_id', $target_contact_ids);
+    if ($assignee_contact_id) {
+      $output->setParameter('assignee_contact_id', $assignee_contact_id);
+    }
+  }
+
 
 
 }
