@@ -1,5 +1,7 @@
-Version 1.49 (not yet released)
+Version 1.49
 ------------
+
+* Added attachment parameter to send e-mail.
 
 Version 1.48
 ------------

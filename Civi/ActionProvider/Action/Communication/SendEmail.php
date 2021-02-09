@@ -7,6 +7,7 @@
 namespace Civi\ActionProvider\Action\Communication;
 
 use Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\Parameter\FileSpecification;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use Civi\ActionProvider\Parameter\SpecificationBag;
 use Civi\ActionProvider\Parameter\Specification;
@@ -52,6 +53,19 @@ class SendEmail extends AbstractAction {
     $body_html = $parameters->getParameter('body_html');
     $cc = $this->configuration->getParameter('cc');
     $bcc = $this->configuration->getParameter('bcc');
+    if ($parameters->doesParameterExists('attachments')) {
+      foreach($parameters->getParameter('attachments') as $fileId) {
+        try {
+          $file = civicrm_api3('File', 'getsingle', ['id' => $fileId]);
+          $filename = \CRM_Utils_File::cleanFileName($file['uri']);
+          $config = \CRM_Core_Config::singleton();
+          $path = $config->customFileUploadDir . DIRECTORY_SEPARATOR . $file['uri'];
+          $mailer->addAttachment($path, $filename, $file['mime_type']);
+        } catch (\CiviCRM_API3_Exception $ex) {
+          // Do nothing.
+        }
+      }
+    }
     $mailer->send($contact_id, $subject, $body_text, $body_html, $extra_data, $cc, $bcc);
   }
 
@@ -89,6 +103,7 @@ class SendEmail extends AbstractAction {
       new Specification('contribution_id', 'Integer', E::ts('Contribution ID'), false),
       new Specification('case_id', 'Integer', E::ts('Case ID'), false),
       new Specification('participant_id', 'Integer', E::ts('Participant ID'), false),
+      new Specification('attachments', 'Integer', E::ts('Attachment(s)'), false, null, null, null, true)
     ));
   }
 
