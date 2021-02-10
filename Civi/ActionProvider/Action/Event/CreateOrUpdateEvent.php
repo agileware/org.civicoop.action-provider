@@ -52,6 +52,7 @@ class CreateOrUpdateEvent extends AbstractAction {
       new OptionGroupSpecification('event_type', 'event_type', E::ts('Event Type'), TRUE),
       new Specification('title', 'String', E::ts('Title'), true, null, null, null, FALSE),
       new Specification('description', 'String', E::ts('Description'), false, null, null, null, FALSE),
+      new Specification('summary', 'String', E::ts('Summary'), false, null, null, null, FALSE),
       new Specification('start_date', 'Timestamp', E::ts('Start date'), true, null, null, null, FALSE),
       new Specification('end_date', 'Timestamp', E::ts('End date'), false, null, null, null, FALSE),
       new Specification('is_active', 'Boolean', E::ts('Is active'), false, 1, null, null, FALSE),
@@ -129,6 +130,9 @@ class CreateOrUpdateEvent extends AbstractAction {
     if ($parameters->doesParameterExists('description')) {
       $apiParams['description'] = $parameters->getParameter('description');
     }
+    if ($parameters->doesParameterExists('summary')) {
+      $apiParams['summary'] = $parameters->getParameter('summary');
+    }    
     $apiParams['start_date'] = $parameters->getParameter('start_date');
     if ($parameters->doesParameterExists('end_date')) {
       $apiParams['end_date'] = $parameters->getParameter('end_date');
