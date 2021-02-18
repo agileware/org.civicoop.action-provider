@@ -25,7 +25,10 @@ class Create extends AbstractAction {
    */
   public function getConfigurationSpecification() {
     $visibilityOptions = \CRM_Contact_DAO_Group::buildOptions('visibility');
+    $checkTitle = new Specification('check_for_title', 'Boolean', E::ts('Check title for existence'), false, false);
+    $checkTitle->setDescription(E::ts('Check whether the group already exists based on the title'));
     return new SpecificationBag([
+      $checkTitle,
       new OptionGroupSpecification('group_type','group_type', E::ts('Group type'), FALSE),
       new Specification('visibility','String', E::ts('Visibility'), FALSE, null, null, $visibilityOptions),
     ]);
@@ -92,6 +95,17 @@ class Create extends AbstractAction {
     // Get the contact and the event.
     if ($parameters->doesParameterExists('id')) {
       $groupApiParams['id'] = $parameters->getParameter('id');
+    } elseif ($this->configuration->getParameter('check_for_title')) {
+      try {
+        $groupApiParams['id'] = civicrm_api3('Group', 'getvalue', [
+          'return' => 'id',
+          'is_active' => 1,
+          'is_hidden' => 0,
+          'title' => $parameters->getParameter('title')
+        ]);
+      } catch (\CiviCRM_API3_Exception $ex) {
+        // Do nothing
+      }
     }
     $groupApiParams['title'] = $parameters->getParameter('title');
     $groupApiParams['description'] = $parameters->getParameter('description');

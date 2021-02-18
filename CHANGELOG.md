@@ -1,6 +1,7 @@
 Version 1.50 (not yet released)
 ------------
 
+* Create/Update group action also checks on the title. (#11)
 * Added summary to create event action (!32 and #10)
 
 Version 1.49
