@@ -1,4 +1,4 @@
-Version 1.50 (not yet released)
+Version 1.50
 ------------
 
 * Create/Update group action also checks on the title. (#11)
