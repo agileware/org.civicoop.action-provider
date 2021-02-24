@@ -1,6 +1,8 @@
 Version 1.51 (not yet released)
 ------------
 
+* Added Formal Title to the action Contact: Create/Update Individual
+
 Version 1.50
 ------------
 
