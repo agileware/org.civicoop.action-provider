@@ -152,10 +152,6 @@ class Actions {
     $provider->addAction('FindOrCreateContactByEmailAndName', '\Civi\ActionProvider\Action\Contact\FindOrCreateContactByEmailAndName', E::ts('Contact: Get or Create By Email and Names'), [
       AbstractAction::DATA_RETRIEVAL_TAG, AbstractAction::DATA_MANIPULATION_TAG
     ]);
-    $provider->addAction('AddTagToContact', '\Civi\ActionProvider\Action\Tag\AddTagToContact', E::ts('Contact: Add tag'), array(
-      AbstractAction::DATA_MANIPULATION_TAG,
-      AbstractAction::SINGLE_CONTACT_ACTION_TAG
-    ));
     $provider->addAction('CreateUpdateWebsite', '\Civi\ActionProvider\Action\Website\CreateUpdateWebsite',E::ts('Contact: Create or update website') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,

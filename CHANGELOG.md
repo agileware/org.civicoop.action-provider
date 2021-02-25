@@ -3,6 +3,8 @@ Version 1.51 (not yet released)
 
 * Added Formal Title to the action Contact: Create/Update Individual
 * Added action Contact: Create Note
+* Added action Contact: Add tags
+* Added action Contact: Sync tags
 
 Version 1.50
 ------------
