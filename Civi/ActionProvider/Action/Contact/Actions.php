@@ -98,6 +98,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('ContactCreateNote', '\Civi\ActionProvider\Action\Contact\CreateNote',E::ts('Contact: Create Note') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $provider->addAction('MarkContactAsDeceased', '\Civi\ActionProvider\Action\Contact\MarkContactAsDeceased',E::ts('Contact: Mark as deceased') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
