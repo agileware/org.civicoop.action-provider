@@ -1,5 +1,7 @@
-Version 1.52 (not yet released)
+Version 1.52
 ------------
+
+* Changed Add tags action so it could retrieve the tag list as a parameter.
 
 Version 1.51
 ------------

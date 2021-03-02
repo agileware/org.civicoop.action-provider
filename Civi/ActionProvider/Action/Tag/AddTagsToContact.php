@@ -17,7 +17,11 @@ use CRM_ActionProvider_ExtensionUtil as E;
 class AddTagsToContact extends AbstractAction {
 
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    $tag_ids = $this->configuration->getParameter('tag_ids');
+    if ($parameters->doesParameterExists('tag_ids')) {
+      $tag_ids = $parameters->getParameter('tag_ids');
+    } else {
+      $tag_ids = $this->configuration->getParameter('tag_ids');
+    }
     if (!is_array($tag_ids) && strlen($tag_ids)) {
       $tag_ids = explode(",", $tag_ids);
     }
@@ -37,14 +41,19 @@ class AddTagsToContact extends AbstractAction {
   }
 
   public function getConfigurationSpecification() {
+    $tagSpec = new Specification('tag_ids', 'Integer', E::ts('Tags'), false, null, 'Tag', null, true);
+    $tagSpec->setDescription(E::ts('Set either the tags at the configuration or at the parameter section.'));
     return new SpecificationBag([
-     new Specification('tag_ids', 'Integer', E::ts('Tags'), true, null, 'Tag', null, true),
+     $tagSpec,
     ]);
   }
 
   public function getParameterSpecification() {
+    $tagSpec = new Specification('tag_ids', 'Integer', E::ts('Tags'), false, null, 'Tag', null, true);
+    $tagSpec->setDescription(E::ts('Set either the tags at the configuration or at the parameter section.'));
     return new SpecificationBag([
       new Specification('contact_id', 'Integer', E::ts('Contact ID'), true),
+      $tagSpec,
     ]);
   }
 
