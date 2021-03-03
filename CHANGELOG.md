@@ -1,4 +1,4 @@
-Version 1.53 (not yet released)
+Version 1.53
 ------------
 
 * New action to create an event from a template !35
