@@ -48,6 +48,9 @@ class Actions {
     $provider->addAction('CreateRecurringEvent', '\Civi\ActionProvider\Action\Event\CreateRecurringEvent', E::ts('Event: Repeat') , array(
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('CreateEventFromTemplate', '\Civi\ActionProvider\Action\Event\CreateEventFromTemplate', E::ts('Event: Create new event from a template'), array(
+        AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $provider->addAction('GetRecurringEvent', '\Civi\ActionProvider\Action\Event\GetRecurringEvent', E::ts('Event: Get repetition') , array(
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
