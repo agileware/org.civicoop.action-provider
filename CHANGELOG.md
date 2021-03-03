@@ -2,6 +2,7 @@ Version 1.53 (not yet released)
 ------------
 
 * New action to create an event from a template !35
+* Made plain text non required on the Send Email and Send PDF by email actions.
 
 Version 1.52
 ------------
