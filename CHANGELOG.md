@@ -1,6 +1,8 @@
 Version 1.54 (not yet released)
 ------------
 
+- Compatibility fix for Symfony ^3.4 ^4.0.
+
 Version 1.53
 ------------
 

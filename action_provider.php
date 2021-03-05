@@ -11,11 +11,12 @@ use Symfony\Component\DependencyInjection\Definition;
  */
 function action_provider_civicrm_container($container) {
 	if (!$container->has('action_provider')) {
-		// Only add our container when it does not exists.
-		// This way other extensions might override the container method.
-		$actionProviderDefinition = new Definition('Civi\ActionProvider\Container');
-		$actionProviderDefinition->setFactory(['Civi\ActionProvider\Container', 'getinstance']);
-		$container->setDefinition('action_provider', $actionProviderDefinition);
+    // Only add our container when it does not exists.
+    // This way other extensions might override the container method.
+    $actionProviderDefinition = new Definition('Civi\ActionProvider\Container');
+    $actionProviderDefinition->setFactory(['Civi\ActionProvider\Container', 'getinstance']);
+    $actionProviderDefinition->setPrivate(FALSE);
+    $container->setDefinition('action_provider', $actionProviderDefinition);
 	}
 }
 
