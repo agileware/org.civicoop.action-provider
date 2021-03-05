@@ -84,10 +84,20 @@ class CreatePdf extends AbstractAction {
       'activity_type_id' => $activityTypeId,
       'activity_date_time' => date('YmdHis'),
       'details' => $message,
-      'target_contact_id' => $contactId,
+      'source_contact_id' => $contactId,
       'subject' => $subject,
     );
     $result = civicrm_api3('Activity', 'create', $activityParams);
+
+    $activityContacts = \CRM_Core_OptionGroup::values('activity_contacts', FALSE, FALSE, FALSE, NULL, 'name');
+    $targetID = \CRM_Utils_Array::key('Activity Targets', $activityContacts);
+    $activityTargetParams = array(
+      'activity_id' => $result['id'],
+      'contact_id' => $contactId,
+      'record_type_id' => $targetID
+    );
+    \CRM_Activity_BAO_ActivityContact::create($activityTargetParams);
+
     $attachment = civicrm_api3('Attachment', 'create', array(
       'entity_table' => 'civicrm_activity',
       'entity_id' => $result['id'],

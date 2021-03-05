@@ -1,7 +1,10 @@
-Version 1.54 (not yet released)
+Version 1.54
 ------------
 
-- Compatibility fix for Symfony ^3.4 ^4.0.
+* Compatibility fix for Symfony ^3.4 ^4.0.
+* Fixed issue with create pdf action and source contact id.
+* Send PDF by E-mail action can also send additional attachments.
+* The create note action does not require any extra permissions anymore.
 
 Version 1.53
 ------------

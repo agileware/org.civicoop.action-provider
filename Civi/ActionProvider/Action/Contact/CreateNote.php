@@ -38,6 +38,7 @@ class CreateNote extends AbstractAction {
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $apiCall = \Civi\Api4\Note::create();
+    $apiCall->setCheckPermissions(false);
     $apiCall->addValue('entity_table', 'civicrm_contact');
     $apiCall->addValue('entity_id', $parameters->getParameter('contact_id'));
     $apiCall->addValue('note', $parameters->getParameter('note'));

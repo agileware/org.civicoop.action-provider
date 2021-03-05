@@ -87,6 +87,21 @@ class SendPdfByEmail extends AbstractAction {
     $extra_data = array();
     $cc = $this->configuration->getParameter('cc');
     $bcc = $this->configuration->getParameter('bcc');
+
+    if ($parameters->doesParameterExists('attachments')) {
+      foreach($parameters->getParameter('attachments') as $fileId) {
+        try {
+          $file = civicrm_api3('File', 'getsingle', ['id' => $fileId]);
+          $filename = \CRM_Utils_File::cleanFileName($file['uri']);
+          $config = \CRM_Core_Config::singleton();
+          $path = $config->customFileUploadDir . DIRECTORY_SEPARATOR . $file['uri'];
+          $mailer->addAttachment($path, $filename, $file['mime_type']);
+        } catch (\CiviCRM_API3_Exception $ex) {
+          // Do nothing.
+        }
+      }
+    }
+
     $mailer->send($contact_id, $subject, $body_text, $body_html, $extra_data, $cc, $bcc);
     $file = $mailer->getAttachment($filename);
 
@@ -135,6 +150,7 @@ class SendPdfByEmail extends AbstractAction {
       new Specification('contribution_id', 'Integer', E::ts('Contribution ID'), false),
       new Specification('case_id', 'Integer', E::ts('Case ID'), false),
       new Specification('participant_id', 'Integer', E::ts('Participant ID'), false),
+      new Specification('attachments', 'Integer', E::ts('Attachment(s)'), false, null, null, null, true)
     ));
   }
 
