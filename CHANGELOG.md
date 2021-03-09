@@ -1,4 +1,4 @@
-Version 1.55 (not yet released)
+Version 1.55
 ------------
 
 * Fixed issue with attachments and send e-mail action.
