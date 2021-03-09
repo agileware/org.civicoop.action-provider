@@ -19,6 +19,10 @@ class Tokens {
    * @return string
    */
   public static function replaceTokens($contactId, $message, $contactData=array()) {
+    if (isset($contactData['activity_id']) && !empty($contactData['activity_id'])) {
+      $contactData['extra_data']['activity']['id'] = $contactData['activity_id'];
+    }
+
     $tokenCategories = self::getTokenCategories();
     $messageTokens = \CRM_Utils_Token::getTokens($message);
     $returnProperties = [
@@ -35,6 +39,7 @@ class Tokens {
         $returnProperties[$prop] = 1;
       }
     }
+
     $contact = self::getTokenDetails($contactId, $returnProperties);
     foreach($contactData as $key => $val) {
       $contact[$key] = $val;

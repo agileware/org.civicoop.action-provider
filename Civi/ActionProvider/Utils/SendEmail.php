@@ -258,7 +258,7 @@ class SendEmail {
    * @param $mimeType
    */
   public function addAttachment($fullPath, $cleanName, $mimeType) {
-    $this->attachments[$cleanName] = array(
+    $this->attachments[] = array(
       'fullPath' => $fullPath,
       'cleanName' => $cleanName,
       'mime_type' => $mimeType
@@ -274,7 +274,11 @@ class SendEmail {
    * @return mixed
    */
   public function getAttachment($cleanName) {
-    return $this->attachments[$cleanName];
+    foreach($this->attachments as $index => $attachment) {
+      if ($attachment['cleanName'] == $cleanName) {
+        return $this->attachments[$index];
+      }
+    }
   }
 
   /**
@@ -284,7 +288,7 @@ class SendEmail {
    */
   protected function processAttachments($activity_id) {
     if (is_array($this->attachments)) {
-      foreach($this->attachments as $cleanName => $attachment) {
+      foreach($this->attachments as $index => $attachment) {
         try {
           $result = civicrm_api3('Attachment', 'create', array(
             'entity_table' => 'civicrm_activity',
@@ -293,7 +297,7 @@ class SendEmail {
             'mime_type' => $attachment['mime_type'],
             'options' => array('move-file' => $attachment['fullPath']),
           ));
-          $this->attachments[$cleanName] = reset($result['values']);
+          $this->attachments[$index] = reset($result['values']);
         } catch (\CiviCRM_API3_Exception $ex) {
           // Do nothing
         }

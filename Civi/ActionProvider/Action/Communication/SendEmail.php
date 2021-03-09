@@ -57,13 +57,24 @@ class SendEmail extends AbstractAction {
     $cc = $this->configuration->getParameter('cc');
     $bcc = $this->configuration->getParameter('bcc');
     if ($parameters->doesParameterExists('attachments')) {
-      foreach($parameters->getParameter('attachments') as $fileId) {
+      foreach($parameters->getParameter('attachments') as $path) {
         try {
-          $file = civicrm_api3('File', 'getsingle', ['id' => $fileId]);
-          $filename = \CRM_Utils_File::cleanFileName($file['uri']);
-          $config = \CRM_Core_Config::singleton();
-          $path = $config->customFileUploadDir . DIRECTORY_SEPARATOR . $file['uri'];
-          $mailer->addAttachment($path, $filename, $file['mime_type']);
+          if (!file_exists($path) && is_numeric($path)) {
+            $file = civicrm_api3('File', 'getsingle', ['id' => $path]);
+            $filename = \CRM_Utils_File::cleanFileName($file['uri']);
+            $config = \CRM_Core_Config::singleton();
+            $path = $config->customFileUploadDir . DIRECTORY_SEPARATOR . $file['uri'];
+            $mime_type = $file['mime_type'];
+          }
+          if (file_exists($path)) {
+            if (!$mime_type) {
+              $mime_type = mime_content_type($path);
+            }
+            if (!$filename) {
+              $filename = basename($path);
+            }
+            $mailer->addAttachment($path, $filename, $mime_type);
+          }
         } catch (\CiviCRM_API3_Exception $ex) {
           // Do nothing.
         }
@@ -96,6 +107,8 @@ class SendEmail extends AbstractAction {
    * @return SpecificationBag
    */
   public function getParameterSpecification() {
+    $attachments = new Specification('attachments', 'String', E::ts('Attachment(s)'), false, null, null, null, true);
+    $attachments->setDescription(E::ts('Give either the path to the file or the File ID in the CiviCRM database.'));
     return new SpecificationBag(array(
       new Specification('contact_id', 'Integer', E::ts('Receiver Contact ID'), true),
       new Specification('subject', 'String', E::ts('Subject'), true),
@@ -106,7 +119,7 @@ class SendEmail extends AbstractAction {
       new Specification('contribution_id', 'Integer', E::ts('Contribution ID'), false),
       new Specification('case_id', 'Integer', E::ts('Case ID'), false),
       new Specification('participant_id', 'Integer', E::ts('Participant ID'), false),
-      new Specification('attachments', 'Integer', E::ts('Attachment(s)'), false, null, null, null, true)
+      $attachments
     ));
   }
 

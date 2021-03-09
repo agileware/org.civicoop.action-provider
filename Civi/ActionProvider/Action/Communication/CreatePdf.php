@@ -67,6 +67,7 @@ class CreatePdf extends AbstractAction {
     $output->setParameter('filename', $file['name']);
     $output->setParameter('url', $file['url']);
     $output->setParameter('path', $file['path']);
+    $output->setParameter('file_id', $file['id']);
   }
 
   /**
@@ -233,6 +234,7 @@ class CreatePdf extends AbstractAction {
       new Specification('filename', 'String', E::ts('Filename')),
       new Specification('url', 'String', E::ts('Download Url')),
       new Specification('path', 'String', E::ts('Path in filesystem')),
+      new Specification('file_id', 'Integer', E::ts('File ID')),
     ));
   }
 
