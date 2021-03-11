@@ -44,13 +44,13 @@ class UpdateCustomData extends AbstractAction {
   public function getParameterSpecification() {
     $specs = new SpecificationBag();
     $specs->addSpecification(new Specification('case_id', 'Integer', E::ts('Case ID'), true));
-    $customGroups = civicrm_api3('CustomGroup', 'get', [
-      'extends' => 'Case',
-      'is_active' => 1,
-      'options' => ['limit' => 0],
-    ]);
-    foreach ($customGroups['values'] as $customGroup) {
-      $specs->addSpecification(CustomField::getSpecForCustomGroup($customGroup['id'], $customGroup['name'], $customGroup['title']));
+
+    $config = \Civi\ActionProvider\ConfigContainer::getInstance();
+    $customGroups = $config->getCustomGroupsForEntity('Case');
+    foreach ($customGroups as $customGroup) {
+      if (!empty($customGroup['is_active'])) {
+        $specs->addSpecification(CustomField::getSpecForCustomGroup($customGroup['id'], $customGroup['name'], $customGroup['title']));
+      }
     }
     return $specs;
   }

@@ -3,6 +3,7 @@
 namespace Civi\ActionProvider\Action\Event;
 
 use \Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\ConfigContainer;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
@@ -15,7 +16,7 @@ class CreateOrUpdateParticipant extends AbstractAction {
 
   /**
    * Returns the specification of the configuration options for the actual action.
-   * 
+   *
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
@@ -26,13 +27,13 @@ class CreateOrUpdateParticipant extends AbstractAction {
       new Specification('source', 'String', E::ts('Source'), false, null, null, null, FALSE),
     ));
   }
-  
+
   /**
    * Returns the specification of the configuration options for the actual action.
-   * 
+   *
    * @return SpecificationBag
    */
-  public function getParameterSpecification() { 
+  public function getParameterSpecification() {
     $specs = new SpecificationBag(array(
       /**
        * The parameters given to the Specification object are:
@@ -49,26 +50,23 @@ class CreateOrUpdateParticipant extends AbstractAction {
       new Specification('contact_id', 'Integer', E::ts('Contact ID'), true, null, null, null, FALSE),
       new Specification('campaign_id', 'Integer', E::ts('Campaign ID'), false, null, null, null, FALSE),
     ));
-    
-    $customGroups = civicrm_api3('CustomGroup', 'get', array('extends' => 'Participant', 'is_active' => 1, 'options' => array('limit' => 0)));
-    foreach($customGroups['values'] as $customGroup) {
-      $customFields = civicrm_api3('CustomField', 'get', array('custom_group_id' => $customGroup['id'], 'is_active' => 1, 'options' => array('limit' => 0)));
-      foreach($customFields['values'] as $customField) {
-        $spec = CustomField::getSpecFromCustomField($customField, $customGroup['title'].': ', false);
-        if ($spec) {
-          $specs->addSpecification($spec);
-        }
+
+    $config = ConfigContainer::getInstance();
+    $customGroups = $config->getCustomGroupsForEntity('Participant');
+    foreach ($customGroups as $customGroup) {
+      if (!empty($customGroup['is_active'])) {
+        $specs->addSpecification(CustomField::getSpecForCustomGroup($customGroup['id'], $customGroup['name'], $customGroup['title']));
       }
     }
-    
+
     return $specs;
   }
-  
+
   /**
    * Returns the specification of the output parameters of this action.
-   * 
+   *
    * This function could be overriden by child classes.
-   * 
+   *
    * @return SpecificationBag
    */
   public function getOutputSpecification() {
@@ -76,14 +74,14 @@ class CreateOrUpdateParticipant extends AbstractAction {
       new Specification('id', 'Integer', E::ts('Participant record ID')),
     ));
   }
-  
+
   /**
    * Run the action
-   * 
+   *
    * @param ParameterInterface $parameters
    *   The parameters to this action.
    * @param ParameterBagInterface $output
-   *   The parameters this action can send back 
+   *   The parameters this action can send back
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
@@ -93,9 +91,9 @@ class CreateOrUpdateParticipant extends AbstractAction {
     $role_id = $this->configuration->getParameter('role_id');
     $status_id = $this->configuration->getParameter('status_id');
     $participant_id = false;
-    
+
     if ($this->configuration->getParameter('update_existing')) {
-      // Find the participant record for this contact and event. 
+      // Find the participant record for this contact and event.
       // This assumes that the contact has already been registered for the event.
       $participant_id = \CRM_Core_DAO::singleValueQuery("SELECT id FROM civicrm_participant WHERE is_test = '0' AND contact_id = %1 AND event_id = %2 and role_id = %3 ORDER BY id DESC LIMIT 1", array(
         1 => array($contact_id, 'Integer'),
@@ -103,7 +101,7 @@ class CreateOrUpdateParticipant extends AbstractAction {
         3 => array($role_id, 'Integer')
       ));
     }
-    
+
     // Create or Update the participant record through an API call.
     try {
       $participantParams = array();
@@ -120,7 +118,7 @@ class CreateOrUpdateParticipant extends AbstractAction {
       if ($parameters->getParameter('campaign_id')) {
         $participantParams['campaign_id'] = $parameters->getParameter('campaign_id');
       }
-      
+
       foreach($this->getParameterSpecification() as $spec) {
         if (stripos($spec->getName(), 'custom_')!==0) {
           continue;
@@ -129,12 +127,12 @@ class CreateOrUpdateParticipant extends AbstractAction {
           $participantParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
         }
       }
-      
+
       $result = civicrm_api3('Participant', 'create', $participantParams);
       $output->setParameter('id', $result['id']);
     } catch (Exception $e) {
       throw new \Civi\ActionProvider\Exception\ExecutionException(E::ts('Could not update or create a participant record'));
     }
   }
-  
+
 }

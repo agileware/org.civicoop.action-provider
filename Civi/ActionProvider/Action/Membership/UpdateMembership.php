@@ -3,6 +3,7 @@
 namespace Civi\ActionProvider\Action\Membership;
 
 use \Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\ConfigContainer;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
@@ -46,14 +47,11 @@ class UpdateMembership extends AbstractAction {
       new Specification('end_date', 'Date', E::ts('End date'), false),
     ));
 
-    $customGroups = civicrm_api3('CustomGroup', 'get', array('extends' => 'Membership', 'is_active' => 1, 'options' => array('limit' => 0)));
-    foreach($customGroups['values'] as $customGroup) {
-      $customFields = civicrm_api3('CustomField', 'get', array('custom_group_id' => $customGroup['id'], 'is_active' => 1, 'options' => array('limit' => 0)));
-      foreach($customFields['values'] as $customField) {
-        $spec = CustomField::getSpecFromCustomField($customField, $customGroup['title'].': ', false);
-        if ($spec) {
-          $specs->addSpecification($spec);
-        }
+    $config = ConfigContainer::getInstance();
+    $customGroups = $config->getCustomGroupsForEntity('Membership');
+    foreach ($customGroups as $customGroup) {
+      if (!empty($customGroup['is_active'])) {
+        $specs->addSpecification(CustomField::getSpecForCustomGroup($customGroup['id'], $customGroup['name'], $customGroup['title']));
       }
     }
 

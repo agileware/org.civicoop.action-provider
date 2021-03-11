@@ -3,6 +3,7 @@
 namespace Civi\ActionProvider\Action\Event;
 
 use \Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\ConfigContainer;
 use Civi\ActionProvider\Parameter\FileSpecification;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
@@ -90,22 +91,16 @@ class UploadCustomFileField extends AbstractAction {
    */
   public function getConfigurationSpecification() {
     $fileFields = array();
-    $customGroups = civicrm_api3('CustomGroup', 'get', array('is_active' => 1, 'is_multiple' => 0, 'extends' => 'Event', 'options' => array('limit' => 0)));
-    foreach($customGroups['values'] as $customGroup) {
-      if (!in_array($customGroup['extends'], [
-        'Event'
-      ])) {
-        continue;
-      }
-
-      $customFields = civicrm_api3('CustomField', 'get', [
-        'custom_group_id' => $customGroup['id'],
-        'is_active' => 1,
-        'data_type' => 'File',
-        'options' => ['limit' => 0]
-      ]);
-      foreach ($customFields['values'] as $customField) {
-        $fileFields[$customField['id']] = $customGroup['title']. ' :: '.$customField['label'];
+    $config = ConfigContainer::getInstance();
+    $customGroups = $config->getCustomGroupsForEntity('Event');
+    foreach ($customGroups as $customGroup) {
+      if (!empty($customGroup['is_active'])) {
+        $customFields = $config->getCustomFieldsOfCustomGroup($customGroup['id']);
+        foreach($customFields as $customField) {
+          if ($customField['data_type'] == 'File') {
+            $fileFields[$customField['id']] = $customGroup['title']. ' :: '.$customField['label'];
+          }
+        }
       }
     }
 

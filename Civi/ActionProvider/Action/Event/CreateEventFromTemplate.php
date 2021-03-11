@@ -3,6 +3,7 @@
 namespace Civi\ActionProvider\Action\Event;
 
 use \Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\ConfigContainer;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
@@ -24,7 +25,7 @@ class CreateEventFromTemplate extends AbstractAction {
 
     $locationTypes = ContactActionUtils::getLocationTypes();
     reset($locationTypes);
-    $defaultLocationType = key($locationTypes); 
+    $defaultLocationType = key($locationTypes);
 
     return new SpecificationBag(array(
       new Specification('template_id', 'Integer', E::ts('Event Template'), false, null, 'Event', null, FALSE),
@@ -72,14 +73,11 @@ class CreateEventFromTemplate extends AbstractAction {
 
     ));
 
-    $customGroups = civicrm_api3('CustomGroup', 'get', array('extends' => 'Event', 'is_active' => 1, 'options' => array('limit' => 0)));
-    foreach($customGroups['values'] as $customGroup) {
-      $customFields = civicrm_api3('CustomField', 'get', array('custom_group_id' => $customGroup['id'], 'is_active' => 1, 'options' => array('limit' => 0)));
-      foreach($customFields['values'] as $customField) {
-        $spec = CustomField::getSpecFromCustomField($customField, $customGroup['title'].': ', false);
-        if ($spec) {
-          $specs->addSpecification($spec);
-        }
+    $config = ConfigContainer::getInstance();
+    $customGroups = $config->getCustomGroupsForEntity('Event');
+    foreach ($customGroups as $customGroup) {
+      if (!empty($customGroup['is_active'])) {
+        $specs->addSpecification(CustomField::getSpecForCustomGroup($customGroup['id'], $customGroup['name'], $customGroup['title']));
       }
     }
 

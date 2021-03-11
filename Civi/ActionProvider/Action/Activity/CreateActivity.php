@@ -7,6 +7,7 @@
 namespace Civi\ActionProvider\Action\Activity;
 
 use Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\ConfigContainer;
 use Civi\ActionProvider\Parameter\OptionGroupByNameSpecification;
 use Civi\ActionProvider\Parameter\ParameterBagInterface;
 use Civi\ActionProvider\Parameter\Specification;
@@ -55,13 +56,12 @@ class CreateActivity extends AbstractAction {
       new Specification('case_id', 'Integer', E::ts('Case ID'), false),
     ]);
 
-    $customGroups = civicrm_api3('CustomGroup', 'get', [
-      'extends' => 'Activity',
-      'is_active' => 1,
-      'options' => ['limit' => 0],
-    ]);
-    foreach ($customGroups['values'] as $customGroup) {
-      $bag->addSpecification(CustomField::getSpecForCustomGroup($customGroup['id'], $customGroup['name'], $customGroup['title']));
+    $config = ConfigContainer::getInstance();
+    $customGroups = $config->getCustomGroupsForEntity('Activity');
+    foreach ($customGroups as $customGroup) {
+      if (!empty($customGroup['is_active'])) {
+        $bag->addSpecification(CustomField::getSpecForCustomGroup($customGroup['id'], $customGroup['name'], $customGroup['title']));
+      }
     }
 
     return $bag;

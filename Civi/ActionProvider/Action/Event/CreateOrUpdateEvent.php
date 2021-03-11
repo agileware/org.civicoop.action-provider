@@ -4,6 +4,7 @@ namespace Civi\ActionProvider\Action\Event;
 
 use \Civi\ActionProvider\Action\AbstractAction;
 use Civi\ActionProvider\Action\Contact\ContactActionUtils;
+use Civi\ActionProvider\ConfigContainer;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
@@ -14,10 +15,10 @@ use CRM_ActionProvider_ExtensionUtil as E;
 use Dompdf\Exception;
 
 class CreateOrUpdateEvent extends AbstractAction {
-  
+
   /**
    * Returns the specification of the configuration options for the actual action.
-   * 
+   *
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
@@ -29,13 +30,13 @@ class CreateOrUpdateEvent extends AbstractAction {
       new Specification('address_location_type', 'Integer', E::ts('Address: Location type'), false, $defaultLocationType, null, $locationTypes, FALSE),
     ));
   }
-  
+
   /**
    * Returns the specification of the configuration options for the actual action.
-   * 
+   *
    * @return SpecificationBag
    */
-  public function getParameterSpecification() { 
+  public function getParameterSpecification() {
     $specs = new SpecificationBag(array(
       /**
        * The parameters given to the Specification object are:
@@ -58,28 +59,25 @@ class CreateOrUpdateEvent extends AbstractAction {
       new Specification('is_active', 'Boolean', E::ts('Is active'), false, 1, null, null, FALSE),
       new Specification('is_public', 'Boolean', E::ts('Is public'), false, 0, null, null, FALSE),
     ));
-    
-    $customGroups = civicrm_api3('CustomGroup', 'get', array('extends' => 'Event', 'is_active' => 1, 'options' => array('limit' => 0)));
-    foreach($customGroups['values'] as $customGroup) {
-      $customFields = civicrm_api3('CustomField', 'get', array('custom_group_id' => $customGroup['id'], 'is_active' => 1, 'options' => array('limit' => 0)));
-      foreach($customFields['values'] as $customField) {
-        $spec = CustomField::getSpecFromCustomField($customField, $customGroup['title'].': ', false);
-        if ($spec) {
-          $specs->addSpecification($spec);
-        }
+
+    $config = ConfigContainer::getInstance();
+    $customGroups = $config->getCustomGroupsForEntity('Event');
+    foreach ($customGroups as $customGroup) {
+      if (!empty($customGroup['is_active'])) {
+        $specs->addSpecification(CustomField::getSpecForCustomGroup($customGroup['id'], $customGroup['name'], $customGroup['title']));
       }
     }
 
     ContactActionUtils::createAddressParameterSpecification($specs);
-    
+
     return $specs;
   }
-  
+
   /**
    * Returns the specification of the output parameters of this action.
-   * 
+   *
    * This function could be overriden by child classes.
-   * 
+   *
    * @return SpecificationBag
    */
   public function getOutputSpecification() {
@@ -87,14 +85,14 @@ class CreateOrUpdateEvent extends AbstractAction {
       new Specification('id', 'Integer', E::ts('Event ID')),
     ));
   }
-  
+
   /**
    * Run the action
-   * 
+   *
    * @param ParameterInterface $parameters
    *   The parameters to this action.
    * @param ParameterBagInterface $output
-   *   The parameters this action can send back 
+   *   The parameters this action can send back
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
@@ -132,7 +130,7 @@ class CreateOrUpdateEvent extends AbstractAction {
     }
     if ($parameters->doesParameterExists('summary')) {
       $apiParams['summary'] = $parameters->getParameter('summary');
-    }    
+    }
     $apiParams['start_date'] = $parameters->getParameter('start_date');
     if ($parameters->doesParameterExists('end_date')) {
       $apiParams['end_date'] = $parameters->getParameter('end_date');
@@ -165,5 +163,5 @@ class CreateOrUpdateEvent extends AbstractAction {
       throw new \Civi\ActionProvider\Exception\ExecutionException(E::ts('Could not update or create an event.'));
     }
   }
-  
+
 }

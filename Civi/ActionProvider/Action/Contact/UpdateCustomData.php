@@ -3,6 +3,7 @@
 namespace Civi\ActionProvider\Action\Contact;
 
 use \Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\ConfigContainer;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
@@ -11,14 +12,14 @@ use \Civi\ActionProvider\Utils\CustomField;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class UpdateCustomData extends AbstractAction {
-  
+
   /**
    * Run the action
-   * 
+   *
    * @param ParameterInterface $parameters
    *   The parameters to this action.
    * @param ParameterBagInterface $output
-   *   The parameters this action can send back 
+   *   The parameters this action can send back
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
@@ -33,56 +34,45 @@ class UpdateCustomData extends AbstractAction {
     }
     $result = civicrm_api3('Contact', 'create', $apiParams);
   }
-  
+
   /**
    * Returns the specification of the configuration options for the actual action.
-   * 
+   *
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
     return new SpecificationBag();
   }
-  
+
   /**
    * Returns the specification of the parameters of the actual action.
-   * 
+   *
    * @return SpecificationBag
    */
   public function getParameterSpecification() {
     $specs = new SpecificationBag();
     $specs->addSpecification(new Specification('contact_id', 'Integer', E::ts('Contact ID'), true));
-    
-    $customGroups = civicrm_api3('CustomGroup', 'get', array('is_active' => 1, 'is_multiple' => 0, 'options' => array('limit' => 0)));
-    foreach($customGroups['values'] as $customGroup) {
-      if (!in_array($customGroup['extends'], array('Individual', 'Household', 'Organization', 'Contact'))) {
-        continue;
-      }
-      
-      $customFields = civicrm_api3('CustomField', 'get', array('custom_group_id' => $customGroup['id'], 'is_active' => 1, 'options' => array('limit' => 0)));
-      foreach($customFields['values'] as $customField) {
-        if (isset($customField['is_view']) && $customField['is_view']) {
-          continue;
-        }
 
-        $spec = CustomField::getSpecFromCustomField($customField, $customGroup['title'].': ', false);
-        if ($spec) {
-          $specs->addSpecification($spec);
-        }
+    $config = ConfigContainer::getInstance();
+    $customGroups = $config->getCustomGroupsForEntities(['Contact', 'Individual', 'Household', 'Organization']);
+    foreach ($customGroups as $customGroup) {
+      if (!empty($customGroup['is_active'])) {
+        $specs->addSpecification(CustomField::getSpecForCustomGroup($customGroup['id'], $customGroup['name'], $customGroup['title']));
       }
     }
     return $specs;
   }
-  
+
   /**
    * Returns the specification of the output parameters of this action.
-   * 
+   *
    * This function could be overriden by child classes.
-   * 
+   *
    * @return SpecificationBag
    */
   public function getOutputSpecification() {
     return new SpecificationBag();
   }
-    
-  
+
+
 }

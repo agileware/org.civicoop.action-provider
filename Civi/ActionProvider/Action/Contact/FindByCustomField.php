@@ -3,6 +3,7 @@
 namespace Civi\ActionProvider\Action\Contact;
 
 use \Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\ConfigContainer;
 use Civi\ActionProvider\Exception\ExecutionException;
 use Civi\ActionProvider\Exception\InvalidParameterException;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
@@ -78,18 +79,11 @@ class FindByCustomField extends AbstractAction {
 	 */
 	public function getParameterSpecification() {
 		$specs = new SpecificationBag();
-    $customGroups = civicrm_api3('CustomGroup', 'get', array('is_active' => 1, 'is_multiple' => 0, 'options' => array('limit' => 0)));
-    foreach($customGroups['values'] as $customGroup) {
-      if (!in_array($customGroup['extends'], array('Individual', 'Household', 'Organization', 'Contact'))) {
-        continue;
-      }
-
-      $customFields = civicrm_api3('CustomField', 'get', array('custom_group_id' => $customGroup['id'], 'is_active' => 1, 'options' => array('limit' => 0)));
-      foreach($customFields['values'] as $customField) {
-        $spec = CustomField::getSpecFromCustomField($customField, $customGroup['title'].': ', false);
-        if ($spec) {
-          $specs->addSpecification($spec);
-        }
+    $config = ConfigContainer::getInstance();
+    $customGroups = $config->getCustomGroupsForEntities(['Contact', 'Individual', 'Household', 'Organization']);
+    foreach($customGroups as $customGroup) {
+      if (!empty($customGroup['is_active'])) {
+        $specs->addSpecification(CustomField::getSpecForCustomGroup($customGroup['id'], $customGroup['name'], $customGroup['title']));
       }
     }
     return $specs;

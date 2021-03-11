@@ -3,6 +3,7 @@
 namespace Civi\ActionProvider\Action\Contact;
 
 use Civi\ActionProvider\Action\AbstractGetSingleAction;
+use Civi\ActionProvider\ConfigContainer;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
@@ -72,22 +73,11 @@ class ContactDataById extends AbstractGetSingleAction {
    */
   public function getOutputSpecification() {
     $specs = parent::getOutputSpecification();
-    $customGroups = civicrm_api3('CustomGroup', 'get', [
-      'extends' => ['IN' => ['Individual', 'Household', 'Organization']],
-      'is_active' => 1,
-      'options' => ['limit' => 0],
-    ]);
-    foreach ($customGroups['values'] as $customGroup) {
-      $customFields = civicrm_api3('CustomField', 'get', [
-        'custom_group_id' => $customGroup['id'],
-        'is_active' => 1,
-        'options' => ['limit' => 0],
-      ]);
-      foreach ($customFields['values'] as $customField) {
-        $spec = CustomField::getSpecFromCustomField($customField, $customGroup['title'] . ': ', FALSE);
-        if ($spec) {
-          $specs->addSpecification($spec);
-        }
+    $config = ConfigContainer::getInstance();
+    $customGroups = $config->getCustomGroupsForEntities(['Contact', 'Individual', 'Household', 'Organization']);
+    foreach ($customGroups as $customGroup) {
+      if (!empty($customGroup['is_active'])) {
+        $specs->addSpecification(CustomField::getSpecForCustomGroup($customGroup['id'], $customGroup['name'], $customGroup['title']));
       }
     }
     return $specs;

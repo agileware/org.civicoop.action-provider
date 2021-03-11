@@ -73,6 +73,21 @@ class Config extends \Symfony\Component\DependencyInjection\Container {
   }
 
   /**
+   * Returns an array of custom groups for an entity.
+   *
+   * @param array $entities
+   * @return array
+   */
+  public function getCustomGroupsForEntities($entities) {
+    $customGroupExtends = $this->getParameter('custom_groups_per_extends');
+    $customGroups = [];
+    foreach($entities as $entity) {
+      $customGroups = array_merge($customGroups, isset($customGroupExtends[$entity]) ? $customGroupExtends[$entity] : []);
+    }
+    return $customGroups;
+  }
+
+  /**
    * Build the container with the custom field and custom groups.
    *
    * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
