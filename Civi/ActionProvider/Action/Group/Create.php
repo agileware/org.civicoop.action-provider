@@ -28,6 +28,7 @@ class Create extends AbstractAction {
     return new SpecificationBag([
       new OptionGroupSpecification('group_type','group_type', E::ts('Group type'), FALSE),
       new Specification('visibility','String', E::ts('Visibility'), FALSE, null, null, $visibilityOptions),
+      new Specification('is_hidden','Boolean', E::ts('Group is hidden')),
     ]);
   }
 
@@ -100,6 +101,9 @@ class Create extends AbstractAction {
     }
     if ($this->configuration->doesParameterExists('visibility')) {
       $groupApiParams['visibility'] = $this->configuration->getParameter('visibility');
+    }
+    if ($this->configuration->doesParameterExists('is_hidden')) {
+      $groupApiParams['is_hidden'] = $this->configuration->getParameter('is_hidden');
     }
     foreach($this->getParameterSpecification() as $spec) {
       if (stripos($spec->getName(), 'custom_')!==0) {
