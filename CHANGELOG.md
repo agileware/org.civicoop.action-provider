@@ -2,6 +2,7 @@ Version 1.56 (not yet released)
 ------------
 
 * Improved performance of various actions by using the config container which caches the api calls of custom groups and custom fields.
+* Add is_hidden as an option for Create Group action !38
 
 Version 1.55
 ------------
