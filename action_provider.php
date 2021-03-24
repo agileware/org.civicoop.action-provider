@@ -2,7 +2,7 @@
 
 require_once 'action_provider.civix.php';
 use CRM_ActionProvider_ExtensionUtil as E;
-use Symfony\Component\DependencyInjection\Definition;
+use Civi\ActionProvider\Symfony\Component\DependencyInjection\DefinitionAdapter;
 
 /**
  * Implements hook_civicrm_container()
@@ -13,9 +13,8 @@ function action_provider_civicrm_container($container) {
 	if (!$container->has('action_provider')) {
     // Only add our container when it does not exists.
     // This way other extensions might override the container method.
-    $actionProviderDefinition = new Definition('Civi\ActionProvider\Container');
+    $actionProviderDefinition = DefinitionAdapter::createDefinitionClass('Civi\ActionProvider\Container');
     $actionProviderDefinition->setFactory(['Civi\ActionProvider\Container', 'getinstance']);
-    $actionProviderDefinition->setPrivate(FALSE);
     $container->setDefinition('action_provider', $actionProviderDefinition);
 	}
 }

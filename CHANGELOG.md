@@ -1,5 +1,7 @@
-Version 1.57 (not yet released)
+Version 1.57
 ------------
+
+* Fixed issue with action provider and CiviCRM version 5.14 whlist keeping the compatibility with civicrm version 5.34 and drupal 9.
 
 Version 1.56
 ------------
