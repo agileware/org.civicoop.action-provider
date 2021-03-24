@@ -3,6 +3,7 @@ Version 1.56 (not yet released)
 
 * Improved performance of various actions by using the config container which caches the api calls of custom groups and custom fields.
 * Add is_hidden as an option for Create Group action !38
+* Add Max Participants and Waitlist Text to Create Event and Create Event From Template actions.
 
 Version 1.55
 ------------

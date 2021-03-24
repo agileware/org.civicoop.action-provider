@@ -66,6 +66,8 @@ class CreateEventFromTemplate extends AbstractAction {
 
       new Specification('is_active', 'Boolean', E::ts('Is active'), false, 1, null, null, FALSE),
       new Specification('is_public', 'Boolean', E::ts('Is public'), false, 0, null, null, FALSE),
+      new Specification('max_participants', 'Integer', E::ts('Max. Participants'), false, null),
+      new Specification('waitlist_text', 'String', E::ts('Text when event is full'), false, null),
 
       new Specification('organiser', 'Integer', E::ts('Event Organiser'), false, null, 'Contact', null, FALSE),
 
@@ -170,6 +172,14 @@ class CreateEventFromTemplate extends AbstractAction {
 
     if ($parameters->doesParameterExists('is_public')) {
       $apiParams['is_public'] = $parameters->getParameter('is_public');
+    }
+
+    if ($parameters->doesParameterExists('max_participants')) {
+      $apiParams['max_participants'] = $parameters->getParameter('max_participants');
+    }
+
+    if ($parameters->doesParameterExists('waitlist_text')) {
+      $apiParams['waitlist_text'] = $parameters->getParameter('waitlist_text');
     }
 
     if ($parameters->doesParameterExists('organiser')) {
