@@ -1,4 +1,4 @@
-Version 1.56 (not yet released)
+Version 1.56
 ------------
 
 * Improved performance of various actions by using the config container which caches the api calls of custom groups and custom fields.
