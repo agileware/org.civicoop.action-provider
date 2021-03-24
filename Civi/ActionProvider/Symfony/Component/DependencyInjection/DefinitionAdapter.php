@@ -34,6 +34,7 @@ class DefinitionAdapter extends Definition {
    */
   public static function createDefinitionClass($class = null, array $arguments = array()) {
     $definition = new Definition($class, $arguments);
+    $definition->setPublic(true);
     if (method_exists(Definition::class, 'setPrivate')) {
       $definition->setPrivate(FALSE);
     }
