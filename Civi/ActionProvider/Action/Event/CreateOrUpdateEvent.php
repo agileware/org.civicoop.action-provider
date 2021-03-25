@@ -159,8 +159,6 @@ class CreateOrUpdateEvent extends AbstractAction {
       $apiParams['waitlist_text'] = $parameters->getParameter('waitlist_text');
     }
 
-    var_dump($parameters);
-    var_dump($apiParams); exit();
     // Create or Update the event through an API call.
     try {
       $result = civicrm_api3('Event', 'create', $apiParams);
