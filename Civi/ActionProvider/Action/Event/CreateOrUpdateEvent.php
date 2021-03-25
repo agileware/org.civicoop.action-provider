@@ -123,7 +123,7 @@ class CreateOrUpdateEvent extends AbstractAction {
     }
 
     // Get the contact and the event.
-    $apiParams = array();
+    $apiParams = CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification());
     if ($parameters->doesParameterExists('event_id')) {
       $apiParams['id'] = $parameters->getParameter('event_id');
     }
@@ -159,14 +159,8 @@ class CreateOrUpdateEvent extends AbstractAction {
       $apiParams['waitlist_text'] = $parameters->getParameter('waitlist_text');
     }
 
-    foreach($this->getParameterSpecification() as $spec) {
-      if (stripos($spec->getName(), 'custom_')!==0) {
-        continue;
-      }
-      if ($parameters->doesParameterExists($spec->getName())) {
-        $apiParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
-      }
-    }
+    var_dump($parameters);
+    var_dump($apiParams); exit();
     // Create or Update the event through an API call.
     try {
       $result = civicrm_api3('Event', 'create', $apiParams);

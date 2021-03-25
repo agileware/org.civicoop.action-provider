@@ -1,5 +1,7 @@
-Version 1.59 (not yet released)
+Version 1.59
 ------------
+
+* Fixed issue with custom fields with Create Event and Create Event From Template actions.
 
 Version 1.58
 ------------

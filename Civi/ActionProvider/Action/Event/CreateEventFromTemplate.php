@@ -134,7 +134,7 @@ class CreateEventFromTemplate extends AbstractAction {
       }
     }
 
-    $apiParams = array();
+    $apiParams = CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification());
 
     $apiParams['template_id'] = $parameters->getParameter('template_id');
 
@@ -189,15 +189,6 @@ class CreateEventFromTemplate extends AbstractAction {
 
     if ($parameters->doesParameterExists('organiser')) {
       $apiParams['created_id'] = $parameters->getParameter('organiser');
-    }
-
-    foreach($this->getParameterSpecification() as $spec) {
-      if (stripos($spec->getName(), 'custom_')!==0) {
-        continue;
-      }
-      if ($parameters->doesParameterExists($spec->getName())) {
-        $apiParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
-      }
     }
 
     // Create the event through an API call.
