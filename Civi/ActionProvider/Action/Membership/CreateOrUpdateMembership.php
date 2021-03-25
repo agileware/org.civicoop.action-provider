@@ -87,7 +87,7 @@ class CreateOrUpdateMembership extends AbstractAction {
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $membership_type = civicrm_api3('MembershipType', 'getvalue', array('name' => $this->configuration->getParameter('membership_type'), 'return' => 'id'));
 
-    $apiParams = array();
+    $apiParams = CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification());
     if ($parameters->doesParameterExists('membership_id')) {
       $apiParams['id'] = $parameters->getParameter('membership_id');
     }
@@ -106,14 +106,6 @@ class CreateOrUpdateMembership extends AbstractAction {
       $apiParams['source'] = $parameters->getParameter('source');
     }
 
-    foreach($this->getParameterSpecification() as $spec) {
-      if (stripos($spec->getName(), 'custom_')!==0) {
-        continue;
-      }
-      if ($parameters->doesParameterExists($spec->getName())) {
-        $apiParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
-      }
-    }
     // Create or Update the event through an API call.
     try {
       $result = civicrm_api3('Membership', 'create', $apiParams);

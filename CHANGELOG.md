@@ -1,5 +1,7 @@
-Version 1.60 (not yet released)
+Version 1.60
 ------------
+
+* Fixed regression issue with custom fields on a lot of actions.
 
 Version 1.59
 ------------

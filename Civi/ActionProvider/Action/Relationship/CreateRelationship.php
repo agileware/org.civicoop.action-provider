@@ -11,6 +11,7 @@ use Civi\ActionProvider\ConfigContainer;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
+use Civi\ActionProvider\Parameter\SpecificationGroup;
 use \Civi\ActionProvider\Utils\CustomField;
 
 use CRM_ActionProvider_ExtensionUtil as E;
@@ -126,16 +127,26 @@ class CreateRelationship extends AbstractAction {
 
     $relationshipParams['custom'] = array();
     foreach($this->getParameterSpecification() as $spec) {
-      if (stripos($spec->getName(), 'custom_')!==0) {
-        continue;
-      }
-      if ($parameters->doesParameterExists($spec->getName())) {
-        [$customFieldID, $customValueID] = \CRM_Core_BAO_CustomField::getKeyID($spec->getApiFieldName(), TRUE);
-        $value = $parameters->getParameter($spec->getName());
-        if (is_array($value)) {
-          $value = \CRM_Core_DAO::VALUE_SEPARATOR . implode(\CRM_Core_DAO::VALUE_SEPARATOR, $value) . \CRM_Core_DAO::VALUE_SEPARATOR;
+      if ($spec instanceof SpecificationGroup) {
+        foreach($spec->getSpecificationBag() as $subSpec) {
+          if (stripos($subSpec->getName(), 'custom_')===0 && $parameters->doesParameterExists($subSpec->getName())) {
+            list($customFieldID, $customValueID) = \CRM_Core_BAO_CustomField::getKeyID($subSpec->getApiFieldName(), TRUE);
+            $value = $parameters->getParameter($subSpec->getName());
+            if (is_array($value)) {
+              $value = \CRM_Core_DAO::VALUE_SEPARATOR . implode(\CRM_Core_DAO::VALUE_SEPARATOR, $value) . \CRM_Core_DAO::VALUE_SEPARATOR;
+            }
+            \CRM_Core_BAO_CustomField::formatCustomField($customFieldID, $relationshipParams['custom'], $value, 'Relationship', $customValueID);
+          }
         }
-        \CRM_Core_BAO_CustomField::formatCustomField($customFieldID, $relationshipParams['custom'], $value, 'Relationship', $customValueID);
+      } elseif (stripos($spec->getName(), 'custom_')===0) {
+        if ($parameters->doesParameterExists($spec->getName())) {
+          list($customFieldID, $customValueID) = \CRM_Core_BAO_CustomField::getKeyID($spec->getApiFieldName(), TRUE);
+          $value = $parameters->getParameter($spec->getName());
+          if (is_array($value)) {
+            $value = \CRM_Core_DAO::VALUE_SEPARATOR . implode(\CRM_Core_DAO::VALUE_SEPARATOR, $value) . \CRM_Core_DAO::VALUE_SEPARATOR;
+          }
+          \CRM_Core_BAO_CustomField::formatCustomField($customFieldID, $relationshipParams['custom'], $value, 'Relationship', $customValueID);
+        }
       }
     }
     try {

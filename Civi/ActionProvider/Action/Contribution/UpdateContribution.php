@@ -30,8 +30,8 @@ class UpdateContribution extends AbstractAction {
    * @throws \Exception
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
+    $contribution_params = CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification());
     $contribution_params['id'] = $parameters->getParameter('id');
-
 
     if ($parameters->doesParameterExists('financial_type_id')) {
       $contribution_params['financial_type_id'] = $parameters->getParameter('financial_type_id');
@@ -71,15 +71,6 @@ class UpdateContribution extends AbstractAction {
     }
     if ($parameters->doesParameterExists('note')) {
       $contribution_params['note'] = $parameters->getParameter('note');
-    }
-
-    foreach($this->getParameterSpecification() as $spec) {
-      if (stripos($spec->getName(), 'custom_')!==0) {
-        continue;
-      }
-      if ($parameters->doesParameterExists($spec->getName())) {
-        $contribution_params[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
-      }
     }
 
     $result = civicrm_api3('Contribution', 'Create', $contribution_params);

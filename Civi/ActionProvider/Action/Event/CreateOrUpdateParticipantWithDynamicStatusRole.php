@@ -104,7 +104,7 @@ class CreateOrUpdateParticipantWithDynamicStatusRole extends AbstractAction {
 
     // Create or Update the participant record through an API call.
     try {
-      $participantParams = array();
+      $participantParams = CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification());
       if ($participant_id) {
         $participantParams['id'] = $participant_id;
       }
@@ -117,15 +117,6 @@ class CreateOrUpdateParticipantWithDynamicStatusRole extends AbstractAction {
       }
       if ($parameters->getParameter('campaign_id')) {
         $participantParams['campaign_id'] = $parameters->getParameter('campaign_id');
-      }
-
-      foreach($this->getParameterSpecification() as $spec) {
-        if (stripos($spec->getName(), 'custom_')!==0) {
-          continue;
-        }
-        if ($parameters->doesParameterExists($spec->getName())) {
-          $participantParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
-        }
       }
 
       $result = civicrm_api3('Participant', 'create', $participantParams);

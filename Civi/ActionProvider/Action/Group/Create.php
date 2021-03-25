@@ -84,6 +84,7 @@ class Create extends AbstractAction {
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     // Get the contact and the event.
+    $groupApiParams = CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification());
     if ($parameters->doesParameterExists('id')) {
       $groupApiParams['id'] = $parameters->getParameter('id');
     } elseif ($this->configuration->getParameter('check_for_title')) {
@@ -108,14 +109,6 @@ class Create extends AbstractAction {
     }
     if ($this->configuration->doesParameterExists('is_hidden')) {
       $groupApiParams['is_hidden'] = $this->configuration->getParameter('is_hidden');
-    }
-    foreach($this->getParameterSpecification() as $spec) {
-      if (stripos($spec->getName(), 'custom_')!==0) {
-        continue;
-      }
-      if ($parameters->doesParameterExists($spec->getName())) {
-        $groupApiParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
-      }
     }
 
     try {

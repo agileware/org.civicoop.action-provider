@@ -33,6 +33,7 @@ class CreateContributionWithParameters extends AbstractAction {
     $contact_id = $parameters->getParameter('contact_id');
 
     // Create a contribution
+    $contribution_params = CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification());
     $contribution_params['financial_type_id'] = $parameters->getParameter('financial_type_id');
     $contribution_params['contribution_status_id'] = $parameters->getParameter('contribution_status');
     $contribution_params['payment_instrument_id'] = $parameters->getParameter('payment_instrument');
@@ -78,14 +79,6 @@ class CreateContributionWithParameters extends AbstractAction {
       $contribution_params['check_number'] = $parameters->getParameter('check_number');
     }
     $contribution_params['skipLineItem'] = $this->configuration->getParameter('skipLineItem') ? true : false;
-    foreach($this->getParameterSpecification() as $spec) {
-      if (stripos($spec->getName(), 'custom_')!==0) {
-        continue;
-      }
-      if ($parameters->doesParameterExists($spec->getName())) {
-        $contribution_params[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
-      }
-    }
 
     $result = civicrm_api3('Contribution', 'Create', $contribution_params);
 
