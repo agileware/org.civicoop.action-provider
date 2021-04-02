@@ -1,6 +1,8 @@
 Version 1.61 (not yet released)
 ------------
 
+* Improved angular performance.
+
 Version 1.60
 ------------
 

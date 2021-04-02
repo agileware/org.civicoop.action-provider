@@ -1,7 +1,7 @@
 (function(angular, $, _) {
   // "crmApActionConfiguration" is a basic skeletal directive.
   // Example usage: <crm-ap-action-configuration configuration="action.configuration" action="action.type"></crm-ap-action-configuration>
-  angular.module('action_provider').directive('crmApActionConfiguration', ["crmApi", function(crmApi) {
+  angular.module('action_provider').directive('crmApActionConfiguration', ["actionProviderFactory", function(actionProviderFactory) {
     var actions = {};
     return {
       restrict: 'E',
@@ -38,8 +38,8 @@
       	  return;
       	}
 
-      	crmApi('ActionProvider', 'getaction', {name: $scope.name, context: $scope.context}).
-      	then(function (data) {
+        actionProviderFactory.getAction($scope.name, $scope.context)
+        .then(function (data) {
       	  actions[$scope.context][$scope.name] = data;
       	  $scope.action = data;
 
