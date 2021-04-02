@@ -1,7 +1,7 @@
 (function(angular, $, _) {
   // "crmApConditionConfiguration" is a basic skeletal directive.
   // Example usage: <crm-ap-condition-configuration configuration="condition.configuration" condition="condition.type"></crm-ap-condition-configuration>
-  angular.module('action_provider').directive('crmApConditionConfiguration', ["crmApi", function(crmApi) {
+  angular.module('action_provider').directive('crmApConditionConfiguration', ["actionProviderFactory", function(actionProviderFactory) {
     var conditions = {};
     var actions = {};
     return {
@@ -38,7 +38,7 @@
             return;
           }
 
-          crmApi('ActionProvider', 'getcondition', {name: $scope.name, context: $scope.context}).
+          actionProviderFactory.getCondition($scope.name, $scope.context).
           then(function (data) {
             conditions[$scope.context][$scope.name] = data;
             $scope.condition = data;
@@ -65,10 +65,8 @@
         if ($scope.action in actions[$scope.context]) {
           $scope.actionObject = actions[$scope.context][$scope.action];
         } else {
-          crmApi('ActionProvider', 'getaction', {
-            name: $scope.action,
-            context: $scope.context
-          }).then(function (data) {
+          actionProviderFactory.getAction($scope.action, $scope.context)
+          .then(function (data) {
             actions[$scope.context][$scope.action] = data;
             $scope.actionObject = data;
           });

@@ -52,17 +52,16 @@
 	  <h3 class="widget-header">{{ts('Parameters')}}</h3>
 	  <ng-repeat ng-repeat="spec in condition.parameter_spec">
       <div crm-ui-field="{name: 'input_mapper.'+spec.name, title: spec.title, required: spec.required}" ng-if="spec.type == 'specification'">
-        <select
+        <input
+            type="text"
             style="width: 90%;"
             crm-ui-id="input_mapper.{{spec.name}}"
             name="{{spec.name}}"
             ui-jq="select2"
-            ui-options="{allowClear: true}"
+            ui-options="{dropdownAutoWidth : true, allowClear: true, minimumInputLength: 0, data: {results: fields}}"
             ng-model="configuration.parameter_mapping[spec.name]"
             ng-required="spec.required"
-            ng-options="field.name as field.label for field in fields">
-          <option value=""></option>
-        </select>
+        />
       </div>
 
       <div ng-if="spec.type == 'collection'">
@@ -78,17 +77,16 @@
           <tr ng-repeat="collection_config in configuration.parameter_mapping[spec.name]" ng-class-even="'crm-entity even-row even'" ng-class-odd="'crm-entity odd-row odd'">
             <td ng-repeat="collection_spec in spec.specification_bag">
               <div crm-ui-field="{name: 'input_mapper.'+collection_spec.name}" ng-if="collection_spec.type == 'specification'">
-                <select
+                <input
+                  type="text"
                   style="width: 90%;"
                   crm-ui-id="input_mapper.{{collection_spec.name}}"
                   name="{{collection_spec.name}}"
                   ui-jq="select2"
-                  ui-options="{allowClear: true}"
+                  ui-options="{dropdownAutoWidth : true, allowClear: true, minimumInputLength: 0, data: {results: fields}}"
                   ng-model="collection_config.parameter_mapping[collection_spec.name]"
                   ng-required="collection_spec.required"
-                  ng-options="field.name as field.label for field in fields">
-                  <option value=""></option>
-                </select>
+                  />
               </div>
             </td>
             <td>
@@ -107,17 +105,15 @@
 	<h3 class="widget-header">{{ts('Map output data if condition is not valid')}}</h3>
 	<ng-repeat ng-repeat="spec in actionObject.output_spec">
 	  <div crm-ui-field="{name: 'output_mapper.'+spec.name, title: spec.title}">
-	    <select
-	     	class="huge"
-	     	crm-ui-id="output_mapper.{{spec.name}}"
+	    <input
+          type="text"
+          class="huge"
+          crm-ui-id="output_mapper.{{spec.name}}"
 	      name="{{spec.name}}"
-	      ui-jq="select2"
-	      ui-options="{allowClear: true}"
+          ui-jq="select2"
+          ui-options="{dropdownAutoWidth : true, allowClear: true, minimumInputLength: 0, data: {results: fields}}"
 	      ng-model="configuration.output_mapping[spec.name]"
-	      ng-options="field.name as field.label for field in fields"
-      >
-	      <option value=""></option>
-      </select>
+      />
     </div>
   </ng-repeat>
 </div>
