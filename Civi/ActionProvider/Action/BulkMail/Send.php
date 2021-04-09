@@ -54,6 +54,7 @@ class Send extends AbstractAction {
       new Specification('from_name', 'String', E::ts('From name'), false, null, null, null, False),
       new Specification('from_email', 'String', E::ts('From E-mail'), false, null, null, null, False),
       new Specification('replyto_email', 'String', E::ts('Reply to'), false, null, null, null, False),
+      new Specification('scheduled_date', 'Timestamp', E::ts('Scheduled date'), false, null, null, null, False),
     ));
     return $specs;
   }
@@ -116,6 +117,9 @@ class Send extends AbstractAction {
     if ($parameters->doesParameterExists('template_options')) {
       $apiParams['template_options'] = $parameters->getParameter('template_options');
     }
+    if ($parameters->doesParameterExists('scheduled_date')) {
+      $scheduled_date = $parameters->getParameter('scheduled_date');
+    }
     $mailing = civicrm_api3('Mailing', 'Create', $apiParams);
 
     foreach($groupIds as $groupId) {
@@ -127,8 +131,13 @@ class Send extends AbstractAction {
     }
 
     // Now send the mailing
-    $now = new \DateTime();
-    $now->setTimezone(new \DateTimeZone('UTC'));
+    if(!empty($scheduled_date)) {
+      $now = new \DateTime($scheduled_date, new \DateTimeZone('UTC'));
+    }
+    else {
+      $now = new \DateTime();
+      $now->setTimezone(new \DateTimeZone('UTC'));
+    }
     $mailingSendParams['id'] = $mailing['id'];
     $mailingSendParams['scheduled_date'] = $now->format('Ymd His');
     civicrm_api3('Mailing', 'submit', $mailingSendParams);
