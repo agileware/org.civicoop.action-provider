@@ -1,6 +1,8 @@
 Version 1.62 (not yet released)
 ------------
 
+* Ability to add schedule date for sending emails  by !39
+
 Version 1.61
 ------------
 
