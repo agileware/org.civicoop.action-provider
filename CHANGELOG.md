@@ -1,6 +1,7 @@
 Version 1.62 (not yet released)
 ------------
 
+* Added action Implode List to the other actions.
 * Ability to add schedule date for sending emails  by !39
 
 Version 1.61
