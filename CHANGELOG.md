@@ -1,3 +1,8 @@
+Version 1.60.3
+------------
+
+* Added action Implode List to the other actions.
+
 Version 1.60.2
 ------------
 
