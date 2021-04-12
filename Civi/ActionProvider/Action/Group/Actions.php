@@ -26,6 +26,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('AddMultipleToGroupParameter', '\Civi\ActionProvider\Action\Group\AddMultipleToGroupParameter', E::ts('Contact: Add multiple to Group (with group ID as parameter)'), array(
+      AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $provider->addAction('RemoveFromGroupParameter', '\Civi\ActionProvider\Action\Group\RemoveFromGroupParameter', E::ts('Contact: Remove from  group (with group ID as parameter)'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
