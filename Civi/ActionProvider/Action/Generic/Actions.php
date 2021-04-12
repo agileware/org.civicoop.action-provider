@@ -40,6 +40,9 @@ class Actions {
     $provider->addAction('ExplodeList', '\Civi\ActionProvider\Action\Generic\ExplodeList', E::ts('Other: Explode List'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('ImplodeList', '\Civi\ActionProvider\Action\Generic\ImplodeList', E::ts('Other: Implode List'), array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $provider->addAction('ConcatDateTimeValue', '\Civi\ActionProvider\Action\Generic\ConcatDateTimeValue', E::ts('Other: Concat (merge) a date and a time field to one field'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG
     ));
