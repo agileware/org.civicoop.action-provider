@@ -3,6 +3,7 @@ Version 1.62 (not yet released)
 
 * Added action Implode List to the other actions.
 * Ability to add schedule date for sending emails  by !39
+* New action to add multiple contacts to a group by !40
 
 Version 1.61
 ------------
