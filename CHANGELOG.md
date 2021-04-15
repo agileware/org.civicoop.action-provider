@@ -1,4 +1,4 @@
-Version 1.62 (not yet released)
+Version 1.62
 ------------
 
 * Added action Implode List to the other actions.
