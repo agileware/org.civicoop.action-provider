@@ -261,6 +261,7 @@ class SendEmail {
     $this->attachments[] = array(
       'fullPath' => $fullPath,
       'cleanName' => $cleanName,
+      'name' => $cleanName,
       'mime_type' => $mimeType
     );
   }
@@ -275,7 +276,9 @@ class SendEmail {
    */
   public function getAttachment($cleanName) {
     foreach($this->attachments as $index => $attachment) {
-      if ($attachment['cleanName'] == $cleanName) {
+      if ($attachment['name'] == $cleanName) {
+        return $this->attachments[$index];
+      } elseif ($attachment['cleanName'] == $cleanName) {
         return $this->attachments[$index];
       }
     }

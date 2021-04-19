@@ -1,6 +1,8 @@
 Version 1.63 (not yet released)
 ------------
 
+* Fixed compatibility issue with send pdf and civicrm version 5.35 and newer.
+
 Version 1.62
 ------------
 
