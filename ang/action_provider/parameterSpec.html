@@ -4,7 +4,7 @@
         class="huge"
         crm-ui-id="input_mapper.{{spec.name}}"
         ui-jq="select2"
-        ui-options="{dropdownAutoWidth : true, allowClear: true, minimumInputLength: 0, data: {results: fields}, multiple: spec.multiple}"
+        ui-options="{placeholder: ts(' - Select - '), dropdownAutoWidth : true, allowClear: true, minimumInputLength: 0, data: {results: fields}, multiple: spec.multiple}"
         name="{{spec.name}}"
         ng-model="mapping[spec.name]"
         ng-required="spec.required"
