@@ -25,7 +25,9 @@ class ValidateChecksum extends AbstractAction {
 	 */
 	protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
 	  $contactId = $parameters->getParameter('cid');
+    $checkSum = $parameters->getParameter('cs');
     $output->setParameter('contact_id', $contactId);
+    $output->setParameter('cs', $checkSum);
 	}
 
 	/**
@@ -73,7 +75,8 @@ class ValidateChecksum extends AbstractAction {
 	 */
 	public function getOutputSpecification() {
 		return new SpecificationBag([
-			new Specification('contact_id', 'Integer', E::ts('Contact ID'), TRUE)
+			new Specification('contact_id', 'Integer', E::ts('Contact ID'), TRUE),
+      new Specification('cs', 'Integer', E::ts('Checksum'), TRUE)
 		]);
 	}
 
