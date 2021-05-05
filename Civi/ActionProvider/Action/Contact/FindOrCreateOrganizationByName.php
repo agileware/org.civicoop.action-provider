@@ -73,7 +73,7 @@ class FindOrCreateOrganizationByName extends AbstractAction {
 	 */
 	public function getParameterSpecification() {
 		$specs = new SpecificationBag(array(
-      new Specification('organization_name', 'String', E::ts('Organization name'), false),
+      new Specification('organization_name', 'String', E::ts('Organization name'), true),
     ));
     return $specs;
 	}
