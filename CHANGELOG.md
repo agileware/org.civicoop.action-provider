@@ -1,4 +1,4 @@
-Version 1.64 (not yet released)
+Version 1.64
 ------------
 
 * The checksum value is now also returned by ValidateChecksum
