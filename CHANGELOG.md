@@ -2,6 +2,7 @@ Version 1.64 (not yet released)
 ------------
 
 * The checksum value is now also returned by ValidateChecksum
+* Added action 'Contact: Get organization by name'
 
 Version 1.63
 ------------

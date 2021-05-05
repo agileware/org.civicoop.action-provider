@@ -82,6 +82,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $provider->addAction('FindOrCreateOrganizationByName', '\Civi\ActionProvider\Action\Contact\FindOrCreateOrganizationByName', E::ts('Contact: Get or create organization by name'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $provider->addAction('CreateUpdateIndividual', '\Civi\ActionProvider\Action\Contact\CreateUpdateIndividual', E::ts('Contact: Create or update Individual'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
