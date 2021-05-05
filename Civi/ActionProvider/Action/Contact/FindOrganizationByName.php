@@ -23,21 +23,25 @@ class FindOrganizationByName extends AbstractAction {
 	 * @return void
 	 */
 	protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    $apiParams = array();
-    $contact_sub_type = $this->configuration->getParameter('contact_sub_type');
-    $apiParams['contact_type'] = "Organization";
-    if ($contact_sub_type) {
-      $apiParams['contact_sub_type'] = $contact_sub_type;
+	  try {
+      $apiParams = [];
+      $contact_sub_type = $this->configuration->getParameter('contact_sub_type');
+      $apiParams['contact_type'] = "Organization";
+      if ($contact_sub_type) {
+        $apiParams['contact_sub_type'] = $contact_sub_type;
+      }
+      $apiParams['organization_name'] = $parameters->getParameter('organization_name');
+
+      $apiParams['return'] = 'id';
+      $contact_id = civicrm_api3('Contact', 'getvalue', $apiParams);
+
+      $output->setParameter('contact_id', $contact_id);
+    } catch (\Exception $e) {
+	    // Do nothing.
     }
-    $apiParams['organization_name'] = $parameters->getParameter('organization_name');
-
-    $apiParams['return'] = 'id';
-    $contact_id = civicrm_api3('Contact', 'getvalue', $apiParams);
-
-		$output->setParameter('contact_id', $contact_id);
 	}
 
-	/**
+  /**
 	 * Returns the specification of the configuration options for the actual action.
 	 *
 	 * @return SpecificationBag
@@ -64,7 +68,7 @@ class FindOrganizationByName extends AbstractAction {
 	 */
 	public function getParameterSpecification() {
 		$specs = new SpecificationBag(array(
-      new Specification('organization_name', 'String', E::ts('Organization name'), false),
+      new Specification('organization_name', 'String', E::ts('Organization name'), true),
     ));
     return $specs;
 	}
