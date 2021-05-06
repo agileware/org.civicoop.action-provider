@@ -1,6 +1,8 @@
 Version 1.65 (not yet released)
 ------------
 
+* Changed action Contact: get or create by email and names. So that it also accepts organization name and household name.
+
 Version 1.64
 ------------
 
