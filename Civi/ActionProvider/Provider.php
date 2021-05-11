@@ -71,6 +71,7 @@ class Provider {
     Action\Communication\Actions::loadActions($this);
     Action\Generic\Actions::loadActions($this);
     Action\Tag\Actions::loadActions($this);
+    Action\SMS\Actions::loadActions($this);
 
 		$conditions = array(
 		  new \Civi\ActionProvider\Condition\ParameterIsEmpty(),
