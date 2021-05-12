@@ -1,4 +1,4 @@
-Version 1.66 (not yet released)
+Version 1.66
 ------------
 
 * Fixed issue with get participant actions.
