@@ -46,7 +46,8 @@ class SMSSend extends AbstractAction {
       new Specification('msg_text', 'Text', E::ts('Message Text'), true, null, null, null, FALSE),
       new Specification('group_id', 'Integer', E::ts('Group ID'), true, null, 'Group', null, FALSE),
       new Specification('scheduled_date', 'Timestamp', E::ts('Scheduled date'), false, null, null, null, False),
-      new Specification('sms_provider_id', 'String', E::ts('SMS Provider ID'), false, null, null, null, False),
+      new Specification('sms_provider_id', 'String', E::ts('SMS Provider ID'), true, null, null, null, False),
+      new Specification('created_id', 'String', E::ts('User Creator ID'), false, null, null, null, False),
     ));
     return $specs;
   }
@@ -88,9 +89,11 @@ class SMSSend extends AbstractAction {
     $apiParams['mailing_type'] = NULL;
     $apiParams['dedupe_email'] = 0;
 
+    if ($parameters->doesParameterExists('created_id') && $parameters->getParameter('created_id')) {
+      $apiParams['created_id'] = $parameters->getParameter('created_id');
+    }
     // Create a simple SMS Mailing.
     $smsMailing = civicrm_api3('Mailing', 'Create', $apiParams);
-
 
     $session = CRM_Core_Session::singleton();
     // set the scheduled_id
