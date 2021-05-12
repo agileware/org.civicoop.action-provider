@@ -1,8 +1,8 @@
-Version 1.65 (not yet released)
+Version 1.65
 ------------
 
 * Changed action Contact: get or create by email and names. So that it also accepts organization name and household name.
-*  Create action to send SMS by !142
+* Create action to send SMS by !142
 
 Version 1.64
 ------------
