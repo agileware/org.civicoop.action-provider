@@ -86,7 +86,9 @@ abstract class AbstractGetSingleAction extends AbstractAction {
       if (in_array($field, $fieldsToSkip)) {
         continue;
       }
-      if (stripos($field, 'custom_') !== 0) {
+      if (stripos($field, $this->getEntityAlias().'_')===0) {
+        $output->setParameter(substr($field, strlen($this->getEntityAlias().'_')), $value);
+      } else if (stripos($field, 'custom_') !== 0) {
         $output->setParameter($field, $value);
       } else {
         $custom_id = substr($field, 7);
@@ -161,6 +163,15 @@ abstract class AbstractGetSingleAction extends AbstractAction {
    */
   public function getConfigurationSpecification() {
     return new SpecificationBag();
+  }
+
+  /**
+   * Returns the name of the entity.
+   *
+   * @return string
+   */
+  protected function getEntityAlias() {
+    return strtolower($this->getApiEntity());
   }
 
 }
