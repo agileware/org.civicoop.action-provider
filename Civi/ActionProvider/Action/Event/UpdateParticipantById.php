@@ -3,12 +3,14 @@
 namespace Civi\ActionProvider\Action\Event;
 
 use \Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\ConfigContainer;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
 use \Civi\ActionProvider\Parameter\OptionGroupSpecification;
 use \Civi\ActionProvider\Utils\CustomField;
 
+use Civi\ActionProvider\Utils\Fields;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class UpdateParticipantById extends AbstractAction {
@@ -62,13 +64,7 @@ class UpdateParticipantById extends AbstractAction {
           $type = 'Integer';
           break;
       }
-      if (stripos($field['name'], 'custom_') === 0) {
-        $fieldId = substr($field['name'], 7);
-        $name = CustomField::getCustomFieldName($fieldId);
-        $title = $field['groupTitle'].' :: '.$field['title'];
-        $fieldSpec = new Specification($name, $type, $title, FALSE);
-        $fieldSpec->setApiFieldName($field['name']);
-      } else {
+      if (stripos($field['name'], 'custom_') !== 0) {
         $fieldSpec = new Specification(
           $field['name'],
           $type,
@@ -78,6 +74,13 @@ class UpdateParticipantById extends AbstractAction {
         $fieldSpec->setApiFieldName($field['name']);
       }
       $specs->addSpecification($fieldSpec);
+    }
+
+    $customGroups = ConfigContainer::getInstance()->getCustomGroupsForEntity('Participant');
+    foreach ($customGroups as $customGroup) {
+      if (!empty($customGroup['is_active'])) {
+        $specs->addSpecification(CustomField::getSpecForCustomGroup($customGroup['id'], $customGroup['name'], $customGroup['title']));
+      }
     }
 
     return $specs;
@@ -110,12 +113,12 @@ class UpdateParticipantById extends AbstractAction {
     $participant_id = $parameters->getParameter('participant_id');
     // Create or Update the participant record through an API call.
     try {
-      $participantParams = array();
+      $participantParams = CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification());
       if ($participant_id) {
         $participantParams['id'] = $participant_id;
       }
       foreach($this->getParameterSpecification() as $spec) {
-        if ($parameters->doesParameterExists($spec->getName())) {
+        if ($spec instanceof Specification && $spec->getApiFieldName() && $parameters->doesParameterExists($spec->getName())) {
           $participantParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
         }
       }

@@ -2,6 +2,7 @@ Version 1.66 (not yet released)
 ------------
 
 * Fixed issue with get participant actions.
+* Fixed issues with Update Participant By ID action.
 
 Version 1.65
 ------------
