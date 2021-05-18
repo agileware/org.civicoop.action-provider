@@ -1,3 +1,8 @@
+Version 1.61 (not yet released)
+------------
+
+* Backport of fixed issue with Contact: Get contact by custom field #15
+
 Version 1.60
 ------------
 

@@ -31,9 +31,11 @@ class FindByCustomField extends AbstractAction {
 	protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
 	  $fail = $this->configuration->doesParameterExists('fail_not_found') ? $this->configuration->getParameter('fail_not_found') : true;
     $apiParams = array();
-    foreach($this->getParameterSpecification() as $spec) {
-		  if ($parameters->doesParameterExists($spec->getName())) {
-		    $apiParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
+    foreach($this->getParameterSpecification() as $specGroup) {
+      foreach($specGroup->getSpecificationBag() as $spec) {
+        if ($parameters->doesParameterExists($spec->getName())) {
+          $apiParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
+        }
       }
     }
 		if (!count($apiParams)) {
@@ -51,13 +53,12 @@ class FindByCustomField extends AbstractAction {
     $apiParams['return'] = 'id';
     try {
       $contact_id = civicrm_api3('Contact', 'getvalue', $apiParams);
+      $output->setParameter('contact_id', $contact_id);
     } catch (\CiviCRM_API3_Exception $ex) {
       if ($fail) {
         throw new ExecutionException('Could not find contact');
       }
     }
-
-		$output->setParameter('contact_id', $contact_id);
 	}
 
 	/**
