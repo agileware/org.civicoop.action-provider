@@ -1,6 +1,7 @@
 Version 1.67 (not yet released)
 ------------
 
+* Regenerated action_provider.civix.php (removing curly braces PHP 7.4 problem)
 * Fixed issue with Contact: Get contact by custom field #15
 
 Version 1.66
