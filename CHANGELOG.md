@@ -1,4 +1,4 @@
-Version 1.67 (not yet released)
+Version 1.67
 ------------
 
 * Regenerated action_provider.civix.php (removing curly braces PHP 7.4 problem)
