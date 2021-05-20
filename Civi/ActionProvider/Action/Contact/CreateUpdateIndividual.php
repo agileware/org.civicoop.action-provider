@@ -94,6 +94,12 @@ class CreateUpdateIndividual extends AbstractAction {
     if ($parameters->doesParameterExists('do_not_sms')) {
       $params['do_not_sms'] = $parameters->getParameter('do_not_sms') ? '1' : '0';
     }
+
+    if ($parameters->doesParameterExists('email') && empty ($params['id']) && empty ($params['first_name']) && empty ($params['last_name'])) {
+      // When we create a contact and no name is set set the display name to the e-mail address.
+      $params['display_name'] = $parameters->getParameter('email');
+    }
+
     $result = civicrm_api3('Contact', 'create', $params);
     $contact_id = $result['id'];
     $output->setParameter('contact_id', $contact_id);
