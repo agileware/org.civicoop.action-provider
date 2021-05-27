@@ -34,6 +34,10 @@ class Actions {
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ));
+    $provider->addAction('CreateLineItem', '\Civi\ActionProvider\Action\Contribution\CreateLineItem', E::ts('Contribution: Create Line Item'), array(
+        AbstractAction::DATA_MANIPULATION_TAG,
+        AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ));
     $provider->addAction('LinkContributionToMembership', '\Civi\ActionProvider\Action\Contribution\LinkContributionToMembership', E::ts('Contribution: Link to membership'), array(
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG
