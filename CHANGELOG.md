@@ -1,4 +1,4 @@
-Version 1.68 (not yet released)
+Version 1.68 
 ------------
 
 * Changed actions Send Email and Send pdf by email in such a way that one can set a custom from name and e-mail address. And also an alternative recipient.
