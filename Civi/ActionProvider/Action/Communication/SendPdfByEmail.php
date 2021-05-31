@@ -76,6 +76,15 @@ class SendPdfByEmail extends AbstractAction {
     if ($parameters->doesParameterExists('participant_id')) {
       $mailer->setParticipantId($parameters->getParameter('participant_id'));
     }
+    if ($this->configuration->doesParameterExists('alternative_recipient')) {
+      $mailer->setAlternativeRecipientEmail($this->configuration->getParameter('alternative_recipient'));
+    }
+    if ($this->configuration->doesParameterExists('from_name')) {
+      $mailer->setFromName($this->configuration->getParameter('from_name'));
+    }
+    if ($this->configuration->doesParameterExists('from_email')) {
+      $mailer->setFromEmail($this->configuration->getParameter('from_email'));
+    }
 
     $contact_id = array($parameters->getParameter('contact_id'));
     $subject = $parameters->getParameter('subject');
@@ -141,6 +150,9 @@ class SendPdfByEmail extends AbstractAction {
       new Specification('use_sender_as', 'String', E::ts('Use Sender Contact ID as'), true, 'none', null, $sender_options),
       new Specification('cc', 'String', E::ts('CC'), false),
       new Specification('bcc', 'String', E::ts('BCC'), false),
+      new Specification('alternative_recipient', 'String', E::ts('Alternative Recipient Email'), false),
+      new Specification('from_name', 'String', E::ts('From name'), false),
+      new Specification('from_email', 'String', E::ts('From email'), false),
     ));
   }
 

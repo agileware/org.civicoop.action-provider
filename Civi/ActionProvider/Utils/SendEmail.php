@@ -26,6 +26,8 @@ class SendEmail {
 
   private $attachments;
 
+  private $alternative_recipient_email;
+
   public function __construct($from_email=null, $from_name=null) {
     $this->from_email = $from_email;
     $this->from_name = $from_name;
@@ -45,6 +47,18 @@ class SendEmail {
 
   public function setActivityId($activity_id) {
     $this->activity_id = $activity_id;
+  }
+
+  public function setAlternativeRecipientEmail($email) {
+    $this->alternative_recipient_email = $email;
+  }
+
+  public function setFromName($name) {
+    $this->from_name = $name;
+  }
+
+  public function setFromEmail($email) {
+    $this->from_email = $email;
   }
 
   /**
@@ -146,6 +160,9 @@ class SendEmail {
          */
         $email = $contact['email'];
         $toName = $contact['display_name'];
+      }
+      if ($this->alternative_recipient_email) {
+        $email = $this->alternative_recipient_email;
       }
       $type = array('body_html', 'body_text', 'subject');
       foreach ($type as $key => $bodyType) {
