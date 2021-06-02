@@ -20,6 +20,8 @@ class Actions {
   public static function loadActions(Provider $provider) {
     $provider->addAction('OptionValueToLabel', '\Civi\ActionProvider\Action\Generic\OptionValueToLabel', E::ts('Other: Show option value(s) as their Label(s)'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG));
+    $provider->addAction('ResolveOptionValues', '\Civi\ActionProvider\Action\Generic\ResolveOptionValues', E::ts('Other: Resolve/map input to option values'), array(
+        AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG));
     $provider->addAction('SetValue', '\Civi\ActionProvider\Action\Generic\SetValue', E::ts('Other: Set Value'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG));
     $provider->addAction('RegexReplaceValue', '\Civi\ActionProvider\Action\Generic\RegexReplaceValue', E::ts('Other: Modify Value with Regular Expression'), array(
