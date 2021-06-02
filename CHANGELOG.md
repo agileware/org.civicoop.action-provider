@@ -1,6 +1,8 @@
 Version 1.69 (not yet released) 
 ------------
 
+* New Action: Create Line Item 
+
 Version 1.68 
 ------------
 
