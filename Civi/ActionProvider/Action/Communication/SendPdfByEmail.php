@@ -76,7 +76,9 @@ class SendPdfByEmail extends AbstractAction {
     if ($parameters->doesParameterExists('participant_id')) {
       $mailer->setParticipantId($parameters->getParameter('participant_id'));
     }
-    if ($this->configuration->doesParameterExists('alternative_recipient')) {
+    if ($parameters->doesParameterExists('alternative_recipient')) {
+      $mailer->setAlternativeRecipientEmail($parameters->getParameter('alternative_recipient'));
+    } elseif ($this->configuration->doesParameterExists('alternative_recipient')) {
       $mailer->setAlternativeRecipientEmail($this->configuration->getParameter('alternative_recipient'));
     }
     if ($this->configuration->doesParameterExists('from_name')) {
@@ -166,6 +168,7 @@ class SendPdfByEmail extends AbstractAction {
     $attachments->setDescription(E::ts('Give either the path to the file or the File ID in the CiviCRM database.'));
     return new SpecificationBag(array(
       new Specification('contact_id', 'Integer', E::ts('Receiver Contact ID'), true),
+      new Specification('alternative_recipient', 'String', E::ts('Alternative Recipient Email'), false),
       new Specification('subject', 'String', E::ts('Subject'), true),
       new Specification('body_html', 'String', E::ts('HTML Body'), true),
       new Specification('body_text', 'String', E::ts('Plain text Body'), false),
