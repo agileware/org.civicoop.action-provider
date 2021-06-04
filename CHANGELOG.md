@@ -1,10 +1,11 @@
-Version 1.69 (not yet released) 
+Version 1.69 (not yet released)
 ------------
 
 * New Action: Create Line Item !47
-*  New action 'Other: Resolve/map input to option values' !46
+* New action 'Other: Resolve/map input to option values' !46
+* Fixed regression bug with output values from get entity by id actions. Such as Get Case By Id where the case type wasn't set correctly.
 
-Version 1.68 
+Version 1.68
 ------------
 
 * Changed actions Send Email and Send pdf by email in such a way that one can set a custom from name and e-mail address. And also an alternative recipient.

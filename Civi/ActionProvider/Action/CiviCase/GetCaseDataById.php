@@ -55,6 +55,7 @@ class GetCaseDataById extends AbstractGetSingleAction {
   protected function setOutputFromEntity($entity, ParameterBagInterface $output) {
     parent::setOutputFromEntity($entity, $output);
     $output->setParameter('contact_id', reset($entity['contact_id']));
+    $output->setParameter('case_type_id', $entity['case_type_id']);
   }
 
 

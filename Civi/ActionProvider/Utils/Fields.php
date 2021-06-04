@@ -12,7 +12,7 @@ use Civi\ActionProvider\Parameter\SpecificationBag;
 
 class Fields {
 
-  public static function getFieldsForEntity(SpecificationBag $specs, $entity, $api_action='get', $fieldsToSkip=array()) {
+  public static function getFieldsForEntity(SpecificationBag $specs, $entity, $api_action='get', $fieldsToSkip=array(), $entity_alias=null) {
     $fields = civicrm_api3($entity, 'getfields', array('api_action' => $api_action));
     foreach($fields['values'] as $field) {
       if (in_array($field['name'], $fieldsToSkip)) {
@@ -29,10 +29,14 @@ class Fields {
           // Do nothing
         }
 
+        $name = $field['name'];
+        if ($entity_alias && stripos($name, $entity_alias.'_')===0) {
+          $name = substr($name, strlen($entity_alias.'_'));
+        }
         $type = \CRM_Utils_Type::typeToString($field['type']);
         if ($type) {
           $type = Type::convertCrmType($type);
-          $spec = new Specification($field['name'], $type, $field['title'], FALSE, NULL, NULL, $options, FALSE);
+          $spec = new Specification($name, $type, $field['title'], FALSE, NULL, NULL, $options, FALSE);
           $specs->addSpecification($spec);
         }
       }

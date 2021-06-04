@@ -53,7 +53,7 @@ abstract class AbstractGetSingleAction extends AbstractAction {
    */
   public function getOutputSpecification() {
     $bag = new SpecificationBag();
-    Fields::getFieldsForEntity($bag,$this->getApiEntity(), 'get', $this->getSkippedFields());
+    Fields::getFieldsForEntity($bag,$this->getApiEntity(), 'get', $this->getSkippedFields(), $this->getEntityAlias());
     return $bag;
   }
 
