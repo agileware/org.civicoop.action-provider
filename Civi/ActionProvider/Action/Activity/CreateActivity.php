@@ -124,6 +124,10 @@ class CreateActivity extends AbstractAction {
       $activityParams['case_id'] = $parameters->getParameter('case_id');
     }
 
+    if (empty($activityParams['activity_type_id']) && !empty($activityParams['id'])) {
+      $activityParams['activity_type_id'] = civicrm_api3('Activity', 'getvalue', ['return' => 'activity_type_id', 'id' => $activityParams['id']]);
+    }
+
     $activityParams = array_merge($activityParams, CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification()));
 
     try {

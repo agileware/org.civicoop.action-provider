@@ -1,5 +1,7 @@
-Version 1.70 (not yet released)
+Version 1.70
 ------------
+
+* Updated action Create/Update activity with looking activity type when none is given and an existing activity is updated.
 
 Version 1.69
 ------------
