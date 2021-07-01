@@ -2,6 +2,7 @@ Version 1.71 (not yet released)
 ------------
 
 * Added action: Contribution: get by custom field.
+* Added possibility to give a group name at the Group: Add to Group action.
 
 Version 1.70
 ------------
