@@ -1,6 +1,8 @@
 Version 1.71 (not yet released)
 ------------
 
+* Added action: Contribution: get by custom field.
+
 Version 1.70
 ------------
 

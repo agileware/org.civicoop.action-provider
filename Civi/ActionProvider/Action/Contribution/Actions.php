@@ -22,6 +22,10 @@ class Actions {
       AbstractAction::DATA_RETRIEVAL_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ));
+    $provider->addAction('GetContributionByCustomField', '\Civi\ActionProvider\Action\Contribution\GetContributionByCustomField', E::ts('Contribution: Get data by custom field'), array(
+      AbstractAction::DATA_RETRIEVAL_TAG,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ));
     $provider->addAction('CreateContribution', '\Civi\ActionProvider\Action\Contribution\CreateContribution', E::ts('Contribution: Create'), array(
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
