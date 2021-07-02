@@ -1,5 +1,7 @@
-Version 1.72 (not yet released)
+Version 1.72
 ------------
+
+* Fixed issue with Contact: Create/Update Individual when only an email address is provided.
 
 Version 1.71
 ------------

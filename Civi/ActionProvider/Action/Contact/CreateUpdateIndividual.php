@@ -201,8 +201,8 @@ class CreateUpdateIndividual extends AbstractAction {
   protected function validateParameters(ParameterBagInterface $parameters) {
     $return = parent::validateParameters($parameters);
     if (!$parameters->doesParameterExists('contact_id')) {
-      if (!$parameters->doesParameterExists('first_name') && !$parameters->doesParameterExists('last_name')) {
-        throw new InvalidParameterException("Please provide a valid first name or last name.");
+      if (!$parameters->doesParameterExists('first_name') && !$parameters->doesParameterExists('last_name') && !$parameters->doesParameterExists('email')) {
+        throw new InvalidParameterException("Please provide a valid first name, last name or e-mail.");
       }
     }
     return $return;
