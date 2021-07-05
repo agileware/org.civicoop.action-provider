@@ -1,4 +1,4 @@
-Version 1.73 (not yet released)
+Version 1.73
 ------------
 
 * Fixed issue with action create contribution and non US locale.
