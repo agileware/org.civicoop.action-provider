@@ -38,10 +38,12 @@ class CreateContribution extends AbstractAction {
     $contribution_params['contribution_status_id'] = $this->configuration->getParameter('contribution_status');
     $contribution_params['payment_instrument_id'] = $this->configuration->getParameter('payment_instrument');
     $contribution_params['contact_id'] = $contact_id;
+    $currency = null;
     if ($parameters->doesParameterExists('currency')) {
       $contribution_params['currency'] = $parameters->getParameter('currency');
+      $currency = $parameters->getParameter('currency');
     }
-    $contribution_params['total_amount'] = \CRM_Utils_Money::format((float) $parameters->getParameter('amount'));
+    $contribution_params['total_amount'] = \CRM_Utils_Money::format((float) $parameters->getParameter('amount'), $currency, NULL, TRUE);
     if ($parameters->doesParameterExists('source')) {
       $contribution_params['source'] = $parameters->getParameter('source');
     }
@@ -64,13 +66,13 @@ class CreateContribution extends AbstractAction {
       $contribution_params['thankyou_date'] = $parameters->getParameter('thankyou_date');
     }
     if ($parameters->doesParameterExists('fee_amount')) {
-      $contribution_params['fee_amount'] = \CRM_Utils_Money::format((float) $parameters->getParameter('fee_amount'));
+      $contribution_params['fee_amount'] = \CRM_Utils_Money::format((float) $parameters->getParameter('fee_amount'), $currency, NULL, TRUE);
     }
     if ($parameters->doesParameterExists('non_deductible_amount')) {
-      $contribution_params['non_deductible_amount'] = \CRM_Utils_Money::format((float) $parameters->getParameter('non_deductible_amount'));
+      $contribution_params['non_deductible_amount'] = \CRM_Utils_Money::format((float) $parameters->getParameter('non_deductible_amount'), $currency, NULL, TRUE);
     }
     if ($parameters->doesParameterExists('net_amount')) {
-      $contribution_params['net_amount'] = \CRM_Utils_Money::format((float) $parameters->getParameter('net_amount'));
+      $contribution_params['net_amount'] = \CRM_Utils_Money::format((float) $parameters->getParameter('net_amount'), $currency, NULL, TRUE);
     }
     if ($parameters->doesParameterExists('note')) {
       $contribution_params['note'] = $parameters->getParameter('note');
