@@ -78,9 +78,22 @@ class GetActivity extends AbstractGetSingleAction {
         $target_contact_ids[] = $dao->contact_id;
       }
     }
+    $sql = "SELECT DISTINCT case_id from civicrm_case_activity WHERE activity_id = %1";
+    $sqlParams[1] = array($entity['id'], 'Integer');
+    $dao = \CRM_Core_DAO::executeQuery($sql, $sqlParams);
+    $case_id = array();
+    while($dao->fetch()) {
+      $case_id[] = $dao->case_id;
+    }
     $output->setParameter('target_contact_id', $target_contact_ids);
     if ($assignee_contact_id) {
       $output->setParameter('assignee_contact_id', $assignee_contact_id);
+    }
+    if(!empty($case_id)){
+      if(count($case_id)){
+        $case_id = reset($case_id);
+      }
+      $output->setParameter('case_id', $case_id);
     }
   }
 

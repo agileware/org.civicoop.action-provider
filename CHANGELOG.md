@@ -1,5 +1,6 @@
 Version 1.74 (not yet released)
 ------------
+* Add case_id to the GetActivity action.
 
 Version 1.73
 ------------
