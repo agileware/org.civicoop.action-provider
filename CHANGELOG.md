@@ -1,6 +1,7 @@
 Version 1.74 (not yet released)
 ------------
 * Add case_id to the GetActivity action.
+* Extended Create/Update Individual with Is Deceased and Deceaded Date.
 
 Version 1.73
 ------------

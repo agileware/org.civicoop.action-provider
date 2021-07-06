@@ -67,6 +67,12 @@ class CreateUpdateIndividual extends AbstractAction {
     if ($parameters->getParameter('birth_date')) {
       $params['birth_date'] = $parameters->getParameter('birth_date');
     }
+    if ($parameters->doesParameterExists('is_deceased')) {
+      $params['is_deceased'] = $parameters->getParameter('is_deceased')  ? '1' : '0';;
+    }
+    if ($parameters->getParameter('deceased_date') && $parameters->getParameter('is_deceased') && $parameters->doesParameterExists('is_deceased') && $params['is_deceased'] ) {
+      $params['deceased_date'] = $parameters->getParameter('deceased_date');
+    }
     if ($parameters->getParameter('gender_id')) {
       $params['gender_id'] = $parameters->getParameter('gender_id');
     }
@@ -164,6 +170,8 @@ class CreateUpdateIndividual extends AbstractAction {
       new Specification('formal_title', 'String', E::ts('Formal Title'), false),
       new Specification('job_title', 'String', E::ts('Job Title'), false),
       new Specification('birth_date', 'Date', E::ts('Birth date'), false),
+      new Specification('is_deceased', 'Boolean', E::ts('Is deceased'), false),
+      new Specification('deceased_date', 'Date', E::ts('Deceased date'), false),
       new OptionGroupSpecification('gender_id', 'gender', E::ts('Gender'), false),
       new Specification('source', 'String', E::ts('Source'), false),
       new Specification('created_date', 'Date', E::ts('Created Date'), false),
