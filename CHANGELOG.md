@@ -1,5 +1,6 @@
-Version 1.74 (not yet released)
+Version 1.74
 ------------
+
 * Add case_id to the GetActivity action.
 * Extended Create/Update Individual with Is Deceased and Deceaded Date.
 * Fixed issue with custom fields and Participant: register contact for event action.
