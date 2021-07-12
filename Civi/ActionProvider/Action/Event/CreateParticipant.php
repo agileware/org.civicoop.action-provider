@@ -8,6 +8,7 @@ use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
 use \Civi\ActionProvider\Parameter\OptionGroupSpecification;
+use Civi\ActionProvider\Parameter\SpecificationGroup;
 use \Civi\ActionProvider\Utils\CustomField;
 
 use CRM_ActionProvider_ExtensionUtil as E;
@@ -119,14 +120,7 @@ class CreateParticipant extends AbstractAction {
           $participantParams['campaign_id'] = $parameters->getParameter('campaign_id');
         }
 
-        foreach ($this->getParameterSpecification() as $spec) {
-          if (stripos($spec->getName(), 'custom_') !== 0) {
-            continue;
-          }
-          if ($parameters->doesParameterExists($spec->getName())) {
-            $participantParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
-          }
-        }
+        $participantParams = array_merge($participantParams, CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification()));
 
         $result = civicrm_api3('Participant', 'create', $participantParams);
         $output->setParameter('id', $result['id']);
