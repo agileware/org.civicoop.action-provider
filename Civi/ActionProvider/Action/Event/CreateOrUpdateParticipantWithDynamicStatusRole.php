@@ -52,7 +52,7 @@ class CreateOrUpdateParticipantWithDynamicStatusRole extends AbstractAction {
     ));
 
     $config = ConfigContainer::getInstance();
-    $customGroups = $config->getCustomGroupsForEntity('Participant');
+    $customGroups = $config->getCustomGroupsForEntities(['Participant', 'ParticipantEventType', 'ParticipantRole']);
     foreach ($customGroups as $customGroup) {
       if (!empty($customGroup['is_active'])) {
         $specs->addSpecification(CustomField::getSpecForCustomGroup($customGroup['id'], $customGroup['name'], $customGroup['title']));

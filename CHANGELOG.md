@@ -1,6 +1,8 @@
 Version 1.75 (not yet released)
 ------------
 
+* Fixed issue with Create and Update participant actions and custom fields.
+
 Version 1.74
 ------------
 
