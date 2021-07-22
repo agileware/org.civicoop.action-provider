@@ -72,6 +72,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $provider->addAction('FindParticipantByCustomField', '\Civi\ActionProvider\Action\Event\ParticipantFindByCustomField',E::ts('Participant: Get by Custom Field') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $provider->addAction('UpdateParticipantById', '\Civi\ActionProvider\Action\Event\UpdateParticipantById',E::ts('Participant: Update by ID') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,

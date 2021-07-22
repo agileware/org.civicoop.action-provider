@@ -1,6 +1,7 @@
 Version 1.76 (not yet released)
 ------------
 
+* Added action Participant Get by Custom Field.
 * Added condition all are equal.
 
 Version 1.75
