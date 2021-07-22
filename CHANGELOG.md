@@ -1,3 +1,6 @@
+Version 1.77 (not yet released)
+------------
+
 Version 1.76
 ------------
 
