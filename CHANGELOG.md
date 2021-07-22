@@ -1,4 +1,4 @@
-Version 1.76 (not yet released)
+Version 1.76
 ------------
 
 * Added action Participant Get by Custom Field.
