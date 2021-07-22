@@ -1,6 +1,8 @@
 Version 1.76 (not yet released)
 ------------
 
+* Added condition all are equal.
+
 Version 1.75
 ------------
 
