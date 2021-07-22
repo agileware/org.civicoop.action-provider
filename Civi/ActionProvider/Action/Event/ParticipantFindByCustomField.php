@@ -10,6 +10,7 @@ use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
 
+use Civi\ActionProvider\Parameter\SpecificationGroup;
 use Civi\ActionProvider\Utils\CustomField;
 use CRM_ActionProvider_ExtensionUtil as E;
 
@@ -32,6 +33,9 @@ class ParticipantFindByCustomField extends AbstractAction {
 	  $fail = $this->configuration->doesParameterExists('fail_not_found') ? $this->configuration->getParameter('fail_not_found') : true;
     $apiParams = array();
     foreach($this->getParameterSpecification() as $specGroup) {
+      if (!$specGroup instanceof SpecificationGroup) {
+        continue;
+      }
       foreach($specGroup->getSpecificationBag() as $spec) {
         if ($parameters->doesParameterExists($spec->getName())) {
           $apiParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());

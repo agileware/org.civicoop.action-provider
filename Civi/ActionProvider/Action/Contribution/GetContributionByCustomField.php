@@ -2,16 +2,14 @@
 
 namespace Civi\ActionProvider\Action\Contribution;
 
-use \Civi\ActionProvider\Action\AbstractAction;
 use Civi\ActionProvider\Action\AbstractGetSingleAction;
 use Civi\ActionProvider\ConfigContainer;
+use Civi\ActionProvider\Exception\InvalidParameterException;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
 use \Civi\ActionProvider\Utils\CustomField;
 
-use Civi\ActionProvider\Utils\Fields;
-use Civi\DataProcessor\DataSpecification\CustomFieldSpecification;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class GetContributionByCustomField extends AbstractGetSingleAction {
