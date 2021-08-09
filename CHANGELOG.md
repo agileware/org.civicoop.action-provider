@@ -1,5 +1,7 @@
 Version 1.77 (not yet released)
 ------------
+* Regenerate auto-generated code (civix) for PHP7.4 compatibility.
+* Use full class path in action_provider.php instead of a "use" statement as classloader has not always completed when this file is read (fixes failures on some Wordpress site when run via CRON).
 
 Version 1.76
 ------------

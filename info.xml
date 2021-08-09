@@ -28,7 +28,7 @@
   <comments>Funded by CiviCooP, Roparun, Velt, Barnekreftforeningen, Civiservice.de GmbH, Bundesverband Soziokultur e.V.</comments>
   <classloader>
     <psr4 prefix="Civi\" path="Civi" />
-	</classloader>
+  </classloader>
   <civix>
     <namespace>CRM/ActionProvider</namespace>
   </civix>
