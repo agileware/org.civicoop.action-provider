@@ -1,5 +1,5 @@
 Package: action-provider
-Copyright (C) 2018, Jaap Jansma <jaap.jansma@civicoop.org>
+Copyright (C) 2021, Jaap Jansma <jaap.jansma@civicoop.org>
 Licensed under the GNU Affero Public License 3.0 (below).
 
 -------------------------------------------------------------------------------
