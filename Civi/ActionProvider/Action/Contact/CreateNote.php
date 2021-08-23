@@ -42,6 +42,9 @@ class CreateNote extends AbstractAction {
     $apiCall->addValue('entity_table', 'civicrm_contact');
     $apiCall->addValue('entity_id', $parameters->getParameter('contact_id'));
     $apiCall->addValue('note', $parameters->getParameter('note'));
+    if ($parameters->doesParameterExists('note_date')) {
+      $apiCall->addValue('note_date', $parameters->getParameter('note_date'));
+    }
     if ($parameters->doesParameterExists('subject')) {
       $apiCall->addValue('subject', $parameters->getParameter('subject'));
     }
@@ -69,6 +72,7 @@ class CreateNote extends AbstractAction {
       new Specification('contact_id', 'Integer', E::ts('Contact ID'), true),
       new Specification('note', 'String', E::ts('Note'), true),
       new Specification('subject', 'String', E::ts('Subject'), false),
+      new Specification('note_date', 'Date', E::ts('Note Date'), false),
     ]);
   }
 
