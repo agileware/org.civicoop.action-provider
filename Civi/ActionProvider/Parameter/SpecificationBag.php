@@ -85,14 +85,20 @@ class SpecificationBag implements \IteratorAggregate  {
 	 *   The name of the parameter.
 	 * @return SpecificationInterface|null
 	 */
-	public function getSpecificationByName($name) {
-		foreach($this->parameterSpecifications as $key => $spec) {
-			if ($spec->getName() == $name) {
-				return $this->parameterSpecifications[$key];
-			}
-		}
-		return null;
-	}
+  public function getSpecificationByName($name) {
+    foreach ($this->parameterSpecifications as $key => $spec) {
+      if ($spec instanceof Specification && $spec->getName() == $name) {
+        return $this->parameterSpecifications[$key];
+      }
+      elseif ($spec instanceof SpecificationGroup) {
+        $parameterSpecifications = $spec->getSpecificationBag()->getSpecificationByName($name);
+        if ($parameterSpecifications) {
+          return $parameterSpecifications;
+        }
+      }
+    }
+    return null;
+  }
 
 	public function getIterator() {
     return new \ArrayIterator($this->parameterSpecifications);
