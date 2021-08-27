@@ -45,6 +45,16 @@
 
           for (var spec in $scope.action.configuration_spec) {
             $scope.action.configuration_spec[spec].crmUiField = getCrmUiField($scope.action.configuration_spec[spec]);
+            if ($scope.action.configuration_spec[spec].options) {
+              $scope.action.configuration_spec[spec].select2Options = [];
+              for (var optionValue in $scope.action.configuration_spec[spec].options) {
+                var select2Option = {
+                  'id': optionValue,
+                  'text': $scope.action.configuration_spec[spec].options[optionValue],
+                };
+                $scope.action.configuration_spec[spec].select2Options.push(select2Option);
+              }
+            }
           }
 
           for (var parameterSpec in $scope.action.parameter_spec) {

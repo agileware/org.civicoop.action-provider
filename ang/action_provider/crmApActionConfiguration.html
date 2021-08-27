@@ -2,33 +2,18 @@
 
   <h3 class="widget-header" ng-if="action.configuration_spec.length">{{ts('Configuration')}}</h3>
     <ng-repeat ng-repeat="spec in action.configuration_spec">
-        <div crm-ui-field="spec.crmUiField"
-             ng-if="spec.options">
-            <select crm-ui-id="{{spec.name}}"
-                    ui-jq="select2"
-                    ui-options="{dropdownAutoWidth : true, allowClear: true, minimumInputLength: 0}"
-                    name="{{spec.name}}"
-                    ng-if="!spec.multiple"
-                    ng-model="configuration[spec.name]"
-                    ng-required="spec.required"
-                    class="huge"
-            >
-                <option value=""></option>
-                <option ng-repeat="(key,value) in spec.options" value="{{key}}">{{value}}</option>
-            </select>
-            <select class="huge"
-                    crm-ui-id="{{spec.name}}"
-                    ui-jq="select2"
-                    ui-options="{dropdownAutoWidth : true, allowClear: true, minimumInputLength: 0}"
-                    name="{{spec.name}}"
-                    ng-if="spec.multiple"
-                    ng-model="configuration[spec.name]"
-                    ng-required="spec.required"
-                    multiple="multiple"
-            >
-                <option ng-repeat="(key,value) in spec.options" value="{{key}}">{{value}}</option>
-            </select>
-            <div class="description" ng-bind-html="spec.description" ng-if="spec.description"></div>
+        <div crm-ui-field="spec.crmUiField" ng-if="spec.options">
+          <input
+            type="text"
+            class="huge"
+            crm-ui-id="{{spec.name}}"
+            ui-jq="select2"
+            ui-options="{placeholder: ts(' - Select - '), dropdownAutoWidth : true, allowClear: true, minimumInputLength: 0, data: {results: spec.select2Options}, multiple: spec.multiple}"
+            name="{{spec.name}}"
+            ng-model="configuration[spec.name]"
+            ng-required="spec.required"
+          />
+          <div class="description" ng-bind-html="spec.description" ng-if="spec.description"></div>
         </div>
         <div crm-ui-field="spec.crmUiField"
              ng-if="spec.fk_entity">
