@@ -1,4 +1,4 @@
-Version 1.78 (not yet released)
+Version 1.78
 ------------
 
 * Added action 'Contact: Edit communication styles'.
