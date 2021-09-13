@@ -130,6 +130,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('SetCommunicationStyle', '\Civi\ActionProvider\Action\Contact\SetCommunicationStyle',E::ts("Contact: Edit communication styles") , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $provider->addAction('SetPreferredCommunicationMethod', '\Civi\ActionProvider\Action\Contact\SetPreferredCommunicationMethod',E::ts("Contact: Edit preferred communication methods") , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,

@@ -1,6 +1,7 @@
 Version 1.78 (not yet released)
 ------------
 
+* Added action 'Contact: Edit communication styles'.
 * Fixed SpecificationBag->getSpecificationByName function to support custom fields.
 * support note date on 'Create Note'  by !53
 
