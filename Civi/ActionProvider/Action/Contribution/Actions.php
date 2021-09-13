@@ -34,6 +34,10 @@ class Actions {
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ));
+    $provider->addAction('CreateContributionRecur', '\Civi\ActionProvider\Action\Contribution\CreateContributionRecur', E::ts('Contribution: Create recurring contribution'), array(
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ));
     $provider->addAction('UpdateContribution', '\Civi\ActionProvider\Action\Contribution\UpdateContribution', E::ts('Contribution: Update'), array(
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
