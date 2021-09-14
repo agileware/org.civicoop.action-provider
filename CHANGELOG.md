@@ -1,4 +1,4 @@
-Version 1.79 (not yet released)
+Version 1.79
 ------------
 
 * Added action 'Contribution: create recurring contribution'
