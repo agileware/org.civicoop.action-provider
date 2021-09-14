@@ -2,6 +2,7 @@ Version 1.79 (not yet released)
 ------------
 
 * Added action 'Contribution: create recurring contribution'
+* Added Contribution Recur ID as parameter to the Send E-mail, Create PDF and Send PDF by Email action.
 
 Version 1.78
 ------------

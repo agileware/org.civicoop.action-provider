@@ -37,6 +37,9 @@ class SendEmail extends AbstractAction {
     if ($parameters->doesParameterExists('participant_id')) {
       $extra_data['participant']['id'] = $parameters->getParameter('participant_id');;
     }
+    if ($parameters->doesParameterExists('contribution_recur_id')) {
+      $extra_data['contribution_recur']['id'] = $parameters->getParameter('contribution_recur_id');
+    }
     if ($parameters->doesParameterExists('case_id')) {
       $mailer->setCaseId($parameters->getParameter('case_id'));
     }
@@ -132,6 +135,7 @@ class SendEmail extends AbstractAction {
       new Specification('sender_contact_id', 'Integer', E::ts('Sender Contact ID'), false),
       new Specification('activity_id', 'Integer', E::ts('Activity ID'), false),
       new Specification('contribution_id', 'Integer', E::ts('Contribution ID'), false),
+      new Specification('contribution_recur_id', 'Integer', E::ts('Recurring Contribution ID'), false),
       new Specification('case_id', 'Integer', E::ts('Case ID'), false),
       new Specification('participant_id', 'Integer', E::ts('Participant ID'), false),
       $attachments

@@ -37,6 +37,9 @@ class CreatePdf extends AbstractAction {
     if ($participantId) {
       $contact['extra_data']['participant']['id'] = $participantId;
     }
+    if ($parameters->doesParameterExists('contribution_recur_id')) {
+      $contact['extra_data']['contribution_recur']['id'] = $parameters->getParameter('contribution_recur_id');
+    }
     if ($parameters->doesParameterExists('case_id')) {
       $contact['case_id'] = $parameters->getParameter('case_id');
     }
@@ -206,6 +209,7 @@ class CreatePdf extends AbstractAction {
       new Specification('message', 'String', E::ts('Message'), true),
       new Specification('activity_id', 'Integer', E::ts('Activity ID'), false),
       new Specification('contribution_id', 'Integer', E::ts('Contribution ID'), false),
+      new Specification('contribution_recur_id', 'Integer', E::ts('Recurring Contribution ID'), false),
       new Specification('case_id', 'Integer', E::ts('Case ID'), false),
       new Specification('participant_id', 'Integer', E::ts('Participant ID'), false),
       new Specification('subject', 'String', E::ts('Subject (for the activity)'), false),

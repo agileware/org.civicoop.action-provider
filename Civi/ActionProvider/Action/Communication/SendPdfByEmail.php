@@ -35,6 +35,9 @@ class SendPdfByEmail extends AbstractAction {
     if ($participantId) {
       $contact['extra_data']['participant']['id'] = $participantId;
     }
+    if ($parameters->doesParameterExists('contribution_recur_id')) {
+      $contact['extra_data']['contribution_recur']['id'] = $parameters->getParameter('contribution_recur_id');
+    }
     if ($parameters->doesParameterExists('case_id')) {
       $contact['case_id'] = $parameters->getParameter('case_id');
     }
@@ -56,6 +59,7 @@ class SendPdfByEmail extends AbstractAction {
     $pdfContents = \CRM_Utils_PDF_Utils::html2pdf($text, $filename, TRUE);
     file_put_contents($_fullPathName, $pdfContents);
 
+    $extra_data = array();
     $mailer = new \Civi\ActionProvider\Utils\SendEmail();
     $mailer->addAttachment($_fullPathName, $filename, 'application/pdf');
     if ($this->configuration->getParameter('use_sender_as') == 'from' && $parameters->doesParameterExists('sender_contact_id')) {
@@ -76,6 +80,9 @@ class SendPdfByEmail extends AbstractAction {
     if ($parameters->doesParameterExists('participant_id')) {
       $mailer->setParticipantId($parameters->getParameter('participant_id'));
     }
+    if ($parameters->doesParameterExists('contribution_recur_id')) {
+      $extra_data['contribution_recur']['id'] = $parameters->getParameter('contribution_recur_id');
+    }
     if ($parameters->doesParameterExists('alternative_recipient')) {
       $mailer->setAlternativeRecipientEmail($parameters->getParameter('alternative_recipient'));
     } elseif ($this->configuration->doesParameterExists('alternative_recipient')) {
@@ -95,7 +102,6 @@ class SendPdfByEmail extends AbstractAction {
       $body_text = $parameters->getParameter('body_text');
     }
     $body_html = $parameters->getParameter('body_html');
-    $extra_data = array();
     $cc = $this->configuration->getParameter('cc');
     $bcc = $this->configuration->getParameter('bcc');
 
@@ -176,6 +182,7 @@ class SendPdfByEmail extends AbstractAction {
       new Specification('sender_contact_id', 'Integer', E::ts('Sender Contact ID'), false),
       new Specification('activity_id', 'Integer', E::ts('Activity ID'), false),
       new Specification('contribution_id', 'Integer', E::ts('Contribution ID'), false),
+      new Specification('contribution_recur_id', 'Integer', E::ts('Recurring Contribution ID'), false),
       new Specification('case_id', 'Integer', E::ts('Case ID'), false),
       new Specification('participant_id', 'Integer', E::ts('Participant ID'), false),
       $attachments
