@@ -1,6 +1,8 @@
 Version 1.80 (not yet released)
 ------------
 
+* Added status to the create recurring contribution action.
+
 Version 1.79
 ------------
 

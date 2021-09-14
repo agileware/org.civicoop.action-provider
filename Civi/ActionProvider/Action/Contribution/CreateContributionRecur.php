@@ -48,6 +48,7 @@ class CreateContributionRecur extends AbstractAction {
     }
     $contribution_params['frequency_interval'] = $parameters->getParameter('frequency_interval');
     $contribution_params['frequency_unit'] = $parameters->getParameter('frequency_unit');
+    $contribution_params['contribution_status_id'] = $this->configuration->getParameter('status_id');
 
     $result = civicrm_api3('ContributionRecur', 'Create', $contribution_params);
 
@@ -72,6 +73,7 @@ class CreateContributionRecur extends AbstractAction {
     return new SpecificationBag(array(
       new Specification('financial_type_id', 'Integer', E::ts('Financial Type'), TRUE, null, 'FinancialType'),
       new Specification('payment_processor', 'Integer', E::ts('Payment Processor'), TRUE, null, 'PaymentProcessor'),
+      new OptionGroupSpecification('status_id', 'contribution_recur_status', E::ts('Status'), TRUE),
     ));
   }
 
