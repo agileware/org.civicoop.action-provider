@@ -57,7 +57,7 @@ cv en action_provider
 ## Developer documentation
 
 * [How to create an action](docs/howto_create_an_action.md)
-* [How to create an action in an extenion](docs/howto_create_an_action_in_an_extension.md)
+* [How to create an action in an extension](docs/howto_create_an_action_in_an_extension.md)
 * How to use the action provider in your extension (not yet written)
 * How to use the batch functionality in your extension (not yet written)
 
