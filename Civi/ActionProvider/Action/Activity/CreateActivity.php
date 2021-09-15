@@ -32,6 +32,7 @@ class CreateActivity extends AbstractAction {
       new OptionGroupByNameSpecification('activity_type', 'activity_type', E::ts('Activity Type'), FALSE),
       new OptionGroupByNameSpecification('activity_status', 'activity_status', E::ts('Activity Status'), TRUE),
       $subject,
+      new OptionGroupByNameSpecification('priority', 'priority', E::ts('Priority'), TRUE,'Normal'),
     ]);
   }
 
@@ -94,6 +95,7 @@ class CreateActivity extends AbstractAction {
     // Get the contact and the event.
 
     $activityParams['status_id'] = $this->configuration->getParameter('activity_status');
+    $activityParams['priority_id'] = $this->configuration->getParameter('priority');
     if ($parameters->doesParameterExists('subject')) {
       $activityParams['subject'] = $parameters->getParameter('subject');
     } elseif ($this->configuration->getParameter('subject')) {

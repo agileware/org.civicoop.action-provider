@@ -1,6 +1,8 @@
 Version 1.81 (not yet released)
 ------------
 
+* Action 'Activity: Create/Update' has now priority in the configuration (with default Normal).
+
 Version 1.80
 ------------
 
