@@ -22,9 +22,9 @@ class SetCommunicationStyle extends AbstractAction {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
-    return new SpecificationBag([
-        new OptionGroupSpecification('value', 'communication_style', E::ts('Communication Style'), true),
-    ]);
+    $value = new OptionGroupSpecification('value', 'communication_style', E::ts('Communication Style'), false);
+    $value->setDescription(E::ts('Set the communication style either with a parameter or with the configuration'));
+    return new SpecificationBag([$value]);
   }
 
   /**
@@ -36,6 +36,7 @@ class SetCommunicationStyle extends AbstractAction {
   public function getParameterSpecification() {
     return new SpecificationBag(array(
         new Specification('contact_id', 'Integer', E::ts('Contact ID'), true),
+        new OptionGroupSpecification('value', 'communication_style', E::ts('Communication Style'), false),
     ));
   }
 
@@ -63,7 +64,18 @@ class SetCommunicationStyle extends AbstractAction {
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     // the default way of getting the contact is this:
     $contact_id = $parameters->getParameter('contact_id');
-    $value      = $this->configuration->getParameter('value');
-    \civicrm_api3('Contact', 'create', ['id' => $contact_id, 'communication_style_id' => $value]);
+    if ($parameters->doesParameterExists('value')) {
+      $value = $parameters->getParameter('value');
+      \civicrm_api3('Contact', 'create', [
+        'id' => $contact_id,
+        'communication_style_id' => $value
+      ]);
+    } elseif ($this->configuration->doesParameterExists('value')) {
+      $value = $this->configuration->getParameter('value');
+      \civicrm_api3('Contact', 'create', [
+        'id' => $contact_id,
+        'communication_style_id' => $value
+      ]);
+    }
   }
 }

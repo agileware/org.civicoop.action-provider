@@ -1,6 +1,7 @@
 Version 1.81 (not yet released)
 ------------
 
+* Changed action 'Contact: Edit communication styles' and made the communication style also available as a parameter.
 * Action 'Activity: Create/Update' has now priority in the configuration (with default Normal).
 
 Version 1.80
