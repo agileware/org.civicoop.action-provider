@@ -1,4 +1,4 @@
-Version 1.81 (not yet released)
+Version 1.81
 ------------
 
 * Changed action 'Contact: Edit communication styles' and made the communication style also available as a parameter.
