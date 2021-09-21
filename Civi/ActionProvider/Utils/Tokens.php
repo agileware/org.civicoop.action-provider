@@ -159,4 +159,73 @@ class Tokens {
     return $contactDetails[$contact_id];
   }
 
+  /**
+   *  Copy from \CRM_Utils_Token.
+   *  Reason it has to call the local self::getApiTokenReplacement
+   *
+   * @param $entity
+   * @param $entityArray
+   * @param $str
+   * @param array $knownTokens
+   * @param false $escapeSmarty
+   *
+   * @return array|mixed|string|string[]|null
+   * @throws \CiviCRM_API3_Exception
+   */
+  public static function replaceEntityTokens($entity, $entityArray, $str, $knownTokens = [], $escapeSmarty = FALSE) {
+    if (!$knownTokens || empty($knownTokens[$entity])) {
+      return $str;
+    }
+
+    foreach ($knownTokens[$entity] as $token) {
+      $replacement = self::getApiTokenReplacement($entity, $token, $entityArray);
+      if ($escapeSmarty) {
+        $replacement = \CRM_Utils_Token::tokenEscapeSmarty($replacement);
+      }
+      $str = str_replace('{' . $entity . '.' . $token . '}', $replacement, $str);
+    }
+    return preg_replace('/\\\\|\{(\s*)?\}/', ' ', $str);
+  }
+
+  /**
+   * Generic function for formatting token replacement for an api field
+   * This function is copied from \CRM_Utils_Token.
+   * Motivation
+   *  the dataprocessor does not have the getfield function (only getfields)
+   *  and the getfields method asks for 'api_action' instead of 'action'
+   * @param string $entity
+   * @param string $token
+   * @param array $entityArray
+   * @return string
+   * @throws \CiviCRM_API3_Exception
+   */
+  public static function getApiTokenReplacement($entity, $token, $entityArray) {
+    if (!isset($entityArray[$token])) {
+      return '';
+    }
+    $fields = civicrm_api3($entity, 'getfields', ['api_action' => 'get', 'name' => $token, 'get_options' => 'get']);
+    if(!key_exists($token,$fields['values'])){
+      throw new \CiviCRM_API3_Exception ("The field '{$token}' doesn't exist.");
+    }
+    $field = $fields['values'][$token];
+    $fieldType = $field['type'] ?? NULL;
+    // Boolean fields
+    if ($fieldType == \CRM_Utils_Type::T_BOOLEAN && empty($field['options'])) {
+      $field['options'] = [ts('No'), ts('Yes')];
+    }
+    // Match pseudoconstants
+    if (!empty($field['options'])) {
+      $ret = [];
+      foreach ((array) $entityArray[$token] as $val) {
+        $ret[] = $field['options'][$val];
+      }
+      return implode(', ', $ret);
+    }
+    // Format date fields
+    elseif ($entityArray[$token] && $fieldType == \CRM_Utils_Type::T_DATE) {
+      return \CRM_Utils_Date::customFormat($entityArray[$token]);
+    }
+    return implode(', ', (array) $entityArray[$token]);
+  }
+
 }

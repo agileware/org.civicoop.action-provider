@@ -57,6 +57,9 @@ class Actions {
     $provider->addAction('ReplaceTokensInHTML', '\Civi\ActionProvider\Action\Generic\ReplaceTokensInHTML', E::ts('Other: Replace tokens in HTML'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG
     ));
+    $provider->addAction('ReplaceEntityTokensInHTML', '\Civi\ActionProvider\Action\Generic\ReplaceEntityTokensInHTML', E::ts('Other: Replace entity tokens in HTML'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG
+    ));
     $provider->addAction('Geocode', '\Civi\ActionProvider\Action\Generic\Geocode', E::ts('Other: Retrieve Geocoding (Latitude, Longitude)'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG
     ));
