@@ -1,6 +1,7 @@
 Version 1.82 (not yet released)
 ------------
 
+* Added Action 'Activity: Assign'.
 * Added Action 'Other: Replace entity tokens in HTML'.
 
 Version 1.81
