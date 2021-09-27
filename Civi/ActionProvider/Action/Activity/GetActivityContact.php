@@ -69,8 +69,16 @@ class GetActivityContact extends AbstractAction {
     $record_type_ids = $this->configuration->getParameter('record_type');
     $sql = "SELECT DISTINCT contact_id FROM civicrm_activity_contact WHERE activity_id = %1";
     $sqlParams[1] = array($id, 'Integer');
-    if ($record_type_ids && is_array($record_type_ids) && count($record_type_ids)) {
-      $sql .= " AND record_type_id IN (".implode(", ", $record_type_ids).")";
+    if ($record_type_ids) {
+      if (is_array($record_type_ids)) {
+        if (count($record_type_ids)) {
+          $sql .= " AND record_type_id IN (".implode(", ", $record_type_ids).")";
+        }
+      }
+      else {
+        $sql .= " AND record_type_id = %2";
+        $sqlParams[2] = [(int) $record_type_ids, 'Integer'];
+      }
     }
 
     $dao = \CRM_Core_DAO::executeQuery($sql, $sqlParams);

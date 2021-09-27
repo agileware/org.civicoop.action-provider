@@ -3,6 +3,7 @@ Version 1.82 (not yet released)
 
 * Added Action 'Activity: Assign'.
 * Added Action 'Other: Replace entity tokens in HTML'.
+* Fixed #18: activity contact not correctly returned for 1 record type only
 
 Version 1.81
 ------------
