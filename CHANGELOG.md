@@ -1,4 +1,7 @@
-Version 1.82 (not yet released)
+Version 1.83 (not yet released)
+------------
+
+Version 1.82
 ------------
 
 * Added Action 'Activity: Assign'.
