@@ -24,7 +24,7 @@ class MailingEventSubscribe extends AbstractAction {
    */
   public function getConfigurationSpecification() {
     return new SpecificationBag([
-      new Specification('group_id', 'Integer', E::ts('Subscribe to mailing list'), FALSE, NULL, 'Group'),
+      new Specification('group_id', 'Integer', E::ts('Subscribe to mailing list'), TRUE, NULL, 'Group'),
     ]);
   }
 
@@ -66,6 +66,14 @@ class MailingEventSubscribe extends AbstractAction {
     $configuration = $this->getConfiguration();
     if (!$parameters->doesParameterExists('group_id') && !$configuration->doesParameterExists('group_id')) {
       throw new InvalidParameterException('group_id is required');
+    }
+
+    // Check that the group is a Public group
+    $group_id = $parameters->getParameter('group_id');
+    $group_visibility = civicrm_api3('Group', 'getvalue', ['return' => ["visibility"], 'id' => $group_id]);
+
+    if ($group_visibility && substr($group_visibility, 0, 6) != 'Public') {
+      throw new InvalidParameterException('group visibility must be Public');
     }
 
     return parent::validateParameters($parameters);
