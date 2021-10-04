@@ -1,6 +1,8 @@
 Version 1.83 (not yet released)
 ------------
 
+* Refactoring SpecificationBag->getSpecificationByName. Processing remarks !55
+
 Version 1.82
 ------------
 

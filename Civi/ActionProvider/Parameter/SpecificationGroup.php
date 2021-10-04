@@ -39,6 +39,9 @@ class SpecificationGroup implements SpecificationInterface {
     $this->setDescription($description);
   }
 
+  /**
+   * @return \Civi\ActionProvider\Parameter\SpecificationBag
+   */
   public function getSpecificationBag() {
     return $this->specificationBag;
   }
