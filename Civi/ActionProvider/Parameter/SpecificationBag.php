@@ -87,20 +87,23 @@ class SpecificationBag implements \IteratorAggregate  {
 	 */
   public function getSpecificationByName($name) {
     foreach ($this->parameterSpecifications as $key => $spec) {
-      if ($spec instanceof Specification && $spec->getName() == $name) {
-        return $this->parameterSpecifications[$key];
-      }
-      elseif ($spec instanceof SpecificationGroup) {
+      /* check if the specification is a composite object (an object with a method getSpecificationBag)
+         if so search this bag with a recursive call
+      */
+      if (method_exists($spec, 'getSpecificationBag')) {
         $parameterSpecifications = $spec->getSpecificationBag()->getSpecificationByName($name);
         if ($parameterSpecifications) {
           return $parameterSpecifications;
         }
+      } else if ($spec->getName() == $name) {
+        return $this->parameterSpecifications[$key];
       }
     }
     return null;
   }
 
-	public function getIterator() {
+
+  public function getIterator() {
     return new \ArrayIterator($this->parameterSpecifications);
   }
 

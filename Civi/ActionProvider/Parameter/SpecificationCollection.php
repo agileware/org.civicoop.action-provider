@@ -52,6 +52,13 @@ class SpecificationCollection implements SpecificationInterface {
   }
 
   /**
+   * @return \Civi\ActionProvider\Parameter\SpecificationBag
+   */
+  public function getSpecificationBag() {
+    return $this->specificationBag;
+  }
+
+  /**
    * @return String
    */
   public function getType() {
