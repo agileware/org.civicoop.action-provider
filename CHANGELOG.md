@@ -1,5 +1,6 @@
 Version 1.83 (not yet released)
 ------------
+* Fix "Create or Update Relationships" to handle symmetric relationships.
 
 * Refactoring SpecificationBag->getSpecificationByName. Processing remarks !55
 

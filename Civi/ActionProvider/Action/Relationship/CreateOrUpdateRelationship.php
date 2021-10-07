@@ -73,7 +73,32 @@ class CreateOrUpdateRelationship extends CreateRelationship {
    *
    * @return mixed
    */
-  protected function findExistingRelationshipId($contact_id_a, $contact_id_b, $type_id, $also_inactive=false) {
+  protected function findExistingRelationshipId($contact_id_a, $contact_id_b, $type_id, $also_inactive = FALSE) {
+    if (version_compare(\CRM_Utils_System::version(), '5.29.0', '<')) {
+      return $this->findExistingRelationshipIdLegacy($contact_id_a, $contact_id_b, $type_id, $also_inactive);
+    }
+    else {
+      $relationshipQuery = \Civi\Api4\RelationshipCache::get(FALSE)
+        ->addSelect('id')
+        ->addWhere('near_contact_id', '=', $contact_id_a)
+        ->addWhere('far_contact_id', '=', $contact_id_b)
+        ->addWhere('relationship_type_id', '=', $type_id)
+        ->addOrderBy('is_active', 'DESC');
+
+      if (!$also_inactive) {
+        $relationshipQuery->addWhere('is_active', '=', TRUE);
+      }
+      try {
+        $id = $relationshipQuery->execute()->first()['id'] ?? FALSE;
+        return $id;
+      } catch (\Exception $e) {
+        // Do nothing
+        return FALSE;
+      }
+    }
+  }
+
+  protected function findExistingRelationshipIdLegacy($contact_id_a, $contact_id_b, $type_id, $also_inactive = FALSE) {
     $relationshipFindParams = array();
     $relationshipFindParams['contact_id_a'] = $contact_id_a;
     $relationshipFindParams['contact_id_b'] = $contact_id_b;
