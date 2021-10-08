@@ -69,6 +69,7 @@ class CreateRelationship extends AbstractAction {
       new Specification('start_date', 'Date', E::ts('Start date'), false),
       new Specification('end_date', 'Date', E::ts('End date'), false),
       new Specification('description', 'String', E::ts('Description'), false),
+      new Specification('case_id', 'Integer', E::ts('Case ID'), false, null, null, null, FALSE),
     ));
 
     $config = ConfigContainer::getInstance();
@@ -123,6 +124,9 @@ class CreateRelationship extends AbstractAction {
     }
     if ($parameters->doesParameterExists('description')) {
       $relationshipParams['description'] = $parameters->getParameter('description');
+    }
+    if ($parameters->doesParameterExists('case_id')) {
+      $relationshipParams['case_id'] = $parameters->getParameter('case_id');
     }
 
     $relationshipParams['custom'] = array();

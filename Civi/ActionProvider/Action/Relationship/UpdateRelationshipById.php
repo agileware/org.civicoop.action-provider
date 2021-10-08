@@ -41,6 +41,7 @@ class UpdateRelationshipById extends CreateRelationship {
       new Specification('contact_id_a', 'Integer', E::ts('Contact ID A'), false, null, null, null, FALSE),
       new Specification('contact_id_b', 'Integer', E::ts('Contact ID B'), false, null, null, null, FALSE),
       new Specification('description', 'String', E::ts('Description'), false),
+      new Specification('case_id', 'Integer', E::ts('Case ID'), false, null, null, null, FALSE),
     ));
 
     $config = ConfigContainer::getInstance();
@@ -81,6 +82,9 @@ class UpdateRelationshipById extends CreateRelationship {
     $relationshipParams['relationship_type_id'] = $relationship_type_id;
     if ($parameters->doesParameterExists('description')) {
       $relationshipParams['description'] = $parameters->getParameter('description');
+    }
+    if ($parameters->doesParameterExists('case_id')) {
+      $relationshipParams['case_id'] = $parameters->getParameter('case_id');
     }
     $relationshipParams['custom'] = array();
     foreach($this->getParameterSpecification() as $spec) {

@@ -1,7 +1,10 @@
 Version 1.83 (not yet released)
 ------------
-* Fix "Create or Update Relationships" to handle symmetric relationships.
 
+* Added action Update Case
+* Added Case ID to create and update relationship actions
+* Added extra fields to the action Create Case.
+* Fix "Create or Update Relationships" to handle symmetric relationships.
 * Refactoring SpecificationBag->getSpecificationByName. Processing remarks !55
 
 Version 1.82

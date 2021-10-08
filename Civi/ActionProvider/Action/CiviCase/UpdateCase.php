@@ -10,7 +10,7 @@ use \Civi\ActionProvider\Parameter\Specification;
 
 use CRM_ActionProvider_ExtensionUtil as E;
 
-class CreateCase extends AbstractAction {
+class UpdateCase extends AbstractAction {
 
   /**
    * Returns the specification of the configuration options for the action.
@@ -47,6 +47,7 @@ class CreateCase extends AbstractAction {
    */
   public function getParameterSpecification() {
     return new SpecificationBag([
+      new Specification('case_id', 'Integer', E::ts('Case ID'), TRUE, NULL, NULL, NULL, FALSE),
       new Specification('contact_id', 'Integer', E::ts('Contact ID'), TRUE, NULL, NULL, NULL, FALSE),
       new Specification('creator_id', 'Integer', E::ts('Creator Contact ID (Case Manager)'), FALSE, NULL, 'Contact', NULL, FALSE),
       new OptionGroupSpecification('case_status', 'case_status', E::ts('Case Status')),
@@ -82,6 +83,7 @@ class CreateCase extends AbstractAction {
     $contact_id = $parameters->getParameter('contact_id');
 
     // Get the case type and subject.
+    $createParams['id'] = $parameters->getParameter('case_id');
     $createParams['case_type_id'] = $this->configuration->getParameter('case_type_id');
     $createParams['subject'] = $this->configuration->getParameter('subject');
     $createParams['contact_id'] = $contact_id;
