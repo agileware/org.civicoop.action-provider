@@ -30,41 +30,6 @@ class CreateOrUpdateRelationship extends CreateRelationship {
   }
 
   /**
-   * Returns the specification of the configuration options for the actual action.
-   *
-   * @return SpecificationBag
-   * @throws \Exception
-   */
-  public function getParameterSpecification() {
-    $specs = new SpecificationBag(array(
-      /**
-       * The parameters given to the Specification object are:
-       * @param string $name
-       * @param string $dataType
-       * @param string $title
-       * @param bool $required
-       * @param mixed $defaultValue
-       * @param string|null $fkEntity
-       * @param array $options
-       * @param bool $multiple
-       */
-      new Specification('contact_id_a', 'Integer', E::ts('Contact ID A'), true, null, null, null, FALSE),
-      new Specification('contact_id_b', 'Integer', E::ts('Contact ID B'), true, null, null, null, FALSE),
-      new Specification('description', 'String', E::ts('Description'), false),
-      new Specification('case_id', 'Integer', E::ts('Case ID'), false, null, null, null, FALSE),
-    ));
-
-    $config = ConfigContainer::getInstance();
-    $customGroups = $config->getCustomGroupsForEntity('Relationship');
-    foreach ($customGroups as $customGroup) {
-      if (!empty($customGroup['is_active'])) {
-        $specs->addSpecification(CustomField::getSpecForCustomGroup($customGroup['id'], $customGroup['name'], $customGroup['title']));
-      }
-    }
-    return $specs;
-  }
-
-  /**
    * Find existing relationship
    *
    * @param $contact_id_a
@@ -152,14 +117,19 @@ class CreateOrUpdateRelationship extends CreateRelationship {
     // Get the contact and the event.
     $relationshipParams['contact_id_a'] = $parameters->getParameter('contact_id_a');
     $relationshipParams['contact_id_b'] = $parameters->getParameter('contact_id_b');
+    $relationshipParams['start_date'] = $parameters->getParameter('start_date');
+    $relationshipParams['end_date'] = $parameters->getParameter('end_date');
     $relationshipParams['relationship_type_id'] = $relationship_type_id;
     $relationshipParams['is_active'] = '1';
     if ($this->configuration->getParameter('set_start_date') && !$relationship_id) {
       $today = new \DateTime();
       $relationshipParams['start_date'] = $today->format('Ymd');
     }
-    if ($relationship_id) {
-      $relationshipParams['end_date'] = 'null';
+    else if ($parameters->doesParameterExists('start_date')) {
+      $relationshipParams['start_date'] = $parameters->getParameter('start_date');
+    }
+    if ($parameters->doesParameterExists('end_date')) {
+      $relationshipParams['end_date'] = $parameters->getParameter('end_date');
     }
     if ($parameters->doesParameterExists('description')) {
       $relationshipParams['description'] = $parameters->getParameter('description');
