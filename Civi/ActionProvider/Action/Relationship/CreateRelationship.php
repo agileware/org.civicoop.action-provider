@@ -41,7 +41,7 @@ class CreateRelationship extends AbstractAction {
   public function getConfigurationSpecification() {
     return new SpecificationBag(array(
       new Specification('relationship_type_id', 'String', E::ts('Relationship type'), true, null, null, $this->relationshipTypes, False),
-      new Specification('set_start_date', 'Boolean', E::ts('Set start date?'), false, 0, null, null, FALSE),
+      new Specification('set_start_date', 'Boolean', E::ts('Set start date to today?'), false, 0, null, null, FALSE),
     ));
   }
 
@@ -114,13 +114,12 @@ class CreateRelationship extends AbstractAction {
     if ($this->configuration->getParameter('set_start_date')) {
       $today = new \DateTime();
       $relationshipParams['start_date'] = $today->format('Ymd');
-    } else {
-      if ($parameters->doesParameterExists('start_date')) {
-        $relationshipParams['start_date'] = $parameters->getParameter('start_date');
-      }
-      if ($parameters->doesParameterExists('end_date')) {
-        $relationshipParams['end_date'] = $parameters->getParameter('end_date');
-      }
+    }
+    else if ($parameters->doesParameterExists('start_date')) {
+      $relationshipParams['start_date'] = $parameters->getParameter('start_date');
+    }
+    if ($parameters->doesParameterExists('end_date')) {
+      $relationshipParams['end_date'] = $parameters->getParameter('end_date');
     }
     if ($parameters->doesParameterExists('description')) {
       $relationshipParams['description'] = $parameters->getParameter('description');
