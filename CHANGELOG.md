@@ -7,6 +7,7 @@ Version 1.83 (not yet released)
 * Fix "Create or Update Relationships" to handle symmetric relationships.
 * Refactoring SpecificationBag->getSpecificationByName. Processing remarks !55
 * Support start/end dates on relationship create/update; related fixes by !62
+* Address Component Lookup action by !63
 
 Version 1.82
 ------------
