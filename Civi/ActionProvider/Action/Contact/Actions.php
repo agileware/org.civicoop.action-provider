@@ -50,7 +50,7 @@ class Actions {
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
-    $provider->addAction('GetCountryId', '\Civi\ActionProvider\Action\Contact\GetCountryId', E::ts('Get country ID by name/ISO code'), array(
+    $provider->addAction('GetCountryId', '\Civi\ActionProvider\Action\Contact\GetCountryId', E::ts('Address: Get country ID by name/ISO code'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
@@ -174,6 +174,9 @@ class Actions {
     ));
     $provider->addAction('GetPhone', '\Civi\ActionProvider\Action\Phone\GetPhone', E::ts('Contact: Get phone number'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
+    $provider->addAction('AddressComponentIdLookup', '\Civi\ActionProvider\Action\Contact\AddressComponentIdLookup', E::ts('Address: Get country or state/province from ID'), array(
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
   }
