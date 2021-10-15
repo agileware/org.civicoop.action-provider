@@ -1,6 +1,7 @@
 Version 1.83 (not yet released)
 ------------
 
+* Added action Update Case status.
 * Added action Update Case
 * Added Case ID to create and update relationship actions
 * Added extra fields to the action Create Case.
