@@ -1,4 +1,4 @@
-Version 1.83 (not yet released)
+Version 1.83
 ------------
 
 * Added action Update Case status.
