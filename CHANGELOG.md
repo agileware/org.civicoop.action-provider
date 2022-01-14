@@ -1,4 +1,4 @@
-Version 1.84 (not yet released)
+Version 1.84
 ------------
 
 * Support nickname on create/update individual actions.
