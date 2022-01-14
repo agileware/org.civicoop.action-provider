@@ -2,6 +2,7 @@ Version 1.84 (not yet released)
 ------------
 
 * Support nickname on create/update individual actions.
+* Add action Contribution: Repeat recurring contribution.
 
 Version 1.83
 ------------
