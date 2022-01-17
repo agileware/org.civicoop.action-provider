@@ -30,7 +30,7 @@ class ContributionRecurRepeatTransaction extends AbstractAction {
    * @throws \Exception
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    $contribution_params['contribution_recur_id'] = $this->configuration->getParameter('contribution_recur_id');
+    $contribution_params['contribution_recur_id'] = $parameters->getParameter('contribution_recur_id');
     $result = civicrm_api3('Contribution', 'repeattransaction', $contribution_params);
   }
 

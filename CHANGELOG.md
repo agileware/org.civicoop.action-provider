@@ -1,6 +1,8 @@
 Version 1.85 (not yet released)
 ------------
 
+* Fixed issue action Contribution: repeat recurring contribution.
+
 Version 1.84
 ------------
 
