@@ -31,6 +31,9 @@ class ContributionRecurRepeatTransaction extends AbstractAction {
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $contribution_params['contribution_recur_id'] = $parameters->getParameter('contribution_recur_id');
+    if ($parameters->doesParameterExists('original_contribution_id')) {
+      $contribution_params['original_contribution_id'] = $parameters->getParameter('original_contribution_id');
+    }
     $result = civicrm_api3('Contribution', 'repeattransaction', $contribution_params);
   }
 
@@ -57,7 +60,8 @@ class ContributionRecurRepeatTransaction extends AbstractAction {
    */
   public function getParameterSpecification() {
     $specs = new SpecificationBag(array(
-      new Specification('contribution_recur_id', 'Integer', E::ts('Contribution Recur ID'), false),
+      new Specification('contribution_recur_id', 'Integer', E::ts('Contribution Recur ID'), true),
+      new Specification('original_contribution_id', 'Integer', E::ts('Original Contribution ID'), false),
     ));
     return $specs;
   }
