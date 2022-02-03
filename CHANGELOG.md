@@ -1,4 +1,4 @@
-Version 1.87 (not yet released)
+Version 1.87
 ------------
 
 * Added option to disable the sending of confirmation e-mails with the Contribution Repeat Transaction action
