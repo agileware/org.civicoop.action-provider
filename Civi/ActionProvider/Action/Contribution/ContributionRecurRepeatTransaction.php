@@ -34,6 +34,7 @@ class ContributionRecurRepeatTransaction extends AbstractAction {
     if ($parameters->doesParameterExists('original_contribution_id')) {
       $contribution_params['original_contribution_id'] = $parameters->getParameter('original_contribution_id');
     }
+    $contribution_params['is_email_receipt'] = $this->configuration->getParameter('is_email_receipt');
     $result = civicrm_api3('Contribution', 'repeattransaction', $contribution_params);
   }
 
@@ -50,7 +51,9 @@ class ContributionRecurRepeatTransaction extends AbstractAction {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
-    return new SpecificationBag(array());
+    return new SpecificationBag(array(
+      new Specification('is_email_receipt', 'Boolean', E::ts('Send e-mail receipt'), true),
+    ));
   }
 
   /**
