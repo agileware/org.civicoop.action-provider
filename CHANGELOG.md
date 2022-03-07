@@ -1,6 +1,8 @@
 Version 1.88-dev
 ------------
 
+* Added Action Update Campaign
+
 Version 1.87
 ------------
 
