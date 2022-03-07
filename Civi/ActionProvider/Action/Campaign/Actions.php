@@ -22,6 +22,10 @@ class Actions {
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('UpdateCampaign', '\Civi\ActionProvider\Action\Campaign\UpdateCampaign',E::ts('Campaign: Update') , array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
   }
 
 }
