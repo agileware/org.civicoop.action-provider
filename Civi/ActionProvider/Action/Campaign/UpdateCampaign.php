@@ -71,9 +71,9 @@ class UpdateCampaign extends AbstractAction {
     $specs->addSpecification(new OptionGroupSpecification('campaign_type_id', 'campaign_type', E::ts('Campaign Type'), false));
     $specs->addSpecification(new OptionGroupSpecification('status_id', 'campaign_status', E::ts('Campaign Status'), false));
     $specs->addSpecification(new Specification('external_identifier', 'String', E::ts('External Identifier'), false));
-    $specs->addSpecification(new Specification('parent_id', 'Integer', E::ts('Parent ID'), true));
-    $specs->addSpecification(new Specification('goal_general', 'String', E::ts('Goal General'), true));
-    $specs->addSpecification(new Specification('goal_revenue', 'Integer', E::ts('Goal General'), true));
+    $specs->addSpecification(new Specification('parent_id', 'Integer', E::ts('Parent ID'), false));
+    $specs->addSpecification(new Specification('goal_general', 'String', E::ts('Goal General'), false));
+    $specs->addSpecification(new Specification('goal_revenue', 'Integer', E::ts('Goal Revenue'), false));
 
     $config = \Civi\ActionProvider\ConfigContainer::getInstance();
     $customGroups = $config->getCustomGroupsForEntity('Campaign');
