@@ -1,4 +1,4 @@
-Version 1.88-dev
+Version 1.88
 ------------
 
 * Fix for #21 Process mapping with customfields in the searchactiondesigner
