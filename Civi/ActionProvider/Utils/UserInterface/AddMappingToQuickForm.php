@@ -69,10 +69,14 @@ class AddMappingToQuickForm {
   public static function processMapping($submittedValues, $prefix, \Civi\ActionProvider\Parameter\SpecificationBag $specificationBag) {
     $return = array();
     foreach($specificationBag as $spec) {
-      $name = $prefix.'mapping_'.$spec->getName();
-      if (isset($submittedValues[$name])) {
-        $return[$spec->getName()] = $submittedValues[$name];
-      }
+      if (method_exists($spec, 'getSpecificationBag')) {
+        $result = self::processMapping($submittedValues, $prefix, $spec->getSpecificationBag() );
+        $return = array_merge($return,$result);
+      } else {
+        $name = $prefix.'mapping_'.$spec->getName();
+        if (isset($submittedValues[$name])) {
+          $return[$spec->getName()] = $submittedValues[$name];
+        }}
     }
     return $return;
   }

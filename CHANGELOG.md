@@ -1,6 +1,7 @@
 Version 1.88-dev
 ------------
 
+* Fix for #21 Process mapping with customfields in the searchactiondesigner
 * Added Action Update Campaign
 
 Version 1.87
