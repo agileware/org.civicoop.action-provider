@@ -19,7 +19,7 @@ class SendEmail extends AbstractAction {
   /**
    * Run the action
    *
-   * @param ParameterInterface $parameters
+   * @param ParameterBagInterface $parameters
    *   The parameters to this action.
    * @param ParameterBagInterface $output
    * 	 The parameters this action can send back
