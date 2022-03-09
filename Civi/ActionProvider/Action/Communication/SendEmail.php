@@ -54,10 +54,14 @@ class SendEmail extends AbstractAction {
     } elseif ($this->configuration->doesParameterExists('alternative_recipient')) {
       $mailer->setAlternativeRecipientEmail($this->configuration->getParameter('alternative_recipient'));
     }
-    if ($this->configuration->doesParameterExists('from_name')) {
+    if ($parameters->doesParameterExists('from_name'))  {
+      $mailer->setFromName($parameters->getParameter('from_name'));
+    } else if ($this->configuration->doesParameterExists('from_name')) {
       $mailer->setFromName($this->configuration->getParameter('from_name'));
     }
-    if ($this->configuration->doesParameterExists('from_email')) {
+    if ($parameters->doesParameterExists('from_email'))  {
+      $mailer->setFromEmail($parameters->getParameter('from_email'));
+    } else if ($this->configuration->doesParameterExists('from_email')) {
       $mailer->setFromEmail($this->configuration->getParameter('from_email'));
     }
 
@@ -138,6 +142,8 @@ class SendEmail extends AbstractAction {
       new Specification('contribution_recur_id', 'Integer', E::ts('Recurring Contribution ID'), false),
       new Specification('case_id', 'Integer', E::ts('Case ID'), false),
       new Specification('participant_id', 'Integer', E::ts('Participant ID'), false),
+      new Specification('from_name', 'String', E::ts('From name'), false),
+      new Specification('from_email', 'String', E::ts('From email'), false),
       $attachments
     ));
   }
