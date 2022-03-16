@@ -1,4 +1,4 @@
-Version 1.89-dev
+Version 1.89
 ------------
 
 * The SendEmail action extended with from_email and from_name parameters
