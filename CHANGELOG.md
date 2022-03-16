@@ -2,6 +2,7 @@ Version 1.89-dev
 ------------
 
 * The SendEmail action extended with from_email and from_name parameters
+* Added action: Relationship Validate Checksums
 
 Version 1.88
 ------------

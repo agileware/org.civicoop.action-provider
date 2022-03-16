@@ -50,6 +50,10 @@ class Actions {
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('RelationshipValidateChecksums', '\Civi\ActionProvider\Action\Relationship\ValidateChecksum', E::ts('Relationship: Validate checksums'), [
+      AbstractAction::DATA_RETRIEVAL_TAG,
+      AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG
+    ]);
   }
 
 }

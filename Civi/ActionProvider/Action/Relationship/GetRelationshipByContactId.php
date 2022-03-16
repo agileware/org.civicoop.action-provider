@@ -30,7 +30,6 @@ class GetRelationshipByContactId extends AbstractGetSingleAction {
       $this->relationshipTypes[$relType['name_a_b']] = $relType['label_a_b'];
       $this->relationshipTypeIds[$relType['name_a_b']] = $relType['id'];
     }
-
   }
 
   /**
