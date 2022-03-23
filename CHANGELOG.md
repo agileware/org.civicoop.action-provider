@@ -1,6 +1,8 @@
 Version 1.90 (not yet released)
 ------------
 
+* Added condition: 'Compare Parameter with an regular Expression'
+
 Version 1.89
 ------------
 
