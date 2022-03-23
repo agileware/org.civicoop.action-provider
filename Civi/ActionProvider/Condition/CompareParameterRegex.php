@@ -23,9 +23,16 @@ class CompareParameterRegex extends AbstractCondition {
   public function isConditionValid(ParameterBagInterface $parameterBag) {
     $parameter = $parameterBag->getParameter('parameter');
     $regex = $this->configuration->getParameter('regex');
+    $inverse = $this->configuration->getParameter('inverse');
     if (preg_match($regex,$parameter)) {
+      if($inverse){
+        return false;
+      }
       return true;
     }
+    if($inverse){
+        return true;
+      }
     return false;
   }
 
@@ -36,7 +43,8 @@ class CompareParameterRegex extends AbstractCondition {
    */
   public function getConfigurationSpecification() {
     return new SpecificationBag(array(
-      new Specification('regex', 'String', E::ts('Regular Expression'), true)
+      new Specification('regex', 'String', E::ts('Regular Expression'), true),
+      new Specification('inverse', 'String', E::ts('Invert Regex Matching Result'), false, null, null, $this->getInvertOptions()),
     ));
   }
 
@@ -58,4 +66,10 @@ class CompareParameterRegex extends AbstractCondition {
     return E::ts('Compare Parameter with an regular Expression');
   }
 
+  protected function getInvertOptions() {
+    return [
+            0  => E::ts("no"),
+            1  => E::ts("yes"),
+        ];
+  }
 }
