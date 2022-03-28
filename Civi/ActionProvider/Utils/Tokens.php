@@ -24,7 +24,7 @@ class Tokens {
   public static function replaceTokens($contactId, $message, $contactData=array(), $format='text/html') {
     $version = \CRM_Core_BAO_Domain::version();
     if (version_compare('5.42', $version, '>=')) {
-      // When civicrm prior to version 5.42 use the old way of handling tokens.
+      // When civicrm prior to version 5.43 use the old way of handling tokens.
       return self::replaceTokensWithDeprecatedMethod($contactId, $message, $contactData);
     }
     $schema[] = 'contactId';
@@ -73,7 +73,7 @@ class Tokens {
    * Returns a processed message. Meaning that all tokens are replaced with their value.
    * This message could then be used to generate the PDF.
    *
-   * This method is to keep compatibility with CiviCRM prior to version 5.42
+   * This method is to keep compatibility with CiviCRM prior to version 5.43
    *
    * @param $contactId
    * @param $message
