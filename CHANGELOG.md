@@ -1,4 +1,4 @@
-Version 1.91 (not yet released)
+Version 1.91
 ------------
 
 * Convert tokens with the token processor (only if civicrm is newer then version 5.42).
