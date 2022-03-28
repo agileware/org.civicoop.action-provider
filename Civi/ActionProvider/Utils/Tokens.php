@@ -6,6 +6,8 @@
 
 namespace Civi\ActionProvider\Utils;
 
+use Civi\Token\TokenProcessor;
+
 class Tokens {
 
   /**
@@ -15,10 +17,71 @@ class Tokens {
    * @param $contactId
    * @param $message
    * @param array $contactData
+   * @param string $format either 'text/html' or 'text/plain'.
    *
    * @return string
    */
-  public static function replaceTokens($contactId, $message, $contactData=array()) {
+  public static function replaceTokens($contactId, $message, $contactData=array(), $format='text/html') {
+    $version = \CRM_Core_BAO_Domain::version();
+    if (version_compare('5.42', $version, '>=')) {
+      // When civicrm prior to version 5.42 use the old way of handling tokens.
+      return self::replaceTokensWithDeprecatedMethod($contactId, $message, $contactData);
+    }
+    $schema[] = 'contactId';
+    $context['contactId'] = $contactId;
+    foreach ($contactData['extra_data'] ?? [] as $entity => $entityData) {
+      $schema[] = "{$entity}Id";
+      $context["{$entity}Id"] = $contactData["{$entity}_id"];
+      $context[$entity] = $entityData;
+    }
+    if (isset($contactData['case_id']) && !empty($contactData['case_id'])) {
+      $schema[] = "caseId";
+      $context["caseId"] = $contactData['case_id'];
+    }
+    if (isset($contactData['contribution_id']) && !empty($contactData['contribution_id'])) {
+      $contribution = civicrm_api3('Contribution', 'getsingle', ['id' => $contactData['contribution_id']]);
+      $schema[] = "contributionId";
+      $context["contributionId"] = $contactData['contribution_id'];
+      $context["contribution"] = $contribution;
+    }
+    if (isset($contactData['activity_id']) && !empty($contactData['activity_id'])) {
+      $activity = civicrm_api3('Activity', 'getsingle', ['id' => $contactData['activity_id']]);
+      $schema[] = "activityId";
+      $context["activityId"] = $contactData['activity_id'];
+      $context["activity"] = $activity;
+    }
+
+    // Whether to enable Smarty evaluation.
+    $useSmarty = (defined('CIVICRM_MAIL_SMARTY') && CIVICRM_MAIL_SMARTY);
+
+    $tokenProcessor = new TokenProcessor(\Civi::dispatcher(), [
+      'controller' => __CLASS__,
+      'schema' => $schema,
+      'smarty' => $useSmarty,
+    ]);
+
+    // Populate the token processor.
+    $tokenProcessor->addMessage('message', $message, $format);
+    $row = $tokenProcessor->addRow($context);
+    // Evaluate and render.
+    $tokenProcessor->evaluate();
+    return $row->render('message');
+
+  }
+
+  /**
+   * Returns a processed message. Meaning that all tokens are replaced with their value.
+   * This message could then be used to generate the PDF.
+   *
+   * This method is to keep compatibility with CiviCRM prior to version 5.42
+   *
+   * @param $contactId
+   * @param $message
+   * @param array $contactData
+   *
+   * @return string
+   */
+  public static function replaceTokensWithDeprecatedMethod($contactId, $message, $contactData=array()) {
     if (isset($contactData['activity_id']) && !empty($contactData['activity_id'])) {
       $contactData['extra_data']['activity']['id'] = $contactData['activity_id'];
     }

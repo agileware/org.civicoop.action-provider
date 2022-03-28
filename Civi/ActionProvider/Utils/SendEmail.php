@@ -165,19 +165,9 @@ class SendEmail {
         $email = $this->alternative_recipient_email;
       }
       $type = array('body_html', 'body_text', 'subject');
-      foreach ($type as $key => $bodyType) {
-        if ($$bodyType) {
-          $$bodyType = Tokens::replaceTokens($contactId, $$bodyType, $contactData);
-        }
-      }
-      $html = $body_html;
-      $text = $body_text;
-      if (defined('CIVICRM_MAIL_SMARTY') && CIVICRM_MAIL_SMARTY) {
-        $smarty = \CRM_Core_Smarty::singleton();
-        foreach ($type as $elem) {
-          $$elem = $smarty->fetch("string:{$$elem}");
-        }
-      }
+      $html = Tokens::replaceTokens($contactId, $body_html, $contactData, 'text/html');
+      $text = Tokens::replaceTokens($contactId, $body_text, $contactData, 'text/plain');
+      $subject = Tokens::replaceTokens($contactId, $subject, $contactData, 'text/plain');
 
       // set up the parameters for CRM_Utils_Mail::send
       $mailParams = array(

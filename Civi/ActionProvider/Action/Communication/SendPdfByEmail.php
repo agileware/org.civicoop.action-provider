@@ -52,7 +52,7 @@ class SendPdfByEmail extends AbstractAction {
       $pdfFormat = $parameters->getParameter('page_format_id');
     }
 
-    $processedMessage = Tokens::replaceTokens($contactId, $pdf_message, $contact);
+    $processedMessage = Tokens::replaceTokens($contactId, $pdf_message, $contact, 'text/html');
     if ($processedMessage === false) {
       return;
     }

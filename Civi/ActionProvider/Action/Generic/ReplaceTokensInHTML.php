@@ -53,7 +53,7 @@ class ReplaceTokensInHTML extends AbstractAction {
       $html = html_entity_decode($this->configuration->getParameter('html'));
     }
 
-    $html = Tokens::replaceTokens($contactId, $html, $contactData);
+    $html = Tokens::replaceTokens($contactId, $html, $contactData, 'text/html');
     $output->setParameter('html', $html);
   }
 
