@@ -1,4 +1,4 @@
-Version 1.90 (not yet released)
+Version 1.90
 ------------
 
 * Added condition: 'Compare Parameter with an regular Expression'
