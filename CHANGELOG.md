@@ -2,6 +2,7 @@ Version 1.90 (not yet released)
 ------------
 
 * Added condition: 'Compare Parameter with an regular Expression'
+* Added PDF Page Format to actions get message template by name and the create pdf and send pdf by email actions.
 
 Version 1.89
 ------------

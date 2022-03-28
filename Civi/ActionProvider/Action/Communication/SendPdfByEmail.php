@@ -47,6 +47,10 @@ class SendPdfByEmail extends AbstractAction {
     if ($parameters->doesParameterExists('activity_id')) {
       $contact['activity_id'] = $parameters->getParameter('activity_id');
     }
+    $pdfFormat = null;
+    if ($parameters->doesParameterExists('page_format_id')) {
+      $pdfFormat = $parameters->getParameter('page_format_id');
+    }
 
     $processedMessage = Tokens::replaceTokens($contactId, $pdf_message, $contact);
     if ($processedMessage === false) {
@@ -56,7 +60,7 @@ class SendPdfByEmail extends AbstractAction {
     //from particular letter line, CRM-6798
     \CRM_Contact_Form_Task_PDFLetterCommon::formatMessage($processedMessage);
     $text = array($processedMessage);
-    $pdfContents = \CRM_Utils_PDF_Utils::html2pdf($text, $filename, TRUE);
+    $pdfContents = \CRM_Utils_PDF_Utils::html2pdf($text, $filename, TRUE, $pdfFormat);
     file_put_contents($_fullPathName, $pdfContents);
 
     $extra_data = array();
@@ -179,6 +183,7 @@ class SendPdfByEmail extends AbstractAction {
       new Specification('body_html', 'String', E::ts('HTML Body'), true),
       new Specification('body_text', 'String', E::ts('Plain text Body'), false),
       new Specification('pdf_message', 'String', E::ts('PDF Message'), true),
+      new Specification('page_format_id', 'Integer', E::ts('Print Page (PDF) Format'), false),
       new Specification('sender_contact_id', 'Integer', E::ts('Sender Contact ID'), false),
       new Specification('activity_id', 'Integer', E::ts('Activity ID'), false),
       new Specification('contribution_id', 'Integer', E::ts('Contribution ID'), false),

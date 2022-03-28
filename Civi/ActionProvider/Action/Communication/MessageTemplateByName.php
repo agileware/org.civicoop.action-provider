@@ -33,6 +33,9 @@ class MessageTemplateByName extends AbstractAction {
       $output->setParameter('subject', $messageTemplateBao->msg_subject);
       $output->setParameter('body_html', $messageTemplateBao->msg_html);
       $output->setParameter('body_text', $messageTemplateBao->msg_text);
+      if ($messageTemplateBao->pdf_format_id) {
+        $output->setParameter('page_format_id', $messageTemplateBao->pdf_format_id);
+      }
     }
   }
 
@@ -77,6 +80,7 @@ class MessageTemplateByName extends AbstractAction {
       new Specification('subject', 'String', E::ts('Subject')),
       new Specification('body_html', 'String', E::ts('HTML Body')),
       new Specification('body_text', 'String', E::ts('Plain text Body')),
+      new Specification('page_format_id', 'Integer', E::ts('Print Page (PDF) Format')),
     ));
   }
 

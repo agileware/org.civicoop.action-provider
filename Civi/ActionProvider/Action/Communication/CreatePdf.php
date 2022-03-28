@@ -49,6 +49,10 @@ class CreatePdf extends AbstractAction {
     if ($parameters->doesParameterExists('activity_id')) {
       $contact['activity_id'] = $parameters->getParameter('activity_id');
     }
+    $pdfFormat = null;
+    if ($parameters->doesParameterExists('page_format_id')) {
+      $pdfFormat = $parameters->getParameter('page_format_id');
+    }
 
     $processedMessage = Tokens::replaceTokens($contactId, $message, $contact);
     if ($processedMessage === false) {
@@ -59,7 +63,7 @@ class CreatePdf extends AbstractAction {
     \CRM_Contact_Form_Task_PDFLetterCommon::formatMessage($processedMessage);
     $this->messages[] = $processedMessage;
     $text = array($processedMessage);
-    $pdfContents = \CRM_Utils_PDF_Utils::html2pdf($text, $fileNameWithoutContactId, TRUE);
+    $pdfContents = \CRM_Utils_PDF_Utils::html2pdf($text, $fileNameWithoutContactId, TRUE, $pdfFormat);
 
     if ($this->currentBatch && $this->zip) {
       $this->zip->addFromString($filenameWithContactId, $pdfContents);
@@ -213,6 +217,7 @@ class CreatePdf extends AbstractAction {
       new Specification('case_id', 'Integer', E::ts('Case ID'), false),
       new Specification('participant_id', 'Integer', E::ts('Participant ID'), false),
       new Specification('subject', 'String', E::ts('Subject (for the activity)'), false),
+      new Specification('page_format_id', 'Integer', E::ts('Print Page (PDF) Format'), false),
     ));
   }
 
