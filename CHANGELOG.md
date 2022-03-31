@@ -1,6 +1,8 @@
 Version 1.92 (not yet released)
 ------------
 
+* Added preferred language to action Create/Update Individual.
+
 Version 1.91
 ------------
 
