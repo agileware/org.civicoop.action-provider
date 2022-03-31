@@ -71,7 +71,7 @@ class CreateUpdateIndividual extends AbstractAction {
       $params['birth_date'] = $parameters->getParameter('birth_date');
     }
     if ($parameters->doesParameterExists('is_deceased')) {
-      $params['is_deceased'] = $parameters->getParameter('is_deceased')  ? '1' : '0';;
+      $params['is_deceased'] = $parameters->getParameter('is_deceased') ? '1' : '0';
     }
     if ($parameters->getParameter('deceased_date') && $parameters->getParameter('is_deceased') && $parameters->doesParameterExists('is_deceased') && $params['is_deceased'] ) {
       $params['deceased_date'] = $parameters->getParameter('deceased_date');
@@ -102,6 +102,9 @@ class CreateUpdateIndividual extends AbstractAction {
     }
     if ($parameters->doesParameterExists('do_not_sms')) {
       $params['do_not_sms'] = $parameters->getParameter('do_not_sms') ? '1' : '0';
+    }
+    if ($parameters->doesParameterExists('preferred_language')) {
+      $params['preferred_language'] = $parameters->getParameter('preferred_language');
     }
 
     if ($parameters->doesParameterExists('email') && empty ($params['id']) && empty ($params['first_name']) && empty ($params['last_name'])) {
@@ -183,6 +186,7 @@ class CreateUpdateIndividual extends AbstractAction {
       new Specification('do_not_email', 'Boolean', E::ts('Do not e-mail'), false),
       new Specification('do_not_phone', 'Boolean', E::ts('Do not Phone'), false),
       new Specification('do_not_sms', 'Boolean', E::ts('Do not SMS'), false),
+      new Specification('preferred_language', 'String', E::ts('Preferred Language'), false),
     ));
     ContactActionUtils::createAddressParameterSpecification($spec);
     ContactActionUtils::createEmailParameterSpecification($spec);
