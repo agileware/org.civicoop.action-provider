@@ -24,6 +24,8 @@ class Actions {
         AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG));
     $provider->addAction('SetValue', '\Civi\ActionProvider\Action\Generic\SetValue', E::ts('Other: Set Value'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG));
+    $provider->addAction('StringReplaceWithParameter', '\Civi\ActionProvider\Action\Generic\StringReplaceWithParameter', E::ts('Other: Replace text'), array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG));
     $provider->addAction('RegexReplaceValue', '\Civi\ActionProvider\Action\Generic\RegexReplaceValue', E::ts('Other: Modify Value with Regular Expression'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG));
     $provider->addAction('MapValue', '\Civi\ActionProvider\Action\Generic\MapValue', E::ts('Other: Map Value'), array(
