@@ -137,7 +137,8 @@ class CreateActivity extends AbstractAction {
       $result = civicrm_api3('Activity', 'Create', $activityParams);
       $output->setParameter('id', $result['id']);
     } catch (\Exception $e) {
-      // Do nothing.
+      \Civi::log()->error('ActionProvider CreateActivity Error: ' . $e->getMessage());
+      throw new \Civi\ActionProvider\Exception\ExecutionException(E::ts('Could not create activity.'));
     }
   }
 
