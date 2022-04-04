@@ -3,6 +3,7 @@ Version 1.92 (not yet released)
 
 * Added preferred language to action Create/Update Individual.
 * Added action Other: Replace text.
+* Error handling at the create activity action
 
 Version 1.91
 ------------
