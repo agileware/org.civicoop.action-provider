@@ -1,3 +1,6 @@
+Version 1.93 (not yet released)
+------------
+
 Version 1.92
 ------------
 
