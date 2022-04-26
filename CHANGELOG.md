@@ -1,6 +1,8 @@
 Version 1.93 (not yet released)
 ------------
 
+* Fixed bug with action Contact: add tags.
+
 Version 1.92
 ------------
 

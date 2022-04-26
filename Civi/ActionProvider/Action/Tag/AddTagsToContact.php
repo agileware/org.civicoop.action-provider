@@ -17,7 +17,7 @@ use CRM_ActionProvider_ExtensionUtil as E;
 class AddTagsToContact extends AbstractAction {
 
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    if ($parameters->doesParameterExists('tag_ids')) {
+    if ($parameters->doesParameterExists('tag_ids') && count($parameters->getParameter('tag_ids'))) {
       $tag_ids = $parameters->getParameter('tag_ids');
     } else {
       $tag_ids = $this->configuration->getParameter('tag_ids');
