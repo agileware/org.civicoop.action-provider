@@ -103,6 +103,9 @@ class CreateUpdateIndividual extends AbstractAction {
     if ($parameters->doesParameterExists('do_not_sms')) {
       $params['do_not_sms'] = $parameters->getParameter('do_not_sms') ? '1' : '0';
     }
+    if ($parameters->doesParameterExists('is_opt_out')) {
+      $params['is_opt_out'] = $parameters->getParameter('is_opt_out') ? '1' : '0';
+    }
     if ($parameters->doesParameterExists('preferred_language')) {
       $params['preferred_language'] = $parameters->getParameter('preferred_language');
     }
@@ -186,6 +189,7 @@ class CreateUpdateIndividual extends AbstractAction {
       new Specification('do_not_email', 'Boolean', E::ts('Do not e-mail'), false),
       new Specification('do_not_phone', 'Boolean', E::ts('Do not Phone'), false),
       new Specification('do_not_sms', 'Boolean', E::ts('Do not SMS'), false),
+      new Specification('is_opt_out', 'Boolean', E::ts('No mass mail (opt-out)'), false),
       new Specification('preferred_language', 'String', E::ts('Preferred Language'), false),
     ));
     ContactActionUtils::createAddressParameterSpecification($spec);
