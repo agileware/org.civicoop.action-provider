@@ -34,6 +34,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('RemoveFromGroup', '\Civi\ActionProvider\Action\Group\RemoveFromGroup', E::ts('Contact: Remove from  group'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));    
     $provider->addAction('UpdateGroupSubscriptions', '\Civi\ActionProvider\Action\Group\UpdateGroupSubscriptions', E::ts('Contact: Subscribe/Unsubscribe to groups.'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
