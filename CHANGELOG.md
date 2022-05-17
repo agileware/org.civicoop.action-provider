@@ -3,6 +3,7 @@ Version 1.93 (not yet released)
 
 * Fixed bug with action Contact: add tags.
 * Added is_opt_out parameter to CreateUpdateIndividual action see !73
+* Added action Contact: Remove From Group see !74
 
 Version 1.92
 ------------
