@@ -1,6 +1,7 @@
-Version 1.93 (not yet released)
+Version 1.93
 ------------
 
+* Fixed #22: Typo in Activity: Get most Recent activity. And loading of configuration of an action when it contains multiple values. Such as activity type.
 * Fixed bug with action Contact: add tags.
 * Added is_opt_out parameter to CreateUpdateIndividual action see !73
 * Added action Contact: Remove From Group see !74

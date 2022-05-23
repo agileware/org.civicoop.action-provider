@@ -40,4 +40,16 @@ interface SpecificationInterface {
    */
   public function validate($value);
 
+  /**
+   * @return bool
+   */
+  public function isMultiple();
+
+  /**
+   * @param bool $multiple
+   *
+   * @return \Civi\ActionProvider\Parameter\SpecificationInterface
+   */
+  public function setMultiple($multiple);
+
 }

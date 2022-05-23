@@ -5,9 +5,9 @@ namespace Civi\ActionProvider\Parameter;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 
 class ParameterBag implements ParameterBagInterface, \IteratorAggregate {
-	
+
 	protected $parameters = array();
-	
+
 	/**
 	 * Get the parameter.
 	 */
@@ -16,7 +16,7 @@ class ParameterBag implements ParameterBagInterface, \IteratorAggregate {
 			return $this->parameters[$name];
 		}
 		return null;
-	}	
+	}
 	/**
 	 * Tests whether the parameter with the name exists.
 	 */
@@ -26,21 +26,21 @@ class ParameterBag implements ParameterBagInterface, \IteratorAggregate {
 		}
 		return false;
 	}
-	
+
 	/**
-	 * Sets parameter. 
+	 * Sets parameter.
 	 */
 	public function setParameter($name, $value) {
 		$this->parameters[$name] = $value;
 	}
-	
+
 	public function getIterator() {
     return new \ArrayIterator($this->parameters);
   }
-	
+
 	/**
 	 * Converts the object to an array.
-	 * 
+	 *
 	 * @return array
 	 */
 	public function toArray() {
@@ -52,11 +52,18 @@ class ParameterBag implements ParameterBagInterface, \IteratorAggregate {
    *
    * @return \Civi\ActionProvider\Parameter\ParameterBag
    */
-	public function fromArray($data) {
+	public function fromArray($data, SpecificationBag $specificationBag=null) {
 	  foreach($data as $key => $val) {
+      $spec = null;
+      if ($specificationBag) {
+        $spec = $specificationBag->getSpecificationByName($key);
+      }
+      if ($spec && $spec->isMultiple() && !is_array($val)) {
+        $val = explode(",", $val);
+      }
 	    $this->setParameter($key, $val);
     }
 	  return $this;
   }
-	
+
 }

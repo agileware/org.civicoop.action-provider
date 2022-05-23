@@ -77,7 +77,7 @@ class GetMostRecentActivity extends AbstractAction {
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $id = $parameters->getParameter('id');
     $record_type_ids = $this->configuration->getParameter('record_type');
-    $activity_type_ids = $this->configuration->getParameter('activity_type');
+    $activity_type_ids = $this->configuration->getParameter('activity_type_id');
     $status_ids = $this->configuration->getParameter('status_id');
     $error = $this->configuration->getParameter('error');
     $sql =<<< SQL
