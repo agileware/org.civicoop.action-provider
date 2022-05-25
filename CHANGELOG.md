@@ -1,3 +1,6 @@
+Version 1.82.2 (not yet released)
+------------
+
 Version 1.82.1
 ------------
 
