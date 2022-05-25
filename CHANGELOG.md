@@ -1,5 +1,7 @@
-Version 1.83 (not yet released)
+Version 1.82.1
 ------------
+
+* Added action: Mailing Event Unsubscrive from Mailing list.
 
 Version 1.82
 ------------
