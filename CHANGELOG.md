@@ -1,6 +1,8 @@
 Version 1.94-dev
 ------------
 
+* Added action: Mailing Event Unsubscrive from Mailing list.
+
 Version 1.93
 ------------
 
