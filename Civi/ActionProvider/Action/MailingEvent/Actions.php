@@ -23,6 +23,11 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::SEND_MESSAGES_TO_CONTACTS,
     ));
+    $provider->addAction('MailingEventUnsubscribe', '\Civi\ActionProvider\Action\MailingEvent\MailingEventUnsubscribe', E::ts('Mailing Event: Unsubscribe from mailing list'), array(
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::SEND_MESSAGES_TO_CONTACTS,
+    ));
     $provider->addAction('MailingEventConfirm', '\Civi\ActionProvider\Action\MailingEvent\MailingEventConfirm', E::ts('Mailing Event: Confirm mailing list subscription'), array(
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
