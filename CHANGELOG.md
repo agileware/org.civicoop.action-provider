@@ -1,6 +1,7 @@
 Version 1.94-dev
 ------------
 
+* Fixed regression bug #23
 * Added action: Mailing Event Unsubscrive from Mailing list.
 
 Version 1.93

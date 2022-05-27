@@ -155,5 +155,21 @@ class SpecificationGroup implements SpecificationInterface {
     return false;
   }
 
+  /**
+   * @return bool
+   */
+  public function isMultiple() {
+    return FALSE;
+  }
+
+  /**
+   * @param bool $multiple
+   *
+   * @return \Civi\ActionProvider\Parameter\SpecificationInterface
+   */
+  public function setMultiple($multiple) {
+    return $this;
+  }
+
 
 }

@@ -215,6 +215,25 @@ class SpecificationCollection implements SpecificationInterface {
     }
   }
 
+  /**
+   * @return bool
+   */
+  public function isMultiple() {
+    if ($this->getMin() == $this->getMax() && $this->getMin() <= 1) {
+      return FALSE;
+    }
+    return TRUE;
+  }
+
+  /**
+   * @param bool $multiple
+   *
+   * @return \Civi\ActionProvider\Parameter\SpecificationInterface
+   */
+  public function setMultiple($multiple) {
+    return $this;
+  }
+
 
 
 
