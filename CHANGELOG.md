@@ -1,4 +1,4 @@
-Version 1.94-dev
+Version 1.94
 ------------
 
 * Don't allow users to populate file custom fields
