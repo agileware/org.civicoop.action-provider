@@ -1,6 +1,7 @@
 Version 1.94-dev
 ------------
 
+* Don't allow users to populate file custom fields
 * Fixed regression bug #23
 * Added action: Mailing Event Unsubscrive from Mailing list.
 
