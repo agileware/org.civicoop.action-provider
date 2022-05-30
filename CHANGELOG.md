@@ -1,6 +1,8 @@
 Version 1.95-dev
 ------------
 
+* Fixed issue with sending e-mails. 
+
 Version 1.94
 ------------
 

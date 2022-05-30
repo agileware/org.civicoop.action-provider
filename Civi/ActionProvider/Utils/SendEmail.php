@@ -132,6 +132,10 @@ class SendEmail {
       if (!$contact || is_a($contact, 'CRM_Core_Error')) {
         throw new \Exception('Could not find contact with ID: ' . $contact_params['contact_id']);
       }
+      if ($contact['preferred_mail_format']===null) {
+        $contact['preferred_mail_format'] = 'Both';
+      }
+
       $contactData = array();
       if ($this->case_id) {
         $contactData['case_id'] = $this->case_id;
