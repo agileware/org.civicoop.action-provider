@@ -71,6 +71,10 @@ class CustomField {
     if ($customField['html_type'] == 'Multi-Select') {
       $multiple = true;
     }
+    // File custom fields shouldn't be selectable - use the "upload file to a custom field" action instead.
+    if ($customField['html_type'] == 'File') {
+      return null;
+    }
     $default = null;
     $spec = null;
 
