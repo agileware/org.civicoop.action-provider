@@ -1,10 +1,12 @@
 Version 1.96 (not yet released)
 ------------
 
+* Added action: Contact restore from trash.
+
 Version 1.95
 ------------
 
-* Fixed issue with sending e-mails. 
+* Fixed issue with sending e-mails.
 
 Version 1.94
 ------------
