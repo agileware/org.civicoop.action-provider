@@ -154,6 +154,9 @@ class Actions {
     $provider->addAction('RestoreContactFromContact', '\Civi\ActionProvider\Action\Contact\RestoreContactFromTrash', E::ts('Contact: Restore from trash'), [
       AbstractAction::DATA_MANIPULATION_TAG,  AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ]);
+    $provider->addAction('BlockCommunication', '\Civi\ActionProvider\Action\Contact\BlockCommunication', E::ts('Contact: Block Communication (set all do not fields)'), [
+      AbstractAction::DATA_MANIPULATION_TAG,  AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ]);
     $provider->addAction('SaveMaxContactId', '\Civi\ActionProvider\Action\Contact\SaveMaxContactId', E::ts('Contact: Get maximum contact ID'), [
       AbstractAction::DATA_RETRIEVAL_TAG
     ]);

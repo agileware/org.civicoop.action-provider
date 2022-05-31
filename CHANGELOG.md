@@ -2,6 +2,7 @@ Version 1.96 (not yet released)
 ------------
 
 * Added action: Contact restore from trash.
+* Added action: Contact: Block Communication (set all do not fields)
 
 Version 1.95
 ------------
