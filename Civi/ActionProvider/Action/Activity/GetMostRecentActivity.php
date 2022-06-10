@@ -89,12 +89,18 @@ SQL;
     $sqlParams[1] = array($id, 'Integer');
     if ($record_type_ids && is_array($record_type_ids) && count($record_type_ids)) {
       $sql .= " AND record_type_id IN (".implode(", ", $record_type_ids).")";
+    } elseif ($record_type_ids && !is_array($record_type_ids)) {
+      $sql .= " AND record_type_id IN (".implode(", ", explode(",", $record_type_ids)).")";
     }
     if ($activity_type_ids && is_array($activity_type_ids) && count($activity_type_ids)) {
       $sql .= " AND activity_type_id IN (".implode(", ", $activity_type_ids).")";
+    } elseif ($activity_type_ids && !is_array($activity_type_ids)) {
+      $sql .= " AND activity_type_id IN (".implode(", ", explode(",", $activity_type_ids)).")";
     }
     if ($status_ids && is_array($status_ids) && count($status_ids)) {
       $sql .= " AND status_id IN (".implode(", ", $status_ids).")";
+    } elseif ($status_ids && !is_array($status_ids)) {
+      $sql .= " AND status_id IN (".implode(", ", explode(",", $status_ids)).")";
     }
     $sql .= " ORDER BY act.activity_date_time DESC limit 1";
     $activity_id = \CRM_Core_DAO::singleValueQuery($sql,[

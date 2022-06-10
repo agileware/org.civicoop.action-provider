@@ -1,3 +1,8 @@
+Version 1.97
+------------
+
+* Fixed issue in action Activity get most recent activity.
+
 Version 1.96
 ------------
 
