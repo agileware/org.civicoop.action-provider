@@ -1,3 +1,6 @@
+Version 1.98 (Not yet released)
+------------
+
 Version 1.97
 ------------
 
