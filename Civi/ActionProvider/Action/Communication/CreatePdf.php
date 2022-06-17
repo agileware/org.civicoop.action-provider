@@ -372,7 +372,9 @@ class CreatePdf extends AbstractAction {
    * @param string $fileName
    */
   protected function _html2pdf_wkhtmltopdf($paper_size, $orientation, $margins, $html_file, $fileName) {
-    require_once 'packages/snappy/src/autoload.php';
+    if (!class_exists('Knp\Snappy\Pdf', FALSE)) {
+      require_once 'packages/snappy/src/autoload.php';
+    }
     $config = \CRM_Core_Config::singleton();
     $snappy = new \Knp\Snappy\Pdf($config->wkhtmltopdfPath);
     $snappy->setOption("page-width", $paper_size[2] . "pt");

@@ -1,6 +1,8 @@
 Version 1.98 (Not yet released)
 ------------
 
+* Fixed issue with Create PDF action and CiviCRM and Drupal 9.
+
 Version 1.97
 ------------
 
