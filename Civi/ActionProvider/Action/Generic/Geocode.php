@@ -47,6 +47,12 @@ class Geocode extends AbstractAction {
     if ($parameters->doesParameterExists('supplemental_address_1')) {
       $addressParams['supplemental_address_1'] = $parameters->getParameter('supplemental_address_1');
     }
+    if ($parameters->doesParameterExists('supplemental_address_2')) {
+      $addressParams['supplemental_address_2'] = $parameters->getParameter('supplemental_address_2');
+    }
+    if ($parameters->doesParameterExists('supplemental_address_3')) {
+      $addressParams['supplemental_address_3'] = $parameters->getParameter('supplemental_address_3');
+    }
     if ($parameters->doesParameterExists('street_name')) {
       $addressParams['street_name'] = $parameters->getParameter('street_name');
     }
@@ -107,16 +113,18 @@ class Geocode extends AbstractAction {
    */
   public function getParameterSpecification() {
     $spec = new SpecificationBag();
-    $spec->addSpecification(new Specification('name', 'String', E::ts('Address name'), false));
-    $spec->addSpecification(new Specification('street_address', 'String', E::ts('Street and housenumber'), false));
-    $spec->addSpecification(new Specification('supplemental_address_1', 'String', E::ts('Supplemental address 1'), false));
-    $spec->addSpecification(new Specification('street_name', 'String', E::ts('Street name'), false));
-    $spec->addSpecification(new Specification('street_number', 'String', E::ts('Housenumber'), false));
+    $spec->addSpecification(new Specification('name', 'String', E::ts('Address Name'), false));
+    $spec->addSpecification(new Specification('street_address', 'String', E::ts('Street Address'), false));
+    $spec->addSpecification(new Specification('supplemental_address_1', 'String', E::ts('Supplemental Address 1'), false));
+    $spec->addSpecification(new Specification('supplemental_address_2', 'String', E::ts('Supplemental Address 2'), false));
+    $spec->addSpecification(new Specification('supplemental_address_3', 'String', E::ts('Supplemental Address 3'), false));
+    $spec->addSpecification(new Specification('street_name', 'String', E::ts('Street Name'), false));
+    $spec->addSpecification(new Specification('street_number', 'String', E::ts('Street Number'), false));
     $spec->addSpecification(new Specification('street_unit', 'String', E::ts('Street Unit'), false));
-    $spec->addSpecification(new Specification('postal_code', 'String', E::ts('Postal code'), false));
+    $spec->addSpecification(new Specification('postal_code', 'String', E::ts('Postal Code'), false));
     $spec->addSpecification(new Specification('city', 'String', E::ts('City'), false));
-    $spec->addSpecification(new Specification('state_province_id', 'Integer', E::ts('State/Province ID'), false, null, 'StateProvince'));
-    $spec->addSpecification(new Specification('country_id', 'Integer', E::ts('Country ID'), false, null, 'Country'));
+    $spec->addSpecification(new Specification('state_province_id', 'Integer', E::ts('State/Province'), false, null, 'StateProvince'));
+    $spec->addSpecification(new Specification('country_id', 'Integer', E::ts('Country'), false, null, 'Country'));
     return $spec;
   }
 
