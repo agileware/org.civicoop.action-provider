@@ -132,9 +132,6 @@ class SendEmail {
       if (!$contact || is_a($contact, 'CRM_Core_Error')) {
         throw new \Exception('Could not find contact with ID: ' . $contact_params['contact_id']);
       }
-      if ($contact['preferred_mail_format']===null) {
-        $contact['preferred_mail_format'] = 'Both';
-      }
 
       $contactData = array();
       if ($this->case_id) {
@@ -188,13 +185,9 @@ class SendEmail {
         $mailParams['bcc'] = $bcc;
       }
 
-      if (!$html || $contact['preferred_mail_format'] == 'Text' || $contact['preferred_mail_format'] == 'Both') {
-        // render the &amp; entities in text mode, so that the links work
-        $mailParams['text'] = str_replace('&amp;', '&', $text);
-      }
-      if ($html && ($contact['preferred_mail_format'] == 'HTML' || $contact['preferred_mail_format'] == 'Both')) {
-        $mailParams['html'] = $html;
-      }
+      // render the &amp; entities in text mode, so that the links work
+      $mailParams['text'] = str_replace('&amp;', '&', $text);
+      $mailParams['html'] = $html;
       if ($this->reply_to_email) {
         $mailParams['replyTo'] = $this->reply_to_email;
       }
