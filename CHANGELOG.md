@@ -1,6 +1,8 @@
 Version 1.99 (not yet released)
 ------------
 
+* Use CiviCRM "standard" labels for address fields. Add missing Supplemental Address 2, 3 fields  by !77
+
 Version 1.98
 ------------
 
