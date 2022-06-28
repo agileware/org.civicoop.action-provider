@@ -1,3 +1,5 @@
+Version 1.100 (not yet released)
+
 Version 1.99
 ------------
 
