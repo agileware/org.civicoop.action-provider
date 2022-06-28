@@ -85,6 +85,9 @@ class CreateUpdateIndividual extends AbstractAction {
     if ($parameters->getParameter('individual_suffix')) {
       $params['individual_suffix'] = $parameters->getParameter('individual_suffix');
     }
+    if ($parameters->getParameter('nick_name')) {
+      $params['nick_name'] = $parameters->getParameter('nick_name');
+    }
     if ($parameters->doesParameterExists('source')) {
       $params['source'] = $parameters->getParameter('source');
     }
@@ -177,6 +180,7 @@ class CreateUpdateIndividual extends AbstractAction {
       new Specification('middle_name', 'String', E::ts('Middle name'), false),
       new Specification('nick_name', 'String', E::ts('Nickname'), false),
       new OptionGroupSpecification('individual_suffix', 'individual_suffix', E::ts('Individual suffix'), false),
+      new Specification('nick_name', 'String', E::ts('Nickname'), false),
       new Specification('formal_title', 'String', E::ts('Formal Title'), false),
       new Specification('job_title', 'String', E::ts('Job Title'), false),
       new Specification('birth_date', 'Date', E::ts('Birth date'), false),
