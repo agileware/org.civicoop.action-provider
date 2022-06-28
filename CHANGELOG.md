@@ -1,6 +1,7 @@
-Version 1.99 (not yet released)
+Version 1.99
 ------------
 
+* Fixed UpdateGroupSubscriptions action fails !24
 * Use CiviCRM "standard" labels for address fields. Add missing Supplemental Address 2, 3 fields  by !77
 * Remove deprecated preferred_mail_format by !78
 
