@@ -27,7 +27,7 @@ class UpdateGroupSubscriptions extends AbstractAction {
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $groups = $parameters->getParameter('group_ids');
-    $groupsToCheck = explode(",", $this->configuration->getParameter('group_ids'));
+    $groupsToCheck = $this->configuration->getParameter('group_ids');
     foreach($groupsToCheck as $groupIdToCheck) {
       if (in_array($groupIdToCheck, $groups)) {
         $action = 'create';
