@@ -93,12 +93,17 @@ class ExplodeList extends AbstractAction {
     ParameterBagInterface $parameters,
     ParameterBagInterface $output
   ) {
+
+    $array_value = explode(
+      $this->configuration->getParameter('separator'),
+      $parameters->getParameter('value')
+    );
+    // Remove all leading/trailing spaces from each value
+    $array_value_trim = array_map('trim', $array_value);
+
     $output->setParameter(
       'value',
-      explode(
-        $this->configuration->getParameter('separator'),
-        $parameters->getParameter('value')
-      )
+      $array_value_trim
     );
   }
 
