@@ -2,6 +2,7 @@ Version 1.100 (not yet released)
 ------------
 
 * !82 Add nick_name support to CreateUpdateIndividual
+* Fix for #25: let mosaico alter the mail content and other extensions which use hook_alter_mailContent
 
 Version 1.99
 ------------
