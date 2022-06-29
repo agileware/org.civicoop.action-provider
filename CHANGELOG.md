@@ -1,5 +1,7 @@
-Version 1.82.2 (not yet released)
+Version 1.82.2
 ------------
+
+* Fix for #25: let mosaico alter the mail content and other extensions which use hook_alter_mailContent
 
 Version 1.82.1
 ------------
