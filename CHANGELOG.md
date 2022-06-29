@@ -1,4 +1,4 @@
-Version 1.100 (not yet released)
+Version 1.100
 ------------
 
 * !82 Add nick_name support to CreateUpdateIndividual
