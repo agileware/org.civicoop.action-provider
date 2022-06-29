@@ -196,6 +196,8 @@ class SendEmail {
         $mailParams['attachments'] = $this->attachments;
       }
 
+      \CRM_Utils_Hook::alterMailContent($mailParams);
+
       $result = \CRM_Utils_Mail::send($mailParams);
       if (!$result) {
         throw new \Exception('Error sending e-mail to ' . $contact['display_name'] . ' <' . $email . '> ');
