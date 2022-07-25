@@ -86,6 +86,7 @@ class Provider {
       new \Civi\ActionProvider\Condition\ArrayParameterContains(),
       new \Civi\ActionProvider\Condition\ContactHasSubtype(),
       new \Civi\ActionProvider\Condition\ContactHasTag(),
+      new \Civi\ActionProvider\Condition\ContactHasActivity(),
     );
 
     foreach($conditions as $condition) {
