@@ -1,6 +1,8 @@
 Version 1.101 (not yet released)
 ------------
 
+* !83 Added Condition: Contact has Activity
+
 Version 1.100
 ------------
 
