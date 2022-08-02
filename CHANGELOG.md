@@ -2,7 +2,8 @@ Version 1.101 (not yet released)
 ------------
 
 * !83 Added Condition: Contact has Activity
-* !84 CiviCase Create and CiviCase Update actions provides Case Subject as an input field, but should be provided as a parameter option field 
+* !84 CiviCase Create and CiviCase Update actions provides Case Subject as an input field, but should be provided as a parameter option field
+* Added action CiviCase get most recent activity of a case
 
 Version 1.100
 ------------

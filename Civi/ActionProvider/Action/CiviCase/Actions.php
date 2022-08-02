@@ -50,6 +50,9 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('CaseGetMostRecentActivity', '\Civi\ActionProvider\Action\CiviCase\GetMostRecentActivity', E::ts('CiviCase: Get most recent activity of a case'), array(
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
   }
 
 }

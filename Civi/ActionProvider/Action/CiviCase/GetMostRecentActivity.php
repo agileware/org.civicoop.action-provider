@@ -1,0 +1,106 @@
+<?php
+/**
+ * Gets the most recent activity of a contact. So the contact_id is the key, the
+ * activity id is returned.
+ *
+ * Returns the activity id and the contact id as well.
+ *
+ * @author Klaas Eikelboom  <klaas.eikelboom@civicoop.org>
+ * @date 25-May-2020
+ * @license  AGPL-3.0
+ */
+
+namespace Civi\ActionProvider\Action\CiviCase;
+
+use Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\Exception\ExecutionException;
+use Civi\ActionProvider\Parameter\OptionGroupSpecification;
+use Civi\ActionProvider\Parameter\ParameterBagInterface;
+use Civi\ActionProvider\Parameter\Specification;
+use Civi\ActionProvider\Parameter\SpecificationBag;
+
+use CRM_ActionProvider_ExtensionUtil as E;
+
+class GetMostRecentActivity extends AbstractAction {
+
+  /**
+   * Returns the specification of the configuration options for the actual
+   * action.
+   *
+   * @return SpecificationBag
+   */
+  public function getConfigurationSpecification() {
+    $bag = new SpecificationBag();
+    $bag->addSpecification(new OptionGroupSpecification('activity_type_id', 'activity_type', E::ts('Activity Type'), false, null, true));
+    $bag->addSpecification(new OptionGroupSpecification('status_id', 'activity_status', E::ts('Activity Status'), false, null, true));
+    $bag->addSpecification(new Specification('error', 'Boolean', E::ts('Error on no activity found'), false, false));
+    return $bag;
+  }
+
+  /**
+   * Returns the specification of the parameters of the actual action.
+   *
+   * @return SpecificationBag
+   */
+  public function getParameterSpecification() {
+    $bag = new SpecificationBag([
+      new Specification('id', 'Integer', E::ts('Case ID'), true),
+    ]);
+    return $bag;
+  }
+
+  /**
+   * Returns the specification of the output parameters of this action.
+   *
+   * This function could be overriden by child classes.
+   *
+   * @return SpecificationBag
+   */
+  public function getOutputSpecification() {
+    $bag = new SpecificationBag();
+    $bag->addSpecification(new Specification('activity_id', 'Integer', E::ts('Activity ID'), false, null, null, false, true));
+    return $bag;
+  }
+
+  /**
+   * Run the action
+   *
+   * @param ParameterBagInterface $parameters
+   *   The parameters to this action.
+   * @param ParameterBagInterface $output
+   *   The parameters this action can send back
+   * @return void
+   * @throws \Exception
+   */
+  protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
+    $id = $parameters->getParameter('id');
+    $activity_type_ids = $this->configuration->getParameter('activity_type_id');
+    $status_ids = $this->configuration->getParameter('status_id');
+    $error = $this->configuration->getParameter('error');
+    $sql =<<< SQL
+    SELECT activity_id
+    FROM civicrm_case_activity cc
+    JOIN civicrm_activity act ON (act.id=cc.activity_id)
+    WHERE cc.case_id = %1
+SQL;
+    $sqlParams[1] = array($id, 'Integer');
+    if ($activity_type_ids && is_array($activity_type_ids) && count($activity_type_ids)) {
+      $sql .= " AND activity_type_id IN (".implode(", ", $activity_type_ids).")";
+    } elseif ($activity_type_ids && !is_array($activity_type_ids)) {
+      $sql .= " AND activity_type_id IN (".implode(", ", explode(",", $activity_type_ids)).")";
+    }
+    if ($status_ids && is_array($status_ids) && count($status_ids)) {
+      $sql .= " AND status_id IN (".implode(", ", $status_ids).")";
+    } elseif ($status_ids && !is_array($status_ids)) {
+      $sql .= " AND status_id IN (".implode(", ", explode(",", $status_ids)).")";
+    }
+    $sql .= " ORDER BY act.activity_date_time DESC limit 1";
+    $activity_id = \CRM_Core_DAO::singleValueQuery($sql,[
+      1 => [$id,'Integer']
+    ]);
+    if ($error && empty($activity_id)) {
+      throw new ExecutionException(E::ts('Could not find an activity'));
+    }
+    $output->setParameter('activity_id', $activity_id);
+  }
+}
