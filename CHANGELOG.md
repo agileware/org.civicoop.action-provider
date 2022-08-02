@@ -1,4 +1,4 @@
-Version 1.101 (not yet released)
+Version 1.101
 ------------
 
 * !83 Added Condition: Contact has Activity
