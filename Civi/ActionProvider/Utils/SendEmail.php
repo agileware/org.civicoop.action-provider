@@ -192,12 +192,10 @@ class SendEmail {
         $mailParams['replyTo'] = $this->reply_to_email;
       }
 
+      \CRM_Utils_Hook::alterMailContent($mailParams);
       if (is_array($this->attachments)) {
         $mailParams['attachments'] = $this->attachments;
       }
-
-      \CRM_Utils_Hook::alterMailContent($mailParams);
-
       $result = \CRM_Utils_Mail::send($mailParams);
       if (!$result) {
         throw new \Exception('Error sending e-mail to ' . $contact['display_name'] . ' <' . $email . '> ');
@@ -298,18 +296,22 @@ class SendEmail {
   protected function processAttachments($activity_id) {
     if (is_array($this->attachments)) {
       foreach($this->attachments as $index => $attachment) {
+        $config = \CRM_Core_Config::singleton();
+        $tmpPath = $config->uploadDir . DIRECTORY_SEPARATOR . $attachment['cleanName'];
+        copy($attachment['fullPath'], $tmpPath);
         try {
           $result = civicrm_api3('Attachment', 'create', array(
             'entity_table' => 'civicrm_activity',
             'entity_id' => $activity_id,
             'name' => $attachment['cleanName'],
             'mime_type' => $attachment['mime_type'],
-            'options' => array('move-file' => $attachment['fullPath']),
+            'options' => array('move-file' => $tmpPath),
           ));
           $this->attachments[$index] = reset($result['values']);
         } catch (\CiviCRM_API3_Exception $ex) {
           // Do nothing
         }
+        unlink($tmpPath);
       }
     }
   }

@@ -1,5 +1,7 @@
-Version 1.102 (not yet released)
+Version 1.102
 ------------
+
+* Fixed issue with attachment and sending mails in batch mode.
 
 Version 1.101
 ------------

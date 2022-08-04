@@ -77,10 +77,12 @@ class SendEmail extends AbstractAction {
     if ($parameters->doesParameterExists('attachments')) {
       foreach($parameters->getParameter('attachments') as $path) {
         try {
+          $config = \CRM_Core_Config::singleton();
+          $filename = false;
+          $mime_type = false;
           if (!file_exists($path) && is_numeric($path)) {
             $file = civicrm_api3('File', 'getsingle', ['id' => $path]);
             $filename = \CRM_Utils_File::cleanFileName($file['uri']);
-            $config = \CRM_Core_Config::singleton();
             $path = $config->customFileUploadDir . DIRECTORY_SEPARATOR . $file['uri'];
             $mime_type = $file['mime_type'];
           }
