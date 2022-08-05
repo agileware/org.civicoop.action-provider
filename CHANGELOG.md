@@ -1,5 +1,6 @@
 Version 1.103 (not yet released)
 ------------
+* Added action GetRelationshipById.
 
 Version 1.102
 ------------

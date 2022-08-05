@@ -26,6 +26,10 @@ class Actions {
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $provider->addAction('GetRelationshipById', '\Civi\ActionProvider\Action\Relationship\GetRelationshipById',E::ts('Relationship: Get by ID') , array(
+      AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $provider->addAction('GetRelationshipByContactId', '\Civi\ActionProvider\Action\Relationship\GetRelationshipByContactId',E::ts('Relationship: Get by Contact ID') , array(
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
