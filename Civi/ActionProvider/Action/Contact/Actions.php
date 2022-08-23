@@ -182,6 +182,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $provider->addAction('GetPhone', '\Civi\ActionProvider\Action\Contact\GetEmployer', E::ts('Contact: Get employer'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $provider->addAction('AddressComponentIdLookup', '\Civi\ActionProvider\Action\Contact\AddressComponentIdLookup', E::ts('Address: Get country or state/province from ID'), array(
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));

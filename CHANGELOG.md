@@ -1,6 +1,7 @@
 Version 1.103 (not yet released)
 ------------
 * Added action GetRelationshipById.
+* Added action GetEmployer (Retrieves the employer_id and name for a contact)
 
 Version 1.102
 ------------
