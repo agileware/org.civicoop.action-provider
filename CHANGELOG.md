@@ -2,6 +2,7 @@ Version 1.103 (not yet released)
 ------------
 * Added action GetRelationshipById.
 * Added action GetEmployer (Retrieves the employer_id and name for a contact)
+* Make subject optional in the Civi:Case Update Action.
 
 Version 1.102
 ------------

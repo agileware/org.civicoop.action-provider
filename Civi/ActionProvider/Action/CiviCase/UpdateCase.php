@@ -33,7 +33,7 @@ class UpdateCase extends AbstractAction {
     return new SpecificationBag(
       [
         new Specification('case_type_id', 'Integer', E::ts('Case Type'), TRUE, NULL, 'CaseType', NULL, FALSE),
-        new Specification('subject', 'String', E::ts('Default Subject'), TRUE, NULL, NULL, NULL, FALSE),
+        new Specification('subject', 'String', E::ts('Default Subject'), FALSE, NULL, NULL, NULL, FALSE),
         new Specification('creator_id', 'Integer', E::ts('Creator Contact ID (Case Manager)'), FALSE, NULL, 'Contact', NULL, FALSE),
         new OptionGroupSpecification('case_status', 'case_status', E::ts('Case Status')),
       ]
@@ -86,7 +86,6 @@ class UpdateCase extends AbstractAction {
     // Get the case type and subject.
     $createParams['id'] = $parameters->getParameter('case_id');
     $createParams['case_type_id'] = $this->configuration->getParameter('case_type_id');
-    $createParams['subject'] = $this->configuration->getParameter('subject');
     $createParams['contact_id'] = $contact_id;
     if ($parameters->getParameter('creator_id')) {
       $createParams['creator_id'] = $parameters->getParameter('creator_id');
@@ -102,6 +101,8 @@ class UpdateCase extends AbstractAction {
     }
     if ($parameters->getParameter('subject')) {
       $createParams['subject'] = $parameters->getParameter('subject');
+    } elseif ($this->configuration->getParameter('subject')) {
+      $createParams['subject'] = $this->configuration->getParameter('subject');
     }
     elseif ($this->configuration->getParameter('subject')) {
       $createParams['subject'] = $this->configuration->getParameter('subject');
