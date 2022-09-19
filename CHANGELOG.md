@@ -1,3 +1,6 @@
+Version 1.104 (not yet released)
+------------
+
 Version 1.103
 ------------
 * Added action GetRelationshipById.
