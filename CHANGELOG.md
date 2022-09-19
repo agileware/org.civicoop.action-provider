@@ -4,6 +4,7 @@ Version 1.103 (not yet released)
 * Added action GetEmployer (Retrieves the employer_id and name for a contact)
 * Make subject optional in the Civi:Case Update Action.
 * Added condition "Parameter is Not"
+* Fixed issue with Send PDF By Email action and token replacements for participant tokens.
 
 Version 1.102
 ------------
