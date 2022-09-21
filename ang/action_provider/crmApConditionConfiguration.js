@@ -28,16 +28,14 @@
         }
 
         $scope.$watch('name', function(newCondition, oldCondition) {
-          if (!newCondition) {
+          if (!newCondition || typeof newCondition === 'object') {
             $scope.condition = null;
             return;
           }
-
           if ($scope.name in conditions[$scope.context]) {
             $scope.condition = conditions[$scope.context][$scope.name];
             return;
           }
-
           actionProviderFactory.getCondition($scope.name, $scope.context).
           then(function (data) {
             conditions[$scope.context][$scope.name] = data;
