@@ -31,7 +31,11 @@ class Tokens {
     $context['contactId'] = $contactId;
     foreach ($contactData['extra_data'] ?? [] as $entity => $entityData) {
       $schema[] = "{$entity}Id";
-      $context["{$entity}Id"] = $contactData["{$entity}_id"];
+      if (isset($entityData['id'])) {
+        $context["{$entity}Id"] = $entityData['id'];
+      } else {
+        $context["{$entity}Id"] = $contactData["{$entity}_id"];
+      }
       $context[$entity] = $entityData;
     }
     if (isset($contactData['case_id']) && !empty($contactData['case_id'])) {
