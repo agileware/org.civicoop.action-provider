@@ -2,6 +2,7 @@ Version 1.104 (not yet released)
 ------------
 * Added action CiviCase: Role Group Sync
 * Added action CiviCase: Get Role Group
+* Added action Other: Logged-in Contact Id
 
 Version 1.103
 ------------

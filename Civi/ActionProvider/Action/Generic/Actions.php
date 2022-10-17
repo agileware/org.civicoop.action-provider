@@ -65,6 +65,9 @@ class Actions {
     $provider->addAction('Geocode', '\Civi\ActionProvider\Action\Generic\Geocode', E::ts('Other: Retrieve Geocoding (Latitude, Longitude)'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG
     ));
+    $provider->addAction('LoggedInContact', '\Civi\ActionProvider\Action\Generic\LoggedInContact', E::ts('Other: Logged-in Contact Id'), array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG
+    ));
   }
 
 }
