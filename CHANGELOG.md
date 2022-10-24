@@ -1,4 +1,4 @@
-Version 1.105
+Version 1.104
 ------------
 * Added action CiviCase: Role Group Sync
 * Added action CiviCase: Get Role Group
