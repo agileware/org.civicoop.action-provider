@@ -50,6 +50,7 @@ class CreateParticipant extends AbstractAction {
       new Specification('event_id', 'Integer', E::ts('Event ID'), true, null, null, null, FALSE),
       new Specification('contact_id', 'Integer', E::ts('Contact ID'), true, null, null, null, FALSE),
       new Specification('campaign_id', 'Integer', E::ts('Campaign ID'), false, null, null, null, FALSE),
+      new Specification('source', 'String', E::ts('Source'), false, null, null, null, FALSE),
     ));
 
     $config = ConfigContainer::getInstance();
@@ -113,7 +114,9 @@ class CreateParticipant extends AbstractAction {
         $participantParams['status_id'] = $status_id;
         $participantParams['role_id'] = $role_id;
         $participantParams['contact_id'] = $contact_id;
-        if ($this->configuration->doesParameterExists('source')) {
+        if ($parameters->doesParameterExists('source')) {
+          $participantParams['source'] = $parameters->getParameter('source');
+        } elseif ($this->configuration->doesParameterExists('source')) {
           $participantParams['source'] = $this->configuration->getParameter('source');
         }
         if ($parameters->getParameter('campaign_id')) {
