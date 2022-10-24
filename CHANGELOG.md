@@ -1,3 +1,6 @@
+Version 1.105 (not yet released)
+------------
+
 Version 1.104
 ------------
 * Added action CiviCase: Role Group Sync
