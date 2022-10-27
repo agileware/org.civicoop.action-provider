@@ -1,3 +1,6 @@
+Version 1.106 (not yet released)
+------------
+
 Version 1.105
 ------------
 
