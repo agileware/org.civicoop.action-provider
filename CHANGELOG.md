@@ -1,4 +1,4 @@
-Version 1.106 (not yet released)
+Version 1.106
 ------------
 
 * Added location type to Send E-mail and Send PDF by Email actions. With a fall back to primary email address.
