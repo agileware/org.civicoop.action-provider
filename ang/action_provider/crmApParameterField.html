@@ -1,0 +1,15 @@
+<div class="crm-section">
+    <div class="label">{{spec.title}}<span class="crm-marker" ng-if="spec.required">*</span></div>
+    <div class="content">
+        <input
+            class="huge"
+            crm-ui-id="input_mapper.{{spec.name}}"
+            name="{{spec.name}}"
+            ng-model="mapping[spec.name]"
+            ng-required="spec.required"
+            crm-ap-ui-select="{dropdownAutoWidth : true, allowClear: true, placeholder: ts(' - Select parameter -'), data: fields, multiple: spec.multiple}"
+        />
+        <div class="description" ng-bind-html="spec.description" ng-if="spec.description"></div>
+    </div>
+    <div class="clear"></div>
+</div>

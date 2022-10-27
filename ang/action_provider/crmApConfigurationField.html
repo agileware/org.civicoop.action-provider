@@ -1,0 +1,50 @@
+<div class="crm-section">
+    <div class="label">{{spec.title}}<span class="crm-marker" ng-if="spec.required">*</span></div>
+    <div class="content">
+
+        <input
+            ng-if="spec.options"
+            type="text"
+            class="huge"
+            crm-ui-id="{{spec.name}}"
+            crm-ui-select="{placeholder: ts(' - Select - '), dropdownAutoWidth : true, allowClear: true, minimumInputLength: 0, data: {results: spec.select2Options}, multiple: spec.multiple}"
+            name="{{spec.name}}"
+            ng-model="configuration[spec.name]"
+            ng-required="spec.required"
+        />
+
+        <input
+           ng-if="spec.fk_entity"
+           class="huge"
+           crm-entityref="{entity: spec.fk_entity, select: {allowClear: true, placeholder: spec.title, minimumInputLength: 0, multiple: spec.multiple}}"
+           crm-ui-id="{{spec.name}}"
+           name="{{spec.name}}"
+           ng-model="configuration[spec.name]"
+           ng-required="spec.required"
+        />
+
+        <div ng-if="!spec.options && !spec.fk_entity && spec.wysiwyg">
+            <div style="overflow: hidden;"><div style="float: right;"><crm-ap-token tokens="{{spec.available_tokens}}" on-select="$broadcast('insert:{{spec.name}}', token.name)" tabindex="-1"></crm-ap-token></div></div>
+            <textarea
+                crm-ui-id="{{spec.name}}"
+                crm-ui-richtext=""
+                crm-ui-insert-rx="insert:{{spec.name}}"
+                name="{{spec.name}}"
+                ng-model="configuration[spec.name]"
+            ></textarea>
+        </div>
+
+        <input
+            ng-if="!spec.options && !spec.fk_entity && !spec.wysiwyg"
+            class="huge crm-form-text"
+            crm-ui-id="{{spec.name}}"
+            name="{{spec.name}}"
+            ng-model="configuration[spec.name]"
+            ng-required="spec.required"
+            type="text"
+        />
+
+        <div class="description" ng-bind-html="spec.description" ng-if="spec.description"></div>
+    </div>
+    <div class="clear"></div>
+</div>

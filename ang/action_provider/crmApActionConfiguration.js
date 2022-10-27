@@ -14,17 +14,6 @@
         mapping: '=?',
       },
       link: function($scope, $el, $attr) {
-        var getCrmUiField = function(spec) {
-          var crmUiField = {
-            'name': spec.name,
-            'title': spec.title
-          };
-          if (spec.required) {
-            crmUiField.required = true;
-          }
-          return crmUiField;
-        };
-
       	$scope.ts = CRM.ts(null);
       	$scope.action = {};
       	$scope.uiFields = {};
@@ -44,7 +33,6 @@
       	  $scope.action = data;
 
           for (var spec in $scope.action.configuration_spec) {
-            $scope.action.configuration_spec[spec].crmUiField = getCrmUiField($scope.action.configuration_spec[spec]);
             if ($scope.action.configuration_spec[spec].options) {
               $scope.action.configuration_spec[spec].select2Options = [];
               for (var optionValue in $scope.action.configuration_spec[spec].options) {
@@ -56,17 +44,6 @@
               }
             }
           }
-
-          for (var parameterSpec in $scope.action.parameter_spec) {
-            if ($scope.action.parameter_spec[parameterSpec].type == 'group') {
-              for (var subParameterSpec in $scope.action.parameter_spec[parameterSpec].specification_bag) {
-                $scope.action.parameter_spec[parameterSpec].specification_bag[subParameterSpec].crmUiField = getCrmUiField($scope.action.parameter_spec[parameterSpec].specification_bag[subParameterSpec]);
-              }
-            } else {
-              $scope.action.parameter_spec[parameterSpec].crmUiField = getCrmUiField($scope.action.parameter_spec[parameterSpec]);
-            }
-          }
-
       	});
       }
     };
