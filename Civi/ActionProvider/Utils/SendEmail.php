@@ -28,6 +28,8 @@ class SendEmail {
 
   private $alternative_recipient_email;
 
+  private $location_type_id;
+
   public function __construct($from_email=null, $from_name=null) {
     $this->from_email = $from_email;
     $this->from_name = $from_name;
@@ -59,6 +61,10 @@ class SendEmail {
 
   public function setFromEmail($email) {
     $this->from_email = $email;
+  }
+
+  public function setLocationTypeId($locationTypeId) {
+    $this->location_type_id = $locationTypeId;
   }
 
   /**
@@ -127,7 +133,7 @@ class SendEmail {
     $returnValues = array();
     foreach($contactIds as $contactId) {
       $contact_params = array(array('contact_id', '=', $contactId, 0, 0));
-      list($contact, $_) = \CRM_Contact_BAO_Query::apiQuery($contact_params);
+      list($contact) = \CRM_Contact_BAO_Query::apiQuery($contact_params);
       $contact = reset($contact);
       if (!$contact || is_a($contact, 'CRM_Core_Error')) {
         throw new \Exception('Could not find contact with ID: ' . $contact_params['contact_id']);
@@ -159,7 +165,7 @@ class SendEmail {
         /**
          * Send e-mail to the contact
          */
-        $email = $contact['email'];
+        $email = $this->getContactEmail($contactId, $contact['email']);
         $toName = $contact['display_name'];
       }
       if ($this->alternative_recipient_email) {
@@ -314,6 +320,23 @@ class SendEmail {
         unlink($tmpPath);
       }
     }
+  }
+
+  protected function getContactEmail($contactId, $fallbackEmail) {
+    $email = $fallbackEmail;
+    if ($this->location_type_id) {
+      try {
+        $email = civicrm_api3('Email', 'getvalue', [
+          'return' => 'email',
+          'location_type_id' => $this->location_type_id,
+          'contact_id' => $contactId,
+          'options' => ['limit' => 1]
+        ]);
+      } catch (\CiviCRM_API3_Exception $e) {
+        // Do nothing
+      }
+    }
+    return $email;
   }
 
 }

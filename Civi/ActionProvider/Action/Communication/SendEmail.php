@@ -34,6 +34,9 @@ class SendEmail extends AbstractAction {
     }
 
     $extra_data = array();
+    if ($parameters->getParameter('location_type_id')) {
+      $mailer->setLocationTypeId($parameters->getParameter('location_type_id'));
+    }
     if ($parameters->doesParameterExists('participant_id')) {
       $extra_data['participant']['id'] = $parameters->getParameter('participant_id');;
     }
@@ -134,6 +137,7 @@ class SendEmail extends AbstractAction {
     $attachments->setDescription(E::ts('Give either the path to the file or the File ID in the CiviCRM database.'));
     return new SpecificationBag(array(
       new Specification('contact_id', 'Integer', E::ts('Receiver Contact ID'), true),
+      new Specification('location_type_id', 'Integer', E::ts('Location Type'), false),
       new Specification('alternative_recipient', 'String', E::ts('Alternative Recipient Email'), false),
       new Specification('subject', 'String', E::ts('Subject'), true),
       new Specification('body_html', 'String', E::ts('HTML Body'), true),
