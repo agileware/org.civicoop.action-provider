@@ -50,6 +50,13 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('CaseRoleGroupSync', '\Civi\ActionProvider\Action\CiviCase\RoleGroupSync',E::ts('CiviCase: Role Group Sync') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $provider->addAction('CaseGetRoleGroup', '\Civi\ActionProvider\Action\CiviCase\GetRoleGroup',E::ts('CiviCase: Get Role Group') , array(
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $provider->addAction('CaseGetMostRecentActivity', '\Civi\ActionProvider\Action\CiviCase\GetMostRecentActivity', E::ts('CiviCase: Get most recent activity of a case'), array(
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));

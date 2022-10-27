@@ -1,5 +1,12 @@
-Version 1.104 (not yet released)
+Version 1.105 (not yet released)
 ------------
+
+Version 1.104
+------------
+* Added action CiviCase: Role Group Sync
+* Added action CiviCase: Get Role Group
+* Added action Other: Logged-in Contact Id
+* Added parameter source to action Create Participant
 
 Version 1.103
 ------------
