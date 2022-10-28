@@ -1,4 +1,4 @@
-Version 1.107 (not yet released)
+Version 1.107
 ------------
 
 * Fixed regression bug. After performance update.
