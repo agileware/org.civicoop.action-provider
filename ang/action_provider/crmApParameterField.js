@@ -7,7 +7,8 @@
       restrict: 'E',
       scope: {
         'spec': '=',
-        'fields': '='
+        'fields': '=',
+        'mapping': '='
       },
     };
   });

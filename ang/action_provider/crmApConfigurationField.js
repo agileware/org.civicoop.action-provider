@@ -7,6 +7,7 @@
       restrict: 'E',
       scope: {
         'spec': '=',
+        'configuration': '='
       },
     };
   });
