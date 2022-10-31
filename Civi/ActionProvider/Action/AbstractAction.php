@@ -285,7 +285,7 @@ abstract class AbstractAction implements \JsonSerializable {
 	/**
 	 * Returns the data structure to serialize it as a json
 	 */
-	public function jsonSerialize() {
+	public function jsonSerialize(): mixed {
 		// An empty array goes wrong with the default confifuration.
 		if (empty($return['default_configuration'])) {
 			$return['default_configuration'] = new \stdClass();;
