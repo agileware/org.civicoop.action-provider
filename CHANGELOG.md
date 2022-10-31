@@ -1,6 +1,8 @@
 Version 1.108 (not yet released)
 ------------
 
+* !87 PHP 8.1 compatibility - jsonSerialize must have a return type 
+
 Version 1.107
 ------------
 
