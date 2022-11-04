@@ -1,4 +1,4 @@
-Version 1.108 (not yet released)
+Version 1.108
 ------------
 
 * Fix for https://lab.civicrm.org/extensions/form-processor/issues/47
