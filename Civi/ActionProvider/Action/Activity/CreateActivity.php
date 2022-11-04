@@ -49,7 +49,9 @@ class CreateActivity extends AbstractAction {
       new Specification('target_contact_id', 'Integer', E::ts('Target Contact ID'), TRUE,null, null, null, true),
       new Specification('assignee_contact_id', 'Integer', E::ts('Assignee Contact ID'), FALSE, null, null, null, false),
       new Specification('activity_type_id', 'Integer', E::ts('Activity Type'), FALSE, null, null, null, FALSE),
+      new Specification('location', 'String', E::ts('Location'), FALSE),
       new Specification('activity_date', 'Timestamp', E::ts('Activity Date'), FALSE),
+      new Specification('duration', 'Integer', E::ts('Duration'), FALSE),
       new Specification('id', 'Integer', E::ts('Activity ID'), false),
       new Specification('campaign_id', 'Integer', E::ts('Campaign'), false),
       $subject,
@@ -110,7 +112,11 @@ class CreateActivity extends AbstractAction {
     if ($parameters->doesParameterExists('assignee_contact_id')) {
       $activityParams['assignee_contact_id'] = $parameters->getParameter('assignee_contact_id');
     }
+
+    $activityParams['location'] = $parameters->getParameter('location');
     $activityParams['activity_date_time'] = $parameters->getParameter('activity_date');
+    $activityParams['duration'] = $parameters->getParameter('duration');
+
     if ($parameters->doesParameterExists('campaign_id')) {
       $activityParams['campaign_id'] = $parameters->getParameter('campaign_id');
     }
