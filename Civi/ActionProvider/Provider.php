@@ -11,7 +11,7 @@ use \CRM_ActionProvider_ExtensionUtil as E;
 /**
  * Singleton and conatiner class with all the actions.
  *
- * This class could be overriden by child classes in an extension to provide a context aware container
+ * This class could be overridden by child classes in an extension to provide a context aware container
  * for the actions.
  */
 class Provider {

@@ -42,7 +42,7 @@ class DeleteActivity extends AbstractAction {
   /**
    * Returns the specification of the output parameters of this action.
    *
-   * This function could be overriden by child classes.
+   * This function could be overridden by child classes.
    *
    * @return SpecificationBag
    */
