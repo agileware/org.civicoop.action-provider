@@ -10,6 +10,10 @@ angular.module('action_provider').directive('crmApUiSelect', function () {
       crmApUiSelect: '='
     },
     link: function (scope, element, attrs, ngModel) {
+      scope.ts = CRM.ts(null);
+      if (scope.crmApUiSelect.placeholder) {
+        scope.crmApUiSelect.placeholder = scope.ts(scope.crmApUiSelect.placeholder);
+      }
       element.select2(scope.crmApUiSelect);
       scope.$watchCollection('crmApUiSelect.data.results', function(newData, oldData) {
         element.trigger('change.select2');

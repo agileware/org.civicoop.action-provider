@@ -1,6 +1,7 @@
 Version 1.108 (not yet released)
 ------------
 
+* Fix for https://lab.civicrm.org/extensions/form-processor/issues/47
 * !88 Activity: Create/Update does not expose Duration and Location fields
 * !87 PHP 8.1 compatibility - jsonSerialize must have a return type 
 

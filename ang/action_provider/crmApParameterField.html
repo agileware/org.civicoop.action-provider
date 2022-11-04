@@ -7,7 +7,7 @@
             name="{{spec.name}}"
             ng-model="mapping[spec.name]"
             ng-required="spec.required"
-            crm-ap-ui-select="{dropdownAutoWidth : true, allowClear: true, placeholder: ts(' - Select parameter -'), data: fields, multiple: spec.multiple}"
+            crm-ap-ui-select="{dropdownAutoWidth : true, allowClear: true, placeholder: ' - Select parameter -', data: fields, multiple: spec.multiple}"
         />
         <div class="description" ng-bind-html="spec.description" ng-if="spec.description"></div>
     </div>
