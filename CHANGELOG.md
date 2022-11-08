@@ -1,4 +1,4 @@
-Version 1.109 (not yet released)
+Version 1.109
 ------------
 
 * Implemented the condition parameter configuration screen for the condition All are (not) empty in the search action designer.
