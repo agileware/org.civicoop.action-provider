@@ -39,7 +39,7 @@ class CheckParameters extends AbstractCondition {
       case 'mix':
         return $this->allAreNotEmpty($parameters) && $this->allAreEmpty($parameters2);
         break;
-      case 'mix':
+      case 'mix2':
         return $this->oneOfIsNotEmpty($parameters) && $this->allAreEmpty($parameters2);
         break;
     }
@@ -103,7 +103,7 @@ class CheckParameters extends AbstractCondition {
    */
   public function getParameterSpecification() {
     $parametersBag = new SpecificationBag(array(
-      new Specification('parameter', 'String', E::ts('Parameter'), true, null, null, null, true),
+      new Specification('parameter', 'String', E::ts('Parameter'), true, null, null, null, false),
     ));
     $parameterCollection1 = new SpecificationCollection('parameters', E::ts('Parameters (1)'), $parametersBag, 1);
     $parameterCollection2 = new SpecificationCollection('parameters2', E::ts('Parameters (2)'), $parametersBag, 0);

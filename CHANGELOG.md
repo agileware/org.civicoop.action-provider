@@ -1,12 +1,14 @@
 Version 1.109 (not yet released)
 ------------
 
+* Implemented the condition parameter configuration screen for the condition All are (not) empty in the search action designer.
+
 Version 1.108
 ------------
 
 * Fix for https://lab.civicrm.org/extensions/form-processor/issues/47
 * !88 Activity: Create/Update does not expose Duration and Location fields
-* !87 PHP 8.1 compatibility - jsonSerialize must have a return type 
+* !87 PHP 8.1 compatibility - jsonSerialize must have a return type
 
 Version 1.107
 ------------
