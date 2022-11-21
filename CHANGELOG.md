@@ -1,6 +1,8 @@
 Version 1.110 (not yet released)
 ------------
 
+* Custom field using option group returns incorrect values when option values are non-numeric  by !90
+
 Version 1.109
 ------------
 
