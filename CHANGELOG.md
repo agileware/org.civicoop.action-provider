@@ -1,6 +1,7 @@
 Version 1.110 (not yet released)
 ------------
 
+* OptionValueToLabel action incorrectly returns an array when single parameter is provided by !91
 * Custom field using option group returns incorrect values when option values are non-numeric  by !90
 
 Version 1.109
