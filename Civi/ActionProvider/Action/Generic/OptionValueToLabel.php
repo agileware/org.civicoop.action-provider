@@ -70,17 +70,14 @@ class OptionValueToLabel extends AbstractAction {
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $value = $parameters->getParameter('value');
     $option_group_id = $this->configuration->getParameter('option_group_id');
-    if (is_array($value)) {
-      $labels = array();
-      foreach($value as $v) {
-        $label = civicrm_api3('OptionValue', 'getvalue', array('return' => 'label', 'value' => $v, 'option_group_id' => $option_group_id));
-        $labels[] = $label;
-      }
-      $output->setParameter('value', $labels);
-    } elseif (!empty($value)) {
-      $label = civicrm_api3('OptionValue', 'getvalue', array('return' => 'label', 'value' => $value, 'option_group_id' => $option_group_id));
-      $output->setParameter('value', $label);
+
+    $labels = array();
+    foreach($value as $v) {
+      $label = civicrm_api3('OptionValue', 'getvalue', array('return' => 'label', 'value' => $v, 'option_group_id' => $option_group_id));
+      $labels[] = $label;
     }
+
+    $output->setParameter('value', count($labels) > 1 ? $labels : $labels[0]);
   }
 
 }
