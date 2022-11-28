@@ -34,7 +34,7 @@ class ParameterBag implements ParameterBagInterface, \IteratorAggregate {
 		$this->parameters[$name] = $value;
 	}
 
-	public function getIterator() {
+	public function getIterator(): \Traversable {
     return new \ArrayIterator($this->parameters);
   }
 
