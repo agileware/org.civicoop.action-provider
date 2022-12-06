@@ -30,6 +30,8 @@ class SendEmail {
 
   private $location_type_id;
 
+  private $campaign_id;
+
   public function __construct($from_email=null, $from_name=null) {
     $this->from_email = $from_email;
     $this->from_name = $from_name;
@@ -65,6 +67,13 @@ class SendEmail {
 
   public function setLocationTypeId($locationTypeId) {
     $this->location_type_id = $locationTypeId;
+  }
+
+  /**
+   * @param mixed $campaign_id
+   */
+  public function setCampaignId($campaign_id): void {
+    $this->campaign_id = $campaign_id;
   }
 
   /**
@@ -228,6 +237,9 @@ class SendEmail {
       );
       if ($this->sender_contact_id) {
         $activityParams['source_contact_id'] = $this->sender_contact_id;
+      }
+      if ($this->campaign_id) {
+        $activityParams['campaign_id'] = $this->campaign_id;
       }
       $activity = \CRM_Activity_BAO_Activity::create($activityParams);
 
