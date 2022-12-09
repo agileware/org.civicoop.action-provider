@@ -165,7 +165,7 @@ class SendEmail {
         $contactData['extra_data']['participant']['id'] = $this->participant_id;
       }
 
-      if ($contact['do_not_email'] || empty($contact['email']) || \CRM_Utils_Array::value('is_deceased', $contact) || $contact['on_hold']) {
+      if ($contact['do_not_email'] || (empty($contact['email']) && empty($this->alternative_recipient_email)) || \CRM_Utils_Array::value('is_deceased', $contact) || $contact['on_hold']) {
         /**
          * Contact is deceased or has opted out from mailings so do not send the e-mail
          */

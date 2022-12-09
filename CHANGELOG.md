@@ -1,6 +1,7 @@
 Version 1.110 (not yet released)
 ------------
 
+* Communication:Sendmail Enabled sending email for a contact with no email when an alternative email is provided.
 * Add campaign parameter to Communication:Sendmail action. The email is added to the campaign.
 * OptionValueToLabel action incorrectly returns an array when single parameter is provided by !91
 * Custom field using option group returns incorrect values when option values are non-numeric  by !90
