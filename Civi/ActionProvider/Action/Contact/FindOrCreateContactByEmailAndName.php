@@ -41,22 +41,23 @@ class FindOrCreateContactByEmailAndName extends AbstractAction {
       }
 			switch ($contactType['contact_type']['name']) {
         case 'Individual':
-          $params['first_name'] = $parameters->getParameter('first_name');
-          $params['last_name'] = $parameters->getParameter('last_name');
+          $params['contact_id.first_name'] = $parameters->getParameter('first_name');
+          $params['contact_id.last_name'] = $parameters->getParameter('last_name');
           break;
         case 'Household';
-          $params['household_name'] = $parameters->getParameter('household_name');
+          $params['contact_id.household_name'] = $parameters->getParameter('household_name');
           break;
         case 'Organization':
-          $params['organization_name'] = $parameters->getParameter('organization_name');
+          $params['contact_id.organization_name'] = $parameters->getParameter('organization_name');
           break;
       }
-			$params['contact_type'] = $contactType['contact_type']['name'];
+			$params['contact_id.contact_type'] = $contactType['contact_type']['name'];
 			if ($contactType['contact_sub_type']) {
-				$params['contact_sub_type'] = $contactType['contact_sub_type']['name'];
+				$params['contact_id.contact_sub_type'] = $contactType['contact_sub_type']['name'];
 			}
-			$params['return'] = 'id';
-			$contactId = civicrm_api3('Contact', 'getvalue', $params);
+			$params['return'] = 'contact_id';
+      $params['options'] = ['sort' => 'contact_id ASC', 'limit' => 1];
+			$contactId = civicrm_api3('Email', 'getvalue', $params);
 		} catch (\Exception $e) {
 		  if ($parameters->doesParameterExists('email')) {
         $createParams['email'] = $parameters->getParameter('email');

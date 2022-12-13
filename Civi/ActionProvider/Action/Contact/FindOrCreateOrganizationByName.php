@@ -25,25 +25,24 @@ class FindOrCreateOrganizationByName extends AbstractAction {
 	protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $contact_sub_type = $this->configuration->getParameter('contact_sub_type');
 	  try {
-      $apiParams = array();
-      $apiParams['contact_type'] = "Organization";
+      $params['contact_type'] = 'Organization';
       if ($contact_sub_type) {
-        $apiParams['contact_sub_type'] = $contact_sub_type;
+        $params['contact_sub_type'] = $contact_sub_type;
       }
-      $apiParams['organization_name'] = $parameters->getParameter('organization_name');
-      $apiParams['return'] = 'id';
-      $contact_id = civicrm_api3('Contact', 'getvalue', $apiParams);
+      $params['organization_name'] = $parameters->getParameter('organization_name');
+      $params['return'] = 'id';
+      $params['options'] = ['sort' => 'contact_id ASC', 'limit' => 1];
+      $contactId = civicrm_api3('Contact', 'getvalue', $params);
     } catch (\Exception $e) {
-	    $createParams = array();
       $createParams['organization_name'] = $parameters->getParameter('organization_name');
-      $createParams['contact_type'] = "Organization";
+      $createParams['contact_type'] = 'Organization';
       if ($contact_sub_type) {
         $createParams['contact_sub_type'] = $contact_sub_type;
       }
       $result = civicrm_api3('Contact', 'create', $createParams);
-      $contact_id = $result['id'];
+      $contactId = $result['id'];
     }
-    $output->setParameter('contact_id', $contact_id);
+    $output->setParameter('contact_id', $contactId);
 	}
 
 	/**
