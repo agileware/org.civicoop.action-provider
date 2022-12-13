@@ -112,6 +112,9 @@ class CreateUpdateIndividual extends AbstractAction {
     if ($parameters->doesParameterExists('preferred_language')) {
       $params['preferred_language'] = $parameters->getParameter('preferred_language');
     }
+    if ($parameters->doesParameterExists('preferred_communication_method')) {
+      $params['preferred_communication_method'] = $parameters->getParameter('preferred_communication_method');
+    }
 
     if ($parameters->doesParameterExists('email') && empty ($params['id']) && empty ($params['first_name']) && empty ($params['last_name'])) {
       // When we create a contact and no name is set set the display name to the e-mail address.
@@ -195,6 +198,7 @@ class CreateUpdateIndividual extends AbstractAction {
       new Specification('do_not_sms', 'Boolean', E::ts('Do not SMS'), false),
       new Specification('is_opt_out', 'Boolean', E::ts('No mass mail (opt-out)'), false),
       new Specification('preferred_language', 'String', E::ts('Preferred Language'), false),
+      new OptionGroupSpecification('preferred_communication_method', 'preferred_communication_method', E::ts('Preferred Communication Method'), false, null, true),
     ));
     ContactActionUtils::createAddressParameterSpecification($spec);
     ContactActionUtils::createEmailParameterSpecification($spec);

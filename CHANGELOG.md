@@ -7,6 +7,7 @@ Version 1.110 (not yet released)
 * Custom field using option group returns incorrect values when option values are non-numeric  by !90
 * PHP 8.1 compatibility - set return types on iterator methods by !92
 * Changes the Action: Contact: Get By Email* to search any email address instead of just primary email by !94
+* Added the parameter Preferred Communication Method to the Action Contact: CreateUpdateIndividual
 
 Version 1.109
 ------------
