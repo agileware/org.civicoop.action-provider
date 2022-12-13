@@ -25,8 +25,7 @@ class FindOrCreateOrganizationByName extends AbstractAction {
 	protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $contact_sub_type = $this->configuration->getParameter('contact_sub_type');
 	  try {
-      $params = array();
-      $params['contact_type'] = "Organization";
+      $params['contact_type'] = 'Organization';
       if ($contact_sub_type) {
         $params['contact_sub_type'] = $contact_sub_type;
       }
@@ -35,13 +34,12 @@ class FindOrCreateOrganizationByName extends AbstractAction {
       $params['options'] = ['sort' => 'contact_id ASC', 'limit' => 1];
       $contactId = civicrm_api3('Contact', 'getvalue', $params);
     } catch (\Exception $e) {
-      $params = array();
-      $params['organization_name'] = $parameters->getParameter('organization_name');
-      $params['contact_type'] = "Organization";
+      $createParams['organization_name'] = $parameters->getParameter('organization_name');
+      $createParams['contact_type'] = 'Organization';
       if ($contact_sub_type) {
-        $params['contact_sub_type'] = $contact_sub_type;
+        $createParams['contact_sub_type'] = $contact_sub_type;
       }
-      $result = civicrm_api3('Contact', 'create', $params);
+      $result = civicrm_api3('Contact', 'create', $createParams);
       $contactId = $result['id'];
     }
     $output->setParameter('contact_id', $contactId);

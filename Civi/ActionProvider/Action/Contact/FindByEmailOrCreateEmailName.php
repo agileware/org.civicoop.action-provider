@@ -35,13 +35,13 @@ class FindByEmailOrCreateEmailName extends AbstractAction {
     $contactType = ContactActionUtils::getContactType($this->configuration->getParameter('contact_type'));
 		try {
 			$params['email'] = $parameters->getParameter('email');
-      $params['contact_type'] = $contactType['contact_type']['name'];
+      $params['contact_id.contact_type'] = $contactType['contact_type']['name'];
       if ($contactType['contact_sub_type']) {
-        $params['contact_sub_type'] = $contactType['contact_sub_type']['name'];
+        $params['contact_id.contact_sub_type'] = $contactType['contact_sub_type']['name'];
       }
-			$params['return'] = 'id';
+			$params['return'] = 'contact_id';
       $params['options'] = ['sort' => 'contact_id ASC', 'limit' => 1];
-      $contactId = civicrm_api3('Contact', 'getvalue', $params);
+      $contactId = civicrm_api3('Email', 'getvalue', $params);
 		} catch (\Exception $e) {
       $createParams['email'] = $parameters->getParameter('email');
       $createParams['first_name'] = $parameters->getParameter('first_name');
