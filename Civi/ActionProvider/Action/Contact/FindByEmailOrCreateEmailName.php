@@ -40,7 +40,8 @@ class FindByEmailOrCreateEmailName extends AbstractAction {
         $params['contact_sub_type'] = $contactType['contact_sub_type']['name'];
       }
 			$params['return'] = 'id';
-			$contactId = civicrm_api3('Contact', 'getvalue', $params);
+      $params['options'] = ['sort' => 'contact_id ASC', 'limit' => 1];
+      $contactId = civicrm_api3('Contact', 'getvalue', $params);
 		} catch (\Exception $e) {
       $createParams['email'] = $parameters->getParameter('email');
       $createParams['first_name'] = $parameters->getParameter('first_name');
