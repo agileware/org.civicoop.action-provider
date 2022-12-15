@@ -41,6 +41,9 @@ class Actions {
     $provider->addAction('ModifyDateValue', '\Civi\ActionProvider\Action\Generic\ModifyDateValue', E::ts('Other: Modify date value'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('ParseRawDate', '\Civi\ActionProvider\Action\Generic\ParseRawDate', E::ts('Other: Parse raw date (when you have a weird date field)'), array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $provider->addAction('ExplodeList', '\Civi\ActionProvider\Action\Generic\ExplodeList', E::ts('Other: Explode List'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG,
     ));

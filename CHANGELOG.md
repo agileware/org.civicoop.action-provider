@@ -1,6 +1,7 @@
-Version 1.110 (not yet released)
+Version 1.110
 ------------
 
+* add generic action to parse raw data, fixes #29
 * Communication:Sendmail Enabled sending email for a contact with no email when an alternative email is provided.
 * Add campaign parameter to Communication:Sendmail action. The email is added to the campaign.
 * OptionValueToLabel action incorrectly returns an array when single parameter is provided by !91
