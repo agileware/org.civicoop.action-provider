@@ -31,31 +31,29 @@ class FindByEmailOrCreateEmailName extends AbstractAction {
 	 * @return void
    * @throws
 	 */
-	protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
+  protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $contactType = ContactActionUtils::getContactType($this->configuration->getParameter('contact_type'));
-		try {
-			$params['email'] = $parameters->getParameter('email');
-      $params['contact_id.contact_type'] = $contactType['contact_type']['name'];
-      if ($contactType['contact_sub_type']) {
-        $params['contact_id.contact_sub_type'] = $contactType['contact_sub_type']['name'];
-      }
-			$params['return'] = 'contact_id';
-      $params['options'] = ['sort' => 'contact_id ASC', 'limit' => 1];
-      $contactId = civicrm_api3('Email', 'getvalue', $params);
-		} catch (\Exception $e) {
-      $createParams['email'] = $parameters->getParameter('email');
-      $createParams['first_name'] = $parameters->getParameter('first_name');
-      $createParams['last_name'] = $parameters->getParameter('last_name');
+
+    $params['email']                   = $parameters->getParameter('email');
+    $params['contact_id.contact_type'] = $contactType['contact_type']['name'];
+    if ($contactType['contact_sub_type']) {
+      $params['contact_id.contact_sub_type'] = $contactType['contact_sub_type']['name'];
+    }
+    $params['return']  = 'contact_id';
+    $params['options'] = ['sort' => 'contact_id ASC', 'limit' => 1];
+    $result            = civicrm_api3('Email', 'get', $params);
+    if ($result['count'] < 1) {
+      $createParams['email']        = $parameters->getParameter('email');
+      $createParams['first_name']   = $parameters->getParameter('first_name');
+      $createParams['last_name']    = $parameters->getParameter('last_name');
       $createParams['contact_type'] = $contactType['contact_type']['name'];
       if ($contactType['contact_sub_type']) {
         $createParams['contact_sub_type'] = $contactType['contact_sub_type']['name'];
       }
-			$result = civicrm_api3('Contact', 'create', $createParams);
-			$contactId = $result['id'];
-		}
-
-		$output->setParameter('contact_id', $contactId);
-	}
+      $result = civicrm_api3('Contact', 'create', $createParams);
+    }
+    $output->setParameter('contact_id', $result['id']);
+  }
 
 	/**
 	 * Returns the specification of the configuration options for the actual action.
