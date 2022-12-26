@@ -1,3 +1,7 @@
+Version 1.111
+------------
+* add generic action to parse raw amount, fixes #30
+
 Version 1.110
 ------------
 
