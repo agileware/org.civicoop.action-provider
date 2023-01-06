@@ -1,5 +1,7 @@
 Version 1.111 (for development)
 
+* Add parameter to Contact: Get e-mail address action to fallback to the active email address when the location type email address is not found.
+
 Version 1.110
 ------------
 
