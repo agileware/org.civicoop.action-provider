@@ -1,10 +1,12 @@
 Version 1.111
 ------------
+
 * add generic action to parse raw amount, fixes #30
+* Add parameter to Contact: Get e-mail address action to fallback to the active email address when the location type email address is not found.
 
 Version 1.110
 ------------
-
+*
 * add generic action to parse raw data, fixes #29
 * Communication:Sendmail Enabled sending email for a contact with no email when an alternative email is provided.
 * Add campaign parameter to Communication:Sendmail action. The email is added to the campaign.
