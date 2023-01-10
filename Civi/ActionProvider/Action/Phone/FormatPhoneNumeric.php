@@ -11,7 +11,7 @@ use \Civi\ActionProvider\Parameter\OptionGroupSpecification;
 
 use CRM_ActionProvider_ExtensionUtil as E;
 
-class GetPhone extends AbstractAction {
+class FormatPhoneNumeric extends AbstractAction {
 
   /**
    * Run the action
@@ -23,17 +23,14 @@ class GetPhone extends AbstractAction {
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    $contact_id = $parameters->getParameter('contact_id');
-    $existingPhoneParams['contact_id'] = $contact_id;
-    $existingPhoneParams['phone_type_id'] = $this->configuration->getParameter('phone_type');
-    $existingPhoneParams['location_type_id'] = $this->configuration->getParameter('location_type');
-    $existingPhoneParams['return'] = 'phone';
-    try {
-      $existingPhone = civicrm_api3('Phone', 'getvalue', $existingPhoneParams);
-      $output->setParameter('phone', $existingPhone);
-    } catch (\Exception $e) {
-      // Do nothing
+    $sourcePhone = $parameters->getParameter('phone');
+    $chars = str_split($sourcePhone);
+    foreach ($chars as $charKey => $charValue) {
+      if (!ctype_digit($charValue)) {
+        unset($chars[$charKey]);
+      }
     }
+    $output->setParameter('phone_numeric', (int) implode("", $chars));
   }
 
   /**
@@ -42,13 +39,7 @@ class GetPhone extends AbstractAction {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
-    $locationTypes = ContactActionUtils::getLocationTypes();
-    reset($locationTypes);
-    $defaultLocationType = key($locationTypes);
-    return new SpecificationBag(array(
-      new OptionGroupSpecification('phone_type', 'phone_type', E::ts('Phone Type'), true),
-      new Specification('location_type', 'Integer', E::ts('Location type'), true, $defaultLocationType, null, $locationTypes, FALSE),
-    ));
+    return new SpecificationBag();
   }
 
   /**
@@ -58,7 +49,7 @@ class GetPhone extends AbstractAction {
    */
   public function getParameterSpecification() {
     return new SpecificationBag(array(
-      new Specification('contact_id', 'Integer', E::ts('Contact ID'), false),
+      new Specification('phone', 'String', E::ts('Unformatted Phone Number'), TRUE),
     ));
   }
 
@@ -71,7 +62,7 @@ class GetPhone extends AbstractAction {
    */
   public function getOutputSpecification() {
     return new SpecificationBag(array(
-      new Specification('phone', 'String', E::ts('Phone'), false),
+      new Specification('phone_numeric', 'Integer', E::ts('Phone Numeric'), FALSE),
     ));
   }
 

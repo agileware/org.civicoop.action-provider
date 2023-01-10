@@ -14,7 +14,7 @@
     <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
   </urls>
   <releaseDate>2023-01-10</releaseDate>
-  <version>1.111</version>
+  <version>1.112</version>
   <develStage>stable</develStage>
   <compatibility>
     <ver>4.7</ver>
@@ -25,7 +25,7 @@
     <ver>5.4</ver>
     <ver>5.50</ver>
   </compatibility>
-  <comments>Funded by CiviCooP, Roparun, Velt, Bosplus, Barnekreftforeningen, Civiservice.de GmbH, Bundesverband Soziokultur e.V.</comments>
+  <comments>Funded by CiviCooP, Roparun, Velt, Bosplus, Barnekreftforeningen, Civiservice.de GmbH, Bundesverband Soziokultur e.V., Amnesty International Vlaanderen</comments>
   <classloader>
     <psr4 prefix="Civi\" path="Civi" />
   </classloader>

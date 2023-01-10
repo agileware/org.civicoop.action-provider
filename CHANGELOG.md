@@ -1,13 +1,19 @@
+Version 1.112
+------------
+
+* add contact action to format individual name - fixes #32, funded by Amnesty International Vlaanderen
+* add contact action to format phone string into numbers only - fixes #33, funded by Amnesty International Vlaanderen
+
 Version 1.111
 ------------
 
-* add generic action to parse raw amount, fixes #30
+* add generic action to parse raw amount, fixes #30, , funded by Amnesty International Vlaanderen
 * Add parameter to Contact: Get e-mail address action to fallback to the active email address when the location type email address is not found.
 
 Version 1.110
 ------------
 *
-* add generic action to parse raw data, fixes #29
+* add generic action to parse raw data, fixes #29, funded by Amnesty International Vlaanderen
 * Communication:Sendmail Enabled sending email for a contact with no email when an alternative email is provided.
 * Add campaign parameter to Communication:Sendmail action. The email is added to the campaign.
 * OptionValueToLabel action incorrectly returns an array when single parameter is provided by !91

@@ -122,6 +122,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $provider->addAction('FormatIndividualName', '\Civi\ActionProvider\Action\Contact\FormatIndividualName',E::ts('Contact: Format Individual Name') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $provider->addAction('SetContactEmployer', '\Civi\ActionProvider\Action\Contact\SetEmployer',E::ts('Contact: Set employer') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
@@ -182,7 +186,11 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
-    $provider->addAction('GetPhone', '\Civi\ActionProvider\Action\Contact\GetEmployer', E::ts('Contact: Get employer'), array(
+    $provider->addAction('FormatPhoneNumeric', '\Civi\ActionProvider\Action\Phone\FormatPhoneNumeric', E::ts('Contact: Format Phone into Numbers Only'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $provider->addAction('GetEmployer', '\Civi\ActionProvider\Action\Contact\GetEmployer', E::ts('Contact: Get employer'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
