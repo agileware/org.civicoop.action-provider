@@ -7,6 +7,8 @@
 namespace Civi\ActionProvider\Action\Generic;
 
 use \Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\Exception\InvalidConfigurationException;
+use Civi\ActionProvider\Exception\InvalidParameterException;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
@@ -23,12 +25,12 @@ class ParseRawAmount extends AbstractAction {
    */
   public function getConfigurationSpecification(): SpecificationBag {
     $decimals = new Specification('decimals', 'Boolean', E::ts("Decimals?"), TRUE, FALSE);
-    $decimals->setDescription(E::ts("Does the amount have decimals?"));
+    $decimals->setDescription(E::ts("Does the amount have decimals?<p>Please not that Decimals and Divide by 100 can not <em>both</em> be answered with Yes.</p>"));
     $divideHundred = new Specification('divide', 'Boolean', E::ts("Divide by 100?"), TRUE, FALSE);
-    $decimals->setDescription(E::ts("Some data providers multiply amounts by 100 to avoid issues with decimal digits. Does this amount have to be divided by 100 because this is the case?"));
-    $decimalsDigit = new Specification('decimals_digit', 'Integer', E::ts("Digit for Decimals"), TRUE, 1, NULL, $this->getMonetaryDigits());
+    $divideHundred->setDescription(E::ts("Some data providers multiply amounts by 100 to avoid issues with decimal digits.<br />Does this amount have to be divided by 100 because this is the case?<p>Please not that Decimals and Divide by 100 can not <em>both</em> be answered with Yes.</p>"));
+    $decimalsDigit = new Specification('decimals_digit', 'Integer', E::ts("Digit for Decimals"), FALSE, 1, NULL, $this->getMonetaryDigits());
     $decimalsDigit->setDescription(E::ts("Use a . or a , to separate the decimals"));
-    $thousandsDigit = new Specification('thousands_digit', 'Integer', E::ts("Digit for Thousands"), TRUE, 2, NULL, $this->getMonetaryDigits());
+    $thousandsDigit = new Specification('thousands_digit', 'Integer', E::ts("Digit for Thousands"), FALSE, 0, NULL, $this->getMonetaryDigits());
     $thousandsDigit->setDescription(E::ts("Use a . or a , to separate the thousands"));
     return new SpecificationBag([$decimals, $divideHundred, $decimalsDigit, $thousandsDigit]);
   }
@@ -39,10 +41,7 @@ class ParseRawAmount extends AbstractAction {
    * @return array
    */
   private function getMonetaryDigits(): array {
-    return [
-      1 => ",",
-      2 => ".",
-    ];
+    return ["none", ",", "."];
   }
 
   /**
@@ -63,7 +62,7 @@ class ParseRawAmount extends AbstractAction {
    * @return SpecificationBag
    */
   public function getOutputSpecification(): specificationBag {
-    return new SpecificationBag([new Specification('parsed_amount', 'Float', E::ts('Parsed Amount')),]);
+    return new SpecificationBag([new Specification('parsed_amount', 'Money', E::ts('Parsed Amount')),]);
   }
 
   /**
@@ -96,19 +95,42 @@ class ParseRawAmount extends AbstractAction {
    * @return float
    */
   private function formatAmount(string $rawAmount, int $decimalsDigit, int $thousandsDigit, bool $decimals, bool $divide): float {
-    $fixedAmount = 0.0;
+    $digits = $this->getMonetaryDigits();
     if ($decimals) {
-      $amountParts = explode($decimalsDigit, $rawAmount);
-      $amountParts[0] = str_replace($thousandsDigit, "", $amountParts[0]);
-      $fixedAmount = (float) $amountParts[0] . \Civi::settings()->get('monetaryDecimalPoint'). $amountParts[1];
+      $amountParts = explode($digits[$decimalsDigit], $rawAmount);
+      if ($thousandsDigit) {
+        $amountParts[0] = str_replace($digits[$thousandsDigit], "", $amountParts[0]);
+      }
+      $fixedAmount = (float) $amountParts[0] . "." . substr($amountParts[1],0,2);
     }
     else {
-      $fixedAmount = (float) str_replace($thousandsDigit, "", $rawAmount);
+      if ($thousandsDigit) {
+        $fixedAmount = (float) str_replace( $digits[$thousandsDigit], "", $rawAmount);
+      }
+      else {
+        $fixedAmount = $rawAmount;
+      }
       if ($divide) {
         $fixedAmount = $fixedAmount / 100;
       }
     }
-    return round($fixedAmount, 2, PHP_ROUND_HALF_UP);
+    return $fixedAmount;
+  }
+
+  /**
+   * Decimals and divide can not both be true
+   *
+   * @return bool
+   * @throws InvalidConfigurationException
+   */
+  public function validateConfiguration() {
+    // decimals and divide can not both be true
+    $decimals = $this->configuration->getParameter('decimals');
+    $divide = $this->configuration->getParameter('divide');
+    if ($decimals && $divide) {
+      throw new InvalidConfigurationException(E::ts("Decimals and divide by 100 can not both be true"));
+    }
+    return parent::validateConfiguration();
   }
 
 }
