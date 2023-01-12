@@ -1,3 +1,7 @@
+Version 1.113
+------------
+* fix format individual name for more name parts
+
 Version 1.112
 ------------
 

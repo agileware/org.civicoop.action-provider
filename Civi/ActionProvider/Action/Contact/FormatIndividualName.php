@@ -26,8 +26,16 @@ class FormatIndividualName extends AbstractAction {
 	protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
 	  $firstName = $parameters->getParameter('first_name');
     $lastName = $parameters->getParameter('last_name');
-    $output->setParameter('formatted_first_name', ucfirst(strtolower($firstName)));
-    $output->setParameter('formatted_last_name', ucfirst(strtolower($lastName)));
+    $firstParts = explode(" ", $firstName);
+    foreach ($firstParts as $firstKey => $firstValue) {
+      $firstParts[$firstKey] = ucfirst(strtolower($firstValue));
+    }
+    $lastParts = explode(" ", $lastName);
+    foreach ($lastParts as $lastKey => $lastValue) {
+      $lastParts[$lastKey] = ucfirst(strtolower($lastValue));
+    }
+    $output->setParameter('formatted_first_name', implode(" ", $firstParts));
+    $output->setParameter('formatted_last_name', implode(" ", $lastParts));
 	}
 
 	/**
