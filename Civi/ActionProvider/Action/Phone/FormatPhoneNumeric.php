@@ -30,7 +30,7 @@ class FormatPhoneNumeric extends AbstractAction {
         unset($chars[$charKey]);
       }
     }
-    $output->setParameter('phone_numeric', (int) implode("", $chars));
+    $output->setParameter('formatted_phone', implode("", $chars));
   }
 
   /**
@@ -62,7 +62,7 @@ class FormatPhoneNumeric extends AbstractAction {
    */
   public function getOutputSpecification() {
     return new SpecificationBag(array(
-      new Specification('phone_numeric', 'Integer', E::ts('Phone Numeric'), FALSE),
+      new Specification('formatted_phone', 'String', E::ts('Formatted Phone'), FALSE),
     ));
   }
 

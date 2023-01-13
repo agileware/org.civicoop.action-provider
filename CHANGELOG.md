@@ -1,6 +1,7 @@
-Version 1.113
+Version 1.113 (dev)
 ------------
 * fix format individual name for more name parts
+* output format phone to string so preceding 0 does not disappear
 
 Version 1.112
 ------------
