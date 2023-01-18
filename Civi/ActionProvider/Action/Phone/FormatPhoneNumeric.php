@@ -26,7 +26,7 @@ class FormatPhoneNumeric extends AbstractAction {
     $sourcePhone = $parameters->getParameter('phone');
     $chars = str_split($sourcePhone);
     foreach ($chars as $charKey => $charValue) {
-      if (!ctype_digit($charValue)) {
+      if (!ctype_digit($charValue) && $charValue != "+") {
         unset($chars[$charKey]);
       }
     }

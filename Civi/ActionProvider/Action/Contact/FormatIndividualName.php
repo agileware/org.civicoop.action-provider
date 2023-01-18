@@ -26,17 +26,32 @@ class FormatIndividualName extends AbstractAction {
 	protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
 	  $firstName = $parameters->getParameter('first_name');
     $lastName = $parameters->getParameter('last_name');
-    $firstParts = explode(" ", $firstName);
-    foreach ($firstParts as $firstKey => $firstValue) {
-      $firstParts[$firstKey] = ucfirst(strtolower($firstValue));
-    }
-    $lastParts = explode(" ", $lastName);
-    foreach ($lastParts as $lastKey => $lastValue) {
-      $lastParts[$lastKey] = ucfirst(strtolower($lastValue));
-    }
-    $output->setParameter('formatted_first_name', implode(" ", $firstParts));
-    $output->setParameter('formatted_last_name', implode(" ", $lastParts));
+    $output->setParameter('formatted_first_name', $this->restructureName($firstName));
+    $output->setParameter('formatted_last_name', $this->restructureName($lastName));
 	}
+
+  /**
+   * Method to restructure name with separators ' '(space) and '-'
+   *
+   * @param string $name
+   * @return string
+   */
+  public function restructureName(string $name): string {
+    $parts = preg_split('/[ -.]/', $name);
+    $formattedParts = [];
+    $length = 0;
+    foreach ($parts as $value) {
+      if (!$length) {
+        $length = strlen($value);
+      }
+      else {
+        $length = $length + strlen($value) + 1;
+      }
+      $formattedParts[] = ucfirst(strtolower($value));
+      $formattedParts[] = substr($name, $length, 1);
+    }
+    return implode("", $formattedParts);
+  }
 
 	/**
 	 * Returns the specification of the configuration options for the actual action.
@@ -72,5 +87,14 @@ class FormatIndividualName extends AbstractAction {
 			new Specification('formatted_last_name', 'String', E::ts('Formatted Last Name'), TRUE),
 		]);
 	}
+
+  /**
+   * Method to set the help text
+   *
+   * @return string
+   */
+  public function getHelpText(): string {
+    return E::ts("This action will split the input of first and last name into elements between spaces or '-', '.' and single quotes and change each elements to be lower key apart from the first character which will be capitals. For example john peter as first name and rhys-jones as last name will become John Peter Rhys-Jones");
+  }
 
 }

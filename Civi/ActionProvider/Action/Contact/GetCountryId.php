@@ -52,7 +52,7 @@ class GetCountryId extends AbstractAction {
    */
   public function getParameterSpecification() {
     return new SpecificationBag(array(
-      new Specification('country', 'String', E::ts('State/Province name'), true),
+      new Specification('country', 'String', E::ts('Country'), true),
     ));
   }
 
