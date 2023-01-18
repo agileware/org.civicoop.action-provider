@@ -1,3 +1,9 @@
+Version 1.114
+------------
+* change format individual name with test results AIVL
+* fix text label in action for country iso code
+* format phone allows + in first character
+
 Version 1.113
 ------------
 * fix format individual name for more name parts
