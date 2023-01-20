@@ -117,7 +117,7 @@ class ParseRawDate extends AbstractAction {
    * @param int|NULL $cutOff
    * @return int
    */
-  private function getYear(array $dateParts, int $yearPart, ?int $cutOff=NULL):int {
+  private function getYear(array $dateParts, int $yearPart, ?int $cutOff=NULL): int {
     $year = $dateParts[$yearPart];
     if (strlen($year) == 2) {
       if ($cutOff) {
@@ -144,6 +144,15 @@ class ParseRawDate extends AbstractAction {
   private function explodeRawDate(string $rawDate, int $separator): array {
     $separators = $this->getSeparatorValues();
     return explode($separators[$separator], $rawDate);
+  }
+  /**
+   * Method to specify help text for the action
+   * @return false|string|void
+   */
+  public function getHelpText() {
+    E::ts("This action formats an incoming string which holds a date. You can specify what separator is used for the date
+    and what the year, month and day parts are. You can also select where the cutoff will be for the millennium when the year is 2 digits only.
+    Anything before the cutoff will be 20xx and anything after will be 19xx. The action will return a date in a format that can be used for further processing in CiviCRM.");
   }
 
 }

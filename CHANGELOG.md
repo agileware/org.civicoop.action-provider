@@ -1,3 +1,7 @@
+Version 1.115
+------------
+* add help text to format individual name, parse raw date and parse raw amount
+
 Version 1.114
 ------------
 * change format individual name with test results AIVL

@@ -133,4 +133,15 @@ class ParseRawAmount extends AbstractAction {
     return parent::validateConfiguration();
   }
 
+  /**
+   * Method to specify help text for the action
+   * @return false|string|void
+   */
+  public function getHelpText() {
+    E::ts("This action formats an incoming string which holds an amount. You can specify if the amount contains decimals or if the amount
+    should be divided by 100 (sometimes amounts coming in from services have an amount mulitplied by 100 to avoid the decimal dot or comma issue),
+    what character is used as a decimal delimiter and what is used a a thousands separator. The action will return an amount in a format that
+    can be used for further processing in CiviCRM.");
+  }
+
 }
