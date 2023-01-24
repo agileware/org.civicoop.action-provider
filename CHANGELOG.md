@@ -1,6 +1,7 @@
 Version 1.115
 ------------
 * add help text to format individual name, parse raw date and parse raw amount
+* add Contribution:Invoice action. To be used in combination with the action 'Communication: Create PDF and send by e-mail'.
 
 Version 1.114
 ------------

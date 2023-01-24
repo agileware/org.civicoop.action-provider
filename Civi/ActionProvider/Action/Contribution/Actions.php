@@ -66,6 +66,10 @@ class Actions {
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ));
+    $provider->addAction('Invoice', '\Civi\ActionProvider\Action\Contribution\Invoice', E::ts('Contribution: Invoice'), array(
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ));
   }
 
 }
