@@ -325,6 +325,9 @@ class ContactActionUtils {
         if ($configuration->doesParameterExists('email_is_primary') && $configuration->getParameter('email_is_primary')) {
           $emailParams['is_primary'] = 1;
         }
+        if ($configuration->doesParameterExists('email_is_bulk') && $configuration->getParameter('email_is_bulk')) {
+          $emailParams['is_bulkmail'] = 1;
+        }
         $emailParams['contact_id'] = $contact_id;
         $emailParams['location_type_id'] = $configuration->getParameter('email_location_type');
         $emailParams['email'] = $parameters->getParameter('email');
@@ -382,6 +385,7 @@ class ContactActionUtils {
     reset($locationTypes);
     $defaultLocationType = key($locationTypes);
     $spec->addSpecification(new Specification('email_is_primary', 'Boolean', E::ts('Email: is primary'), false, 0, null, null, FALSE));
+    $spec->addSpecification(new Specification('email_is_bulk', 'Boolean', E::ts('Email: set is bulk mail'), false, 0, null, null, FALSE));
     $spec->addSpecification(new Specification('email_location_type', 'Integer', E::ts('E-mail: Location type'), true, $defaultLocationType, null, $locationTypes, FALSE));
     $spec->addSpecification(new Specification('email_update_existing', 'Boolean', E::ts('E-mail: update existing'), false, 0, null, null, FALSE));
   }

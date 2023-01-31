@@ -1,3 +1,8 @@
+Version 1.116
+------------
+
+* Added configuration option to set bulk mail to Create contact actions.
+
 Version 1.115
 ------------
 * add help text to format individual name, parse raw date and parse raw amount
