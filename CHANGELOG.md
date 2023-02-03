@@ -1,3 +1,8 @@
+Version 1.117
+------------
+
+* Added delete case action.
+
 Version 1.116
 ------------
 

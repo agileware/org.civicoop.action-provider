@@ -34,6 +34,10 @@ class Actions {
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ));
+    $provider->addAction('DeleteCase', '\Civi\ActionProvider\Action\CiviCase\DeleteCase', E::ts('CiviCase: Delete'), array(
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG
+    ));
     $provider->addAction('UpdateCaseStatus', '\Civi\ActionProvider\Action\CiviCase\UpdateCaseStatus',E::ts('CiviCase: Update status') , array(
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG
