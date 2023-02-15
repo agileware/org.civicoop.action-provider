@@ -81,7 +81,7 @@ class ParseRawAmount extends AbstractAction {
     $decimalsDigit = $this->configuration->getParameter('decimals_digit');
     $thousandsDigit = $this->configuration->getParameter('thousands_digit');
     $fixedAmount = $this->formatAmount($rawAmount, $decimalsDigit, $thousandsDigit, $decimals, $divide);
-    $output->setParameter('parsed_amount',  $fixedAmount);
+    $output->setParameter('parsed_amount',  round($fixedAmount,2, PHP_ROUND_HALF_DOWN));
   }
 
   /**

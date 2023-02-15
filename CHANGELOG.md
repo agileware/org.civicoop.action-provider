@@ -1,5 +1,6 @@
-Version 1.118 (not yet released)
+Version 1.118
 ------------
+* round amount in amount parser
 
 Version 1.117
 ------------
