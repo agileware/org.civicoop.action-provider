@@ -149,7 +149,7 @@ abstract class AbstractCondition implements \JsonSerializable {
   /**
    * Returns the data structure to serialize it as a json
    */
-  public function jsonSerialize() {
+  public function jsonSerialize(): mixed {
     $return['name'] = $this->getName();
     $return['title'] = $this->getTitle();
     // An empty array goes wrong with the default confifuration.
