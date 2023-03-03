@@ -6,13 +6,13 @@
 
 namespace Civi\ActionProvider\Action\Generic;
 
-use \Civi\ActionProvider\Action\AbstractAction;
-use \Civi\ActionProvider\Parameter\ParameterBagInterface;
-use \Civi\ActionProvider\Parameter\SpecificationBag;
-use \Civi\ActionProvider\Parameter\Specification;
-use \Civi\ActionProvider\Utils\CustomField;
+use Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\Parameter\ParameterBagInterface;
+use Civi\ActionProvider\Parameter\SpecificationBag;
+use Civi\ActionProvider\Parameter\Specification;
 
 use CRM_ActionProvider_ExtensionUtil as E;
+use CRM_Core_Exception;
 
 class OptionValueToLabel extends AbstractAction {
 
@@ -21,11 +21,19 @@ class OptionValueToLabel extends AbstractAction {
    *
    * @return SpecificationBag
    */
-  public function getConfigurationSpecification() {
+  public function getConfigurationSpecification(): SpecificationBag {
     $optionGroups = array();
-    $option_groups_api = civicrm_api3('OptionGroup', 'get', array('options' => array('limit' => 0, 'is_active' => 1)));
-    foreach($option_groups_api['values'] as $optionGroup) {
-      $optionGroups[$optionGroup['name']] = $optionGroup['title'];
+    try {
+      $option_groups_api = civicrm_api3('OptionGroup', 'get', [
+        'options' => [
+          'limit' => 0,
+          'is_active' => 1,
+        ],
+      ]);
+      foreach($option_groups_api['values'] as $optionGroup) {
+        $optionGroups[$optionGroup['name']] = $optionGroup['title'];
+      }
+    } catch (CRM_Core_Exception $e) {
     }
     return new SpecificationBag(array(
       new Specification('option_group_id', 'String', E::ts('Option Group'), true, null, null, $optionGroups),
@@ -38,7 +46,7 @@ class OptionValueToLabel extends AbstractAction {
    * @return SpecificationBag
    * @throws \Exception
    */
-  public function getParameterSpecification() {
+  public function getParameterSpecification(): SpecificationBag {
     return new SpecificationBag(array(
       new Specification('value', 'String', E::ts('Value'), true, null, null, null, true),
     ));
@@ -51,7 +59,7 @@ class OptionValueToLabel extends AbstractAction {
    *
    * @return SpecificationBag
    */
-  public function getOutputSpecification() {
+  public function getOutputSpecification(): SpecificationBag {
     return new SpecificationBag(array(
       new Specification('value', 'String', E::ts('Value')),
     ));
@@ -64,11 +72,13 @@ class OptionValueToLabel extends AbstractAction {
    *   The parameters to this action.
    * @param ParameterBagInterface $output
    *   The parameters this action can send back
-   * @return void
    * @throws \Exception
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $value = $parameters->getParameter('value');
+    if (!is_array($value)) {
+      $value = array($value);
+    }
     $option_group_id = $this->configuration->getParameter('option_group_id');
 
     $labels = array();

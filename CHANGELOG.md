@@ -1,3 +1,8 @@
+Version 1.119
+-------------
+
+* Fixed regression bug from: optionValueToLabel action incorrectly returns an array when single parameter is provided by !91
+
 Version 1.118
 ------------
 * round amount in amount parser
