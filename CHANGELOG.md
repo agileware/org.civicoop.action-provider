@@ -1,6 +1,8 @@
 Version 1.120 (not yet released)
 -------------
 
+* Sets the CiviCRM default Priceset for the line item, if not already set by !100
+
 Version 1.119
 -------------
 
