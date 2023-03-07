@@ -86,6 +86,11 @@ class CreateLineItem extends AbstractAction {
       }
     }
 
+	// Set the CiviCRM default Priceset for the line item, if not already set
+	if ( empty( $line_item_data['price_field_id'] ) ) {
+	  $line_item_data['price_field_id'] = 1;
+	}
+
     // do some calculations and sanity checks
     $contribution = \civicrm_api3('Contribution', 'getsingle', ['id' => $line_item_data['contribution_id']]);
 
