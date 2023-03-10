@@ -1,6 +1,5 @@
 Version 1.121 (not yet released)
 -------------
-* fix #34 - type error
 
 Version 1.120
 -------------
