@@ -1,7 +1,8 @@
-Version 1.120 (not yet released)
+Version 1.120
 -------------
 
 * Sets the CiviCRM default Priceset for the line item, if not already set by !100
+* Work on PHP 8 and PHP 7 compatibility.
 
 Version 1.119
 -------------
