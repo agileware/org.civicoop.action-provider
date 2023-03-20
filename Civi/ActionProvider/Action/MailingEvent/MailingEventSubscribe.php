@@ -96,6 +96,13 @@ class MailingEventSubscribe extends AbstractAction {
       $subscribe_params['contact_id'] = $parameters->getParameter('contact_id');
     }
 
+	/*
+	 * CRM_Mailing_Event_BAO_MailingEventSubscribe only allows subscriptions only to Public Groups, unless the context is "profile" then that's OK.
+	 * Therefore set context to force the subscribe action to complete.
+	 */
+
+	$subscribe_params['context'] ='profile';
+
     try {
       $result = civicrm_api3('MailingEventSubscribe', 'Create', $subscribe_params);
       $output->setParameter('id', $result['id']);
