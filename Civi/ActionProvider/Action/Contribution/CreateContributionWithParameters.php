@@ -81,6 +81,7 @@ class CreateContributionWithParameters extends AbstractAction {
       $contribution_params['check_number'] = $parameters->getParameter('check_number');
     }
     $contribution_params['skipLineItem'] = $this->configuration->getParameter('skipLineItem') ? true : false;
+	$contribution_params['is_pay_later'] = $this->configuration->getParameter('is_pay_later') ? true : false;
 
     $result = civicrm_api3('Contribution', 'Create', $contribution_params);
 
@@ -122,6 +123,7 @@ class CreateContributionWithParameters extends AbstractAction {
       new Specification('financial_type_id', 'Integer', E::ts('Financial Type'), TRUE, null, 'FinancialType'),
       new OptionGroupSpecification('payment_instrument', 'payment_instrument', E::ts('Payment instrument'), TRUE),
       new OptionGroupSpecification('contribution_status', 'contribution_status', E::ts('Status of contribution'), TRUE),
+	  new Specification('is_pay_later', 'Boolean', E::ts('Is Pay Later'), false),
       new Specification('campaign_id', 'Integer', E::ts('Campaign'), false),
       new Specification('contribution_recur_id', 'Integer', E::ts('Contribution Recur ID'), false),
       new Specification('receive_date', 'Date', E::ts('Receive date'), false),
