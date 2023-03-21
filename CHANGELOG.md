@@ -2,6 +2,7 @@ Version 1.121 (not yet released)
 -------------
 
 * Create Contribution actions, provide option to create a "Pay Later" Contribution by !102
+* Added framework for validator actions.
 
 Version 1.120
 -------------

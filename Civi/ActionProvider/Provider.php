@@ -6,6 +6,7 @@ use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\ParameterBag;
 use Civi\ActionProvider\Action\AbstractAction;
 use Civi\ActionProvider\Parameter\SpecificationBag;
+use Civi\ActionProvider\Validation\Validators;
 use \CRM_ActionProvider_ExtensionUtil as E;
 
 /**
@@ -56,6 +57,16 @@ class Provider {
    */
 	protected $batchActions = array();
 
+  /**
+   * @var array
+   */
+  protected $allValidators = array();
+
+  /**
+   * @var array
+   */
+  protected $validatorTitles = array();
+
 	public function __construct() {
     Action\Contact\Actions::loadActions($this);
     Action\Group\Actions::loadActions($this);
@@ -95,6 +106,8 @@ class Provider {
       $this->allConditions[$condition->getName()] = $condition;
     }
     $this->availableConditions = array_filter($this->allConditions, array($this, 'filterConditions'));
+
+    Validators::loadValidators($this);
 	}
 
 	/**
@@ -165,6 +178,48 @@ class Provider {
 		}
 		return null;
 	}
+
+  /**
+   * @param string $name
+   * @param string $className
+   * @param string $title
+   *
+   * @return $this
+   */
+  public function addValidator($name, $className, $title): Provider {
+    $this->allValidators[$name] = $className;
+    $this->validatorTitles[$name] = $title;
+    return $this;
+  }
+
+  /**
+   * @param string $name
+   *
+   * @return \Civi\ActionProvider\Validation\AbstractValidator|null
+   */
+  public function getValidatorByName($name) {
+    if (isset($this->allValidators[$name])) {
+      $validator = new $this->allValidators[$name];
+      $validator->setProvider($this);
+      $validator->setDefaults();
+      return $validator;
+    }
+    return null;
+  }
+
+  /**
+   * @return array
+   */
+  public function getValidatorTitles(): array {
+    return $this->validatorTitles;
+  }
+
+  /**
+   * @return array
+   */
+  public function getValidators(): array {
+    return $this->allValidators;
+  }
 
   /**
    * Returns an action and store the instance to use in batch mode
