@@ -1,4 +1,4 @@
-Version 1.121 (not yet released)
+Version 1.121
 -------------
 
 * Create Contribution actions, provide option to create a "Pay Later" Contribution by !102
