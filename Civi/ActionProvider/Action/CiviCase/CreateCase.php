@@ -32,7 +32,7 @@ class CreateCase extends AbstractAction {
      */
     return new SpecificationBag(
       [
-        new Specification('case_type_id', 'Integer', E::ts('Case Type'), TRUE, NULL, 'CaseType', NULL, FALSE),
+        new Specification('case_type_id', 'Integer', E::ts('Default Case Type'), TRUE, NULL, 'CaseType', NULL, FALSE),
         new Specification('subject', 'String', E::ts('Default Subject'), TRUE, NULL, NULL, NULL, FALSE),
         new Specification('creator_id', 'Integer', E::ts('Creator Contact ID (Case Manager)'), FALSE, NULL, 'Contact', NULL, FALSE),
         new OptionGroupSpecification('case_status', 'case_status', E::ts('Case Status')),
@@ -54,6 +54,7 @@ class CreateCase extends AbstractAction {
       new Specification('created_date', 'Date', E::ts('Created date'), false),
       new Specification('start_date', 'Date', E::ts('Start date'), false),
       new Specification('end_date', 'Date', E::ts('End date'), false),
+      new Specification('case_type_id', 'Integer', E::ts('Case Type'), false, NULL, 'CaseType', NULL, FALSE),
     ]);
   }
 
@@ -112,6 +113,9 @@ class CreateCase extends AbstractAction {
     }
     if ($parameters->doesParameterExists('end_date')) {
       $createParams['end_date'] = $parameters->getParameter('end_date');
+    }
+    if ($parameters->getParameter('case_type_id')) {
+      $createParams['case_type_id'] = $parameters->getParameter('case_type_id');
     }
 
     // Create the case through an API call.

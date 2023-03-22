@@ -55,6 +55,7 @@ class UpdateCase extends AbstractAction {
       new Specification('created_date', 'Date', E::ts('Created date'), false),
       new Specification('start_date', 'Date', E::ts('Start date'), false),
       new Specification('end_date', 'Date', E::ts('End date'), false),
+      new Specification('case_type_id', 'Integer', E::ts('Case Type'), false, NULL, 'CaseType', NULL, FALSE),
     ]);
   }
 
@@ -115,6 +116,9 @@ class UpdateCase extends AbstractAction {
     }
     if ($parameters->doesParameterExists('end_date')) {
       $createParams['end_date'] = $parameters->getParameter('end_date');
+    }
+    if ($parameters->getParameter('case_type_id')) {
+      $createParams['case_type_id'] = $parameters->getParameter('case_type_id');
     }
 
     // Create the case through an API call.
