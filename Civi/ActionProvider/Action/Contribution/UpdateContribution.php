@@ -33,6 +33,11 @@ class UpdateContribution extends AbstractAction {
     $contribution_params = CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification());
     $contribution_params['id'] = $parameters->getParameter('id');
 
+	$contribution_params['financial_type_id'] = $this->configuration->getParameter('financial_type_id');
+	$contribution_params['contribution_status_id'] = $this->configuration->getParameter('contribution_status');
+	$contribution_params['payment_instrument_id'] = $this->configuration->getParameter('payment_instrument');
+	$contribution_params['is_pay_later'] = $this->configuration->getParameter('is_pay_later') ? true : false;
+
     if ($parameters->doesParameterExists('financial_type_id')) {
       $contribution_params['financial_type_id'] = $parameters->getParameter('financial_type_id');
     }
@@ -93,7 +98,12 @@ class UpdateContribution extends AbstractAction {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
-    return new SpecificationBag(array());
+	  return new SpecificationBag(array(
+		  new Specification('financial_type_id', 'Integer', E::ts('Financial Type'), TRUE, null, 'FinancialType'),
+		  new OptionGroupSpecification('payment_instrument', 'payment_instrument', E::ts('Payment instrument'), TRUE),
+		  new OptionGroupSpecification('contribution_status', 'contribution_status', E::ts('Status of contribution'), TRUE),
+		  new Specification('is_pay_later', 'Boolean', E::ts('Is Pay Later'), true, false),
+	  ));
   }
 
   /**
