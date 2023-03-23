@@ -48,6 +48,16 @@ class CreateUpdateOrganization extends AbstractAction {
       $params['contact_sub_type'] = $contact_sub_type;
     }
     $params['organization_name'] = $parameters->getParameter('organization_name');
+
+	if ($parameters->doesParameterExists('legal_name')) {
+	  $params['legal_name'] = $parameters->getParameter('legal_name');
+	}
+	if ($parameters->doesParameterExists('nick_name')) {
+	  $params['nick_name'] = $parameters->getParameter('nick_name');
+	}
+	if ($parameters->doesParameterExists('sic_code')) {
+	  $params['sic_code'] = $parameters->getParameter('sic_code');
+	}
     if ($parameters->doesParameterExists('source')) {
       $params['source'] = $parameters->getParameter('source');
     }
@@ -123,7 +133,10 @@ class CreateUpdateOrganization extends AbstractAction {
     $spec = new SpecificationBag(array(
       $contactIdSpec,
       new Specification('contact_sub_type', 'String', E::ts('Contact sub type'), false, null, null, $this->contactSubTypes, TRUE),
-      new Specification('organization_name', 'String', E::ts('Organization name'), false),
+      new Specification('organization_name', 'String', E::ts('Organization Name'), false),
+	  new Specification('legal_name', 'String', E::ts('Legal Name'), false),
+	  new Specification('nick_name', 'String', E::ts('Nick Name'), false),
+	  new Specification('sic_code', 'String', E::ts('SIC Code'), false),
       new Specification('source', 'String', E::ts('Source'), false),
       new Specification('created_date', 'Date', E::ts('Created Date'), false),
       new Specification('do_not_mail', 'Boolean', E::ts('Do not mail'), false),
