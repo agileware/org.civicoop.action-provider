@@ -2,6 +2,7 @@ Version 1.122 (not yet released)
 -------------
 
 * Enable CiviCase:Update and CiviCase:Create to update case type.
+* Contact: Create or update Organization expose fields: Legal Name, Nickname, SIC Code. See !103
 
 Version 1.121
 -------------
