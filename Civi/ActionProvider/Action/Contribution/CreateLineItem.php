@@ -108,9 +108,27 @@ class CreateLineItem extends AbstractAction {
     $line_item_data['line_total'] = (float) $line_item_data['unit_price'] * (float) $line_item_data['qty'];
     $line_item_data['financial_type_id'] = $contribution['financial_type_id'];
 
-    // FINALLY: create line item
-    $result = \civicrm_api3('LineItem', 'create', $line_item_data);
-    $output->setParameter('line_item_id', $result['id']);
+    // Create line item
+    $new_lineitem = \civicrm_api3('LineItem', 'create', $line_item_data);
+    $output->setParameter('line_item_id', $new_lineitem['id']);
+
+    // Get the lineitem object (not the array)
+    $lineitem_param = ['id' => $new_lineitem['id']];
+    $lineitem = \CRM_Price_BAO_LineItem::create($lineitem_param);
+    $lineitem->find(TRUE);
+
+    // Get the contribution object (not the array)
+    $contribution_param = ['id' => $line_item_data['contribution_id']];
+    $contribution = \CRM_Contribute_BAO_Contribution::create($contribution_param);
+
+    // Add the financial item
+    \CRM_Financial_BAO_FinancialItem::add($lineitem, $contribution);
+
+    // Add the financial item for tax
+    if (!empty($lineitem->tax_amount)) {
+      \CRM_Financial_BAO_FinancialItem::add($lineitem, $contribution, TRUE);
+    }
+
   }
 
 }
