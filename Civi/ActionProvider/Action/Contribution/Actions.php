@@ -46,6 +46,10 @@ class Actions {
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ));
+    $provider->addAction('CreatePayment', '\Civi\ActionProvider\Action\Contribution\CreatePayment', E::ts('Contribution: Create Payment'), array(
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ));
     $provider->addAction('CreateLineItem', '\Civi\ActionProvider\Action\Contribution\CreateLineItem', E::ts('Contribution: Create Line Item'), array(
         AbstractAction::DATA_MANIPULATION_TAG,
         AbstractAction::SINGLE_CONTACT_ACTION_TAG
