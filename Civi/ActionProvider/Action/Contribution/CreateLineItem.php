@@ -41,6 +41,7 @@ class CreateLineItem extends AbstractAction {
         new Specification('qty', 'Integer', E::ts('Default Quantity'), TRUE, 1),
         new Specification('label', 'String', E::ts('Default Label'), TRUE, E::ts("Contribution Amount")),
         new Specification('entity_table', 'String', E::ts('Linked Object'), 'true', 'civicrm_contribution', null, $linked_entity_options),
+        new Specification('financial_type_id', 'Integer', E::ts('Financial Type'), false, null, 'FinancialType'),
     ]);
   }
 
@@ -53,6 +54,7 @@ class CreateLineItem extends AbstractAction {
     return new SpecificationBag([
         new Specification('contribution_id', 'Integer', E::ts('Contribution ID'), true),
         new Specification('entity_id', 'Integer', E::ts('Linked Entity ID')),
+        new Specification('financial_type_id', 'Integer', E::ts('Financial Type'), false, null, 'FinancialType'),
         new Specification('label', 'String', E::ts('Label')),
         new Specification('qty', 'Integer', E::ts('Quantity')),
         new Specification('unit_price', 'Float', E::ts('Unit Price')),
@@ -78,6 +80,13 @@ class CreateLineItem extends AbstractAction {
     $line_item_data['label'] = $this->configuration->getParameter('label');
     $line_item_data['entity_table'] = $this->configuration->getParameter('entity_table');
 
+    if ($this->configuration->doesParameterExists('financial_type_id')) {
+      $line_item_data['financial_type_id'] = $this->configuration->getParameter('financial_type_id');
+    }
+    if ($parameters->doesParameterExists('financial_type_id')) {
+      $line_item_data['financial_type_id'] = $parameters->getParameter('financial_type_id');
+    }
+
     // override with parameters
     foreach (['contribution_id', 'entity_id', 'label', 'qty', 'unit_price'] as $field) {
       $value = $parameters->getParameter($field);
@@ -86,10 +95,13 @@ class CreateLineItem extends AbstractAction {
       }
     }
 
-	// Set the CiviCRM default Priceset for the line item, if not already set
-	if ( empty( $line_item_data['price_field_id'] ) ) {
-	  $line_item_data['price_field_id'] = 1;
-	}
+    $line_item_data['qty'] = (float) $line_item_data['qty'];
+    $line_item_data['unit_price'] = (float) $line_item_data['unit_price'];
+
+    // Set the CiviCRM default Priceset for the line item, if not already set
+    if ( empty( $line_item_data['price_field_id'] ) ) {
+      $line_item_data['price_field_id'] = 1;
+	  }
 
     // do some calculations and sanity checks
     $contribution = \civicrm_api3('Contribution', 'getsingle', ['id' => $line_item_data['contribution_id']]);
@@ -99,14 +111,18 @@ class CreateLineItem extends AbstractAction {
       $line_item_data['entity_id'] = $line_item_data['contribution_id'];
     }
 
-    // set unit price if not given
-    if (empty($line_item_data['unit_price'])) {
-      $line_item_data['unit_price'] = (float) $contribution['total_amount'] / (float) $line_item_data['qty'];
+    // exit if unit price is zero value
+    if ($line_item_data['unit_price'] == 0) {
+      return false;
     }
 
     // calculate line total + copy financial type
-    $line_item_data['line_total'] = (float) $line_item_data['unit_price'] * (float) $line_item_data['qty'];
-    $line_item_data['financial_type_id'] = $contribution['financial_type_id'];
+    $line_item_data['line_total'] = $line_item_data['unit_price'] * $line_item_data['qty'];
+
+    // if the financial type is not set then use the Contribution financial type
+    if (empty($line_item_data['financial_type_id'])) {
+      $line_item_data['financial_type_id'] = $contribution['financial_type_id'];
+    }
 
     // FINALLY: create line item
     $result = \civicrm_api3('LineItem', 'create', $line_item_data);
