@@ -3,6 +3,7 @@ Version 1.122 (not yet released)
 
 * Enable CiviCase:Update and CiviCase:Create to update case type.
 * Contact: Create or update Organization expose fields: Legal Name, Nickname, SIC Code. See !103
+* Contribution: Create, provide parameter to record the Contribution Page ID for the Contribution . See !109
 
 Version 1.121
 -------------
