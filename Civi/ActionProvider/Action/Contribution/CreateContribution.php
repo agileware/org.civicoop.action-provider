@@ -47,6 +47,9 @@ class CreateContribution extends AbstractAction {
     if ($parameters->doesParameterExists('source')) {
       $contribution_params['source'] = $parameters->getParameter('source');
     }
+    if ($parameters->doesParameterExists('contribution_page_id')) {
+      $contribution_params['contribution_page_id'] = $parameters->getParameter('contribution_page_id');
+    }
     if ($parameters->doesParameterExists('campaign_id')) {
       $contribution_params['campaign_id'] = $parameters->getParameter('campaign_id');
     }
@@ -81,7 +84,7 @@ class CreateContribution extends AbstractAction {
       $contribution_params['check_number'] = $parameters->getParameter('check_number');
     }
     $contribution_params['skipLineItem'] = $this->configuration->getParameter('skipLineItem') ? true : false;
-	$contribution_params['is_pay_later'] = $this->configuration->getParameter('is_pay_later') ? true : false;
+	  $contribution_params['is_pay_later'] = $this->configuration->getParameter('is_pay_later') ? true : false;
 
     $result = civicrm_api3('Contribution', 'Create', $contribution_params);
 
@@ -107,7 +110,7 @@ class CreateContribution extends AbstractAction {
       new Specification('financial_type_id', 'Integer', E::ts('Financial Type'), TRUE, null, 'FinancialType'),
       new OptionGroupSpecification('payment_instrument', 'payment_instrument', E::ts('Payment instrument'), TRUE),
       new OptionGroupSpecification('contribution_status', 'contribution_status', E::ts('Status of contribution'), TRUE),
-	  new Specification('is_pay_later', 'Boolean', E::ts('Is Pay Later'), true, false),
+      new Specification('is_pay_later', 'Boolean', E::ts('Is Pay Later'), true, false),
       new Specification('skipLineItem', 'Boolean', E::ts('Skip Line Item'), true, false),
     ));
   }
@@ -124,7 +127,8 @@ class CreateContribution extends AbstractAction {
       new Specification('fee_amount', 'Float', E::ts('Fee Amount'), false),
       new Specification('net_amount', 'Float', E::ts('Net Amount'), false),
       new Specification('non_deductible_amount', 'Float', E::ts('Non-Deductible Amount'), false),
-      new Specification('campaign_id', 'Integer', E::ts('Campaign'), false),
+      new Specification('contribution_page_id', 'Integer', E::ts('Contribution Page ID'), false),
+      new Specification('campaign_id', 'Integer', E::ts('Campaign ID'), false),
       new Specification('contribution_recur_id', 'Integer', E::ts('Contribution Recur ID'), false),
       new Specification('receive_date', 'Date', E::ts('Receive Date'), false),
       new Specification('receipt_date', 'Date', E::ts('Receipt Date'), false),
