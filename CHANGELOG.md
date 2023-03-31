@@ -3,6 +3,11 @@ Version 1.122 (not yet released)
 
 * Enable CiviCase:Update and CiviCase:Create to update case type.
 * Contact: Create or update Organization expose fields: Legal Name, Nickname, SIC Code. See !103
+* Contribution: Update, provide Configuration parameters for Financial Type, Payment Instrument, Contribution Status and Is Pay Later. See !104
+* Contribution: Create Line Item, add financial items for the related Contribution. See !105
+* Add Payment action to provide partial or complete payment for a Contribution. See !106
+* Link Contribution to Membership action should set the Skip Line Items parameter, so that Line Item actions can be responsible for creating the Line Items correctly. See !107
+* Two changes to the CreateLineItem action: 1) skip creating the Line Item if the Unit Price is zero and 2) provide the ability to set the Financial Type for a Line Item. See !108
 * Contribution: Create, provide parameter to record the Contribution Page ID for the Contribution . See !109
 
 Version 1.121
