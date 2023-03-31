@@ -28,6 +28,8 @@ class LinkContributionToMembership extends AbstractAction {
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $apiParams['contribution_id'] = $parameters->getParameter('contribution_id');
     $apiParams['membership_id'] = $parameters->getParameter('membership_id');
+    // The caller will have taken responsibility for updating the line items themselves
+    $apiParams['isSkipLineItem'] = TRUE;
     civicrm_api3('MembershipPayment', 'create', $apiParams);
 
     if ($this->configuration->getParameter('set_pending')) {
