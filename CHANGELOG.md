@@ -9,6 +9,7 @@ Version 1.122 (not yet released)
 * Link Contribution to Membership action should set the Skip Line Items parameter, so that Line Item actions can be responsible for creating the Line Items correctly. See !107
 * Two changes to the CreateLineItem action: 1) skip creating the Line Item if the Unit Price is zero and 2) provide the ability to set the Financial Type for a Line Item. See !108
 * Contribution: Create, provide parameter to record the Contribution Page ID for the Contribution . See !109
+* Fix of AbstractGetSingleAction to ensure, that for custom contact references the id instead of the contact name is returned.
 
 Version 1.121
 -------------
