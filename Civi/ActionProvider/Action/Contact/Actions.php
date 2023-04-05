@@ -98,68 +98,68 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('UpdateCustomData', '\Civi\ActionProvider\Action\Contact\UpdateCustomData',E::ts('Contact: Update custom data') , array(
+    $provider->addAction('UpdateCustomData', '\Civi\ActionProvider\Action\Contact\UpdateCustomData', E::ts('Contact: Update custom data'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('ContactCreateNote', '\Civi\ActionProvider\Action\Contact\CreateNote',E::ts('Contact: Create Note') , array(
+    $provider->addAction('ContactCreateNote', '\Civi\ActionProvider\Action\Contact\CreateNote', E::ts('Contact: Create Note'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('MarkContactAsDeceased', '\Civi\ActionProvider\Action\Contact\MarkContactAsDeceased',E::ts('Contact: Mark as deceased') , array(
+    $provider->addAction('MarkContactAsDeceased', '\Civi\ActionProvider\Action\Contact\MarkContactAsDeceased', E::ts('Contact: Mark as deceased'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('SetContactSubType', '\Civi\ActionProvider\Action\Contact\SetContactSubType',E::ts('Contact: Set subtype') , array(
+    $provider->addAction('SetContactSubType', '\Civi\ActionProvider\Action\Contact\SetContactSubType', E::ts('Contact: Set subtype'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('RemoveContactSubType', '\Civi\ActionProvider\Action\Contact\RemoveContactSubType',E::ts('Contact: Remove subtype') , array(
+    $provider->addAction('RemoveContactSubType', '\Civi\ActionProvider\Action\Contact\RemoveContactSubType', E::ts('Contact: Remove subtype'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('ContactHasSubType', '\Civi\ActionProvider\Action\Contact\ContactHasSubType',E::ts('Contact: Has subtype') , array(
+    $provider->addAction('ContactHasSubType', '\Civi\ActionProvider\Action\Contact\ContactHasSubType', E::ts('Contact: Has subtype'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
-    $provider->addAction('FormatIndividualName', '\Civi\ActionProvider\Action\Contact\FormatIndividualName',E::ts('Contact: Format Individual Name') , array(
+    $provider->addAction('FormatIndividualName', '\Civi\ActionProvider\Action\Contact\FormatIndividualName', E::ts('Contact: Format Individual Name'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('SetContactEmployer', '\Civi\ActionProvider\Action\Contact\SetEmployer',E::ts('Contact: Set employer') , array(
+    $provider->addAction('SetContactEmployer', '\Civi\ActionProvider\Action\Contact\SetEmployer', E::ts('Contact: Set employer'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('UploadCustomFileField', '\Civi\ActionProvider\Action\Contact\UploadCustomFileField',E::ts('Contact: Upload file to a custom field for a contact') , array(
+    $provider->addAction('UploadCustomFileField', '\Civi\ActionProvider\Action\Contact\UploadCustomFileField', E::ts('Contact: Upload file to a custom field for a contact'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('SetCommunicationStyle', '\Civi\ActionProvider\Action\Contact\SetCommunicationStyle',E::ts("Contact: Edit communication styles") , array(
+    $provider->addAction('SetCommunicationStyle', '\Civi\ActionProvider\Action\Contact\SetCommunicationStyle', E::ts("Contact: Edit communication styles"), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('SetPreferredCommunicationMethod', '\Civi\ActionProvider\Action\Contact\SetPreferredCommunicationMethod',E::ts("Contact: Edit preferred communication methods") , array(
+    $provider->addAction('SetPreferredCommunicationMethod', '\Civi\ActionProvider\Action\Contact\SetPreferredCommunicationMethod', E::ts("Contact: Edit preferred communication methods"), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('FindOrCreateContactByEmail', '\Civi\ActionProvider\Action\Contact\FindOrCreateContactByEmail', E::ts('Contact: Get or create contact by e-mail') , array(
+    $provider->addAction('FindOrCreateContactByEmail', '\Civi\ActionProvider\Action\Contact\FindOrCreateContactByEmail', E::ts('Contact: Get or create contact by e-mail'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('FindContactByEmail', '\Civi\ActionProvider\Action\Contact\FindContactByEmail', E::ts('Contact: Get contact by e-mail') , array(
+    $provider->addAction('FindContactByEmail', '\Civi\ActionProvider\Action\Contact\FindContactByEmail', E::ts('Contact: Get contact by e-mail'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
     ));
     $provider->addAction('ValidateChecksum', '\Civi\ActionProvider\Action\Contact\ValidateChecksum', E::ts('Contact: Validate checksum'), [
-      AbstractAction::DATA_RETRIEVAL_TAG,  AbstractAction::SINGLE_CONTACT_ACTION_TAG
+      AbstractAction::DATA_RETRIEVAL_TAG, AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ]);
     $provider->addAction('GenerateChecksum', '\Civi\ActionProvider\Action\Contact\GenerateChecksum', E::ts('Contact: Generate checksum'), [
-      AbstractAction::DATA_RETRIEVAL_TAG,  AbstractAction::SINGLE_CONTACT_ACTION_TAG
+      AbstractAction::DATA_RETRIEVAL_TAG, AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ]);
     $provider->addAction('RestoreContactFromContact', '\Civi\ActionProvider\Action\Contact\RestoreContactFromTrash', E::ts('Contact: Restore from trash'), [
-      AbstractAction::DATA_MANIPULATION_TAG,  AbstractAction::SINGLE_CONTACT_ACTION_TAG
+      AbstractAction::DATA_MANIPULATION_TAG, AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ]);
     $provider->addAction('BlockCommunication', '\Civi\ActionProvider\Action\Contact\BlockCommunication', E::ts('Contact: Block Communication (set all do not fields)'), [
-      AbstractAction::DATA_MANIPULATION_TAG,  AbstractAction::SINGLE_CONTACT_ACTION_TAG
+      AbstractAction::DATA_MANIPULATION_TAG, AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ]);
     $provider->addAction('SaveMaxContactId', '\Civi\ActionProvider\Action\Contact\SaveMaxContactId', E::ts('Contact: Get maximum contact ID'), [
       AbstractAction::DATA_RETRIEVAL_TAG
@@ -170,7 +170,7 @@ class Actions {
     $provider->addAction('FindOrCreateContactByEmailAndName', '\Civi\ActionProvider\Action\Contact\FindOrCreateContactByEmailAndName', E::ts('Contact: Get or Create By Email and Names'), [
       AbstractAction::DATA_RETRIEVAL_TAG, AbstractAction::DATA_MANIPULATION_TAG
     ]);
-    $provider->addAction('CreateUpdateWebsite', '\Civi\ActionProvider\Action\Website\CreateUpdateWebsite',E::ts('Contact: Create or update website') , array(
+    $provider->addAction('CreateUpdateWebsite', '\Civi\ActionProvider\Action\Website\CreateUpdateWebsite', E::ts('Contact: Create or update website'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
@@ -178,7 +178,7 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
-    $provider->addAction('CreateUpdatePhone', '\Civi\ActionProvider\Action\Phone\CreateUpdatePhone',E::ts('Contact: Create or update phone number') , array(
+    $provider->addAction('CreateUpdatePhone', '\Civi\ActionProvider\Action\Phone\CreateUpdatePhone', E::ts('Contact: Create or update phone number'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
@@ -197,6 +197,15 @@ class Actions {
     $provider->addAction('AddressComponentIdLookup', '\Civi\ActionProvider\Action\Contact\AddressComponentIdLookup', E::ts('Address: Get country or state/province from ID'), array(
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $provider->addAction('FindByCustomGroupMultiValue', '\Civi\ActionProvider\Action\Contact\FindByCustomGroupMultiValue', E::ts('Contact: Get entry of multi valued custom group'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
+    $provider->addAction('UpdateCustomGroupMultiValue', '\Civi\ActionProvider\Action\Contact\UpdateCustomGroupMultiValue', E::ts('Contact: Update entry of multi valued custom group'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+
   }
 
 }
