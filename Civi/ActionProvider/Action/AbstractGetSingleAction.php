@@ -53,7 +53,7 @@ abstract class AbstractGetSingleAction extends AbstractAction {
    */
   public function getOutputSpecification() {
     $bag = new SpecificationBag();
-    Fields::getFieldsForEntity($bag,$this->getApiEntity(), 'get', $this->getSkippedFields(), $this->getEntityAlias());
+    Fields::getFieldsForEntity($bag, $this->getApiEntity(), 'get', $this->getSkippedFields(), $this->getEntityAlias());
     return $bag;
   }
 
@@ -74,7 +74,8 @@ abstract class AbstractGetSingleAction extends AbstractAction {
       if ($entity) {
         $this->setOutputFromEntity($entity, $output);
       }
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       // Do nothing
     }
   }
@@ -82,15 +83,17 @@ abstract class AbstractGetSingleAction extends AbstractAction {
   protected function setOutputFromEntity($entity, ParameterBagInterface $output) {
     $fieldsToSkip = $this->getSkippedFields();
     $entity = $this->normalizeCustomValues($entity);
-    foreach($entity as $field => $value) {
+    foreach ($entity as $field => $value) {
       if (in_array($field, $fieldsToSkip)) {
         continue;
       }
-      if (stripos($field, $this->getEntityAlias().'_')===0) {
-        $output->setParameter(substr($field, strlen($this->getEntityAlias().'_')), $value);
-      } else if (stripos($field, 'custom_') !== 0) {
+      if (stripos($field, $this->getEntityAlias() . '_') === 0) {
+        $output->setParameter(substr($field, strlen($this->getEntityAlias() . '_')), $value);
+      }
+      else if (stripos($field, 'custom_') !== 0) {
         $output->setParameter($field, $value);
-      } else {
+      }
+      else {
         $custom_id = substr($field, 7);
         if (is_numeric($custom_id)) {
           $fieldName = CustomField::getCustomFieldName($custom_id);
@@ -109,21 +112,26 @@ abstract class AbstractGetSingleAction extends AbstractAction {
    * @param $entity
    */
   protected function normalizeCustomValues($entity) {
-    foreach($entity as $field => $value) {
+    $normalizedEntity = array();
+    foreach ($entity as $field => $value) {
       if (stripos($field, 'custom_') !== 0) {
+        $normalizedEntity[$field] = $value;
         // No a custom field
         continue;
       }
       $custom_id = substr($field, 7);
       if (substr($custom_id, -3) === '_id') {
         $custom_id = substr($custom_id, 0, -3);
-        unset($entity[$field]);
-        $entity['custom_' . $custom_id] = $value;
-      } elseif (is_numeric($custom_id)) {
-        $entity['custom_' . $custom_id] = $value;
+        $normalizedEntity['custom_' . $custom_id] = $value;
+      }
+      elseif (is_numeric($custom_id)) {
+        if (isset($normalizedEntity[$field])) {
+          continue;
+        }
+        $normalizedEntity['custom_' . $custom_id] = $value;
       }
     }
-    return $entity;
+    return $normalizedEntity;
   }
 
   /**
