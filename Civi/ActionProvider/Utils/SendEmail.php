@@ -217,7 +217,7 @@ class SendEmail {
       }
 
       //create activity for sending e-mail.
-      $activityTypeID = \CRM_Core_OptionGroup::getValue('activity_type', 'Email', 'name');
+      $activityTypeID = \CRM_Core_PseudoConstant::getKey('CRM_Activity_BAO_Activity', 'activity_type_id', 'Email');
 
       // CRM-6265: save both text and HTML parts in details (if present)
       if ($html and $text) {
