@@ -11,6 +11,7 @@ Version 1.122 (not yet released)
 * Contribution: Create, provide parameter to record the Contribution Page ID for the Contribution . See !109
 * Fix of AbstractGetSingleAction to ensure, that for custom contact references the id instead of the contact name is returned.
 * Replace deprecated `CRM_Core_OptionGroup::getValue` in the send e-mail functionality. See !111
+* Added Phone Type to create/update contact actions.
 
 Version 1.121
 -------------
