@@ -10,6 +10,7 @@ Version 1.122 (not yet released)
 * Two changes to the CreateLineItem action: 1) skip creating the Line Item if the Unit Price is zero and 2) provide the ability to set the Financial Type for a Line Item. See !108
 * Contribution: Create, provide parameter to record the Contribution Page ID for the Contribution . See !109
 * Fix of AbstractGetSingleAction to ensure, that for custom contact references the id instead of the contact name is returned.
+* Replace deprecated `CRM_Core_OptionGroup::getValue` in the send e-mail functionality. See !111
 
 Version 1.121
 -------------
