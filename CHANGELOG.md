@@ -14,6 +14,7 @@ Version 1.122 (not yet released)
 * Added Phone Type to create/update contact actions.
 * Added CC/BCC to parameters of Send e-mail and Send PDF by E-mail actions.
 * Added action get message template by ID
+* Use PDF Format when merging multiple pdf documents into one.
 
 Version 1.121
 -------------
