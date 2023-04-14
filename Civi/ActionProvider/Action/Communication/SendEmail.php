@@ -80,7 +80,13 @@ class SendEmail extends AbstractAction {
     }
     $body_html = $parameters->getParameter('body_html');
     $cc = $this->configuration->getParameter('cc');
+    if ($parameters->doesParameterExists('cc')) {
+      $cc = $parameters->getParameter('cc');
+    }
     $bcc = $this->configuration->getParameter('bcc');
+    if ($parameters->doesParameterExists('bcc')) {
+      $bcc = $parameters->getParameter('bcc');
+    }
     if ($parameters->doesParameterExists('attachments')) {
       foreach($parameters->getParameter('attachments') as $path) {
         try {
@@ -155,6 +161,8 @@ class SendEmail extends AbstractAction {
       new Specification('campaign_id', 'Integer', E::ts('Campaign ID'), false),
       new Specification('from_name', 'String', E::ts('From name'), false),
       new Specification('from_email', 'String', E::ts('From email'), false),
+      new Specification('cc', 'String', E::ts('CC'), false),
+      new Specification('bcc', 'String', E::ts('BCC'), false),
       $attachments
     ));
   }

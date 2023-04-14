@@ -12,6 +12,8 @@ Version 1.122 (not yet released)
 * Fix of AbstractGetSingleAction to ensure, that for custom contact references the id instead of the contact name is returned.
 * Replace deprecated `CRM_Core_OptionGroup::getValue` in the send e-mail functionality. See !111
 * Added Phone Type to create/update contact actions.
+* Added CC/BCC to parameters of Send e-mail and Send PDF by E-mail actions.
+* Added action get message template by ID
 
 Version 1.121
 -------------
