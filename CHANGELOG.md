@@ -1,4 +1,4 @@
-Version 1.122 (not yet released)
+Version 1.122
 -------------
 
 * Enable CiviCase:Update and CiviCase:Create to update case type.
