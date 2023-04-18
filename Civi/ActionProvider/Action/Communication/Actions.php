@@ -22,6 +22,10 @@ class Actions {
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG
     ));
+    $provider->addAction('MessageTemplateById', '\Civi\ActionProvider\Action\Communication\MessageTemplateById', E::ts('Communication: Get message template by ID'), array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG
+    ));
     $provider->addAction('SendEmail', '\Civi\ActionProvider\Action\Communication\SendEmail', E::ts('Communication: Send e-mail'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::SEND_MESSAGES_TO_CONTACTS

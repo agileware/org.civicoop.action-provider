@@ -110,7 +110,13 @@ class SendPdfByEmail extends AbstractAction {
     }
     $body_html = $parameters->getParameter('body_html');
     $cc = $this->configuration->getParameter('cc');
+    if ($parameters->doesParameterExists('cc')) {
+      $cc = $parameters->getParameter('cc');
+    }
     $bcc = $this->configuration->getParameter('bcc');
+    if ($parameters->doesParameterExists('bcc')) {
+      $bcc = $parameters->getParameter('bcc');
+    }
 
     if ($parameters->doesParameterExists('attachments')) {
       foreach($parameters->getParameter('attachments') as $path) {
@@ -183,6 +189,8 @@ class SendPdfByEmail extends AbstractAction {
       new Specification('contact_id', 'Integer', E::ts('Receiver Contact ID'), true),
       new Specification('location_type_id', 'Integer', E::ts('Location Type'), false),
       new Specification('alternative_recipient', 'String', E::ts('Alternative Recipient Email'), false),
+      new Specification('cc', 'String', E::ts('CC'), false),
+      new Specification('bcc', 'String', E::ts('BCC'), false),
       new Specification('subject', 'String', E::ts('Subject'), true),
       new Specification('body_html', 'String', E::ts('HTML Body'), true),
       new Specification('body_text', 'String', E::ts('Plain text Body'), false),
