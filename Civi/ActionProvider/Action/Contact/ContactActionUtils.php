@@ -2,6 +2,7 @@
 
 namespace Civi\ActionProvider\Action\Contact;
 
+use Civi\ActionProvider\Parameter\OptionGroupSpecification;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
@@ -241,6 +242,9 @@ class ContactActionUtils {
       $phoneParams['contact_id'] = $contact_id;
       $phoneParams['location_type_id'] = $configuration->getParameter('phone_location_type');
       $phoneParams['phone'] = $parameters->getParameter('phone');
+      if ($configuration->getParameter('phone_phone_type')) {
+        $phoneParams['phone_type_id'] = $configuration->getParameter('phone_phone_type');
+      }
       $result = civicrm_api3('Phone', 'create', $phoneParams);
       return $result['id'];
     } elseif ($existingPhoneId) {
@@ -295,6 +299,7 @@ class ContactActionUtils {
     $defaultLocationType = key($locationTypes);
     $spec->addSpecification(new Specification('phone_is_primary', 'Boolean', E::ts('Phone: is primary'), false, 0, null, null, FALSE));
     $spec->addSpecification(new Specification('phone_location_type', 'Integer', E::ts('Phone: Location type'), true, $defaultLocationType, null, $locationTypes, FALSE));
+    $spec->addSpecification(new OptionGroupSpecification('phone_phone_type', 'phone_type', E::ts('Phone: Phone type'), true));
     $spec->addSpecification(new Specification('phone_update_existing', 'Boolean', E::ts('Phone: update existing'), false, 0, null, null, FALSE));
   }
 

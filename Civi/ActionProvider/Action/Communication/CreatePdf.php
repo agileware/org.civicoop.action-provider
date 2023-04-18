@@ -24,6 +24,8 @@ class CreatePdf extends AbstractAction {
 
   protected $messages = array();
 
+  protected $pdfFormat;
+
   protected $pdfLetterActivityType;
 
   public function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
@@ -49,9 +51,9 @@ class CreatePdf extends AbstractAction {
     if ($parameters->doesParameterExists('activity_id')) {
       $contact['activity_id'] = $parameters->getParameter('activity_id');
     }
-    $pdfFormat = null;
+    $this->pdfFormat = null;
     if ($parameters->doesParameterExists('page_format_id')) {
-      $pdfFormat = $parameters->getParameter('page_format_id');
+      $this->pdfFormat = $parameters->getParameter('page_format_id');
     }
 
     $processedMessage = Tokens::replaceTokens($contactId, $message, $contact, 'text/html');
@@ -63,7 +65,7 @@ class CreatePdf extends AbstractAction {
     \CRM_Contact_Form_Task_PDFLetterCommon::formatMessage($processedMessage);
     $this->messages[] = $processedMessage;
     $text = array($processedMessage);
-    $pdfContents = \CRM_Utils_PDF_Utils::html2pdf($text, $fileNameWithoutContactId, TRUE, $pdfFormat);
+    $pdfContents = \CRM_Utils_PDF_Utils::html2pdf($text, $fileNameWithoutContactId, TRUE, $this->pdfFormat);
 
     if ($this->currentBatch && $this->zip) {
       $this->zip->addFromString($filenameWithContactId, $pdfContents);
@@ -174,10 +176,18 @@ class CreatePdf extends AbstractAction {
       $subdir = Files::createRestrictedDirectory('createpdf');
       $basePath = \CRM_Core_Config::singleton()->templateCompileDir . $subdir;
       $htmlFile = $basePath .'/'.$batchName.'.html';
+      $pdfFormatFile = $basePath .'/'.$batchName.'.pdfformat';
+      if ($this->pdfFormat) {
+        file_put_contents($pdfFormatFile, $this->pdfFormat);
+      }
       if (count($this->messages)) {
         $this->addPagesToHtmlFile($this->messages, $htmlFile);
       }
       if ($isLastBatch) {
+        if (!$this->pdfFormat && file_exists($pdfFormatFile)) {
+          $this->pdfFormat = file_get_contents($pdfFormatFile);
+          unlink($pdfFormatFile);
+        }
         $pdfFile = $basePath .'/'.$batchName.'.pdf';
         $this->convertHtmlToPdf($htmlFile, $pdfFile);
         $downloadName = $this->configuration->getParameter('filename').'.pdf';
@@ -275,6 +285,9 @@ class CreatePdf extends AbstractAction {
    */
   protected function initializeHtmlFile() {
     $format = \CRM_Core_BAO_PdfFormat::getDefaultValues();
+    if ($this->pdfFormat) {
+      $format = \CRM_Core_BAO_PdfFormat::getById($this->pdfFormat);
+    }
     $metric = \CRM_Core_BAO_PdfFormat::getValue('metric', $format);
     $t = \CRM_Core_BAO_PdfFormat::getValue('margin_top', $format);
     $r = \CRM_Core_BAO_PdfFormat::getValue('margin_right', $format);
@@ -341,6 +354,9 @@ class CreatePdf extends AbstractAction {
     file_put_contents($html_file, $html, FILE_APPEND);
 
     $format = \CRM_Core_BAO_PdfFormat::getDefaultValues();
+    if ($this->pdfFormat) {
+      $format = \CRM_Core_BAO_PdfFormat::getById($this->pdfFormat);
+    }
     $paperSize = \CRM_Core_BAO_PaperSize::getByName($format['paper_size']);
     $paper_width = \CRM_Utils_PDF_Utils::convertMetric($paperSize['width'], $paperSize['metric'], 'pt');
     $paper_height = \CRM_Utils_PDF_Utils::convertMetric($paperSize['height'], $paperSize['metric'], 'pt');
