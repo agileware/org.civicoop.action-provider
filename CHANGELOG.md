@@ -1,7 +1,7 @@
 Version 1.123 (not yet released)
 -------------
 
-* Fix Other: Map Value action - when the result is a single value, do not return an array, just return the value. See !122 and #36
+* Fix Other: Map Value action - when the result is a single value, do not return an array, just return the value. See !112 and #36
 
 Version 1.122
 -------------
