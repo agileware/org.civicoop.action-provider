@@ -2,6 +2,7 @@ Version 1.123 (not yet released)
 -------------
 
 * Fix Other: Map Value action - when the result is a single value, do not return an array, just return the value. See !112 and #36
+* Fix Action "Address: Get country or state/province from ID" crashes due to incorrect parameter usage. See !113
 
 Version 1.122
 -------------
