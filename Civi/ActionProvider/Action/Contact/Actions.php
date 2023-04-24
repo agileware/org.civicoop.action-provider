@@ -197,7 +197,11 @@ class Actions {
     $provider->addAction('AddressComponentIdLookup', '\Civi\ActionProvider\Action\Contact\AddressComponentIdLookup', E::ts('Address: Get country or state/province from ID'), array(
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
-    $provider->addAction('FindByCustomGroupMultiValue', '\Civi\ActionProvider\Action\Contact\FindByCustomGroupMultiValue', E::ts('Contact: Get entry of multi valued custom group'), array(
+    $provider->addAction('FindByCustomGroupMultiValue', '\Civi\ActionProvider\Action\Contact\FindByCustomGroupMultiValue', E::ts('Contact: Find entry of multi valued custom group'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
+    $provider->addAction('GetCustomGroupMultiValueById', '\Civi\ActionProvider\Action\Contact\GetCustomGroupMultiValueById', E::ts('Contact: Get entry of multi valued custom group'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));

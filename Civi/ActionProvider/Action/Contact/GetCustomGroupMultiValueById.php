@@ -2,57 +2,60 @@
 
 namespace Civi\ActionProvider\Action\Contact;
 
-use Civi\ActionProvider\Action\AbstractGetSingleAction;
+use \Civi\ActionProvider\Action\AbstractAction;
 use Civi\ActionProvider\ConfigContainer;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
-use Civi\ActionProvider\Utils\CustomField;
+use \Civi\ActionProvider\Utils\CustomField;
+
 use CRM_ActionProvider_ExtensionUtil as E;
 
-class ContactDataById extends AbstractGetSingleAction {
+class GetCustomGroupMultiValueById extends AbstractAction {
 
   /**
    * Run the action
    *
-   * @param ParameterBagInterface $parameters
+   * @param ParameterInterface $parameters
    *   The parameters to this action.
    * @param ParameterBagInterface $output
    *   The parameters this action can send back
-   *
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    parent::doAction($parameters, $output);
-    // Get custom data
-    $custom_data = civicrm_api3('CustomValue', 'get', array('entity_id' => $parameters->getParameter('contact_id'), 'entity_table' => 'civicrm_contact'));
-    foreach ($custom_data['values'] as $custom) {
-      $fieldName = CustomField::getCustomFieldName($custom['id']);
-      $output->setParameter($fieldName, $custom['latest']);
+
+    $customGroup = civicrm_api4('CustomGroup', 'get', array(
+      'select' => array('name'),
+      'where' => array(
+        array('id', '=', $parameters->getParameter('custom_group_id')),
+      )
+    ));
+    $customGroupName = 'Custom_' . $customGroup[0]['name'];
+
+    $result = civicrm_api4($customGroupName, 'get', array(
+      'where' => array(
+        array('id', '=', $parameters->getParameter('entry_id')),
+      ),
+    ));
+
+    foreach ($result[0] as $key => $value) {
+      if ($key === 'entity_id' || $key === 'id') {
+        continue;
+      }
+      else {
+        $output->setParameter($key, $value);
+      }
     }
 
-    $output->setParameter('Testoutput', $results);
-  }
-
-
-  /**
-   * Returns the name of the entity.
-   *
-   * @return string
-   */
-  protected function getApiEntity() {
-    return 'Contact';
   }
 
   /**
-   * Returns the ID from the parameter array
+   * Returns the specification of the configuration options for the actual action.
    *
-   * @param \Civi\ActionProvider\Parameter\ParameterBagInterface $parameters
-   *
-   * @return int
+   * @return SpecificationBag
    */
-  protected function getIdFromParamaters(ParameterBagInterface $parameters) {
-    return $parameters->getParameter('contact_id');
+  public function getConfigurationSpecification() {
+    return new SpecificationBag();
   }
 
   /**
@@ -61,9 +64,11 @@ class ContactDataById extends AbstractGetSingleAction {
    * @return SpecificationBag
    */
   public function getParameterSpecification() {
-    return new SpecificationBag(array(
-      new Specification('contact_id', 'Integer', E::ts('Contact ID'), true)
-    ));
+    $specs = new SpecificationBag();
+    $specs->addSpecification(new Specification('custom_group_id', 'Integer', E::ts('CustomGroup ID'), true));
+    $specs->addSpecification(new Specification('entry_id', 'Integer', E::ts('Custom group entry ID'), true));
+
+    return $specs;
   }
 
   /**
@@ -74,7 +79,7 @@ class ContactDataById extends AbstractGetSingleAction {
    * @return SpecificationBag
    */
   public function getOutputSpecification() {
-    $specs = parent::getOutputSpecification();
+    $specs = new SpecificationBag();
     $config = ConfigContainer::getInstance();
     $customGroups = $config->getCustomGroupsForEntities(['Contact', 'Individual', 'Household', 'Organization']);
     foreach ($customGroups as $customGroup) {
