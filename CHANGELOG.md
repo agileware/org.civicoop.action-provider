@@ -1,6 +1,9 @@
 Version 1.124 (not yet released)
 -------------
 
+* Add "Campaign: Get by ID" action. See !115
+* Add "Contribution: Send confirmation / receipt" action. See !116
+
 Version 1.123
 -------------
 
