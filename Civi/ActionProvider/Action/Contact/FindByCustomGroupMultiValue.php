@@ -27,7 +27,8 @@ class FindByCustomGroupMultiValue extends AbstractAction {
 			'select' => array('name'),
 			'where' => array(
 				array('id', '=', $this->configuration->getParameter('custom_group')),
-			)
+			),
+			'checkPermissions' => $this->configuration->getParameter('check_permission'),
 		));
 		$customGroupName = $customGroup[0]['name'];
 		$apiParams = array(
@@ -47,6 +48,7 @@ class FindByCustomGroupMultiValue extends AbstractAction {
 
 			}
 		}
+		$apiParams['checkPermissions'] = $this->configuration->getParameter('check_permission');
 
 		$apiCustomGroupName = 'Custom_' . $customGroupName;
 		if (!count($apiParams)) {
@@ -80,6 +82,7 @@ class FindByCustomGroupMultiValue extends AbstractAction {
 	public function getConfigurationSpecification() {
 		return new SpecificationBag(array(
 			new Specification('custom_group', 'Integer', E::ts('Custom group'), true, null, 'CustomGroup', null, FALSE),
+			new Specification('check_permission', 'Boolean', E::ts('Check permissions'), true, null, null, null, FALSE),
 		)
 		);
 	}
