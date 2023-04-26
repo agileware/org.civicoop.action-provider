@@ -23,7 +23,6 @@ class FindByCustomGroupMultiValue extends AbstractAction {
 	 * @return void
 	 */
 	protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-		$fail = $this->configuration->doesParameterExists('fail_not_found') ? $this->configuration->getParameter('fail_not_found') : true;
 		$customGroup = civicrm_api4('CustomGroup', 'get', array(
 			'select' => array('name'),
 			'where' => array(
@@ -32,7 +31,6 @@ class FindByCustomGroupMultiValue extends AbstractAction {
 		));
 		$customGroupName = $customGroup[0]['name'];
 		$apiParams = array(
-			'select' => array('id'),
 			'where' => array()
 		);
 		foreach ($this->getParameterSpecification() as $spec) {
@@ -54,16 +52,18 @@ class FindByCustomGroupMultiValue extends AbstractAction {
 		if (!count($apiParams)) {
 			throw new InvalidParameterException(E::ts("No parameter given"));
 		}
-		try {
-			$entry_id = civicrm_api4($apiCustomGroupName, 'get', $apiParams);
-			$output->setParameter('custom_field_entry_id', $entry_id[0]['id']);
-			$output->setParameter('custom_group_id', $this->configuration->getParameter('custom_group'));
-		}
-		catch (\CiviCRM_API3_Exception $ex) {
-			if ($fail) {
-				throw new ExecutionException('Could not find custom field entry');
+
+		$result = civicrm_api4($apiCustomGroupName, 'get', $apiParams);
+		$output->setParameter('custom_group_id', $this->configuration->getParameter('custom_group'));
+		foreach ($result[0] as $key => $value) {
+			if ($key === 'id') {
+				$output->setParameter('custom_group_entry_id', $value);
+			}
+			else {
+				$output->setParameter($key, $value);
 			}
 		}
+
 	}
 
 	/**
@@ -73,8 +73,7 @@ class FindByCustomGroupMultiValue extends AbstractAction {
 	 */
 	public function getConfigurationSpecification() {
 		return new SpecificationBag(array(
-			new Specification('custom_group', 'String', E::ts('Custom group'), true, null, 'CustomGroup', null, FALSE),
-			new Specification('fail_not_found', 'Boolean', E::ts('Fail on not found'), false, true),
+			new Specification('custom_group', 'Integer', E::ts('Custom group'), true, null, 'CustomGroup', null, FALSE),
 		)
 		);
 	}
@@ -106,11 +105,20 @@ class FindByCustomGroupMultiValue extends AbstractAction {
 	 * @return SpecificationBag
 	 */
 	public function getOutputSpecification() {
-		return new SpecificationBag(array(
-			new Specification('custom_field_entry_id', 'Integer', E::ts('Custom Group entry ID'), true, null, null, null, false),
-			new Specification('custom_group_id', 'String', E::ts('Custom group ID'), true, null, null, null, false),
-		)
-		);
+		$specs = new SpecificationBag();
+		$specs->addSpecification(new Specification('custom_group_entry_id', 'Integer', E::ts('Custom Group entry ID'), true, null, null, null, false));
+		$specs->addSpecification(new Specification('custom_group_id', 'Integer', E::ts('Custom group ID'), true, null, null, null, false));
+		$specs->addSpecification(new Specification('entity_id', 'Integer', E::ts('Entity ID'), true, null, null, null, false));
+
+		$config = ConfigContainer::getInstance();
+		$customGroups = $config->getCustomGroupsForEntities(['Contact', 'Individual', 'Household', 'Organization']);
+		foreach ($customGroups as $customGroup) {
+			if (!empty($customGroup['is_active']) && $customGroup['is_multiple']) {
+				$specs->addSpecification(CustomField::getSpecForCustomGroup($customGroup['id'], $customGroup['name'], $customGroup['title']));
+			}
+		}
+
+		return $specs;
 	}
 
 

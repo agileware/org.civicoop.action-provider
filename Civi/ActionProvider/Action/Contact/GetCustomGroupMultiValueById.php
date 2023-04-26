@@ -46,6 +46,7 @@ class GetCustomGroupMultiValueById extends AbstractAction {
         $output->setParameter($key, $value);
       }
     }
+    $output->setParameter('apiCall', 'Test');
 
   }
 
@@ -83,10 +84,11 @@ class GetCustomGroupMultiValueById extends AbstractAction {
     $config = ConfigContainer::getInstance();
     $customGroups = $config->getCustomGroupsForEntities(['Contact', 'Individual', 'Household', 'Organization']);
     foreach ($customGroups as $customGroup) {
-      if (!empty($customGroup['is_active'])) {
+      if (!empty($customGroup['is_active']) && $customGroup['is_multiple']) {
         $specs->addSpecification(CustomField::getSpecForCustomGroup($customGroup['id'], $customGroup['name'], $customGroup['title']));
       }
     }
+    $specs->addSpecification(new Specification('apiCall', 'String', E::ts('Result of the ApiCall')));
     return $specs;
   }
 

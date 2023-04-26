@@ -31,7 +31,6 @@ class ContactDataById extends AbstractGetSingleAction {
       $output->setParameter($fieldName, $custom['latest']);
     }
 
-    $output->setParameter('Testoutput', $results);
   }
 
 
