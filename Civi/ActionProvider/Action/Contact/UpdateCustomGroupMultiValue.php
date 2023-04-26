@@ -30,7 +30,8 @@ class UpdateCustomGroupMultiValue extends AbstractAction {
         'select' => array('name'),
         'where' => array(
           array('id', '=', $this->configuration->getParameter('custom_group')),
-        )
+        ),
+        'checkPermissions' => $this->configuration->getParameter('check_permission'),
       ));
       $customGroupName = $customGroup[0]['name'];
     }
@@ -39,7 +40,8 @@ class UpdateCustomGroupMultiValue extends AbstractAction {
         'select' => array('name'),
         'where' => array(
           array('id', '=', $parameters->getParameter('custom_group')),
-        )
+        ),
+        'checkPermissions' => $this->configuration->getParameter('check_permission'),
       ));
       $customGroupName = $customGroup[0]['name'];
     }
@@ -77,8 +79,10 @@ class UpdateCustomGroupMultiValue extends AbstractAction {
 
       }
     }
+    $apiParams['checkPermissions'] = $this->configuration->getParameter('check_permission');
 
     $apiCustomGroupName = 'Custom_' . $customGroupName;
+
 
     if (!count($apiParams)) {
       throw new InvalidParameterException(E::ts("No parameter given"));
@@ -86,22 +90,13 @@ class UpdateCustomGroupMultiValue extends AbstractAction {
     try {
       if ($updateEntry) {
         $entry_id = civicrm_api4($apiCustomGroupName, 'update', $apiParams);
-        $apiParams['Action'] = 'Update';
-
       }
       else {
         $entry_id = civicrm_api4($apiCustomGroupName, 'create', $apiParams);
-        $apiParams['Action'] = 'Create';
       }
-      $apiParams['apiCustomGroupName'] = $apiCustomGroupName;
-      $apiParams['Result'] = $entry_id;
-      $apiParams['Parameter'] = $parameters->getParameter('entry_id');
-      $output->setParameter('test_output', $apiParams);
     }
     catch (\CiviCRM_API3_Exception $ex) {
-      $apiParams['apiCustomGroupName'] = $apiCustomGroupName;
-      $apiParams['Result'] = $entry_id;
-      $output->setParameter('test_output', $apiParams);
+
     }
   }
 
@@ -113,6 +108,7 @@ class UpdateCustomGroupMultiValue extends AbstractAction {
   public function getConfigurationSpecification() {
     return new SpecificationBag(array(
       new Specification('custom_group', 'String', E::ts('Custom group'), false, null, 'CustomGroup', null, FALSE),
+      new Specification('check_permission', 'Boolean', E::ts('Check permissions'), true, null, null, null, FALSE),
     )
     );
   }
