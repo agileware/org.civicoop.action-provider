@@ -55,12 +55,18 @@ class FindByCustomGroupMultiValue extends AbstractAction {
 
 		$result = civicrm_api4($apiCustomGroupName, 'get', $apiParams);
 		$output->setParameter('custom_group_id', $this->configuration->getParameter('custom_group'));
-		foreach ($result[0] as $key => $value) {
-			if ($key === 'id') {
-				$output->setParameter('custom_group_entry_id', $value);
-			}
-			else {
-				$output->setParameter($key, $value);
+		if (isset($result[0])) {
+			foreach ($result[0] as $key => $value) {
+				if ($key === 'id') {
+					$output->setParameter('custom_group_entry_id', $value);
+				}
+				else if ($key === 'entity_id') {
+					$output->setParameter($key, $value);
+				}
+				else {
+					$fieldName = 'custom_' . $customGroupName . '_' . $key;
+					$output->setParameter($fieldName, $value);
+				}
 			}
 		}
 

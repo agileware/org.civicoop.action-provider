@@ -201,10 +201,6 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
-    $provider->addAction('GetCustomGroupMultiValueById', '\Civi\ActionProvider\Action\Contact\GetCustomGroupMultiValueById', E::ts('Contact: Get entry of multi valued custom group'), array(
-      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
-      AbstractAction::DATA_RETRIEVAL_TAG,
-    ));
     $provider->addAction('UpdateCustomGroupMultiValue', '\Civi\ActionProvider\Action\Contact\UpdateCustomGroupMultiValue', E::ts('Contact: Update entry of multi valued custom group'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
