@@ -74,6 +74,10 @@ class Actions {
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ));
+    $provider->addAction('SendConfirmation', '\Civi\ActionProvider\Action\Contribution\SendConfirmation', E::ts('Contribution: Send confirmation / receipt'), array(
+      AbstractAction::SEND_MESSAGES_TO_CONTACTS,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ));
   }
 
 }
