@@ -1,5 +1,7 @@
 Version 1.125 (not yet released)
 -------------
+* Add 'Other: Increment integer value'
+* Add 'Activities: Find similar activities'
 
 Version 1.124
 -------------
