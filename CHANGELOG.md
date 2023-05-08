@@ -1,5 +1,12 @@
-Version 1.124 (not yet released)
+Version 1.125 (not yet released)
 -------------
+
+Version 1.124
+-------------
+
+* Add "Campaign: Get by ID" action. See !115
+* Add "Contribution: Send confirmation / receipt" action. See !116
+* Changed configuration of Phone: Phone type to be not required anymore. See !114
 
 Version 1.123
 -------------
