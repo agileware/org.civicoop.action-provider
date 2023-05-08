@@ -18,11 +18,11 @@ class Actions {
    * @param \Civi\ActionProvider\Provider $provider
    */
   public static function loadActions(Provider $provider) {
-    $provider->addAction('CreateActivity', '\Civi\ActionProvider\Action\Activity\CreateActivity',E::ts('Activity: Create/Update') , array(
+    $provider->addAction('CreateActivity', '\Civi\ActionProvider\Action\Activity\CreateActivity', E::ts('Activity: Create/Update'), array(
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG
     ));
-    $provider->addAction('UpdateActivityStatus', '\Civi\ActionProvider\Action\Activity\UpdateActivityStatus',E::ts('Activity: Update status') , array(
+    $provider->addAction('UpdateActivityStatus', '\Civi\ActionProvider\Action\Activity\UpdateActivityStatus', E::ts('Activity: Update status'), array(
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG
     ));
@@ -44,13 +44,16 @@ class Actions {
     $provider->addAction('ActivityUploadAttachment', '\Civi\ActionProvider\Action\Activity\UploadAttachment', E::ts('Activity: Upload attachment'), array(
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
-    $provider->addAction('ActivityUploadCustomFileField', '\Civi\ActionProvider\Action\Activity\UploadCustomFileField',E::ts('Activity: Upload file to a custom field'), array(
+    $provider->addAction('ActivityUploadCustomFileField', '\Civi\ActionProvider\Action\Activity\UploadCustomFileField', E::ts('Activity: Upload file to a custom field'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('ActivityAssign', '\Civi\ActionProvider\Action\Activity\Assign',E::ts('Activity: Assign'), array(
+    $provider->addAction('ActivityAssign', '\Civi\ActionProvider\Action\Activity\Assign', E::ts('Activity: Assign'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $provider->addAction('FindSimilarActivities', '\Civi\ActionProvider\Action\Activity\FindSimilarActivities', E::ts('Activity: Find similar acitivities'), array(
+      AbstractAction::DATA_RETRIEVAL_TAG,
     ));
 
   }
