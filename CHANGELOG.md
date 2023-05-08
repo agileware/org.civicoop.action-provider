@@ -1,5 +1,19 @@
-Version 1.123 (not yet released)
+Version 1.125 (not yet released)
 -------------
+
+Version 1.124
+-------------
+
+* Add "Campaign: Get by ID" action. See !115
+* Add "Contribution: Send confirmation / receipt" action. See !116
+* Changed configuration of Phone: Phone type to be not required anymore. See !114
+
+Version 1.123
+-------------
+
+* Fix Other: Map Value action - when the result is a single value, do not return an array, just return the value. See !112 and #36
+* Fix Action "Address: Get country or state/province from ID" crashes due to incorrect parameter usage. See !113
+* Fixed issue with condition contact has tag.
 
 Version 1.122
 -------------

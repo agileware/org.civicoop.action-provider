@@ -26,9 +26,9 @@ class Actions {
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('GetCampaignById', '\Civi\ActionProvider\Action\Campaign\GetCampaignById', E::ts('Campaign: Get by Id'), array(
-      //      AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
-//      AbstractAction::DATA_RETRIEVAL_TAG,
+    $provider->addAction('GetCampaign', '\Civi\ActionProvider\Action\Campaign\GetCampaign', E::ts('Campaign: Get by ID'), array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
     ));
   }
 

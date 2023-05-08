@@ -68,7 +68,8 @@ class AddressComponentIdLookup extends AbstractAction {
    * @throws \Exception
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    $id = array_pop($parameters->getParameter('value'));
+    $value = $parameters->getParameter('value');
+    $id = is_array($value) ? array_pop($value) : $value;
     [$entity, $field] = explode('~', $this->configuration->getParameter('entity_type'));
 
     if ($id && $entity && $field) {

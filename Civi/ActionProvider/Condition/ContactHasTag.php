@@ -25,7 +25,7 @@ class ContactHasTag extends AbstractCondition {
     $tagIds = array();
     foreach($tagNames as $tagName) {
       try {
-        $tagId = civicrm_api('Tag', 'getvalue', [
+        $tagId = civicrm_api3('Tag', 'getvalue', [
           'return' => 'id',
           'name' => $tagName,
           'used_for' => 'Contacts'
