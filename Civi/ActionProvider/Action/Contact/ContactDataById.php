@@ -26,10 +26,11 @@ class ContactDataById extends AbstractGetSingleAction {
     parent::doAction($parameters, $output);
     // Get custom data
     $custom_data = civicrm_api3('CustomValue', 'get', array('entity_id' => $parameters->getParameter('contact_id'), 'entity_table' => 'civicrm_contact'));
-    foreach($custom_data['values'] as $custom) {
+    foreach ($custom_data['values'] as $custom) {
       $fieldName = CustomField::getCustomFieldName($custom['id']);
       $output->setParameter($fieldName, $custom['latest']);
     }
+
   }
 
 
@@ -53,16 +54,16 @@ class ContactDataById extends AbstractGetSingleAction {
     return $parameters->getParameter('contact_id');
   }
 
-	/**
-	 * Returns the specification of the parameters of the actual action.
-	 *
-	 * @return SpecificationBag
-	 */
-	public function getParameterSpecification() {
-		return new SpecificationBag(array(
-			new Specification('contact_id', 'Integer', E::ts('Contact ID'), true)
-		));
-	}
+  /**
+   * Returns the specification of the parameters of the actual action.
+   *
+   * @return SpecificationBag
+   */
+  public function getParameterSpecification() {
+    return new SpecificationBag(array(
+      new Specification('contact_id', 'Integer', E::ts('Contact ID'), true)
+    ));
+  }
 
   /**
    * Returns the specification of the output parameters of this action.

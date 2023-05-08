@@ -1,5 +1,7 @@
 Version 1.125 (not yet released)
 -------------
+* Add: Contact: Find entry of a custom group with multi values
+* Add: Contact: Edit or create entry for a custom group with multi values.
 * Add 'Other: Increment integer value'
 * Add 'Activities: Find similar activities'
 
