@@ -18,11 +18,11 @@ class Actions {
    * @param \Civi\ActionProvider\Provider $provider
    */
   public static function loadActions(Provider $provider) {
-    $provider->addAction('FindOrCreateCampaign', '\Civi\ActionProvider\Action\Campaign\FindOrCreateCampaign',E::ts('Campaign: Get or create') , array(
+    $provider->addAction('FindOrCreateCampaign', '\Civi\ActionProvider\Action\Campaign\FindOrCreateCampaign', E::ts('Campaign: Get or create'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('UpdateCampaign', '\Civi\ActionProvider\Action\Campaign\UpdateCampaign',E::ts('Campaign: Update') , array(
+    $provider->addAction('UpdateCampaign', '\Civi\ActionProvider\Action\Campaign\UpdateCampaign', E::ts('Campaign: Update'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
