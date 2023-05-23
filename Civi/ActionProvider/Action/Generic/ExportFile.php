@@ -67,6 +67,9 @@ class ExportFile extends AbstractAction {
           $suffix = $parameters->getParameter('suffix');
         }
         $filename = $prefix . CRM_Utils_File::cleanFileName($dao->uri);
+        if (!empty($parameters->getParameter('filename'))) {
+          $filename = $parameters->getParameter('filename');
+        }
         $ext = CRM_Utils_File::getExtensionFromPath($fileUri);
         if (strlen($ext)) {
           $ext = '.' . $ext;
@@ -148,6 +151,8 @@ class ExportFile extends AbstractAction {
     return new SpecificationBag([
       new Specification('file_id', 'Integer', E::ts('File ID'), true),
       new Specification('prefix', 'String', E::ts('File name prefix'), false),
+      new Specification('suffix', 'String', E::ts('File name suffix'), false),
+      new Specification('filename', 'String', E::ts('Use this file name'), false),
     ]);
   }
 
