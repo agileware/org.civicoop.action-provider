@@ -59,6 +59,9 @@ class Actions {
     $provider->addAction('DownloadFileLink', '\Civi\ActionProvider\Action\Generic\DownloadFileLink', E::ts('Other: Link to download file'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_RETRIEVAL_TAG
     ));
+    $provider->addAction('GetFileInfo', '\Civi\ActionProvider\Action\Generic\GetFileInfo', E::ts('Other: Get file info'), array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_RETRIEVAL_TAG
+    ));
     $provider->addAction('ExportFile', '\Civi\ActionProvider\Action\Generic\ExportFile', E::ts('Other: Export file'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_RETRIEVAL_TAG
     ));
