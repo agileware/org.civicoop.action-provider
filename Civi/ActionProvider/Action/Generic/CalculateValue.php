@@ -165,8 +165,27 @@ class CalculateValue extends AbstractAction {
 
     $operator = $this->configuration->getParameter('operator');
 
-    $formula = $operand1 . $operator . $operand2;
-    $result = eval('return ' . $formula . ';');
+    if ($operator === '+') {
+      $result = $operand1 + $operand2;
+    }
+    else if ($operator === '-') {
+      $result = $operand1 - $operand2;
+    }
+    else if ($operator === '*') {
+      $result = $operand1 * $operand2;
+    }
+    else if ($operator === '/') {
+      $result = $operand1 / $operand2;
+    }
+    else if ($operator === '%') {
+      $result = $operand1 % $operand2;
+    }
+    else if ($operator === '**') {
+      $result = $operand1 ** $operand2;
+    }
+    else {
+      throw new InvalidParameterException('Invalid operator.');
+    }
 
     $output->setParameter('value', $result);
   }
