@@ -1,4 +1,4 @@
-Version 1.125 (not yet released)
+Version 1.125
 -------------
 
 * Add: Action to get information about a file.
