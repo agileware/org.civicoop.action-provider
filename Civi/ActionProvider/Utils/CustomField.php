@@ -80,8 +80,10 @@ class CustomField {
 
     if (isset($customField['option_group_id']) && $customField['option_group_id']) {
       $spec = new OptionGroupSpecification($name, $customField['option_group_id'], $title, $is_required, $default, $multiple);
-    } elseif($type) {
-      $spec = new Specification($name, $type, $title, $is_required, $default, null, array(), $multiple);
+    }
+    elseif($type) {
+      $fkEntity = $customField['fk_entity'] ?? null;
+      $spec = new Specification($name, $type, $title, $is_required, $default, $fkEntity, array(), $multiple);
     }
     if ($spec) {
       $spec->setApiFieldName($apiFieldName);
