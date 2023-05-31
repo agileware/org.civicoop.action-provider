@@ -13,6 +13,7 @@ class Type {
       case 'Int':
       case 'File':
       case 'ContactReference':
+      case 'EntityReference':
         return 'Integer';
         break;
       case 'Memo':
