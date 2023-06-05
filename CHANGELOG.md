@@ -1,6 +1,8 @@
 Version 1.126 (not yet released)
 -------------
 
+*  Add support for custom field type EntityReference. See !119
+
 Version 1.125
 -------------
 
