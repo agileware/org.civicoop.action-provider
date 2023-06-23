@@ -2,6 +2,10 @@ Version 1.126 (not yet released)
 -------------
 
 *  Add support for custom field type EntityReference. See !119
+*  Add action to swap participant
+*  Add action to add notes to entities
+*  Add action to find event by custom field
+*  Add action to concatenate values
 
 Version 1.125
 -------------
