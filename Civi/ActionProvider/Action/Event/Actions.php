@@ -94,6 +94,9 @@ class Actions {
     $provider->addAction('UpdateEventStatus', '\Civi\ActionProvider\Action\Event\UpdateEventStatus', E::ts('Event: Update is public and is active state') , array(
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('FindEventByCustomField', '\Civi\ActionProvider\Action\Event\EventFindByCustomField', E::ts('Event: get a single event by custom field') , array(
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
   }
 
 }
