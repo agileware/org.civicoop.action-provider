@@ -93,6 +93,8 @@ class Actions {
     ));
     $provider->addAction('AddNode', '\Civi\ActionProvider\Action\Generic\AddNote', E::ts('Other: Add Note'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG,
+    $provider->addAction('SumInputFields', '\Civi\ActionProvider\Action\Generic\SumInputFields', E::ts('Other: Sum up to 6 input fields'), array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG
     ));
   }
 
