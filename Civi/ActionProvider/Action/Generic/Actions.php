@@ -83,6 +83,8 @@ class Actions {
     $provider->addAction('IncrementIntegerValue', '\Civi\ActionProvider\Action\Generic\IncrementIntegerValue', E::ts('Other: Increment integer value'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG
     ));
+    $provider->addAction('SumInputFields', '\Civi\ActionProvider\Action\Generic\SumInputFields', E::ts('Other: Sum up to 6 input fields'), array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG
     $provider->addAction('Concatenate', '\Civi\ActionProvider\Action\Generic\ConcatenateValues', E::ts('Other: Concatenate values'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG,
     ));
@@ -91,6 +93,8 @@ class Actions {
     ));
     $provider->addAction('AddNode', '\Civi\ActionProvider\Action\Generic\AddNote', E::ts('Other: Add Note'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG,
+    $provider->addAction('SumInputFields', '\Civi\ActionProvider\Action\Generic\SumInputFields', E::ts('Other: Sum up to 6 input fields'), array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG
     ));
   }
 

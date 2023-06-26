@@ -6,6 +6,8 @@ Version 1.126 (not yet released)
 *  Add action to add notes to entities
 *  Add action to find event by custom field
 *  Add action to concatenate values
+*  Add action to sum up to 6 fields
+*  Reworked action: 'Other: Calculate value' does not rely on `eval` anymore.
 
 Version 1.125
 -------------
