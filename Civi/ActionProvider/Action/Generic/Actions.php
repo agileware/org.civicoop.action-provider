@@ -85,6 +85,14 @@ class Actions {
     ));
     $provider->addAction('SumInputFields', '\Civi\ActionProvider\Action\Generic\SumInputFields', E::ts('Other: Sum up to 6 input fields'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG
+    $provider->addAction('Concatenate', '\Civi\ActionProvider\Action\Generic\ConcatenateValues', E::ts('Other: Concatenate values'), array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $provider->addAction('SwapParticipantById', '\Civi\ActionProvider\Action\Event\SwapParticipantById', E::ts('Event: change/swap the contact_id on a participant') , array(
+      AbstractAction::DATA_MANIPULATION_TAG
+    ));
+    $provider->addAction('AddNode', '\Civi\ActionProvider\Action\Generic\AddNote', E::ts('Other: Add Note'), array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG,
     ));
   }
 
