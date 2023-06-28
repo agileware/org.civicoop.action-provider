@@ -56,14 +56,6 @@ class SwapParticipantById extends AbstractGetSingleAction {
     return $specs;
   }
 
-  public function getOutputSpecification() {
-    return new SpecificationBag([
-      new Specification('participant_id', 'int', E::ts('Participant ID')),
-      new Specification('contact_id', 'int', E::ts('Participant ID')),
-      new Specification('updated_participant', 'array', E::ts('Updated participant')),
-    ]);
-  }
-
   /**
    * Run the action
    *
@@ -96,7 +88,7 @@ class SwapParticipantById extends AbstractGetSingleAction {
   }
 
   protected function getIdFromParamaters(ParameterBagInterface $parameters) {
-    // TODO: Implement getIdFromParamaters() method.
+    return $parameters->getParameter('participant_id');
   }
 
 }
