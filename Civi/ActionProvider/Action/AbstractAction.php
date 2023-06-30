@@ -63,6 +63,9 @@ abstract class AbstractAction implements \JsonSerializable {
    */
   private $condition;
 
+  // Reference counter for adding and removing API Wrapper when it's needed
+  protected static int $wrapperLevel = 0;
+
 	public function __construct() {
 
 	}
@@ -138,7 +141,18 @@ abstract class AbstractAction implements \JsonSerializable {
 
     // Condition is valid or no condition class is set
     $output = $this->createParameterBag();
-    $this->doAction($parameters, $output);
+    try {
+      // Install API wrapper at first level of action provider only
+      if (++ self::$wrapperLevel == 1) {
+        \Civi::dispatcher()->addListener('civi.api.prepare', ['Civi\ActionProvider\APIWrapper', 'onApiPrepare'], -100);
+      }
+      $this->doAction($parameters, $output);
+    } finally {
+      // Uninstall API wrapper, even if there was an exception
+      if (-- self::$wrapperLevel == 0) {
+        \Civi::dispatcher()->removeListener('civi.api.prepare', ['Civi\ActionProvider\APIWrapper', 'onApiPrepare']);
+      }
+    }
 		return $output;
 	}
 
