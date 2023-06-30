@@ -8,6 +8,7 @@ Version 1.126 (not yet released)
 *  Add action to concatenate values
 *  Add action to sum up to 6 fields
 *  Reworked action: 'Other: Calculate value' does not rely on `eval` anymore.
+*  A generic approach to check the is_deleted flag see MR !125 and issue #38 
 
 Version 1.125
 -------------
