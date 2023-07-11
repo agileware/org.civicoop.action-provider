@@ -80,8 +80,10 @@ class CreateContributionWithParameters extends AbstractAction {
     if ($parameters->doesParameterExists('check_number')) {
       $contribution_params['check_number'] = $parameters->getParameter('check_number');
     }
+
     $contribution_params['skipLineItem'] = $this->configuration->getParameter('skipLineItem') ? true : false;
-	$contribution_params['is_pay_later'] = $this->configuration->getParameter('is_pay_later') ? true : false;
+
+	  $contribution_params['is_pay_later'] = $parameters->getParameter('is_pay_later') ? true : false;
 
     $result = civicrm_api3('Contribution', 'Create', $contribution_params);
 
