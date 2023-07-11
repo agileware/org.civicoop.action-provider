@@ -8,7 +8,8 @@ Version 1.126 (not yet released)
 *  Add action to concatenate values
 *  Add action to sum up to 6 fields
 *  Reworked action: 'Other: Calculate value' does not rely on `eval` anymore.
-*  A generic approach to check the is_deleted flag see MR !125 and issue #38 
+*  A generic approach to check the is_deleted flag see MR !125 and issue #38
+*  Bug fixed, Create Contribution With Parameters action the Is Pay Later parameter was incorrect, see MR !128 
 
 Version 1.125
 -------------
