@@ -20,9 +20,10 @@ class CreateOrUpdateMembership extends AbstractAction {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
-    return new SpecificationBag(array(
+    return new SpecificationBag([
       new MembershipTypeSpecification('membership_type', E::ts('Membership Type'), TRUE),
-    ));
+      new Specification('status', 'Integer', E::ts('Status'), TRUE, null, 'MembershipStatus'),
+    ]);
   }
 
   /**
@@ -104,6 +105,9 @@ class CreateOrUpdateMembership extends AbstractAction {
     }
     if ($parameters->doesParameterExists('source')) {
       $apiParams['source'] = $parameters->getParameter('source');
+    }
+    if ($this->configuration->doesParameterExists('status')) {
+      $apiParams['status_id'] = $this->configuration->getParameter('status');
     }
 
     // Create or Update the event through an API call.
