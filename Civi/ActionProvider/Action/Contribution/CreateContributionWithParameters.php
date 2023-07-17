@@ -47,6 +47,15 @@ class CreateContributionWithParameters extends AbstractAction {
     if ($parameters->doesParameterExists('source')) {
       $contribution_params['source'] = $parameters->getParameter('source');
     }
+    $contribution_params['contribution_page_id'] = $this->configuration->getParameter('contribution_page_id');
+    if ($parameters->doesParameterExists('contribution_page_id')) {
+      $contribution_params['contribution_page_id'] = $parameters->getParameter('contribution_page_id');
+    }
+
+    if ($parameters->doesParameterExists('campaign_id')) {
+      $contribution_params['campaign_id'] = $parameters->getParameter('campaign_id');
+    }
+
     if ($parameters->doesParameterExists('campaign_id')) {
       $contribution_params['campaign_id'] = $parameters->getParameter('campaign_id');
     }
@@ -83,7 +92,7 @@ class CreateContributionWithParameters extends AbstractAction {
 
     $contribution_params['skipLineItem'] = $this->configuration->getParameter('skipLineItem') ? true : false;
 
-	  $contribution_params['is_pay_later'] = $parameters->getParameter('is_pay_later') ? true : false;
+    $contribution_params['is_pay_later'] = $parameters->getParameter('is_pay_later') ? true : false;
 
     $result = civicrm_api3('Contribution', 'Create', $contribution_params);
 
@@ -107,6 +116,7 @@ class CreateContributionWithParameters extends AbstractAction {
   public function getConfigurationSpecification() {
     return new SpecificationBag(array(
       new Specification('skipLineItem', 'Boolean', E::ts('Skip Line Item'), true, false),
+      new Specification('contribution_page_id', 'Integer', E::ts('Contribution Page ID'), false),
     ));
   }
 
@@ -125,7 +135,8 @@ class CreateContributionWithParameters extends AbstractAction {
       new Specification('financial_type_id', 'Integer', E::ts('Financial Type'), TRUE, null, 'FinancialType'),
       new OptionGroupSpecification('payment_instrument', 'payment_instrument', E::ts('Payment instrument'), TRUE),
       new OptionGroupSpecification('contribution_status', 'contribution_status', E::ts('Status of contribution'), TRUE),
-	  new Specification('is_pay_later', 'Boolean', E::ts('Is Pay Later'), false),
+      new Specification('is_pay_later', 'Boolean', E::ts('Is Pay Later'), false),
+      new Specification('contribution_page_id', 'Integer', E::ts('Contribution Page ID'), false),
       new Specification('campaign_id', 'Integer', E::ts('Campaign'), false),
       new Specification('contribution_recur_id', 'Integer', E::ts('Contribution Recur ID'), false),
       new Specification('receive_date', 'Date', E::ts('Receive date'), false),
