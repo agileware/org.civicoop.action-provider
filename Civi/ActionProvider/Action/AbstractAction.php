@@ -64,7 +64,7 @@ abstract class AbstractAction implements \JsonSerializable {
   private $condition;
 
   // Reference counter for adding and removing API Wrapper when it's needed
-  protected static int $wrapperLevel = 0;
+  protected static $wrapperLevel = 0;
 
 	public function __construct() {
 
