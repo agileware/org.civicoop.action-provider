@@ -1,4 +1,4 @@
-Version 1.126 (not yet released)
+Version 1.126
 -------------
 
 * Compatibility with CiviCRM 5.45
