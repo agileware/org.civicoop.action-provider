@@ -2,6 +2,7 @@ Version 1.126 (not yet released)
 -------------
 
 * Compatibility with CiviCRM 5.45
+*  Added CiviCase: addRole action
 *  Add support for custom field type EntityReference. See !119
 *  Add action to swap participant
 *  Add action to add notes to entities
