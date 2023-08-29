@@ -1,6 +1,7 @@
 Version 1.126 (not yet released)
 -------------
 
+* Compatibility with CiviCRM 5.45
 *  Add support for custom field type EntityReference. See !119
 *  Add action to swap participant
 *  Add action to add notes to entities
@@ -9,7 +10,7 @@ Version 1.126 (not yet released)
 *  Add action to sum up to 6 fields
 *  Reworked action: 'Other: Calculate value' does not rely on `eval` anymore.
 *  A generic approach to check the is_deleted flag see MR !125 and issue #38
-*  Bug fixed, Create Contribution With Parameters action the Is Pay Later parameter was incorrect, see MR !128 
+*  Bug fixed, Create Contribution With Parameters action the Is Pay Later parameter was incorrect, see MR !128
 * Contribution: Create (with parameters), provide parameter to record the Contribution Page ID for the Contribution . See !130
 * Create Update Membership and Create Update Membership Type, provide Membership Status configuration. See !132
 

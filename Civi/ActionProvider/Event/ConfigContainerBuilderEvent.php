@@ -6,10 +6,10 @@
 
 namespace Civi\ActionProvider\Event;
 
+use Civi\Core\Event\GenericHookEvent;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\EventDispatcher\Event;
 
-class ConfigContainerBuilderEvent extends Event {
+class ConfigContainerBuilderEvent extends GenericHookEvent {
 
   const EVENT_NAME = 'ActionProviderConfigContainerBuilderEvent';
 
