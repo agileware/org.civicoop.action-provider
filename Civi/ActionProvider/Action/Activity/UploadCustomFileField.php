@@ -43,12 +43,16 @@ class UploadCustomFileField extends AbstractAction {
         'id' => $activity_id,
         'return' => 'custom_' . $customFieldId,
       ]);
-      if (isset($file['id']) && $currentFile && $file['id'] != $currentFile) {
+      $currentFileId = $currentFile;
+      if (is_array($currentFile) && isset($currentFile['fid'])) {
+        $currentFileId = $currentFile['fid'];
+      }
+      if (isset($file['id']) && $currentFileId && $file['id'] != $currentFileId) {
         $deleteCurrentFile = true;
         $updateCustomField = $file['id'];
       }
-      if ($currentFile && $deleteCurrentFile) {
-        civicrm_api3('Attachment', 'delete', array('id' => $currentFile));
+      if (is_numeric($currentFileId) && $deleteCurrentFile) {
+        civicrm_api3('Attachment', 'delete', array('id' => $currentFileId));
       }
     } catch (\Exception $e) {
       // Do nothing
@@ -78,8 +82,8 @@ class UploadCustomFileField extends AbstractAction {
       $updateCustomField = FALSE;
     }
     if ($updateCustomField) {
-      civicrm_api3('Event', 'create', [
-        'id' => $event_id,
+      civicrm_api3('Activity', 'create', [
+        'id' => $activity_id,
         'custom_' . $customFieldId => $updateCustomField,
       ]);
     }
