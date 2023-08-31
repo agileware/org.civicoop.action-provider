@@ -1,6 +1,8 @@
 Version 1.127 (not yet released)
 -------------
 
+*  Add Action: Contact: Add to multiple Groups (with list of group IDs as parameter). See !135
+
 Version 1.126
 -------------
 
