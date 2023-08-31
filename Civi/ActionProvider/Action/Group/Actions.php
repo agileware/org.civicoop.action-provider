@@ -26,11 +26,11 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('AddToMultipleGroupsParameter', '\Civi\ActionProvider\Action\Group\AddToMultipleGroupsParameter', E::ts('Contact: Add to multiple Groups (with list of group IDs as parameter)'), array(
+    $provider->addAction('AddToMultipleGroupsParameter', '\Civi\ActionProvider\Action\Group\AddToMultipleGroupsParameter', E::ts('Contact: Add a single contact to multiple Groups (with list of group IDs as parameter)'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('AddMultipleToGroupParameter', '\Civi\ActionProvider\Action\Group\AddMultipleToGroupParameter', E::ts('Contact: Add multiple to Group (with group ID as parameter)'), array(
+    $provider->addAction('AddMultipleToGroupParameter', '\Civi\ActionProvider\Action\Group\AddMultipleToGroupParameter', E::ts('Contact: Add multiple contacts to a Group (with group ID as parameter)'), array(
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
