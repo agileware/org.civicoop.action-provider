@@ -96,6 +96,10 @@ class Actions {
     $provider->addAction('SumInputFields', '\Civi\ActionProvider\Action\Generic\SumInputFields', E::ts('Other: Sum up to 6 input fields'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG
     ));
+    $provider->addAction('RoundNumber', '\Civi\ActionProvider\Action\Generic\RoundNumber', E::ts('Other: Round Number'), [
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ]);
   }
 
 }
