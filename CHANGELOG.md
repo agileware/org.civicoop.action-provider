@@ -1,6 +1,8 @@
 Version 1.128 (not yet released)
 -------------
 
+* Added action 'Other: Round Number'. See !136
+
 Version 1.127
 -------------
 
