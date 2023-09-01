@@ -1,6 +1,7 @@
 Version 1.128 (not yet released)
 -------------
 
+* Reworked the action 'Campaign: Get by ID'. See !127
 * Added action 'Other: Round Number'. See !136
 
 Version 1.127
