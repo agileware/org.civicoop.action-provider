@@ -50,7 +50,7 @@ class Config extends \Symfony\Component\DependencyInjection\Container {
    */
   public function getCustomFieldsOfCustomGroup($custom_group_id) {
     $customFieldsPerGroup = $this->getParameter('custom_fields_per_group');
-    return $customFieldsPerGroup[$custom_group_id];
+    return $customFieldsPerGroup[$custom_group_id] ?? [];
   }
 
   /**
