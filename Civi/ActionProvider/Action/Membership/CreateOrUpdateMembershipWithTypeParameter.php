@@ -21,7 +21,7 @@ class CreateOrUpdateMembershipWithTypeParameter extends AbstractAction {
    */
   public function getConfigurationSpecification() {
     return new SpecificationBag([
-      new Specification('status', 'Integer', E::ts('Status'), TRUE, null, 'MembershipStatus'),
+      new Specification('status', 'Integer', E::ts('Status'), FALSE, null, 'MembershipStatus'),
     ]);
   }
 
