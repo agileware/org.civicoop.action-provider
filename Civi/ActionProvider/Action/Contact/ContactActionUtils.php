@@ -109,9 +109,10 @@ class ContactActionUtils {
     if ($existingAddressId) {
       $addressParams['id'] = $existingAddressId;
     }
-    if ($contact_id && !$existingAddressId) {
+
+    if ($contact_id) {
       $addressParams['contact_id'] = $contact_id;
-    } elseif (!$contact_id) {
+    } else {
       $addressParams['contact_id'] = 'null';
     }
     $addressParams['master_id'] = 'null';
