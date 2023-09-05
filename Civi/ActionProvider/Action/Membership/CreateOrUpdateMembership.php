@@ -22,7 +22,7 @@ class CreateOrUpdateMembership extends AbstractAction {
   public function getConfigurationSpecification() {
     return new SpecificationBag([
       new MembershipTypeSpecification('membership_type', E::ts('Membership Type'), TRUE),
-      new Specification('status', 'Integer', E::ts('Status'), TRUE, null, 'MembershipStatus'),
+      new Specification('status', 'Integer', E::ts('Status'), FALSE, null, 'MembershipStatus'),
     ]);
   }
 
