@@ -1,6 +1,7 @@
 Version 1.128 (not yet released)
 -------------
 
+* Added action 'Contact: Update Profile Photo'
 * Reworked the action 'Campaign: Get by ID'. See !127
 * Added action 'Other: Round Number'. See !136
 * Changed Created or Update Membership actions: status should be optional configuration, not required. See !137
