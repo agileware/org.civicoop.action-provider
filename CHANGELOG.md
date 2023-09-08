@@ -1,4 +1,4 @@
-Version 1.129 (not yet released)
+Version 1.129
 -------------
 
 * Added action 'Activity: Get Most Recent Activity By Custom Field'.
