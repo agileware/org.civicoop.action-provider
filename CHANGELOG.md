@@ -1,4 +1,4 @@
-Version 1.128 (not yet released)
+Version 1.128
 -------------
 
 * Added action 'Contact: Update Profile Photo'
