@@ -47,8 +47,9 @@ class CreateUpdateOrganization extends AbstractAction {
     if ($contact_sub_type) {
       $params['contact_sub_type'] = $contact_sub_type;
     }
-    $params['organization_name'] = $parameters->getParameter('organization_name');
-
+    if ($parameters->doesParameterExists('organization_name')) {
+      $params['organization_name'] = $parameters->getParameter('organization_name');
+    }
 	if ($parameters->doesParameterExists('legal_name')) {
 	  $params['legal_name'] = $parameters->getParameter('legal_name');
 	}

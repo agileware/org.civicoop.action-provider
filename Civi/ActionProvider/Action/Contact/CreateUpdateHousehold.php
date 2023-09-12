@@ -47,7 +47,9 @@ class CreateUpdateHousehold extends AbstractAction {
     if ($contact_sub_type) {
       $params['contact_sub_type'] = $contact_sub_type;
     }
-    $params['household_name'] = $parameters->getParameter('household_name');
+    if ($parameters->doesParameterExists('household_name')) {
+      $params['household_name'] = $parameters->getParameter('household_name');
+    }
     if ($parameters->doesParameterExists('source')) {
       $params['source'] = $parameters->getParameter('source');
     }
