@@ -43,7 +43,7 @@ class SendConfirmation extends AbstractAction {
   public function getParameterSpecification() {
     $specs = new SpecificationBag(array(
       new Specification('contribution_id', 'Integer', E::ts('Contribution ID'), true, null, null, null, FALSE),
-      new Specification('receipt_from_email', 'Email', E::ts('From Email address')),
+      new Specification('receipt_from_email', 'String', E::ts('From Email address')),
       new Specification('receipt_from_name', 'String', E::ts('From Name')),
       new Specification('cc_receipt', 'String', E::ts('CC Email address')),
       new Specification('bcc_receipt', 'String', E::ts('BCC Email address')),
