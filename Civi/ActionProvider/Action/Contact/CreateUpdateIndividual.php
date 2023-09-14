@@ -39,6 +39,9 @@ class CreateUpdateIndividual extends AbstractAction {
     if ($parameters->getParameter('contact_id')) {
       $params['id'] = $parameters->getParameter('contact_id');
     }
+    if ($parameters->doesParameterExists('external_identifier')) {
+      $params['external_identifier'] = $parameters->getParameter('external_identifier');
+    }
     $contact_sub_type = false;
     if ($parameters->doesParameterExists('contact_sub_type')) {
       $contact_sub_type = $parameters->getParameter('contact_sub_type');
@@ -176,6 +179,7 @@ class CreateUpdateIndividual extends AbstractAction {
     $contactIdSpec->setDescription(E::ts('Leave empty to create a new Individual'));
     $spec = new SpecificationBag(array(
       $contactIdSpec,
+      new Specification('external_identifier', 'String', E::ts('External Identifier'), false),
       new Specification('contact_sub_type', 'String', E::ts('Contact sub type'), false, null, null, $this->contactSubTypes, TRUE),
       new OptionGroupSpecification('individual_prefix', 'individual_prefix', E::ts('Individual prefix'), false),
       new Specification('first_name', 'String', E::ts('First name'), false),

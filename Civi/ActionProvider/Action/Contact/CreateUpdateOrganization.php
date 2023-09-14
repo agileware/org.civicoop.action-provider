@@ -41,6 +41,9 @@ class CreateUpdateOrganization extends AbstractAction {
     if ($parameters->getParameter('contact_id')) {
       $params['id'] = $parameters->getParameter('contact_id');
     }
+    if ($parameters->doesParameterExists('external_identifier')) {
+      $params['external_identifier'] = $parameters->getParameter('external_identifier');
+    }
     $contact_sub_type = FALSE;
     if ($parameters->doesParameterExists('contact_sub_type')) {
       $contact_sub_type = $parameters->getParameter('contact_sub_type');
@@ -139,6 +142,7 @@ class CreateUpdateOrganization extends AbstractAction {
     $contactIdSpec->setDescription(E::ts('Leave empty to create a new Organization'));
     $spec = new SpecificationBag([
       $contactIdSpec,
+      new Specification('external_identifier', 'String', E::ts('External Identifier'), false),
       new Specification('contact_sub_type', 'String', E::ts('Contact sub type'), FALSE, NULL, NULL, $this->contactSubTypes, TRUE),
       new Specification('organization_name', 'String', E::ts('Organization Name'), FALSE),
       new Specification('legal_name', 'String', E::ts('Legal Name'), FALSE),

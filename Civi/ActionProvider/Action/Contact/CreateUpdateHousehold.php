@@ -41,6 +41,9 @@ class CreateUpdateHousehold extends AbstractAction {
     if ($parameters->getParameter('contact_id')) {
       $params['id'] = $parameters->getParameter('contact_id');
     }
+    if ($parameters->doesParameterExists('external_identifier')) {
+      $params['external_identifier'] = $parameters->getParameter('external_identifier');
+    }
     $contact_sub_type = FALSE;
     if ($parameters->doesParameterExists('contact_sub_type')) {
       $contact_sub_type = $parameters->getParameter('contact_sub_type');
@@ -127,9 +130,10 @@ class CreateUpdateHousehold extends AbstractAction {
    */
   public function getParameterSpecification() {
     $contactIdSpec = new Specification('contact_id', 'Integer', E::ts('Contact ID'), FALSE);
-    $contactIdSpec->setDescription(E::ts('Leave empty to create a new Individual'));
+    $contactIdSpec->setDescription(E::ts('Leave empty to create a new Household'));
     $spec = new SpecificationBag([
       $contactIdSpec,
+      new Specification('external_identifier', 'String', E::ts('External Identifier'), false),
       new Specification('contact_sub_type', 'String', E::ts('Contact sub type'), FALSE, NULL, NULL, $this->contactSubTypes, TRUE),
       new Specification('household_name', 'String', E::ts('Household name'), FALSE),
       new Specification('source', 'String', E::ts('Source'), FALSE),
