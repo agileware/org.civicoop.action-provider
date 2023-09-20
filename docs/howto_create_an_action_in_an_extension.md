@@ -14,6 +14,7 @@ And we will add this action to your own extension. We assume that you already ha
   * [The actual action](#the-actual-action)
   * [Add a tag to this action](#add-a-tag-to-this-action)
 * [Make it available to the action provider](#make-it-available-to-the-action-provider)
+* [Using Metadata](./howto_create_an_action.md#using-metadata)
 
 ## Required functionality
 
