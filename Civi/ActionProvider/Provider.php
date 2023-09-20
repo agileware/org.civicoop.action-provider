@@ -2,12 +2,11 @@
 
 namespace Civi\ActionProvider;
 
-use \Civi\ActionProvider\Parameter\ParameterBagInterface;
-use \Civi\ActionProvider\Parameter\ParameterBag;
+use Civi\ActionProvider\Parameter\ParameterBagInterface;
+use Civi\ActionProvider\Parameter\ParameterBag;
 use Civi\ActionProvider\Action\AbstractAction;
-use Civi\ActionProvider\Parameter\SpecificationBag;
 use Civi\ActionProvider\Validation\Validators;
-use \CRM_ActionProvider_ExtensionUtil as E;
+use Civi\ActionProvider\Event\InitializeMetaDataEvent;
 
 /**
  * Singleton and conatiner class with all the actions.
@@ -67,6 +66,9 @@ class Provider {
    */
   protected $validatorTitles = array();
 
+  /** @var \Civi\ActionProvider\MetaData */
+  protected $metaData = null;
+
 	public function __construct() {
     Action\Contact\Actions::loadActions($this);
     Action\Group\Actions::loadActions($this);
@@ -108,7 +110,13 @@ class Provider {
     $this->availableConditions = array_filter($this->allConditions, array($this, 'filterConditions'));
 
     Validators::loadValidators($this);
+
+    $this->initializeMetaData();
 	}
+
+  public function getMetaData(): MetaData {
+    return $this->metaData;
+  }
 
 	/**
 	 * Returns all available actions
@@ -369,6 +377,17 @@ class Provider {
    */
   protected function filterConditions(\Civi\ActionProvider\Condition\AbstractCondition $condition) {
     return true;
+  }
+
+  /**
+   * Initialize the meta data
+   *
+   * @return void
+   */
+  protected function initializeMetaData() {
+    $this->metaData = new MetaData();
+    $event = new InitializeMetaDataEvent($this->metaData);
+    \Civi::dispatcher()->dispatch(InitializeMetaDataEvent::EVENT_NAME, $event);
   }
 
 }
