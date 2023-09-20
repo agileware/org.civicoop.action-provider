@@ -1,3 +1,6 @@
+Version 1.131 (not yet released)
+-------------
+
 Version 1.130
 -------------
 * Add check for optional Organisation Name and Household Name to the CreateUpdateOrganisation and CreateUpdateHouseHold actions. See !139
