@@ -17,50 +17,55 @@
       }
     }
 
-    var retrieveAction = function (name, context) {
-      setContext(context);
-      if (!(name in actionTypes[context])) {
+    var retrieveAction = function (name, context, metadata={}) {
+      var fullContext = context + JSON.stringify(metadata);
+      setContext(fullContext);
+      if (!(name in actionTypes[fullContext])) {
         var defer = $q.defer();
         crmApi('ActionProvider', 'getaction', {
           name: name,
-          context: context
+          context: context,
+          metadata: metadata
         }).then(function (data) {
-          actionTypes[context][name] = data;
-          defer.resolve(actionTypes[context][name]);
+          actionTypes[fullContext][name] = data;
+          defer.resolve(actionTypes[fullContext][name]);
         });
         return defer.promise;
       }
-      return $q.resolve(actionTypes[context][name]);
+      return $q.resolve(actionTypes[fullContext][name]);
     };
 
-    var retrieveCondition = function (name, context) {
-      setContext(context);
-      if (!(name in conditionTypes[context])) {
+    var retrieveCondition = function (name, context, metadata = {}) {
+      var fullContext = context + JSON.stringify(metadata);
+      setContext(fullContext);
+      if (!(name in conditionTypes[fullContext])) {
         var defer = $q.defer();
         crmApi('ActionProvider', 'getcondition', {
           name: name,
-          context: context
+          context: context,
+          metadata: metadata
         }).then(function (data) {
-          conditionTypes[context][name] = data;
-          defer.resolve(conditionTypes[context][name]);
+          conditionTypes[fullContext][name] = data;
+          defer.resolve(conditionTypes[fullContext][name]);
         });
         return defer.promise;
       }
-      return $q.resolve(conditionTypes[context][name]);
+      return $q.resolve(conditionTypes[fullContext][name]);
     };
 
     return {
-      getAction: function (name, context) {
-        return retrieveAction(name, context);
+      getAction: function (name, context, metadata = {}) {
+        return retrieveAction(name, context, metadata);
       },
 
-      setAction: function(name, context, action) {
-        setContext(context);
-        actionTypes[context][name] = action;
+      setAction: function(name, context, action, metadata = {}) {
+        var fullContext = context + JSON.stringify(metadata);
+        setContext(fullContext);
+        actionTypes[fullContext][name] = action;
       },
 
-      getCondition: function (name, context) {
-        return retrieveCondition(name, context);
+      getCondition: function (name, context, metadata = {}) {
+        return retrieveCondition(name, context, metadata);
       }
     };
   }]);

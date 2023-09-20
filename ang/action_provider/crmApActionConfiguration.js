@@ -9,6 +9,7 @@
       scope: {
         name: '=',
         context: '@',
+        metadata: '=',
         configuration: '=',
         fields: '=?',
         mapping: '=?',
@@ -27,7 +28,7 @@
       	  return;
       	}
 
-        actionProviderFactory.getAction($scope.name, $scope.context)
+        actionProviderFactory.getAction($scope.name, $scope.context, $scope.metadata)
         .then(function (data) {
       	  actions[$scope.context][$scope.name] = data;
       	  $scope.action = data;

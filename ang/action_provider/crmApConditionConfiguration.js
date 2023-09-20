@@ -11,6 +11,7 @@
         name: '=',
         action: '=',
         context: '@',
+        metadata: '=',
         configuration: '=',
         fields: '=?',
         mapping: '=?',
@@ -36,7 +37,7 @@
             $scope.condition = conditions[$scope.context][$scope.name];
             return;
           }
-          actionProviderFactory.getCondition($scope.name, $scope.context).
+          actionProviderFactory.getCondition($scope.name, $scope.context, $scope.metadata).
           then(function (data) {
             conditions[$scope.context][$scope.name] = data;
             $scope.condition = data;
@@ -63,7 +64,7 @@
         if ($scope.action in actions[$scope.context]) {
           $scope.actionObject = actions[$scope.context][$scope.action];
         } else {
-          actionProviderFactory.getAction($scope.action, $scope.context)
+          actionProviderFactory.getAction($scope.action, $scope.context, $scope.metadata)
           .then(function (data) {
             actions[$scope.context][$scope.action] = data;
             $scope.actionObject = data;
