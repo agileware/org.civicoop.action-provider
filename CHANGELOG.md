@@ -3,6 +3,7 @@ Version 1.130 (not yet released)
 * Add check for optional Organisation Name and Household Name to the CreateUpdateOrganisation and CreateUpdateHouseHold actions. See !139
 * Small bug fix. Email is not valid as a parameter type. See !141
 * Add "external_identifier" field to contact create/update actions. See !142
+* Added Metadata to actions, conditions and validations
 
 Version 1.129
 -------------

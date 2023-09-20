@@ -243,6 +243,26 @@ abstract class AbstractAction implements \JsonSerializable {
 		return $this;
 	}
 
+  /**
+   * @return \Civi\ActionProvider\Parameter\SpecificationBag|null
+   */
+  protected function getMetadataSpecification(): SpecificationBag {
+    if ($this->provider) {
+      return $this->provider->getMetaData()->getSpecificationBag();
+    }
+    return new SpecificationBag();
+  }
+
+  /**
+   * @return \Civi\ActionProvider\Parameter\ParameterBag
+   */
+  protected function getMetadata(): ParameterBag {
+    if ($this->provider) {
+      return $this->provider->getMetaData()->getMetaData();
+    }
+    return new ParameterBag();
+  }
+
 	/**
 	 * Sets the default values of this action
 	 */

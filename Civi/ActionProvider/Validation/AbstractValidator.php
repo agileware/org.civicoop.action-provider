@@ -143,6 +143,26 @@ abstract class AbstractValidator implements JsonSerializable {
   }
 
   /**
+   * @return \Civi\ActionProvider\Parameter\SpecificationBag|null
+   */
+  protected function getMetaDataSpecification(): SpecificationBag {
+    if ($this->provider) {
+      return $this->provider->getMetaData()->getSpecificationBag();
+    }
+    return new SpecificationBag();
+  }
+
+  /**
+   * @return \Civi\ActionProvider\Parameter\ParameterBag
+   */
+  protected function getMetaData(): ParameterBag {
+    if ($this->provider) {
+      return $this->provider->getMetaData()->getMetaData();
+    }
+    return new ParameterBag();
+  }
+
+  /**
    * Sets the default values of this action
    */
   public function setDefaults() {

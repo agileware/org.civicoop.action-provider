@@ -6,7 +6,7 @@ use Civi\ActionProvider\Parameter\ParameterBagInterface;
 use Civi\ActionProvider\Parameter\ParameterBag;
 use Civi\ActionProvider\Action\AbstractAction;
 use Civi\ActionProvider\Validation\Validators;
-use Civi\ActionProvider\Event\InitializeMetaDataEvent;
+use Civi\ActionProvider\Event\InitializeMetadataEvent;
 
 /**
  * Singleton and conatiner class with all the actions.
@@ -66,8 +66,8 @@ class Provider {
    */
   protected $validatorTitles = array();
 
-  /** @var \Civi\ActionProvider\MetaData */
-  protected $metaData = null;
+  /** @var \Civi\ActionProvider\Metadata */
+  protected $metadata = null;
 
 	public function __construct() {
     Action\Contact\Actions::loadActions($this);
@@ -114,8 +114,8 @@ class Provider {
     $this->initializeMetaData();
 	}
 
-  public function getMetaData(): MetaData {
-    return $this->metaData;
+  public function getMetadata(): Metadata {
+    return $this->metadata;
   }
 
 	/**
@@ -384,9 +384,9 @@ class Provider {
    *
    * @return void
    */
-  protected function initializeMetaData() {
-    $this->metaData = new MetaData();
-    $event = new InitializeMetaDataEvent($this->metaData);
+  protected function initializeMetadata() {
+    $this->metadata = new Metadata();
+    $event = new InitializeMetadataEvent($this->metadata);
     \Civi::dispatcher()->dispatch(InitializeMetaDataEvent::EVENT_NAME, $event);
   }
 

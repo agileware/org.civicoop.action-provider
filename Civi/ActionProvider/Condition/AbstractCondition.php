@@ -115,6 +115,26 @@ abstract class AbstractCondition implements \JsonSerializable {
   }
 
   /**
+   * @return \Civi\ActionProvider\Parameter\SpecificationBag|null
+   */
+  protected function getMetaDataSpecification(): SpecificationBag {
+    if ($this->provider) {
+      return $this->provider->getMetaData()->getSpecificationBag();
+    }
+    return new SpecificationBag();
+  }
+
+  /**
+   * @return \Civi\ActionProvider\Parameter\ParameterBag
+   */
+  protected function getMetaData(): ParameterBag {
+    if ($this->provider) {
+      return $this->provider->getMetaData()->getMetaData();
+    }
+    return new ParameterBag();
+  }
+
+  /**
    * Returns the system name of the action.
    *
    * We generate one based on the namespace of the class

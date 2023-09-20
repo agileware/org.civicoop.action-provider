@@ -15,31 +15,30 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+namespace Civi\ActionProvider\Event;
 
-namespace Civi\ActionProvider;
+use Civi\Core\Event\GenericHookEvent;
+use Civi\ActionProvider\Metadata;
 
-use Civi\ActionProvider\Parameter\ParameterBag;
-use Civi\ActionProvider\Parameter\SpecificationBag;
+class InitializeMetadataEvent extends GenericHookEvent {
 
-class MetaData {
+  const EVENT_NAME = 'ActionProviderInitializeMetadataEvent';
 
-  /** @var \Civi\ActionProvider\Parameter\SpecificationBag  */
-  protected $specification;
+  /** @var \Civi\ActionProvider\Metadata  */
+  private $metadata;
 
-  /** @var \Civi\ActionProvider\Parameter\ParameterBag  */
-  protected $metaData;
-
-  public function __construct() {
-    $this->specification = new SpecificationBag();
-    $this->metaData = new ParameterBag();
+  /**
+   * @param \Civi\ActionProvider\Metadata $metaData
+   */
+  public function __construct(Metadata $metadata) {
+    $this->metadata = $metadata;
   }
 
-  public function getSpecificationBag(): SpecificationBag {
-    return $this->specification;
-  }
-
-  public function getMetaData(): ParameterBag {
-    return $this->metaData;
+  /**
+   * @return \Civi\ActionProvider\Metadata
+   */
+  public function getMetadata(): Metadata {
+    return $this->metadata;
   }
 
 }
