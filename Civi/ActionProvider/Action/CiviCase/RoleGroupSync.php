@@ -120,8 +120,9 @@ class RoleGroupSync extends AbstractAction {
       $contactColumn = 'contact_id_a';
     }
     $clientId = civicrm_api3('Case', 'getvalue', [
-      'return' => "contact_id",
-      'id' => $caseId
+      'return' => 'contact_id',
+      'id' => $caseId,
+      'options' => ['limit' => 1]
     ]);
     $clientId = reset($clientId);
     // load the list with current contacts that are

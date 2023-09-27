@@ -42,6 +42,7 @@ class UploadCustomFileField extends AbstractAction {
       $currentFile = civicrm_api3('Activity', 'getvalue', [
         'id' => $activity_id,
         'return' => 'custom_' . $customFieldId,
+        'options' => ['limit' => 1]
       ]);
       $currentFileId = $currentFile;
       if (is_array($currentFile) && isset($currentFile['fid'])) {

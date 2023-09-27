@@ -27,6 +27,7 @@ class CreateUpdateWebsite extends AbstractAction {
     $existingWebsitelParams['contact_id'] = $contact_id;
     $existingWebsitelParams['website_type_id'] = $this->configuration->getParameter('website_type');
     $existingWebsitelParams['return'] = 'id';
+    $existingWebsitelParams['options'] = [ 'limit' => 1];
     try {
       $existingWebsitelId = civicrm_api3('Website', 'getvalue', $existingWebsitelParams);
     } catch (\Exception $e) {

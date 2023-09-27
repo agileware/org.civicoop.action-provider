@@ -73,7 +73,8 @@ class ContactActionUtils {
     try {
       $master_id = civicrm_api3('Address', 'getvalue', [
         'return' => 'master_id',
-        'id' => $addressId
+        'id' => $addressId,
+        'options' => ['limit' => 1]
       ]);
       if ($master_id) {
         return self::findMasterAddress($master_id);

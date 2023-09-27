@@ -86,7 +86,7 @@ class CreateOrUpdateMembershipWithTypeParameter extends AbstractAction {
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    $membership_type = civicrm_api3('MembershipType', 'getvalue', array('id' => $parameters->getParameter('membership_type'), 'return' => 'id'));
+    $membership_type = civicrm_api3('MembershipType', 'getvalue', array('id' => $parameters->getParameter('membership_type'), 'return' => 'id','options' => ['limit' => 1]));
 
     $apiParams = CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification());
     if ($parameters->doesParameterExists('membership_id')) {

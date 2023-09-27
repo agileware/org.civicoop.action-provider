@@ -116,7 +116,7 @@ class CreateRecurringEvent extends AbstractAction {
       $params['repetition_start_date'] = \CRM_Utils_Date::customFormat($parameters->getParameter('start_date'), $config->dateformatFull);
       $params['repetition_start_date_time'] = $startDate->format('H:i');
     } else {
-      $startDate = civicrm_api3('Event', 'getvalue', array('id' => $event_id, 'return' => 'start_date'));
+      $startDate = civicrm_api3('Event', 'getvalue', ['id' => $event_id, 'return' => 'start_date','options' => ['limit' => 1]]);
       $startDate = new \DateTime($startDate);
       $params['repetition_start_date'] = \CRM_Utils_Date::customFormat($startDate->format('Ymd His'), $config->dateformatFull);
       $params['repetition_start_date_time'] = $startDate->format('H:i');

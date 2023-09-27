@@ -73,7 +73,7 @@ class AddressComponentIdLookup extends AbstractAction {
     [$entity, $field] = explode('~', $this->configuration->getParameter('entity_type'));
 
     if ($id && $entity && $field) {
-      $result = civicrm_api3($entity, 'getvalue', ['return' => $field, 'id' => $id]);
+      $result = civicrm_api3($entity, 'getvalue', ['return' => $field, 'id' => $id,'options' => ['limit' => 1]]);
       $output->setParameter('value', $result);
     }
   }

@@ -64,7 +64,7 @@ class SetPreferredCommunicationMethod extends AbstractAction {
    * @return array list of active communication options
    */
   protected function getCurrentCommunicationMethods($contact_id) {
-    $current_methods = \civicrm_api3('Contact', 'getValue', ['id' => $contact_id, 'return' => 'preferred_communication_method']);
+    $current_methods = \civicrm_api3('Contact', 'getValue', ['id' => $contact_id, 'return' => 'preferred_communication_method','options' => ['limit' => 1]]);
     if ($current_methods === '' || $current_methods === null) {
       $current_methods = [];
     } elseif (!is_array($current_methods)) {
