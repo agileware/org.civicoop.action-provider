@@ -42,31 +42,23 @@ class ContactActionUtils {
    * @return array|bool
    */
   public static function findExistingAddress($contact_id, $location_type_id, $is_primary) {
-    // First find the address with the location type and is_primary = 1
+    $apiParams                     = [];
+    $apiParams['contact_id']       = $contact_id;
+    $apiParams['location_type_id'] = $location_type_id;
+    $apiParams['options']          = ['limit' => 1];
+    $apiParams['return']           = 'id';
+
+    // If is_primary = 1 then sort to return the is_primary value first
     if ($is_primary) {
-      $existingAddressParams = [];
-      $existingAddressParams['contact_id'] = $contact_id;
-      $existingAddressParams['location_type_id'] = $location_type_id;
-      $existingAddressParams['is_primary'] = 1;
-      $existingAddressParams['return'] = 'id';
-      try {
-        return civicrm_api3('Address', 'getvalue', $existingAddressParams);
-      } catch (\Exception $e) {
-        // Do nothing
-      }
+      $apiParams['options']['sort'] = 'is_primary DESC';
     }
-    $existingAddressParams = array();
-    $existingAddressParams['contact_id'] = $contact_id;
-    $existingAddressParams['location_type_id'] = $location_type_id;
     try {
-      $result = civicrm_api3('Address', 'get', $existingAddressParams);
-      foreach($result['values'] as $address) {
-        return $address['id'];
-      }
-    } catch (\Exception $e) {
+      return civicrm_api3('Address', 'getvalue', $apiParams);
+    }
+    catch (\Exception $e) {
       // Do nothing
     }
-    return false;
+    return FALSE;
   }
 
   /**
@@ -264,31 +256,23 @@ class ContactActionUtils {
    * @return array|bool
    */
   public static function findExistingPhone($contact_id, $location_type_id, $is_primary) {
-    // First find the phone with the location type and is_primary = 1
+    $apiParams                     = [];
+    $apiParams['contact_id']       = $contact_id;
+    $apiParams['location_type_id'] = $location_type_id;
+    $apiParams['options']          = ['limit' => 1];
+    $apiParams['return']           = 'id';
+
+    // If is_primary = 1 then sort to return the is_primary value first
     if ($is_primary) {
-      $existingPhoneParams = [];
-      $existingPhoneParams['contact_id'] = $contact_id;
-      $existingPhoneParams['location_type_id'] = $location_type_id;
-      $existingPhoneParams['is_primary'] = 1;
-      $existingPhoneParams['return'] = 'id';
-      try {
-        return civicrm_api3('Phone', 'getvalue', $existingPhoneParams);
-      } catch (\Exception $e) {
-        // Do nothing
-      }
+      $apiParams['options']['sort'] = 'is_primary DESC';
     }
-    $existingPhoneParams = array();
-    $existingPhoneParams['contact_id'] = $contact_id;
-    $existingPhoneParams['location_type_id'] = $location_type_id;
     try {
-      $result = civicrm_api3('Phone', 'get', $existingPhoneParams);
-      foreach($result['values'] as $phone) {
-        return $phone['id'];
-      }
-    } catch (\Exception $e) {
+      return civicrm_api3('Phone', 'getvalue', $apiParams);
+    }
+    catch (\Exception $e) {
       // Do nothing
     }
-    return false;
+    return FALSE;
   }
 
   /**
@@ -356,31 +340,23 @@ class ContactActionUtils {
    * @return array|bool
    */
   public static function findExistingEmail($contact_id, $location_type_id, $is_primary) {
-    // First find the email with the location type and is_primary = 1
+    $apiParams                     = [];
+    $apiParams['contact_id']       = $contact_id;
+    $apiParams['location_type_id'] = $location_type_id;
+    $apiParams['options']          = ['limit' => 1];
+    $apiParams['return']           = 'id';
+
+    // If is_primary = 1 then sort to return the is_primary value first
     if ($is_primary) {
-      $existingEmailParams = [];
-      $existingEmailParams['contact_id'] = $contact_id;
-      $existingEmailParams['location_type_id'] = $location_type_id;
-      $existingEmailParams['is_primary'] = 1;
-      $existingEmailParams['return'] = 'id';
-      try {
-        return civicrm_api3('Email', 'getvalue', $existingEmailParams);
-      } catch (\Exception $e) {
-        // Do nothing
-      }
+      $apiParams['options']['sort'] = 'is_primary DESC';
     }
-    $existingEmailParams = array();
-    $existingEmailParams['contact_id'] = $contact_id;
-    $existingEmailParams['location_type_id'] = $location_type_id;
     try {
-      $result = civicrm_api3('Email', 'get', $existingEmailParams);
-      foreach($result['values'] as $email) {
-        return $email['id'];
-      }
-    } catch (\Exception $e) {
+      return civicrm_api3('Email', 'getvalue', $apiParams);
+    }
+    catch (\Exception $e) {
       // Do nothing
     }
-    return false;
+    return FALSE;
   }
 
   /**
