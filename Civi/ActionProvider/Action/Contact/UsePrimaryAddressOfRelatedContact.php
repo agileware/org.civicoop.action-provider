@@ -50,6 +50,7 @@ class UsePrimaryAddressOfRelatedContact extends AbstractAction {
       $existingAddressParams['location_type_id'] = $this->configuration->getParameter('location_type');
       $existingAddressParams['return'] = 'id';
       try {
+        $existingAddressParams['options'] = [ 'limit' => 1];
         $existingAddressId = civicrm_api3('Address', 'getvalue', $existingAddressParams);
       } catch (\Exception $e) {
         // Do nothing
@@ -70,6 +71,7 @@ class UsePrimaryAddressOfRelatedContact extends AbstractAction {
         $relationshipParams['return'] = 'contact_id_a';
       }
       try {
+        $relationshipParams['options'] = [ 'limit' => 1];
         $master_contact_id = civicrm_api3('Relationship', 'getvalue', $relationshipParams);
         break;
       } catch (\CiviCRM_API3_Exception $ex) {

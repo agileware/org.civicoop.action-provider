@@ -33,6 +33,7 @@ class FindOrganizationByName extends AbstractAction {
       $apiParams['organization_name'] = $parameters->getParameter('organization_name');
 
       $apiParams['return'] = 'id';
+      $apiParams['options'] = [ 'limit' => 1];
       $contact_id = civicrm_api3('Contact', 'getvalue', $apiParams);
 
       $output->setParameter('contact_id', $contact_id);

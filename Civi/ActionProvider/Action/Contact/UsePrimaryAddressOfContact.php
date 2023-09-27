@@ -35,6 +35,7 @@ class UsePrimaryAddressOfContact extends AbstractAction {
       $existingAddressParams['location_type_id'] = $this->configuration->getParameter('location_type');
       $existingAddressParams['return'] = 'id';
       try {
+        $existingAddressParams['options'] = [ 'limit' => 1];
         $existingAddressId = civicrm_api3('Address', 'getvalue', $existingAddressParams);
       } catch (\Exception $e) {
         // Do nothing

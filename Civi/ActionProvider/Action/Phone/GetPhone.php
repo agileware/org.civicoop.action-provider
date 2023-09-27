@@ -28,6 +28,7 @@ class GetPhone extends AbstractAction {
     $existingPhoneParams['phone_type_id'] = $this->configuration->getParameter('phone_type');
     $existingPhoneParams['location_type_id'] = $this->configuration->getParameter('location_type');
     $existingPhoneParams['return'] = 'phone';
+    $existingPhoneParams['options'] = [ 'limit' => 1];
     try {
       $existingPhone = civicrm_api3('Phone', 'getvalue', $existingPhoneParams);
       $output->setParameter('phone', $existingPhone);

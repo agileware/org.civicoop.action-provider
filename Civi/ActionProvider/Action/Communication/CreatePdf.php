@@ -129,7 +129,8 @@ class CreatePdf extends AbstractAction {
       $this->pdfLetterActivityType = civicrm_api3('OptionValue', 'getvalue', [
         'option_group_id' => 'activity_type',
         'name' => $activityTypeName,
-        'return' => 'value'
+        'return' => 'value',
+        'options' => ['limit' => 1]
       ]);
     }
     return $this->pdfLetterActivityType;

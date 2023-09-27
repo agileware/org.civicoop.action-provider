@@ -29,6 +29,7 @@ class CreateUpdatePhone extends AbstractAction {
     $existingPhoneParams['phone_type_id'] = $this->configuration->getParameter('phone_type');
     $existingPhoneParams['location_type_id'] = $this->configuration->getParameter('location_type');
     $existingPhoneParams['return'] = 'id';
+    $existingPhoneParams['options'] = [ 'limit' => 1];
     try {
       $existingPhoneId = civicrm_api3('Phone', 'getvalue', $existingPhoneParams);
     } catch (\Exception $e) {

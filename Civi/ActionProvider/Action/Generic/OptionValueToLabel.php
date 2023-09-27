@@ -83,7 +83,7 @@ class OptionValueToLabel extends AbstractAction {
 
     $labels = array();
     foreach($value as $v) {
-      $label = civicrm_api3('OptionValue', 'getvalue', array('return' => 'label', 'value' => $v, 'option_group_id' => $option_group_id));
+      $label = civicrm_api3('OptionValue', 'getvalue', ['return' => 'label', 'value' => $v, 'option_group_id' => $option_group_id,'options' => ['limit' => 1]]);
       $labels[] = $label;
     }
 

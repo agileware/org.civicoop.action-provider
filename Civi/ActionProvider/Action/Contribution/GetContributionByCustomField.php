@@ -78,7 +78,7 @@ class GetContributionByCustomField extends AbstractGetSingleAction {
       if ($entity) {
         $this->setOutputFromEntity($entity, $output);
       }
-      $participantId = civicrm_api3('ParticipantPayment', 'getvalue', ['contribution_id' => $entity['id'], 'return' => 'participant_id']);
+      $participantId = civicrm_api3('ParticipantPayment', 'getvalue', ['contribution_id' => $entity['id'], 'return' => 'participant_id','options' => ['limit' => 1]]);
       $output->setParameter('participant_id', $participantId);
     } catch (\Exception $e) {
       // Do nothing

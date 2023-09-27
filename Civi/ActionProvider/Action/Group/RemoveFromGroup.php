@@ -28,7 +28,8 @@ class RemoveFromGroup extends AbstractAction
         } else {
             $group_id = civicrm_api3('Group', 'getvalue', [
                 'return' => 'id',
-                'name' => $this->configuration->getParameter('group_name')
+                'name' => $this->configuration->getParameter('group_name'),
+                'options' => ['limit' => 1]
             ]);
         }
         

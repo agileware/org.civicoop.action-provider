@@ -41,7 +41,8 @@ class UploadCustomFileField extends AbstractAction {
     try {
       $currentFile = civicrm_api3('Case', 'getvalue', [
         'id' => $case_id,
-        'return' => 'custom_' . $customFieldId
+        'return' => 'custom_' . $customFieldId,
+        'options' => ['limit' => 1]
       ]);
       if (isset($file['id']) && $currentFile && $file['id'] != $currentFile) {
         $deleteCurrentFile = true;

@@ -133,7 +133,7 @@ class CreateActivity extends AbstractAction {
     }
 
     if (empty($activityParams['activity_type_id']) && !empty($activityParams['id'])) {
-      $activityParams['activity_type_id'] = civicrm_api3('Activity', 'getvalue', ['return' => 'activity_type_id', 'id' => $activityParams['id']]);
+      $activityParams['activity_type_id'] = civicrm_api3('Activity', 'getvalue', ['return' => 'activity_type_id', 'id' => $activityParams['id'],'options' => ['limit' => 1]]);
     }
 
     $activityParams = array_merge($activityParams, CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification()));
