@@ -1,6 +1,8 @@
 Version 1.131 (not yet released)
 -------------
 
+* Reduce API calls for the FindExistingPhone... and add limit 1 to the civicrm_api3 getvalue API calls. See !143
+
 Version 1.130
 -------------
 * Add check for optional Organisation Name and Household Name to the CreateUpdateOrganisation and CreateUpdateHouseHold actions. See !139
