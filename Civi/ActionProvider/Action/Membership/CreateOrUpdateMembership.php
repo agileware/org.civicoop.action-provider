@@ -50,6 +50,7 @@ class CreateOrUpdateMembership extends AbstractAction {
       new Specification('start_date', 'Date', E::ts('Start date'), false),
       new Specification('end_date', 'Date', E::ts('End date'), false),
       new Specification('source', 'String', E::ts('Source'), false),
+      new Specification('num_terms', 'Integer', E::ts('Number of Terms'), false),
     ));
 
     $config = ConfigContainer::getInstance();
@@ -105,6 +106,9 @@ class CreateOrUpdateMembership extends AbstractAction {
     }
     if ($parameters->doesParameterExists('source')) {
       $apiParams['source'] = $parameters->getParameter('source');
+    }
+    if ($parameters->doesParameterExists('num_terms')) {
+      $apiParams['num_terms'] = $parameters->getParameter('num_terms');
     }
     if ($this->configuration->doesParameterExists('status')) {
       $apiParams['status_id'] = $this->configuration->getParameter('status');
