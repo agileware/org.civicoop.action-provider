@@ -39,8 +39,8 @@ class CreateContributionRecur extends AbstractAction {
     $contribution_params['contact_id'] = $contact_id;
     $currency = null;
     if ($parameters->doesParameterExists('currency')) {
-      $contribution_params['currency'] = $parameters->getParameter('currency');
       $currency = $parameters->getParameter('currency');
+      $contribution_params['currency'] = $currency;
     }
     $contribution_params['amount'] = \CRM_Utils_Money::format((float) $parameters->getParameter('amount'), $currency, NULL, TRUE);
     if ($parameters->doesParameterExists('campaign_id')) {
@@ -49,6 +49,10 @@ class CreateContributionRecur extends AbstractAction {
     $contribution_params['frequency_interval'] = $parameters->getParameter('frequency_interval');
     $contribution_params['frequency_unit'] = $parameters->getParameter('frequency_unit');
     $contribution_params['contribution_status_id'] = $this->configuration->getParameter('status_id');
+
+    if ($parameters->doesParameterExists('payment_token_id')) {
+      $contribution_params['payment_token_id'] = $parameters->getParameter('payment_token_id');
+    }
 
     $result = civicrm_api3('ContributionRecur', 'Create', $contribution_params);
 
@@ -84,11 +88,12 @@ class CreateContributionRecur extends AbstractAction {
    */
   public function getParameterSpecification() {
     $specs = new SpecificationBag(array(
-      new Specification('contact_id', 'Integer', E::ts('Contact ID'), true),
-      new Specification('amount', 'Float', E::ts('Amount'), true),
-      new Specification('frequency_interval', 'Integer', E::ts('Frequency Interval'), true, 1),
-      new OptionGroupSpecification('frequency_unit', 'recur_frequency_units', E::ts('Frequency Unit'), true),
-      new Specification('campaign_id', 'Integer', E::ts('Campaign'), false),
+      new Specification('contact_id', 'Integer', E::ts('Contact ID'), TRUE),
+      new Specification('payment_token_id', 'Integer', E::ts('Payment Token ID'), FALSE),
+      new Specification('amount', 'Float', E::ts('Amount'), TRUE),
+      new Specification('frequency_interval', 'Integer', E::ts('Frequency Interval'), TRUE, 1),
+      new OptionGroupSpecification('frequency_unit', 'recur_frequency_units', E::ts('Frequency Unit'), TRUE),
+      new Specification('campaign_id', 'Integer', E::ts('Campaign'), FALSE),
       new OptionGroupSpecification('currency', 'currencies_enabled', E::ts('Currency'), FALSE),
     ));
 
