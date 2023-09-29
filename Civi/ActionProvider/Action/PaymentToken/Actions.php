@@ -22,7 +22,7 @@ class Actions {
       AbstractAction::DATA_RETRIEVAL_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ]);
-    $provider->addAction('GetPaymentToken', '\Civi\ActionProvider\Action\PaymentToken\GetPaymentToken', E::ts('Payment Token: Get Single'), [
+    $provider->addAction('GetPaymentToken', '\Civi\ActionProvider\Action\PaymentToken\GetPaymentToken', E::ts('Payment Token: Get by Payment Processor'), [
       AbstractAction::DATA_RETRIEVAL_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ]);
