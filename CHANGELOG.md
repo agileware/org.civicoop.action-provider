@@ -3,6 +3,10 @@ Version 1.131 (not yet released)
 
 * Reduce API calls for the FindExistingPhone... and add limit 1 to the civicrm_api3 getvalue API calls. See !143
 * Add num_terms to CreateOrUpdateMembership actions. See !144
+* Provide Action Contribution: Create recurring contribution - adds Payment Token ID parameter to allow saving of a Payment Token. See !145
+* Provide Action Contribution: Update recurring contribution - to update details of an existing recurring contribution. See !145
+* Provide Action Payment Token: Get by Payment Processor - to get a Payment Token for a given Payment Processor. See !145
+* Provide Action Payment Token: Create or Update - creating or updating Payment Token. See !145
 
 Version 1.130
 -------------
