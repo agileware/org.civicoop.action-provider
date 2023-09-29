@@ -85,6 +85,7 @@ class Provider {
     Action\Generic\Actions::loadActions($this);
     Action\Tag\Actions::loadActions($this);
     Action\SMS\Actions::loadActions($this);
+    Action\PaymentToken\Actions::loadActions($this);
 
 		$conditions = array(
 		  new \Civi\ActionProvider\Condition\ParameterIsEmpty(),
