@@ -2,6 +2,7 @@ Version 1.131 (not yet released)
 -------------
 
 * Reduce API calls for the FindExistingPhone... and add limit 1 to the civicrm_api3 getvalue API calls. See !143
+* Add num_terms to CreateOrUpdateMembership actions. See !144
 
 Version 1.130
 -------------
