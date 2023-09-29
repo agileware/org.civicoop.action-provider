@@ -18,14 +18,14 @@ class Actions {
    * @param \Civi\ActionProvider\Provider $provider
    */
   public static function loadActions(Provider $provider) {
-    $provider->addAction('CreateOrUpdatePaymentToken', '\Civi\ActionProvider\Action\PaymentToken\CreateOrUpdatePaymentToken', E::ts('Payment Token: Create or Update'), array(
+    $provider->addAction('CreateOrUpdatePaymentToken', '\Civi\ActionProvider\Action\PaymentToken\CreateOrUpdatePaymentToken', E::ts('Payment Token: Create or Update'), [
       AbstractAction::DATA_RETRIEVAL_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
-    ));
-    $provider->addAction('GetPaymentToken', '\Civi\ActionProvider\Action\PaymentToken\GetPaymentToken', E::ts('Payment Token: Get Single'), array(
+    ]);
+    $provider->addAction('GetPaymentToken', '\Civi\ActionProvider\Action\PaymentToken\GetPaymentToken', E::ts('Payment Token: Get Single'), [
       AbstractAction::DATA_RETRIEVAL_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
-    ));
+    ]);
 		}
 
 }
