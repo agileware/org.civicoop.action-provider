@@ -13,6 +13,8 @@ use Civi\ActionProvider\Action\AbstractAction;
 use Civi\ActionProvider\Parameter\Specification;
 use Civi\Api4\PaymentToken;
 
+use CRM_ActionProvider_ExtensionUtil as E;
+
 class CreateOrUpdatePaymentToken extends AbstractAction {
 	const specDefaults = [
 		'data_type'     => 'String',
