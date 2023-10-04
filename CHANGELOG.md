@@ -7,6 +7,7 @@ Version 1.131 (not yet released)
 * Provide Action Contribution: Update recurring contribution - to update details of an existing recurring contribution. See !145
 * Provide Action Payment Token: Get by Payment Processor - to get a Payment Token for a given Payment Processor. See !145
 * Provide Action Payment Token: Create or Update - creating or updating Payment Token. See !145
+* Added action Campaign: Create
 
 Version 1.130
 -------------
