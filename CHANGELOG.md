@@ -1,4 +1,4 @@
-Version 1.131 (not yet released)
+Version 1.131
 -------------
 
 * Reduce API calls for the FindExistingPhone... and add limit 1 to the civicrm_api3 getvalue API calls. See !143
