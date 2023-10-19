@@ -1,5 +1,7 @@
 Version 1.132-dev
 -------------
+* fix notice in parseRawAmount
+
 
 Version 1.131
 -------------

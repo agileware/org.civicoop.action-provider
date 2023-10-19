@@ -101,7 +101,14 @@ class ParseRawAmount extends AbstractAction {
       if ($thousandsDigit) {
         $amountParts[0] = str_replace($digits[$thousandsDigit], "", $amountParts[0]);
       }
-      $fixedAmount = (float) $amountParts[0] . "." . $amountParts[1];
+      if (isset($amountParts[0]) && $amountParts[1]) {
+        $fixedAmount = (float) $amountParts[0] . "." . $amountParts[1];
+      }
+      else {
+        if (isset($amountParts[0])) {
+          $fixedAmount = (float) $amountParts[0];
+        }
+      }
     }
     else {
       if ($thousandsDigit) {
