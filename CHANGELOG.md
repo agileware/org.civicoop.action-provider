@@ -1,4 +1,4 @@
-Version 1.132-dev
+Version 1.132
 -------------
 
 * fix notice in parseRawAmount
