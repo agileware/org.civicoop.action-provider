@@ -1,7 +1,8 @@
 Version 1.132-dev
 -------------
-* fix notice in parseRawAmount
 
+* fix notice in parseRawAmount
+* Added action: Membership: Extend or Create.
 
 Version 1.131
 -------------

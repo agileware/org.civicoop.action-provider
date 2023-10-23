@@ -18,6 +18,10 @@ class Actions {
    * @param \Civi\ActionProvider\Provider $provider
    */
   public static function loadActions(Provider $provider) {
+    $provider->addAction('ExtendOrCreateMembership', '\Civi\ActionProvider\Action\Membership\ExtendOrCreateMembership',E::ts('Membership: Extend or Create Membership') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $provider->addAction('CreateOrUpdateMembership', '\Civi\ActionProvider\Action\Membership\CreateOrUpdateMembership',E::ts('Membership: Create or update') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
