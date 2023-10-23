@@ -1,5 +1,7 @@
-Version 1.133 (not yet released)
+Version 1.133
 -------------
+
+* Fixed issue with action membership extend.
 
 Version 1.132
 -------------

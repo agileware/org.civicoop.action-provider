@@ -11,6 +11,8 @@ use \Civi\ActionProvider\Action\Membership\Parameter\MembershipTypeSpecification
 use \Civi\ActionProvider\Utils\CustomField;
 
 use CRM_ActionProvider_ExtensionUtil as E;
+use CRM_Member_BAO_MembershipType;
+use CRM_Utils_Time;
 
 class ExtendOrCreateMembership extends AbstractAction {
 
@@ -22,7 +24,11 @@ class ExtendOrCreateMembership extends AbstractAction {
   public function getConfigurationSpecification() {
     return new SpecificationBag([
       new MembershipTypeSpecification('membership_type', E::ts('Membership Type'), TRUE),
-      new Specification('num_terms', 'Integer', E::ts('Number of Terms'), false),
+      new Specification('num_terms', 'Integer', E::ts('Number of Terms'), TRUE, '1'),
+      new Specification('extend_by', 'Integer', E::ts('Extend by'), TRUE, '1', null, [
+        '1' => E::ts('Based on the current end date of the membership'),
+        '2' => E::ts('Based on the submission date')
+      ]),
     ]);
   }
 
@@ -84,7 +90,7 @@ class ExtendOrCreateMembership extends AbstractAction {
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    $membership_type = civicrm_api3('MembershipType', 'getvalue', array('name' => $this->configuration->getParameter('membership_type'), 'return' => 'id','options' => ['limit' => 1]));
+    $membership_type = (int) civicrm_api3('MembershipType', 'getvalue', array('name' => $this->configuration->getParameter('membership_type'), 'return' => 'id','options' => ['limit' => 1]));
 
     $findApiParams['contact_id'] = $parameters->getParameter('contact_id');
     $findApiParams['membership_type_id'] = $membership_type;
@@ -96,6 +102,7 @@ class ExtendOrCreateMembership extends AbstractAction {
     $apiParams = CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification());
     $apiParams['contact_id'] = $parameters->getParameter('contact_id');
     $apiParams['membership_type_id'] = $membership_type;
+    $apiParams['num_terms'] = $this->configuration->getParameter('num_terms');
     if ($parameters->doesParameterExists('start_date')) {
       $apiParams['start_date'] = $parameters->getParameter('start_date');
     }
@@ -108,14 +115,18 @@ class ExtendOrCreateMembership extends AbstractAction {
     if ($parameters->doesParameterExists('source')) {
       $apiParams['source'] = $parameters->getParameter('source');
     }
-    if ($this->configuration->doesParameterExists('num_terms')) {
-      $apiParams['num_terms'] = $this->configuration->getParameter('num_terms');
-    }
 
     try {
       $membership = civicrm_api3('Membership', 'getsingle', $findApiParams);
       $apiParams['id'] = $membership['id'];
       $apiParams['skipStatusCal'] = '0';
+      if ($this->configuration->getParameter('extend_by') == '2') {
+        $today = CRM_Utils_Time::date('Y-m-d');
+        $renewalDates = CRM_Member_BAO_MembershipType::getDatesForMembershipType($membership_type, $today, NULL, NULL, $apiParams['num_terms']);
+        $apiParams['end_date'] = $renewalDates['end_date'];
+        unset($apiParams['num_terms']);
+      }
+      unset($apiParams['membership_type_id']);
     } catch (\CiviCRM_API3_Exception $e) {
 
     }
