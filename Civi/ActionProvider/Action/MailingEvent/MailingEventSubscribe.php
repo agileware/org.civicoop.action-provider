@@ -36,7 +36,7 @@ class MailingEventSubscribe extends AbstractAction {
   public function getParameterSpecification() {
     return new SpecificationBag([
       new Specification('email', 'String', E::ts('Subscribe e-mail'), TRUE),
-      new Specification('group_id', 'Integer', E::ts('Subscribe to group'), FALSE, NULL, 'Group'),
+      new Specification('group_id', 'Integer', E::ts('Subscribe to mailing list'), FALSE, NULL, 'Group'),
       new Specification('contact_id', 'Integer', E::ts('Contact ID'), FALSE, NULL, 'Contact'),
     ]);
   }
@@ -65,7 +65,7 @@ class MailingEventSubscribe extends AbstractAction {
     // Either configuration or parameter for group_id must be present.
     $configuration = $this->getConfiguration();
     if (!$parameters->doesParameterExists('group_id') && !$configuration->doesParameterExists('group_id')) {
-      throw new InvalidParameterException('group_id is required');
+      throw new InvalidParameterException('Subscribe to mailing list group_id is required');
     }
 
     return parent::validateParameters($parameters);
@@ -83,32 +83,36 @@ class MailingEventSubscribe extends AbstractAction {
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     // Get default group ID from configuration.
-    if ($this->configuration->getParameter('group_id')) {
-      $subscribe_params['group_id'] = $this->configuration->getParameter('group_id');
+    $configuration = $this->getConfiguration();
+
+    if ($configuration->doesParameterExists('group_id')) {
+      $subscribe_params['group_id'] = $configuration->getParameter('group_id');
     }
+
     // Overwrite with group ID from parameters if given.
     if ($parameters->doesParameterExists('group_id')) {
       $subscribe_params['group_id'] = $parameters->getParameter('group_id');
     }
 
     $subscribe_params['email'] = $parameters->getParameter('email');
+
     if ($parameters->doesParameterExists('contact_id')) {
       $subscribe_params['contact_id'] = $parameters->getParameter('contact_id');
     }
 
-	/*
-	 * CRM_Mailing_Event_BAO_MailingEventSubscribe only allows subscriptions only to Public Groups, unless the context is "profile" then that's OK.
-	 * Therefore set context to force the subscribe action to complete.
-	 */
+    /*
+     * CRM_Mailing_Event_BAO_MailingEventSubscribe only allows subscriptions only to Public Groups, unless the context is "profile" then that's OK.
+     * Therefore set context to force the subscribe action to complete.
+     */
 
-	$subscribe_params['context'] ='profile';
+    $subscribe_params['context'] ='profile';
 
     try {
       $result = civicrm_api3('MailingEventSubscribe', 'Create', $subscribe_params);
       $output->setParameter('id', $result['id']);
     } catch (\Exception $e) {
-      // Do nothing.
+      \Civi::log()->error('ActionProvider MailingEventSubscribe Error: ' . $e->getMessage() . '; using API parameters: ' . json_encode($subscribe_params));
+      throw new \Civi\ActionProvider\Exception\ExecutionException(E::ts('Could not subscribe to Mailing List. Error: ' . $e->getMessage()));
     }
   }
-
 }
