@@ -1,6 +1,8 @@
 Version 1.134 (not yet released)
 -------------
 
+* Subscribe to mailing list, improve error reporting and parameter checking, consistent parameter label. See !147
+
 Version 1.133
 -------------
 
