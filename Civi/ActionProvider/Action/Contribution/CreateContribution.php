@@ -34,7 +34,11 @@ class CreateContribution extends AbstractAction {
 
     // Create a contribution
     $contribution_params = CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification());
-    $contribution_params['financial_type_id'] = $this->configuration->getParameter('financial_type_id');
+    if($parameters->doesParameterExists('financial_type_id')){
+      $contribution_params['financial_type_id'] = $parameters->getParameter('financial_type_id');
+    } else {
+      $contribution_params['financial_type_id'] = $this->configuration->getParameter('financial_type_id');
+    }
     $contribution_params['contribution_status_id'] = $this->configuration->getParameter('contribution_status');
     $contribution_params['payment_instrument_id'] = $this->configuration->getParameter('payment_instrument');
     $contribution_params['contact_id'] = $contact_id;
@@ -138,6 +142,7 @@ class CreateContribution extends AbstractAction {
       new Specification('note', 'String', E::ts('Note'), false),
       new Specification('trxn_id', 'String', E::ts('Transaction ID'), false),
       new Specification('check_number', 'String', E::ts('Check Number'), false),
+      new Specification('financial_type_id', 'Integer', E::ts('Financial Type'), false, null, 'FinancialType'),
     ));
 
     $config = ConfigContainer::getInstance();
