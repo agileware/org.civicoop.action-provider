@@ -1,4 +1,4 @@
-Version 1.134 (not yet released)
+Version 1.134
 -------------
 
 * CreateContribution now also takes Financial Type as parameter (For the configuration Financial Type is still required but will function as default).
