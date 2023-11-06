@@ -1,5 +1,7 @@
-Version 1.135-dev (not yet released)
+Version 1.135-dev (not yet released
 -------------
+
+* Removed check on related deleted entities. See #43
 
 Version 1.134
 -------------

@@ -58,14 +58,5 @@ class APIWrapper {
       && !array_key_exists('is_deleted', $api_request['params'])) {
       $api_request['params']['is_deleted'] = 0;
     }
-
-    // Other entities might be dependent on an attached entity that can be marked as deleted
-    // This will *normally* be a contact, but check for activities and cases as well
-    foreach(['contact_id', 'activity_id', 'case_id'] as $entityParam) {
-      if (!empty($api_request['fields'][$entityParam])
-        && !array_key_exists("{$entityParam}.is_deleted", $api_request['params'])) {
-        $api_request['params']["{$entityParam}.is_deleted"] = 0;
-      }
-    }
   }
 }
