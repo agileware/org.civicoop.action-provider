@@ -97,6 +97,14 @@ class Actions {
     $provider->addAction('FindEventByCustomField', '\Civi\ActionProvider\Action\Event\EventFindByCustomField', E::ts('Event: get a single event by custom field') , array(
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $provider->addAction('CreateParticipantContribution', '\Civi\ActionProvider\Action\Event\CreateParticipantContribution',E::ts('Participant: Create contribution for participant') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $provider->addAction('CalculateParticipantFee', '\Civi\ActionProvider\Action\Event\CalculateParticipantFee',E::ts('Participant: Calculate Participant Fee') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
   }
 
 }
