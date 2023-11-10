@@ -63,8 +63,7 @@ class CreateOrUpdateRole extends AbstractAction {
    */
   public function getParameterSpecification() {
     return new SpecificationBag([
-      new Specification('contact_id_a', 'Integer', E::ts('Contact ID: Near Side'), TRUE, NULL, NULL, NULL, FALSE),
-      new Specification('contact_id_b', 'Integer', E::ts('Contact ID: Far Side (defaults to client)'), FALSE, NULL, NULL, NULL, FALSE),
+      new Specification('contact_id', 'Integer', E::ts('Contact ID'), TRUE, NULL, NULL, NULL, FALSE),
       new Specification('case_id', 'Integer', E::ts('Case ID'), TRUE, NULL, NULL, NULL, FALSE),
     ]);
   }
@@ -92,7 +91,7 @@ class CreateOrUpdateRole extends AbstractAction {
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     // Get the contact.
-    $contact_id_a = $parameters->getParameter('contact_id_a');
+    $contact_id = $parameters->getParameter('contact_id');
     $case_id = $parameters->getParameter('case_id');
     $checkPermissions = $this->configuration->getParameter('check_permissions');
     $includeInactive = $this->configuration->getParameter('include_inactive');
@@ -100,27 +99,21 @@ class CreateOrUpdateRole extends AbstractAction {
     [$relTypeId, $b, $a] = explode('_', $relationshipType);
 
     /* 
-     * get contact b or, if not provided, get the case client as contact b
+     * get the case client
      */
 
 
-    if ($parameters->doesParameterExists('contact_id_b')) {
-      $contact_id_b = $parameters->getParameter('contact_id_b');
-    }
-    else {
-      $caseContacts = civicrm_api4('CaseContact', 'get', [
-        'select' => [
-          'contact_id',
-        ],
-        'where' => [
-          ['case_id', '=', $case_id],
-        ],
-        'limit' => 1,
-        'checkPermissions' => $checkPermissions,
-      ]);
-
-      $contact_id_b = $caseContacts[0]['contact_id'];
-    }
+    $caseContacts = civicrm_api4('CaseContact', 'get', [
+      'select' => [
+        'contact_id',
+      ],
+      'where' => [
+        ['case_id', '=', $case_id],
+      ],
+      'limit' => 1,
+      'checkPermissions' => $checkPermissions,
+    ]);
+    $case_client = $caseContacts[0]['contact_id'];
 
     /*
      * check if role already exists
@@ -148,12 +141,12 @@ class CreateOrUpdateRole extends AbstractAction {
       'is_active' => TRUE
     ];
     if ($a === 'a') {
-      $apiParams['values']['contact_id_a'] = $contact_id_a;
-      $apiParams['values']['contact_id_b'] = $contact_id_b;
+      $apiParams['values']['contact_id_a'] = $contact_id;
+      $apiParams['values']['contact_id_b'] = $case_client;
     }
     else {
-      $apiParams['values']['contact_id_a'] = $contact_id_a;
-      $apiParams['values']['contact_id_b'] = $contact_id_b;
+      $apiParams['values']['contact_id_a'] = $case_client;
+      $apiParams['values']['contact_id_b'] = $contact_id;
     }
 
     /*
