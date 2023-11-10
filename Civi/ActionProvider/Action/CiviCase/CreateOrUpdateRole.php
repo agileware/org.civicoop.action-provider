@@ -50,6 +50,8 @@ class CreateOrUpdateRole extends AbstractAction {
     return new SpecificationBag(
       [
         new Specification('relationship_type', 'String', E::ts('RelationShip'), TRUE, NULL, NULL, $this->relationshipTypes(), FALSE),
+        new Specification('check_permissions', 'Boolean', E::ts('Check Api Permissions'), TRUE, TRUE, NULL, NULL, FALSE),
+        new Specification('include_inactive', 'Boolean', E::ts('Include inactive roles'), TRUE, TRUE, NULL, NULL, FALSE),
       ]
     );
   }
@@ -61,8 +63,9 @@ class CreateOrUpdateRole extends AbstractAction {
    */
   public function getParameterSpecification() {
     return new SpecificationBag([
-      new Specification('contact_id', 'Integer', E::ts('Contact ID'), TRUE, NULL, NULL, NULL, FALSE),
-      new Specification('case_id', 'Integer', E::ts('Case ID'), TRUE, NULL, 'Contact', NULL, FALSE),
+      new Specification('contact_id_a', 'Integer', E::ts('Contact ID: Near Side'), TRUE, NULL, NULL, NULL, FALSE),
+      new Specification('contact_id_b', 'Integer', E::ts('Contact ID: Far Side (defaults to client)'), FALSE, NULL, NULL, NULL, FALSE),
+      new Specification('case_id', 'Integer', E::ts('Case ID'), TRUE, NULL, NULL, NULL, FALSE),
     ]);
   }
 
@@ -73,7 +76,7 @@ class CreateOrUpdateRole extends AbstractAction {
    */
   public function getOutputSpecification() {
     return new SpecificationBag(
-      [new Specification('relation_ship_id', 'Integer', E::ts('Relationship ID'), FALSE)]
+      [new Specification('relationship_id', 'Integer', E::ts('Relationship ID'), FALSE)]
     );
   }
 
@@ -89,9 +92,95 @@ class CreateOrUpdateRole extends AbstractAction {
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     // Get the contact.
-    $contact_id = $parameters->getParameter('contact_id');
+    $contact_id_a = $parameters->getParameter('contact_id_a');
     $case_id = $parameters->getParameter('case_id');
+    $checkPermissions = $this->configuration->getParameter('check_permissions');
+    $includeInactive = $this->configuration->getParameter('include_inactive');
     $relationshipType = $this->configuration->getParameter('relationship_type');
-    /* Open work */
+    [$relTypeId, $b, $a] = explode('_', $relationshipType);
+
+    /* 
+     * get contact b or, if not provided, get the case client as contact b
+     */
+
+
+    if ($parameters->doesParameterExists('contact_id_b')) {
+      $contact_id_b = $parameters->getParameter('contact_id_b');
+    }
+    else {
+      $caseContacts = civicrm_api4('CaseContact', 'get', [
+        'select' => [
+          'contact_id',
+        ],
+        'where' => [
+          ['case_id', '=', $case_id],
+        ],
+        'limit' => 1,
+        'checkPermissions' => $checkPermissions,
+      ]);
+
+      $contact_id_b = $caseContacts[0]['contact_id'];
+    }
+
+    /*
+     * check if role already exists
+     */
+    $apiParams = [
+      'select' => [
+        'id',
+      ],
+      'where' => [
+        ['case_id', '=', $case_id],
+        ['relationship_type_id', '=', $relTypeId]
+      ],
+      'limit' => 1,
+      'checkPermissions' => $checkPermissions
+    ];
+    if (!$includeInactive) {
+      $apiParams['where'][] = ['is_active', '=', TRUE];
+    }
+    $relationshipId = civicrm_api4('Relationship', 'get', $apiParams);
+
+    $apiParams = ['checkPermissions' => $checkPermissions];
+    $apiParams['values'] = [
+      'case_id' => $case_id,
+      'relationship_type_id' => $relTypeId,
+      'is_active' => TRUE
+    ];
+    if ($a === 'a') {
+      $apiParams['values']['contact_id_a'] = $contact_id_a;
+      $apiParams['values']['contact_id_b'] = $contact_id_b;
+    }
+    else {
+      $apiParams['values']['contact_id_a'] = $contact_id_a;
+      $apiParams['values']['contact_id_b'] = $contact_id_b;
+    }
+
+    /*
+     * create a new relationship, if none was found
+     */
+    if (!isset($relationshipId[0]['id'])) {
+      try {
+        $result = civicrm_api4('Relationship', 'create', $apiParams);
+        $output->setParameter('relationship_id', $result[0]['id']);
+      }
+      catch (Exception $e) {
+        throw new \Civi\ActionProvider\Action\Exception\ExecutionException(E::ts('Could not create new relationship'));
+      }
+    }
+    else {
+      $apiParams['where'] = [
+        ['id', '=', $relationshipId[0]['id']]
+      ];
+      try {
+        $result = civicrm_api4('Relationship', 'update', $apiParams);
+        $output->setParameter('relationship_id', $result[0]['id']);
+      }
+      catch (Exception $e) {
+        throw new \Civi\ActionProvider\Action\Exception\ExecutionException(E::ts('Could not update relationship'));
+      }
+    }
+
+
   }
 }
