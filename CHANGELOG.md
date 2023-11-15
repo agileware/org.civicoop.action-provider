@@ -1,6 +1,7 @@
 Version 1.135-dev (not yet released
 -------------
 
+* PHP 8 in quick form templates
 * Removed check on related deleted entities. See #43
 * Added action: Participant: Calculate Participant Fee
 * Added action: Participant: Create contribution for participant

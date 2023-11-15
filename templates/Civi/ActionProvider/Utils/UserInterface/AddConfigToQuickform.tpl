@@ -8,14 +8,14 @@
         <div class="crm-section">
           <div class="label">{$form.$elementName.label}</div>
           <div class="content">
-            {if ($actionProviderElementPreHtml.$elementName)}
+            {if isset($actionProviderElementPreHtml.$elementName)}
               {$actionProviderElementPreHtml.$elementName}
             {/if}
             {$form.$elementName.html}
-            {if ($actionProviderElementDescriptions.$elementName)}
+            {if isset($actionProviderElementDescriptions.$elementName)}
               <br /><span class="description">{$actionProviderElementDescriptions.$elementName}</span>
             {/if}
-            {if ($actionProviderElementPostHtml.$elementName)}
+            {if isset($actionProviderElementPostHtml.$elementName)}
               {$actionProviderElementPostHtml.$elementName}
             {/if}
           </div>

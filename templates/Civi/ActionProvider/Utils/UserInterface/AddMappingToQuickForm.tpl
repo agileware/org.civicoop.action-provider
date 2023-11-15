@@ -14,7 +14,7 @@
           <div class="label">{$form.$elementName.label}</div>
           <div class="content">
             {$form.$elementName.html}
-            {if ($actionProviderMappingDescriptions.$elementName)}
+            {if isset($actionProviderMappingDescriptions.$elementName)}
               <br /><span class="description">{$actionProviderMappingDescriptions.$elementName}</span>
             {/if}
           </div>
@@ -31,7 +31,7 @@
                 <div class="label">{$form.$elementName.label}</div>
                 <div class="content">
                   {$form.$elementName.html}
-                  {if ($actionProviderMappingDescriptions.$elementName)}
+                  {if isset($actionProviderMappingDescriptions.$elementName)}
                     <br /><span class="description">{$actionProviderMappingDescriptions.$elementName}</span>
                   {/if}
                 </div>
@@ -52,7 +52,7 @@
                 {foreach from=$group.fields item=elementName}
                   <td>
                       {$form.$elementName[0].html}
-                      {if ($actionProviderMappingDescriptions.$elementName)}
+                      {if isset($actionProviderMappingDescriptions.$elementName)}
                         <br /><span class="description">{$actionProviderMappingDescriptions.$elementName}</span>
                       {/if}
                   </td>
@@ -79,7 +79,7 @@
                   {foreach from=$group.fields item=elementName}
                     <td>
                         {$form.$elementName[$elementIndex].html}
-                        {if ($actionProviderMappingDescriptions.$elementName)}
+                        {if isset($actionProviderMappingDescriptions.$elementName)}
                           <br /><span class="description">{$actionProviderMappingDescriptions.$elementName}</span>
                         {/if}
                     </td>
