@@ -33,9 +33,9 @@ class AddValidatorConfigToQuickForm {
 		if (!$prefix) {
 		  $prefix = get_class($validator);
     }
-    $actionProviderElementPreHtml = array();
-    $actionProviderElementPostHtml = array();
-    $actionProviderElementDescriptions = array();
+    $actionProviderElementPreHtml = array($prefix=>array());
+    $actionProviderElementPostHtml = array($prefix=>array());
+    $actionProviderElementDescriptions = array($prefix=>array());
 		$elementNames[$prefix] = array();
 		foreach($validator->getConfigurationSpecification() as $config_field) {
 			$field_name = $prefix.$config_field->getName();
@@ -93,7 +93,6 @@ class AddValidatorConfigToQuickForm {
 				$form->add('text', $field_name, $config_field->getTitle(), $attributes, $config_field->isRequired());
 				$elementNames[$prefix][] = $field_name;
 			}
-
 		}
 		$form->assign('actionProviderElementNames', $elementNames);
 		$form->assign('actionProviderElementDescriptions', $actionProviderElementDescriptions);
