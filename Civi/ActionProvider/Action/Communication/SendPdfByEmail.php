@@ -7,6 +7,7 @@
 namespace Civi\ActionProvider\Action\Communication;
 
 use Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\Parameter\OptionGroupByNameSpecification;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use Civi\ActionProvider\Parameter\SpecificationBag;
 use Civi\ActionProvider\Parameter\Specification;
@@ -30,6 +31,12 @@ class SendPdfByEmail extends AbstractAction {
     $contactId = $parameters->getParameter('contact_id');
     $pdf_message = $parameters->getParameter('pdf_message');
     $filename = $this->configuration->getParameter('filename').'.pdf';
+    $pdfFormatId = null;
+    if ($parameters->doesParameterExists('pdf_format_id')) {
+      $pdfFormatId = $parameters->getParameter('pdf_format_id');
+    } elseif ($this->configuration->doesParameterExists('pdf_format_id')) {
+      $pdfFormatId = $this->configuration->getParameter('pdf_format_id');
+    }
     $_fullPathName =  \CRM_Utils_File::tempnam();
     $contact = [];
     if ($participantId) {
@@ -53,7 +60,7 @@ class SendPdfByEmail extends AbstractAction {
     //from particular letter line, CRM-6798
     \CRM_Contact_Form_Task_PDFLetterCommon::formatMessage($processedMessage);
     $text = array($processedMessage);
-    $pdfContents = \CRM_Utils_PDF_Utils::html2pdf($text, $filename, TRUE);
+    $pdfContents = \CRM_Utils_PDF_Utils::html2pdf($text, $filename, TRUE, $pdfFormatId);
     file_put_contents($_fullPathName, $pdfContents);
 
     $mailer = new \Civi\ActionProvider\Utils\SendEmail();
@@ -138,6 +145,7 @@ class SendPdfByEmail extends AbstractAction {
 
     return new SpecificationBag(array(
       $filename,
+      new OptionGroupByNameSpecification('pdf_format_id', 'pdf_format', E::ts('PDF Format'), false),
       new Specification('use_sender_as', 'String', E::ts('Use Sender Contact ID as'), true, 'none', null, $sender_options),
       new Specification('cc', 'String', E::ts('CC'), false),
       new Specification('bcc', 'String', E::ts('BCC'), false),
@@ -158,6 +166,7 @@ class SendPdfByEmail extends AbstractAction {
       new Specification('body_html', 'String', E::ts('HTML Body'), true),
       new Specification('body_text', 'String', E::ts('Plain text Body'), false),
       new Specification('pdf_message', 'String', E::ts('PDF Message'), true),
+      new OptionGroupByNameSpecification('pdf_format_id', 'pdf_format', E::ts('PDF Format'), false),
       new Specification('sender_contact_id', 'Integer', E::ts('Sender Contact ID'), false),
       new Specification('activity_id', 'Integer', E::ts('Activity ID'), false),
       new Specification('contribution_id', 'Integer', E::ts('Contribution ID'), false),

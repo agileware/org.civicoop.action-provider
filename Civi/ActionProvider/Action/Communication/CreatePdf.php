@@ -31,6 +31,12 @@ class CreatePdf extends AbstractAction {
     $message = $parameters->getParameter('message');
     $contactId = $parameters->getParameter('contact_id');
     $filename = $this->configuration->getParameter('filename');
+    $pdfFormatId = null;
+    if ($parameters->doesParameterExists('pdf_format_id')) {
+      $pdfFormatId = $parameters->getParameter('pdf_format_id');
+    } elseif ($this->configuration->doesParameterExists('pdf_format_id')) {
+      $pdfFormatId = $this->configuration->getParameter('pdf_format_id');
+    }
     $fileNameWithoutContactId = $filename . '.pdf';
     $filenameWithContactId = $filename . '_' . $contactId . '.pdf';
     $contact = [];
@@ -56,7 +62,7 @@ class CreatePdf extends AbstractAction {
     \CRM_Contact_Form_Task_PDFLetterCommon::formatMessage($processedMessage);
     $this->messages[] = $processedMessage;
     $text = array($processedMessage);
-    $pdfContents = \CRM_Utils_PDF_Utils::html2pdf($text, $fileNameWithoutContactId, TRUE);
+    $pdfContents = \CRM_Utils_PDF_Utils::html2pdf($text, $fileNameWithoutContactId, TRUE, $pdfFormatId);
 
     if ($this->currentBatch && $this->zip) {
       $this->zip->addFromString($filenameWithContactId, $pdfContents);
@@ -204,6 +210,7 @@ class CreatePdf extends AbstractAction {
     return new SpecificationBag(array(
       new Specification('contact_id', 'Integer', E::ts('Contact ID'), true),
       new Specification('message', 'String', E::ts('Message'), true),
+      new OptionGroupByNameSpecification('pdf_format_id', 'pdf_format', E::ts('PDF Format'), false),
       new Specification('activity_id', 'Integer', E::ts('Activity ID'), false),
       new Specification('contribution_id', 'Integer', E::ts('Contribution ID'), false),
       new Specification('case_id', 'Integer', E::ts('Case ID'), false),
@@ -221,11 +228,13 @@ class CreatePdf extends AbstractAction {
       ));
     $batch_output_mode->setDescription(E::ts('When this action is executed in batch mode, meaning that it generates more than one pdf, in which way do you want to retrieve the generated PDFs'));
     $activity = new OptionGroupByNameSpecification('activity_type_id', 'activity_type', E::ts('PDF Letter Activity'), true, 'Print PDF Letter');
+    $pdfFormat = new OptionGroupByNameSpecification('pdf_format_id', 'pdf_format', E::ts('PDF Format'), false);
 
     return new SpecificationBag(array(
       $filename,
       $batch_output_mode,
-      $activity
+      $activity,
+      $pdfFormat,
     ));
   }
 
