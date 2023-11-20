@@ -1,3 +1,8 @@
+Version 1.60.2
+------------
+
+* Fixed issue with taking over margin settings from message template for create pdf action.
+
 Version 1.60.1
 ------------
 
