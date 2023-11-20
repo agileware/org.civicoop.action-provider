@@ -26,6 +26,8 @@ class CreatePdf extends AbstractAction {
 
   protected $pdfLetterActivityType;
 
+  protected $pageFormat;
+
   public function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $participantId = $parameters->getParameter('participant_id');
     $message = $parameters->getParameter('message');
@@ -37,6 +39,13 @@ class CreatePdf extends AbstractAction {
     } elseif ($this->configuration->doesParameterExists('pdf_format_id')) {
       $pdfFormatId = $this->configuration->getParameter('pdf_format_id');
     }
+    // Get PDF Page Format
+    $this->pageFormat = \CRM_Core_BAO_PdfFormat::getDefaultValues();
+    if (!empty($pdfFormatId)) {
+      // PDF Page Format ID passed in
+      $this->pageFormat = \CRM_Core_BAO_PdfFormat::getById($pdfFormatId);
+    }
+
     $fileNameWithoutContactId = $filename . '.pdf';
     $filenameWithContactId = $filename . '_' . $contactId . '.pdf';
     $contact = [];
@@ -274,12 +283,11 @@ class CreatePdf extends AbstractAction {
    * @return string
    */
   protected function initializeHtmlFile() {
-    $format = \CRM_Core_BAO_PdfFormat::getDefaultValues();
-    $metric = \CRM_Core_BAO_PdfFormat::getValue('metric', $format);
-    $t = \CRM_Core_BAO_PdfFormat::getValue('margin_top', $format);
-    $r = \CRM_Core_BAO_PdfFormat::getValue('margin_right', $format);
-    $b = \CRM_Core_BAO_PdfFormat::getValue('margin_bottom', $format);
-    $l = \CRM_Core_BAO_PdfFormat::getValue('margin_left', $format);
+    $metric = \CRM_Core_BAO_PdfFormat::getValue('metric', $this->pageFormat);
+    $t = \CRM_Core_BAO_PdfFormat::getValue('margin_top', $this->pageFormat);
+    $r = \CRM_Core_BAO_PdfFormat::getValue('margin_right', $this->pageFormat);
+    $b = \CRM_Core_BAO_PdfFormat::getValue('margin_bottom', $this->pageFormat);
+    $l = \CRM_Core_BAO_PdfFormat::getValue('margin_left', $this->pageFormat);
 
     // Add a special region for the HTML header of PDF files:
     $pdfHeaderRegion = \CRM_Core_Region::instance('export-document-header', FALSE);
@@ -340,18 +348,17 @@ class CreatePdf extends AbstractAction {
     $html = "</div></body></html>";
     file_put_contents($html_file, $html, FILE_APPEND);
 
-    $format = \CRM_Core_BAO_PdfFormat::getDefaultValues();
-    $paperSize = \CRM_Core_BAO_PaperSize::getByName($format['paper_size']);
+    $paperSize = \CRM_Core_BAO_PaperSize::getByName($this->pageFormat['paper_size']);
     $paper_width = \CRM_Utils_PDF_Utils::convertMetric($paperSize['width'], $paperSize['metric'], 'pt');
     $paper_height = \CRM_Utils_PDF_Utils::convertMetric($paperSize['height'], $paperSize['metric'], 'pt');
     // dompdf requires dimensions in points
     $paper_size = array(0, 0, $paper_width, $paper_height);
-    $orientation = \CRM_Core_BAO_PdfFormat::getValue('orientation', $format);
-    $metric = \CRM_Core_BAO_PdfFormat::getValue('metric', $format);
-    $t = \CRM_Core_BAO_PdfFormat::getValue('margin_top', $format);
-    $r = \CRM_Core_BAO_PdfFormat::getValue('margin_right', $format);
-    $b = \CRM_Core_BAO_PdfFormat::getValue('margin_bottom', $format);
-    $l = \CRM_Core_BAO_PdfFormat::getValue('margin_left', $format);
+    $orientation = \CRM_Core_BAO_PdfFormat::getValue('orientation', $this->pageFormat);
+    $metric = \CRM_Core_BAO_PdfFormat::getValue('metric', $this->pageFormat);
+    $t = \CRM_Core_BAO_PdfFormat::getValue('margin_top', $this->pageFormat);
+    $r = \CRM_Core_BAO_PdfFormat::getValue('margin_right', $this->pageFormat);
+    $b = \CRM_Core_BAO_PdfFormat::getValue('margin_bottom', $this->pageFormat);
+    $l = \CRM_Core_BAO_PdfFormat::getValue('margin_left', $this->pageFormat);
 
     $margins = array($metric, $t, $r, $b, $l);
 
