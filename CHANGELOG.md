@@ -1,6 +1,7 @@
 Version 1.135-dev (not yet released
 -------------
 
+* Added action: Event: Get availability information
 * PHP 8 in quick form templates
 * Removed check on related deleted entities. See #43
 * Added action: Participant: Calculate Participant Fee
