@@ -57,13 +57,13 @@ class GetEventAvailability extends AbstractAction {
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     try {
       $event = Event::get(FALSE)
-        ->addWhere('id', '=', $parameters->getParameter('id'))
+        ->addWhere('id', '=', $parameters->getParameter('event_id'))
         ->execute()
         ->first();
       if (isset($event['max_participants'])) {
         $output->setParameter('max_participants', $event['max_participants']);
         $participantCount = Participant::get(FALSE)
-          ->addWhere('event_id', '=', $parameters->getParameter('id'))
+          ->addWhere('event_id', '=', $parameters->getParameter('event_id'))
           ->addWhere('status_id.is_counted', '=', TRUE)
           ->execute()
           ->count();
