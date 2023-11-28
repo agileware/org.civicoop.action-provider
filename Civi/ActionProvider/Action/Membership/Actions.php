@@ -46,6 +46,10 @@ class Actions {
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $provider->addAction('GetMembershipTypeById', '\Civi\ActionProvider\Action\Membership\GetMembershipTypeById',E::ts('Membership: Get type by ID') , array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $provider->addAction('GetMembershipStatus', '\Civi\ActionProvider\Action\Membership\GetMembershipStatus',E::ts('Membership: Get status') , array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
