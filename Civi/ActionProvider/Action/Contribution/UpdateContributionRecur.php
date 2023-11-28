@@ -31,7 +31,7 @@ class UpdateContributionRecur extends AbstractAction {
    * @throws \Exception
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    $contribution_params['contribution_recur_id'] = $parameters->getParameter('contribution_recur_id');
+    $contribution_params['id'] = $parameters->getParameter('contribution_recur_id');
 
     if ($parameters->doesParameterExists('contact_id')) {
       $contribution_params['contact_id'] = $parameters->getParameter('contact_id');
@@ -65,7 +65,7 @@ class UpdateContributionRecur extends AbstractAction {
       $contribution_params['campaign_id'] = $parameters->getParameter('campaign_id');
     }
 
-    $contribution_params = CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification());
+    $contribution_params = array_merge($contribution_params,CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification()));
 
     $currency = NULL;
     if ($parameters->doesParameterExists('currency')) {
