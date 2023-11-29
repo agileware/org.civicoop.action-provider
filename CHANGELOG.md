@@ -7,6 +7,7 @@ Version 1.135-dev (not yet released)
 * Removed check on related deleted entities. See #43
 * Added action: Participant: Calculate Participant Fee
 * Added action: Participant: Create contribution for participant
+* New action, Membership: Get type by ID. Required to get the details for a Membership Type. See !149
 
 Version 1.134
 -------------
