@@ -1,6 +1,7 @@
 Version 1.135-dev (not yet released)
 -------------
 
+* New action, Stop Execution which can be used in combination with Conditions to cause the Form Processor to stop. See !150
 * Fixed action: Contribution: Update recurring contribution
 * Added action: Event: Get availability information
 * PHP 8 in quick form templates
