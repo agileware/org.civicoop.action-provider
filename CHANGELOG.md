@@ -1,4 +1,4 @@
-Version 1.135-dev (not yet released)
+Version 1.135
 -------------
 
 * New action, Stop Execution which can be used in combination with Conditions to cause the Form Processor to stop. See !150
