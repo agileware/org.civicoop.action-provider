@@ -3,6 +3,7 @@ Version 1.135-dev (not yet released)
 
 * New action, Stop Execution which can be used in combination with Conditions to cause the Form Processor to stop. See !150
 * Fixed action: Contribution: Update recurring contribution
+* Create PDF do not create zip when batch only consists of one item.
 * Added action: Event: Get availability information
 * PHP 8 in quick form templates
 * Removed check on related deleted entities. See #43

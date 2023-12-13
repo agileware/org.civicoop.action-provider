@@ -166,12 +166,23 @@ class CreatePdf extends AbstractAction {
     // Child classes could override this function
     // E.g. merge files in a directorys
     if ($this->zip) {
-      $this->zip->close();
-
-      if ($isLastBatch) {
+      if ($this->zip->count() > 1) {
+        $this->zip->close();
+        if ($isLastBatch) {
+          $subdir = Files::createRestrictedDirectory('createpdf');
+          $downloadName = $this->configuration->getParameter('filename') . '.zip';
+          $this->createDownloadStatusMessage($batchName . '.zip', $subdir, $downloadName);
+        }
+      } else {
         $subdir = Files::createRestrictedDirectory('createpdf');
-        $downloadName = $this->configuration->getParameter('filename').'.zip';
-        $this->createDownloadStatusMessage($batchName.'.zip', $subdir, $downloadName);
+        $zipFileName = \CRM_Core_Config::singleton()->templateCompileDir . $subdir . '/' . $batchName . '.zip';
+        $basePath = \CRM_Core_Config::singleton()->templateCompileDir . $subdir;
+        $pdfFile = $this->zip->getNameIndex(0);
+        $this->zip->close();
+        copy("zip://".$zipFileName."#".$pdfFile, $basePath . DIRECTORY_SEPARATOR .$batchName.'.pdf');
+        unlink($zipFileName);
+        $downloadName = $this->configuration->getParameter('filename').'.pdf';
+        $this->createDownloadStatusMessage($batchName.'.pdf', $subdir, $downloadName);
       }
     } else {
       $subdir = Files::createRestrictedDirectory('createpdf');
