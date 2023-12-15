@@ -13,6 +13,7 @@ Version 1.135
 * Added action: Participant: Calculate Participant Fee
 * Added action: Participant: Create contribution for participant
 * New action, Membership: Get type by ID. Required to get the details for a Membership Type. See !149
+* New action: CiviCase: Create or update a role on the case. Allows to omit permission checks and ensures that each role is created only once.
 
 Version 1.134
 -------------
