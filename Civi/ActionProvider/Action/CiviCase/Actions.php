@@ -38,35 +38,38 @@ class Actions {
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG
     ));
-    $provider->addAction('UpdateCaseStatus', '\Civi\ActionProvider\Action\CiviCase\UpdateCaseStatus',E::ts('CiviCase: Update status') , array(
+    $provider->addAction('UpdateCaseStatus', '\Civi\ActionProvider\Action\CiviCase\UpdateCaseStatus', E::ts('CiviCase: Update status'), array(
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG
     ));
-    $provider->addAction('CaseUpdateCustomData', '\Civi\ActionProvider\Action\CiviCase\UpdateCustomData',E::ts('CiviCase: Update custom data') , array(
+    $provider->addAction('CaseUpdateCustomData', '\Civi\ActionProvider\Action\CiviCase\UpdateCustomData', E::ts('CiviCase: Update custom data'), array(
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ));
-    $provider->addAction('CaseUploadCustomFileField', '\Civi\ActionProvider\Action\CiviCase\UploadCustomFileField',E::ts('CiviCase: Upload file to a custom field for a case') , array(
+    $provider->addAction('CaseUploadCustomFileField', '\Civi\ActionProvider\Action\CiviCase\UploadCustomFileField', E::ts('CiviCase: Upload file to a custom field for a case'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('CaseValidateChecksum', '\Civi\ActionProvider\Action\CiviCase\ValidateChecksum',E::ts('CiviCase: Validate checksum of role on case') , array(
+    $provider->addAction('CaseValidateChecksum', '\Civi\ActionProvider\Action\CiviCase\ValidateChecksum', E::ts('CiviCase: Validate checksum of role on case'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('CaseRoleGroupSync', '\Civi\ActionProvider\Action\CiviCase\RoleGroupSync',E::ts('CiviCase: Role Group Sync') , array(
+    $provider->addAction('CaseRoleGroupSync', '\Civi\ActionProvider\Action\CiviCase\RoleGroupSync', E::ts('CiviCase: Role Group Sync'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('CaseGetRoleGroup', '\Civi\ActionProvider\Action\CiviCase\GetRoleGroup',E::ts('CiviCase: Get Role Group') , array(
+    $provider->addAction('CaseGetRoleGroup', '\Civi\ActionProvider\Action\CiviCase\GetRoleGroup', E::ts('CiviCase: Get Role Group'), array(
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
-    $provider->addAction('CaseAddRole', '\Civi\ActionProvider\Action\CiviCase\AddRole',E::ts('CiviCase: Add Role') , array(
+    $provider->addAction('CaseAddRole', '\Civi\ActionProvider\Action\CiviCase\AddRole', E::ts('CiviCase: Add Role'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
     $provider->addAction('CaseGetMostRecentActivity', '\Civi\ActionProvider\Action\CiviCase\GetMostRecentActivity', E::ts('CiviCase: Get most recent activity of a case'), array(
       AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
+    $provider->addAction('CaseCreateOrUpdateRole', '\Civi\ActionProvider\Action\CiviCase\CreateOrUpdateRole', E::ts('CiviCase: Create or update role'), array(
+      AbstractAction::DATA_MANIPULATION_TAG,
     ));
   }
 
