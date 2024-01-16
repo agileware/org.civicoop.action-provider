@@ -1,4 +1,4 @@
-{if count($actionProviderElementNames)}
+{if !empty($actionProviderElementNames)}
   <div class="crm-accordion-wrapper">
     <div class="crm-accordion-header">
       {$title}

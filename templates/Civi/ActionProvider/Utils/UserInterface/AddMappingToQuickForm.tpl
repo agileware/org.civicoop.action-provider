@@ -3,7 +3,7 @@
 {assign var='actionProviderMappingDescriptions' value=$actionProviderMappingDescriptions.$prefix}
 {assign var='actionProviderGroupedMappingFields' value=$actionProviderGroupedMappingFields.$prefix}
 {assign var='actionProviderCollectionMappingFields' value=$actionProviderCollectionMappingFields.$prefix}
-{if count($actionProviderMappingFields) || count($actionProviderGroupedMappingFields) || count($actionProviderCollectionMappingFields)}
+{if !empty($actionProviderMappingFields) || !empty($actionProviderGroupedMappingFields) || !empty($actionProviderCollectionMappingFields)}
   <div class="crm-accordion-wrapper">
     <div class="crm-accordion-header">
       {$title}

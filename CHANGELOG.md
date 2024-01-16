@@ -1,6 +1,8 @@
 Version 1.136 (not yet released)
 -------------
 
+* Fix for 'TypeError: count():' error in the SearchActionDesigner.
+
 Version 1.135
 -------------
 
