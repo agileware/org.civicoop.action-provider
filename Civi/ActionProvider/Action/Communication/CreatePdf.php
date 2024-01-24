@@ -51,6 +51,9 @@ class CreatePdf extends AbstractAction {
     if ($parameters->doesParameterExists('activity_id')) {
       $contact['activity_id'] = $parameters->getParameter('activity_id');
     }
+    if ($parameters->doesParameterExists('membership_id')) {
+      $contact['membership_id'] = $parameters->getParameter('membership_id');
+    }
     $this->pdfFormat = null;
     if ($parameters->doesParameterExists('page_format_id')) {
       $this->pdfFormat = $parameters->getParameter('page_format_id');
@@ -238,6 +241,7 @@ class CreatePdf extends AbstractAction {
       new Specification('contribution_recur_id', 'Integer', E::ts('Recurring Contribution ID'), false),
       new Specification('case_id', 'Integer', E::ts('Case ID'), false),
       new Specification('participant_id', 'Integer', E::ts('Participant ID'), false),
+      new Specification('membership_id', 'Integer', E::ts('Membership ID'), false),
       new Specification('subject', 'String', E::ts('Subject (for the activity)'), false),
       new Specification('page_format_id', 'Integer', E::ts('Print Page (PDF) Format'), false),
     ));
