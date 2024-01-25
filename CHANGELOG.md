@@ -1,6 +1,8 @@
 Version 1.137 (not yet released)
 -------------
 
+*  Add Membership to Create PDF action and Tokens. See !153
+
 Version 1.136
 -------------
 
