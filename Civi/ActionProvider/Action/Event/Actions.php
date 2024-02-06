@@ -108,6 +108,9 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('GetParticipantPayment', '\Civi\ActionProvider\Action\Event\GetParticipantPayment', E::ts('ParticipantPayment: get by Participant Id or Contribution ID') , array(
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
   }
 
 }

@@ -2,6 +2,7 @@ Version 1.137 (not yet released)
 -------------
 
 *  Add Membership to Create PDF action and Tokens. See !153
+*  New Action: ParticipantPayment: get by Participant Id or Contribution ID
 
 Version 1.136
 -------------
