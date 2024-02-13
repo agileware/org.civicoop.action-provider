@@ -1,8 +1,9 @@
-Version 1.137 (not yet released)
+Version 1.137
 -------------
 
-*  Add Membership to Create PDF action and Tokens. See !153
-*  New Action: ParticipantPayment: get by Participant Id or Contribution ID
+* Fixed memory issue when downloading a large file.
+* Add Membership to Create PDF action and Tokens. See !153
+* New Action: ParticipantPayment: get by Participant Id or Contribution ID
 
 Version 1.136
 -------------
