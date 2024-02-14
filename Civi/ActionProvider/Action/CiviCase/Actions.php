@@ -71,6 +71,10 @@ class Actions {
     $provider->addAction('CaseCreateOrUpdateRole', '\Civi\ActionProvider\Action\CiviCase\CreateOrUpdateRole', E::ts('CiviCase: Create or update role'), array(
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('CaseValidateChecksumCaseClient', '\Civi\ActionProvider\Action\CiviCase\ValidateChecksumCaseClient', E::ts('CiviCase: Validate checksum of case client'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
   }
 
 }
