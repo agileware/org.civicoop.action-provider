@@ -111,10 +111,10 @@ class CalculateValue extends AbstractAction {
     }
 
     // Check for existing operands.
-    if (empty($operand1)) {
+    if (is_null($operand1)) {
       throw new InvalidParameterException('First operand is required.');
     }
-    if (empty($operand2)) {
+    if (is_null($operand2)) {
       throw new InvalidParameterException('Second operand is required.');
     }
 
