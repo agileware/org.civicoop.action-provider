@@ -1,6 +1,7 @@
 Version 1.138 (not yet released)
 -------------
 * New action: Validate a checksum for the case client of a provided case id.
+* Handle zero values in CalculateValue and ConcatenateValues. see !155
 
 Version 1.137
 -------------
