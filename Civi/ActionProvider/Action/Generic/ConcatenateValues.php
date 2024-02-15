@@ -90,7 +90,7 @@ class ConcatenateValues extends AbstractAction {
     }
 
     // Check for existing operands.
-    if (empty($text0)) {
+    if (is_null($text0)) {
       throw new InvalidParameterException('The first value is required.');
     }
 
