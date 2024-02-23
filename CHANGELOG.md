@@ -1,5 +1,7 @@
-Version 1.138 (not yet released)
+Version 1.139 (not yet released)
 -------------
+
+* Added validators for Is Empty and Parameter Has Value.
 
 Version 1.138
 -------------
