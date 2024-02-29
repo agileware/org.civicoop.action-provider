@@ -58,6 +58,10 @@ class Actions {
       AbstractAction::DATA_RETRIEVAL_TAG,
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG
     ]);
+    $provider->addAction('CreateRelationshipWithMultipleContacts', '\Civi\ActionProvider\Action\Relationship\CreateRelationshipWithMultipleContacts', E::ts('Relationship: Create with one or more contacts'), [
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG
+    ]);
   }
 
 }
