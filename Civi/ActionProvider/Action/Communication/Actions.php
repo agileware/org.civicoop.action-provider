@@ -38,6 +38,9 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::SEND_MESSAGES_TO_CONTACTS
     ));
+    $provider->addAction('SendEmailToGroup', '\Civi\ActionProvider\Action\Communication\SendEmailToGroup', E::ts('Communication: Send e-mail to group' ), array(
+      AbstractAction::SEND_MESSAGES_TO_CONTACTS
+    ));
   }
 
 }

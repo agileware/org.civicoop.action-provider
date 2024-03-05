@@ -33,8 +33,6 @@ class CreatePdf extends AbstractAction {
     $message = $parameters->getParameter('message');
     $contactId = $parameters->getParameter('contact_id');
     $filename = $this->configuration->getParameter('filename');
-    $fileNameWithoutContactId = $filename . '.pdf';
-    $filenameWithContactId = $filename . '_' . $contactId . '.pdf';
     $contact = [];
     if ($participantId) {
       $contact['extra_data']['participant']['id'] = $participantId;
@@ -59,6 +57,11 @@ class CreatePdf extends AbstractAction {
       $this->pdfFormat = $parameters->getParameter('page_format_id');
     }
 
+    $fileNameWithoutPattern = $filename . '.pdf';
+    if($this->configuration->doesParameterExists('filename_pattern')) {
+      $filenamePattern = $filename . $this->configuration->getParameter('filename_pattern') . '.pdf';
+      $filenameWithPattern = Tokens::replaceTokens($contactId, $filenamePattern,  $contact, 'text/html');
+    }
     $processedMessage = Tokens::replaceTokens($contactId, $message, $contact, 'text/html');
     if ($processedMessage === false) {
       return;
@@ -68,13 +71,14 @@ class CreatePdf extends AbstractAction {
     \CRM_Contact_Form_Task_PDFLetterCommon::formatMessage($processedMessage);
     $this->messages[] = $processedMessage;
     $text = array($processedMessage);
-    $pdfContents = \CRM_Utils_PDF_Utils::html2pdf($text, $fileNameWithoutContactId, TRUE, $this->pdfFormat);
+    $pdfContents = \CRM_Utils_PDF_Utils::html2pdf($text, $fileNameWithoutPattern, TRUE, $this->pdfFormat);
 
     if ($this->currentBatch && $this->zip) {
-      $this->zip->addFromString($filenameWithContactId, $pdfContents);
+      $this->zip->addFromString($filenameWithPattern, $pdfContents);
     }
 
-    $file = $this->createActivity($contactId, $message, $pdfContents, $fileNameWithoutContactId, $parameters->getParameter('subject'));
+    $file = $this->createActivity($contactId, $message, $pdfContents, $fileNameWithoutPattern, $parameters->getParameter('subject'),
+                                  $this->configuration->getParameter('attach_to_case'), $parameters->getParameter('case_id'));
 
     $output->setParameter('filename', $file['name']);
     $output->setParameter('url', $file['url']);
@@ -91,7 +95,7 @@ class CreatePdf extends AbstractAction {
    * @return array
    *   Returns the file array
    */
-  protected function createActivity($contactId, $message, $pdfContents, $filename, $subject='') {
+  protected function createActivity($contactId, $message, $pdfContents, $filename, $subject='', $attachToCase, $caseId) {
     $activityTypeId = $this->getPdfLetterActivityTypeId();
     $activityParams = array(
       'activity_type_id' => $activityTypeId,
@@ -100,6 +104,9 @@ class CreatePdf extends AbstractAction {
       'source_contact_id' => $contactId,
       'subject' => $subject,
     );
+    if($attachToCase) {
+      $activityParams['case_id'] = $caseId;
+    }
     $result = civicrm_api3('Activity', 'create', $activityParams);
 
     $activityContacts = \CRM_Core_OptionGroup::values('activity_contacts', FALSE, FALSE, FALSE, NULL, 'name');
@@ -255,11 +262,17 @@ class CreatePdf extends AbstractAction {
         'pdf' => E::ts('Merge all files into one PDF'),
       ));
     $batch_output_mode->setDescription(E::ts('When this action is executed in batch mode, meaning that it generates more than one pdf, in which way do you want to retrieve the generated PDFs'));
+    $filename_pattern = new Specification('filename_pattern', 'String', E::ts('Name pattern in batch mode'), true, '_{contact.contact_id}', null, array(
+    ));
+    $filename_pattern->setDescription(E::ts('Defines the way individual PDFs-files are named, if several files are created in a zip. The pattern is appended to the filename. You can use tokens in this context.'));
+    $attach_to_case = new Specification('attach_to_case', 'Boolean', E::ts('Store activity on case'), true, FALSE, null, array());
     $activity = new OptionGroupByNameSpecification('activity_type_id', 'activity_type', E::ts('PDF Letter Activity'), true, 'Print PDF Letter');
 
     return new SpecificationBag(array(
       $filename,
       $batch_output_mode,
+      $filename_pattern,
+      $attach_to_case,
       $activity
     ));
   }
