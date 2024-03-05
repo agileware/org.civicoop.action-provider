@@ -38,21 +38,27 @@ class Tokens {
       }
       $context[$entity] = $entityData;
     }
-    if (isset($contactData['case_id']) && !empty($contactData['case_id'])) {
+    if (!empty($contactData['case_id'])) {
       $schema[] = "caseId";
       $context["caseId"] = $contactData['case_id'];
     }
-    if (isset($contactData['contribution_id']) && !empty($contactData['contribution_id'])) {
+    if (!empty($contactData['contribution_id'])) {
       $contribution = civicrm_api3('Contribution', 'getsingle', ['id' => $contactData['contribution_id']]);
       $schema[] = "contributionId";
       $context["contributionId"] = $contactData['contribution_id'];
       $context["contribution"] = $contribution;
     }
-    if (isset($contactData['activity_id']) && !empty($contactData['activity_id'])) {
+    if (!empty($contactData['activity_id'])) {
       $activity = civicrm_api3('Activity', 'getsingle', ['id' => $contactData['activity_id']]);
       $schema[] = "activityId";
       $context["activityId"] = $contactData['activity_id'];
       $context["activity"] = $activity;
+    }
+    if (!empty($contactData['membership_id'])) {
+      $membership = civicrm_api3('Membership', 'getsingle', ['id' => $contactData['membership_id']]);
+      $schema[] = "membershipId";
+      $context["membershipId"] = $contactData['membership_id'];
+      $context["membership"] = $membership;
     }
 
     // Whether to enable Smarty evaluation.

@@ -1,10 +1,41 @@
-Version 1.135-dev (not yet released
+Version 1.139 (not yet released)
 -------------
 
+* Added Action: Relationship: Create with one or more contacts
+* Added validators for Is Empty and Parameter Has Value.
+* Added Action: Send email to a group.
+
+Version 1.138
+-------------
+* New action: Validate a checksum for the case client of a provided case id.
+* Handle zero values in CalculateValue and ConcatenateValues. see !155
+* Added action: Other: Combine Lists
+
+Version 1.137
+-------------
+
+* Fixed memory issue when downloading a large file.
+* Add Membership to Create PDF action and Tokens. See !153
+* New Action: ParticipantPayment: get by Participant Id or Contribution ID
+
+Version 1.136
+-------------
+
+* Fix for 'TypeError: count():' error in the SearchActionDesigner.
+
+Version 1.135
+-------------
+
+* New action, Stop Execution which can be used in combination with Conditions to cause the Form Processor to stop. See !150
+* Fixed action: Contribution: Update recurring contribution
+* Create PDF do not create zip when batch only consists of one item.
+* Added action: Event: Get availability information
+* PHP 8 in quick form templates
 * Removed check on related deleted entities. See #43
 * Added action: Participant: Calculate Participant Fee
 * Added action: Participant: Create contribution for participant
-* Added Action: Send email to a group.
+* New action, Membership: Get type by ID. Required to get the details for a Membership Type. See !149
+* New action: CiviCase: Create or update a role on the case. Allows to omit permission checks and ensures that each role is created only once.
 
 Version 1.134
 -------------

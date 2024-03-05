@@ -17,19 +17,31 @@ class AddMappingToQuickForm {
   public static function addMapping($prefix, SpecificationBag $parameterSpecs, $current_mapping, CRM_Core_Form $form, $availableFields) {
     $actionProviderMappingFields = $form->get_template_vars('actionProviderMappingFields');
     if (!is_array($actionProviderMappingFields)) {
-      $actionProviderMappingFields = array();
+      $actionProviderMappingFields = array($prefix=>array());
+    }
+    if (!isset($actionProviderMappingFields[$prefix])) {
+      $actionProviderMappingFields[$prefix] = array();
     }
     $actionProviderMappingDescriptions = $form->get_template_vars('actionProviderMappingDescriptions');
     if (!is_array($actionProviderMappingDescriptions)) {
-      $actionProviderMappingDescriptions = array();
+      $actionProviderMappingDescriptions = array($prefix=>array());
+    }
+    if (!isset($actionProviderMappingDescriptions[$prefix])) {
+      $actionProviderMappingDescriptions[$prefix] = array();
     }
     $actionProviderGroupedMappingFields = $form->get_template_vars('actionProviderGroupedMappingFields');
     if (!is_array($actionProviderGroupedMappingFields)) {
-      $actionProviderGroupedMappingFields = array();
+      $actionProviderGroupedMappingFields = array($prefix=>array());
+    }
+    if (!isset($actionProviderGroupedMappingFields[$prefix])) {
+      $actionProviderGroupedMappingFields[$prefix] = array();
     }
     $actionProviderCollectionMappingFields = $form->get_template_vars('actionProviderCollectionMappingFields');
     if (!is_array($actionProviderCollectionMappingFields)) {
-      $actionProviderCollectionMappingFields = array();
+      $actionProviderCollectionMappingFields = array($prefix=>array());
+    }
+    if (!isset($actionProviderCollectionMappingFields[$prefix])) {
+      $actionProviderCollectionMappingFields[$prefix] = array();
     }
     foreach($parameterSpecs as $spec) {
       if ($spec instanceof SpecificationGroup) {

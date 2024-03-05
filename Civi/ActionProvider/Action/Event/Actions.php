@@ -57,6 +57,9 @@ class Actions {
     $provider->addAction('GetEvent', '\Civi\ActionProvider\Action\Event\GetEvent',E::ts('Event: Get by ID') , array(
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $provider->addAction('GetEventAvailability', '\Civi\ActionProvider\Action\Event\GetEventAvailability',E::ts('Event: Get availability information') , array(
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $provider->addAction('EventUploadCustomFileField', '\Civi\ActionProvider\Action\Event\UploadCustomFileField',E::ts('Event: Upload file to a custom field for an event') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
@@ -104,6 +107,9 @@ class Actions {
     $provider->addAction('CalculateParticipantFee', '\Civi\ActionProvider\Action\Event\CalculateParticipantFee',E::ts('Participant: Calculate Participant Fee') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $provider->addAction('GetParticipantPayment', '\Civi\ActionProvider\Action\Event\GetParticipantPayment', E::ts('ParticipantPayment: get by Participant Id or Contribution ID') , array(
+      AbstractAction::DATA_RETRIEVAL_TAG,
     ));
   }
 

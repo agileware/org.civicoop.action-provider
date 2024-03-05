@@ -19,23 +19,28 @@ class CRM_ActionProvider_Page_DownloadFile extends CRM_Core_Page {
     $path = $basePath.'/'.$fileName;
     $mimeType = mime_content_type($path);
 
-    if (!$path) {
+    if (!$path || !file_exists($path)) {
       CRM_Core_Error::statusBounce('Could not retrieve the file');
     }
 
-    $buffer = file_get_contents($path);
-    if (!$buffer) {
-      CRM_Core_Error::statusBounce('The file is either empty or you do not have permission to retrieve the file');
+    $now = gmdate('D, d M Y H:i:s') . ' GMT';
+    CRM_Utils_System::setHttpHeader('Content-Type', $mimeType);
+    CRM_Utils_System::setHttpHeader('Expires', $now);
+    // lem9 & loic1: IE needs specific headers
+    $isIE = empty($_SERVER['HTTP_USER_AGENT']) ? FALSE : strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE');
+    $fileString = "filename=\"{$downloadName}\"";
+    if ($isIE) {
+      CRM_Utils_System::setHttpHeader("Content-Disposition", "inline; $fileString");
+      CRM_Utils_System::setHttpHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0');
+      CRM_Utils_System::setHttpHeader('Pragma', 'public');
+    }
+    else {
+      CRM_Utils_System::setHttpHeader("Content-Disposition", "download; $fileString");
+      CRM_Utils_System::setHttpHeader('Pragma', 'no-cache');
     }
 
-    CRM_Utils_System::download(
-      $downloadName,
-      $mimeType,
-      $buffer,
-      NULL,
-      TRUE,
-      'download'
-    );
+    print readfile($path);
+    CRM_Utils_System::civiExit();
   }
 
   /**
