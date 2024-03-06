@@ -3,6 +3,7 @@ Version 1.139 (not yet released)
 
 * Added Action: Relationship: Create with one or more contacts
 * Added validators for Is Empty and Parameter Has Value.
+* Added Action: Activities: Create activities and assign to members of a group.
 * Added Action: Send email to a group.
 
 Version 1.138

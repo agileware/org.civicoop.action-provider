@@ -55,8 +55,11 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
-    $provider->addAction('FindSimilarActivities', '\Civi\ActionProvider\Action\Activity\FindSimilarActivities', E::ts('Activity: Find similar acitivities'), array(
+      $provider->addAction('FindSimilarActivities', '\Civi\ActionProvider\Action\Activity\FindSimilarActivities', E::ts('Activity: Find similar activities'), array(
       AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
+          $provider->addAction('CreateActivityForGroup', '\Civi\ActionProvider\Action\Activity\CreateActivityForGroup', E::ts('Activity: Create activities and assign to members of a group'), array(
+        AbstractAction::DATA_MANIPULATION_TAG,
     ));
 
   }
