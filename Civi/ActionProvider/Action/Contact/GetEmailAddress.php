@@ -47,9 +47,9 @@ class GetEmailAddress extends AbstractGetSingleAction {
       $existingEmail = civicrm_api3('Email', 'getsingle', $existingEmailAddressParams);
       $this->setOutputFromEntity($existingEmail, $output);
     } catch (\Exception $e) {
-      if($this->configuration->getParameter('fallbacktoactive')){
+      if($this->configuration->getParameter('fallbacktoprimary')){
         unset($existingEmailAddressParams['location_type_id']);
-        $existingEmailAddressParams['is_active'] = 1 ;
+        $existingEmailAddressParams['is_primary'] = 1 ;
         try {
           $existingEmail = civicrm_api3('Email', 'getsingle', $existingEmailAddressParams);
           $this->setOutputFromEntity($existingEmail, $output);
@@ -71,7 +71,7 @@ class GetEmailAddress extends AbstractGetSingleAction {
     $defaultLocationType = key($locationTypes);
     return new SpecificationBag(array(
       new Specification('location_type_id', 'Integer', E::ts('Location type'), true, $defaultLocationType, null, $locationTypes, FALSE),
-      new Specification('fallbacktoactive', 'Boolean', E::ts('Fallback to active'), true, 0)
+      new Specification('fallbacktoprimary', 'Boolean', E::ts('Fallback to primary'), true, 0)
     ));
   }
 
