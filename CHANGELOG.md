@@ -4,6 +4,7 @@ Version 1.139 (not yet released)
 * Added Action: Relationship: Create with one or more contacts
 * Added validators for Is Empty and Parameter Has Value.
 * Added Action: Send email to a group.
+* Update GetEmailAddress.php: is_active does not exist for e-mail addresses. See !159
 
 Version 1.138
 -------------
