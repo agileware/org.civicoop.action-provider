@@ -1,4 +1,4 @@
-Version 1.139 (not yet released)
+Version 1.139
 -------------
 
 * Added Action: Relationship: Create with one or more contacts
@@ -6,6 +6,7 @@ Version 1.139 (not yet released)
 * Added Action: Activities: Create activities and assign to members of a group.
 * Added Action: Send email to a group.
 * Update GetEmailAddress.php: is_active does not exist for e-mail addresses. See !159
+* Add Action: Mailing Event: Get Contact ID from Mailing
 
 Version 1.138
 -------------

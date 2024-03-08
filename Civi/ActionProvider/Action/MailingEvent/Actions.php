@@ -33,6 +33,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::SEND_MESSAGES_TO_CONTACTS,
     ));
+    $provider->addAction('MailingEventGetContactId', '\Civi\ActionProvider\Action\MailingEvent\MailingEventGetContactId', E::ts('Mailing Event: Get Contact ID from Mailing'), array(
+      AbstractAction::DATA_RETRIEVAL_TAG,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+    ));
   }
 
 }
