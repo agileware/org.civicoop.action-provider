@@ -79,6 +79,13 @@ class CRM_ActionProvider_ExtensionUtil {
 
 use CRM_ActionProvider_ExtensionUtil as E;
 
+function _action_provider_civix_mixin_polyfill() {
+  if (!class_exists('CRM_Extension_MixInfo')) {
+    $polyfill = __DIR__ . '/mixin/polyfill.php';
+    (require $polyfill)(E::LONG_NAME, E::SHORT_NAME, E::path());
+  }
+}
+
 /**
  * (Delegated) Implements hook_civicrm_config().
  *
@@ -95,16 +102,11 @@ function _action_provider_civix_civicrm_config(&$config = NULL) {
 
   $extRoot = dirname(__FILE__) . DIRECTORY_SEPARATOR;
   $extDir = $extRoot . 'templates';
-
-  if (is_array($template->template_dir)) {
-    array_unshift($template->template_dir, $extDir);
-  }
-  else {
-    $template->template_dir = [$extDir, $template->template_dir];
-  }
+  $template->addTemplateDir([$extDir]);
 
   $include_path = $extRoot . PATH_SEPARATOR . get_include_path();
   set_include_path($include_path);
+  _action_provider_civix_mixin_polyfill();
 }
 
 /**
@@ -130,6 +132,7 @@ function _action_provider_civix_civicrm_install() {
   if ($upgrader = _action_provider_civix_upgrader()) {
     $upgrader->onInstall();
   }
+  _action_provider_civix_mixin_polyfill();
 }
 
 /**
@@ -170,6 +173,7 @@ function _action_provider_civix_civicrm_enable() {
       $upgrader->onEnable();
     }
   }
+  _action_provider_civix_mixin_polyfill();
 }
 
 /**
