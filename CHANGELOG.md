@@ -1,5 +1,7 @@
-Version 1.141 (not yet released)
+Version 1.141
 -------------
+
+* Fixed issue with CiviCRM 5.72
 
 Version 1.140
 -------------

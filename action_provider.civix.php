@@ -102,7 +102,7 @@ function _action_provider_civix_civicrm_config(&$config = NULL) {
 
   $extRoot = dirname(__FILE__) . DIRECTORY_SEPARATOR;
   $extDir = $extRoot . 'templates';
-  $template->addTemplateDir([$extDir]);
+  $template->addTemplateDir($extDir);
 
   $include_path = $extRoot . PATH_SEPARATOR . get_include_path();
   set_include_path($include_path);
