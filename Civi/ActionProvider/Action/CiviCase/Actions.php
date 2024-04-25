@@ -26,6 +26,10 @@ class Actions {
       AbstractAction::DATA_RETRIEVAL_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ));
+    $provider->addAction('HasContactWithRoleOnCase', '\Civi\ActionProvider\Action\CiviCase\HasContactRoleOnCase', E::ts('CiviCase: Has contact a role on the case'), array(
+      AbstractAction::DATA_RETRIEVAL_TAG,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ));
     $provider->addAction('CreateCase', '\Civi\ActionProvider\Action\CiviCase\CreateCase', E::ts('CiviCase: Create'), array(
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG

@@ -1,6 +1,9 @@
 Version 1.142 (not yet released)
 -------------
 
+* Added action: CiviCase has contact role on a case
+* Added validation: CiviCase has contact role on a case
+
 Version 1.141
 -------------
 

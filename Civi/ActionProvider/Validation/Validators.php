@@ -32,6 +32,7 @@ class Validators {
     $provider->addValidator('is_not_empty', 'Civi\ActionProvider\Validation\ParameterIsNotEmpty', E::ts('Parameter is not empty'));
     $provider->addValidator('is_empty', 'Civi\ActionProvider\Validation\ParameterIsEmpty', E::ts('Parameter is empty'));
     $provider->addValidator('compare_parameter_value', 'Civi\ActionProvider\Validation\CompareParameterValue', E::ts('Compare Parameter Value'));
+    $provider->addValidator('has_role_on_case', 'Civi\ActionProvider\Validation\HasContactRoleOnCase', E::ts('CiviCase: Contact has role on case'));
   }
 
 }

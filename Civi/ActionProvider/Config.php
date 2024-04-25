@@ -88,6 +88,18 @@ class Config extends \Symfony\Component\DependencyInjection\Container {
   }
 
   /**
+   * Returns the relationship labels.
+   *
+   * @return array
+   */
+  public function getRelationshipTypeLabels(): array {
+    if ($this->hasParameter('relationship_type_labels')) {
+      return $this->getParameter('relationship_type_labels');
+    }
+    return array();
+  }
+
+  /**
    * Build the container with the custom field and custom groups.
    *
    * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
@@ -122,6 +134,13 @@ class Config extends \Symfony\Component\DependencyInjection\Container {
     $containerBuilder->setParameter('custom_groups_per_extends', $customGroupPerExtends);
     $containerBuilder->setParameter('custom_fields_per_group', $customFieldsPerGroup);
     $containerBuilder->setParameter('custom_fields', $customFields);
+
+    $relationshipTypesApi = civicrm_api3('RelationshipType', 'get', array('is_active' => 1, 'options' => array('limit' => 0)));
+    $relationshipTypes = array();
+    foreach($relationshipTypesApi['values'] as $relType) {
+      $relationshipTypes[$relType['name_a_b']] = $relType['label_a_b'];
+    }
+    $containerBuilder->setParameter('relationship_type_labels', $relationshipTypes);
 
   }
 
