@@ -1,4 +1,4 @@
-Version 1.142 (not yet released)
+Version 1.142
 -------------
 
 * Added action: CiviCase has contact role on a case
