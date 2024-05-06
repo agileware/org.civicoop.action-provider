@@ -1,7 +1,8 @@
 Version 1.143 (not yet released)
 -------------
 
-* Membership: Get by Contact ID'. See !162
+* Added action: "Membership: Get by Contact ID". See !162
+* Added action: "Other: Format date value". See !161
 
 Version 1.142
 -------------
