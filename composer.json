@@ -1,0 +1,5 @@
+{
+    "name": "civicrm/action-provider",
+    "type": "civicrm-ext",
+    "description": "Action Provider"
+}
