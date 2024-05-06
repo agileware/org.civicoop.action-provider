@@ -1,6 +1,8 @@
 Version 1.143 (not yet released)
 -------------
 
+* Membership: Get by Contact ID'. See !162
+
 Version 1.142
 -------------
 
