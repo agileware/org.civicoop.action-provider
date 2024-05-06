@@ -58,6 +58,10 @@ class Actions {
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $provider->addAction('GetMembershipByContactID', '\Civi\ActionProvider\Action\Membership\GetMembershipByContactID',E::ts('Membership: Get by Contact ID') , array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
   }
 
 }
