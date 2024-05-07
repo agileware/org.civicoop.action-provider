@@ -27,6 +27,8 @@ class FindOrCreateContactByEmail extends AbstractAction {
     if ($contact_type['contact_sub_type']) {
       $params['contact_id.contact_sub_type'] = $contact_type['contact_sub_type']['name'];
     }
+	
+	$params['contact_id.is_deleted'] = 0;
     $params['return']  = 'contact_id';
     $params['options'] = ['sort' => 'contact_id ASC', 'limit' => 1];
     $params['sequential'] = true;
