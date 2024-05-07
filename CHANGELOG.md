@@ -3,6 +3,7 @@ Version 1.143 (not yet released)
 
 * Added action: "Membership: Get by Contact ID". See !162
 * Added action: "Other: Format date value". See !161
+* Exclude deleted contacts when searching by Email. See !164
 
 Version 1.142
 -------------
