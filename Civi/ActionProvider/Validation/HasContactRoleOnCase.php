@@ -27,14 +27,13 @@ class HasContactRoleOnCase extends AbstractValidator {
    * @return string|null
    */
   protected function doValidation(ParameterBagInterface $parameters): ?string {
-    $config = ConfigContainer::getInstance();
     $case_id = $parameters->getParameter('case_id');
     $contact_id = $parameters->getParameter('contact_id');
     $hasRole = false;
     if ($this->configuration->getParameter('include_client')) {
       try {
         $clientCount = \Civi\Api4\CaseContact::get(FALSE)
-          ->addWhere('id', '=', $case_id)
+          ->addWhere('case_id', '=', $case_id)
           ->addWhere('contact_id', '=', $contact_id)
           ->execute()
           ->count();
@@ -86,9 +85,11 @@ class HasContactRoleOnCase extends AbstractValidator {
    */
   public function getConfigurationSpecification(): SpecificationBag {
     $config = ConfigContainer::getInstance();
+    $include_client = new Specification('include_client', 'Boolean', E::ts('Include client'), true);
+    $include_client->setDescription(E::ts('Set to yes when you want to check on any role or client.'));
     return new SpecificationBag([
       new Specification('relationship_type_ids', 'String', E::ts('Role'), false, null, null, $config->getRelationshipTypeLabels(), true),
-      new Specification('include_client', 'Boolean', E::ts('Include client'), true),
+      $include_client,
       new Specification('error_message', 'String', E::ts('Message when contact does not have a role on the case'), true)
     ]);
   }

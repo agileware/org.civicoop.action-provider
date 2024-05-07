@@ -1,6 +1,7 @@
 Version 1.143 (not yet released)
 -------------
 
+* Fixed action: CiviCase has contact role on a case
 * Added action: "Membership: Get by Contact ID". See !162
 * Added action: "Other: Format date value". See !161
 * Exclude deleted contacts when searching by Email. See !164
