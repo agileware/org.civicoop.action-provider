@@ -98,10 +98,10 @@ class CreateLineItem extends AbstractAction {
     $line_item_data['qty'] = (float) $line_item_data['qty'];
     $line_item_data['unit_price'] = (float) $line_item_data['unit_price'];
 
-    // Set the CiviCRM default Priceset for the line item, if not already set
-    if ( empty( $line_item_data['price_field_id'] ) ) {
-      $line_item_data['price_field_id'] = 1;
-	  }
+    // Set the Price Field ID and Price Field Value ID for the line item, when just an amount is provided.
+    $order = new \CRM_Financial_BAO_Order();
+    $line_item_data['price_field_id'] = $order->getDefaultPriceFieldID();
+    $line_item_data['price_field_value_id'] = $order->getDefaultPriceFieldValueID();
 
     // do some calculations and sanity checks
     $contribution = \civicrm_api3('Contribution', 'getsingle', ['id' => $line_item_data['contribution_id']]);
