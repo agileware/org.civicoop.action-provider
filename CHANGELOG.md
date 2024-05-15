@@ -1,6 +1,8 @@
 Version 1.144 (not yet released)
 -------------
 
+*  Fixed issue with Create Line Item Action. See !65 
+
 Version 1.143
 -------------
 
