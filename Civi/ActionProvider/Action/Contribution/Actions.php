@@ -66,6 +66,10 @@ class Actions {
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG
     ]);
+    $provider->addAction('LinkContributionToContributionPage', '\Civi\ActionProvider\Action\Contribution\LinkContributionToContributionPage', E::ts('Contribution: Link to contribution page'), [
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG
+    ]);
     $provider->addAction('CreateSoftContribution', '\Civi\ActionProvider\Action\Contribution\CreateSoftContribution', E::ts('Contribution: Create soft contribution'), [
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
