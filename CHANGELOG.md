@@ -1,4 +1,4 @@
-Version 1.144 (not yet released)
+Version 1.144
 -------------
 
 * Added action: Contribution Link to Contribution Page
