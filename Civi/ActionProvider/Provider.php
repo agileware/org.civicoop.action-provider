@@ -101,6 +101,7 @@ class Provider {
       new \Civi\ActionProvider\Condition\ArrayParameterContains(),
       new \Civi\ActionProvider\Condition\ContactHasSubtype(),
       new \Civi\ActionProvider\Condition\ContactHasTag(),
+      new \Civi\ActionProvider\Condition\ContactHasEmail(),
       new \Civi\ActionProvider\Condition\ContactHasActivity(),
     );
 
