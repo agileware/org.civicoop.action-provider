@@ -1,6 +1,8 @@
 Version 1.145 (not yet released)
 -------------
 
+*  Added Contact Has Email condition. See !167
+
 Version 1.144
 -------------
 
