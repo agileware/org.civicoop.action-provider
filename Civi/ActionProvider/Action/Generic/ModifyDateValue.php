@@ -140,6 +140,15 @@ class ModifyDateValue extends AbstractAction {
       $parameters->getParameter('date')
     );
 
+    // check if the dateconversion is successful, if not stop and report
+    if (!$date) {
+      throw new \Exception(E::ts("'%1' is not a valid format for date '%2'", [
+        1 => $this->configuration->getParameter('format'),
+        2 => $parameters->getParameter('date'),
+      ])
+      );
+    };
+
     $date->modify($this->configuration->getParameter('date_interval'));
 
     if (

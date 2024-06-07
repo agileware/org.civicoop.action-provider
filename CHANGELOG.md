@@ -1,6 +1,7 @@
 Version 1.145 (not yet released)
 -------------
 
+* Let the Other::ModifyDateValue give better feedback.
 * Added Contact Has Email condition. See !167
 * Added conditions Parameters match (case-insensitive) and Parameters do not match (case-insensitive). See !166
 * For option group configuration fields and parameters only active options are possible. See !168
