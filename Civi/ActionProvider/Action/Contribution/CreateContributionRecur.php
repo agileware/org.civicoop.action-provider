@@ -11,13 +11,17 @@ use Civi\ActionProvider\ConfigContainer;
 use Civi\ActionProvider\Parameter\OptionGroupSpecification;
 use Civi\ActionProvider\Parameter\ParameterBag;
 use Civi\ActionProvider\Parameter\ParameterBagInterface;
-
 use Civi\ActionProvider\Parameter\Specification;
 use Civi\ActionProvider\Parameter\SpecificationBag;
 use Civi\ActionProvider\Utils\CustomField;
+
+use Civi\Core\Event\PostEvent;
+
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class CreateContributionRecur extends AbstractAction {
+  private int $id;
+  private string $frequency;
 
   /**
    * Run the action
@@ -54,7 +58,18 @@ class CreateContributionRecur extends AbstractAction {
       $contribution_params['payment_token_id'] = $parameters->getParameter('payment_token_id');
     }
 
+    if ($parameters->doesParameterExists('next_sched_contribution_date')) {
+      $contribution_params['next_sched_contribution_date'] = $parameters->getParameter('next_sched_contribution_date');
+    }
+    else {
+      // No schedule given, so make one when a contribution is attached.
+      \Civi::dispatcher()->addListener('hook_civicrm_post', [ $this, 'initializeSchedule' ]);
+    }
+
     $result = civicrm_api3('ContributionRecur', 'Create', $contribution_params);
+
+    $this->id = $result['id'];
+    $this->frequency = join(' ', [$contribution_params['frequency_interval'], $contribution_params['frequency_unit']]);
 
     $output->setParameter('contribution_recur_id', $result['id']);
   }
@@ -95,6 +110,7 @@ class CreateContributionRecur extends AbstractAction {
       new OptionGroupSpecification('frequency_unit', 'recur_frequency_units', E::ts('Frequency Unit'), TRUE),
       new Specification('campaign_id', 'Integer', E::ts('Campaign'), FALSE),
       new OptionGroupSpecification('currency', 'currencies_enabled', E::ts('Currency'), FALSE),
+      new Specification('next_sched_contribution_date', 'Date', E::ts('Next Scheduled Contribution Date'))
     ));
 
     $config = ConfigContainer::getInstance();
@@ -107,4 +123,29 @@ class CreateContributionRecur extends AbstractAction {
     return $specs;
   }
 
+  /**
+   * Callback to set recurring contribution schedule when not given.
+   */
+  public function initializeSchedule(PostEvent $event) {
+    if(!($event->object instanceof \CRM_Contribute_BAO_Contribution)) {
+      return;
+    }
+
+    /** @var \CRM_Contribute_BAO_Contribution $contribution */
+    $contribution = $event->object;
+
+    if($contribution->contribution_recur_id !== $this->id) {
+      return;
+    }
+
+    \Civi::dispatcher()->removeListener('hook_civicrm_post', [ $this, 'initializeSchedule' ]);
+
+    $next_sched_contribution_date = \DateTime::createFromFormat('YmdHis', $contribution->receive_date);
+    $next_sched_contribution_date->modify('+ ' . $this->frequency);
+
+    civicrm_api3('ContributionRecur', 'create', [
+      'id' => $this->id,
+      'next_sched_contribution_date' => $next_sched_contribution_date->format('YmdHis'),
+    ]);
+  }
 }
