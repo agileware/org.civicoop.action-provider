@@ -131,11 +131,17 @@ class CustomField {
         foreach($spec->getSpecificationBag() as $subSpec) {
           if (stripos($subSpec->getName(), 'custom_')===0 && $parameters->doesParameterExists($subSpec->getName())) {
             $apiParams[$subSpec->getApiFieldName()] = $parameters->getParameter($subSpec->getName());
+            if ($subSpec instanceof OptionGroupSpecification && !$subSpec->isMultiple() && is_array($apiParams[$subSpec->getApiFieldName()])) {
+              $apiParams[$subSpec->getApiFieldName()] = implode(",", $apiParams[$subSpec->getApiFieldName()]);
+            }
           }
         }
       } elseif (stripos($spec->getName(), 'custom_')===0) {
         if ($parameters->doesParameterExists($spec->getName())) {
           $apiParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
+          if ($spec instanceof OptionGroupSpecification && !$spec->isMultiple() && is_array($apiParams[$spec->getApiFieldName()])) {
+            $apiParams[$spec->getApiFieldName()] = implode(",", $apiParams[$spec->getApiFieldName()]);
+          }
         }
       }
     }

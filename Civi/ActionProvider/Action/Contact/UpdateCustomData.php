@@ -4,6 +4,7 @@ namespace Civi\ActionProvider\Action\Contact;
 
 use \Civi\ActionProvider\Action\AbstractAction;
 use Civi\ActionProvider\ConfigContainer;
+use Civi\ActionProvider\Exception\ExecutionException;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
@@ -25,7 +26,11 @@ class UpdateCustomData extends AbstractAction {
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $apiParams = CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification());
     $apiParams['id'] = $parameters->getParameter('contact_id');
-    $result = civicrm_api3('Contact', 'create', $apiParams);
+    try {
+      $result = civicrm_api3('Contact', 'create', $apiParams);
+    } catch (\Exception|\CRM_Core_Exception|\TypeError $e) {
+      throw new ExecutionException('Could not update contact custom data');
+    }
   }
 
   /**

@@ -1,6 +1,7 @@
 Version 1.145 (not yet released)
 -------------
 
+* Fixed issue with radio custom fields
 * Let the Other::ModifyDateValue give better feedback.
 * Added Contact Has Email condition. See !167
 * Added conditions Parameters match (case-insensitive) and Parameters do not match (case-insensitive). See !166
