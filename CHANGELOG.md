@@ -1,4 +1,4 @@
-Version 1.145 (not yet released)
+Version 1.145
 -------------
 
 * Fixed issue with radio custom fields
