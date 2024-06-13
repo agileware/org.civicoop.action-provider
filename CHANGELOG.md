@@ -1,5 +1,7 @@
-Version 1.147 (not yet released)
+Version 1.147
 -------------
+
+* Fixed issue with Create or Update Relationship action.
 
 Version 1.146
 -------------

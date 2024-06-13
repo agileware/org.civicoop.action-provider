@@ -40,56 +40,23 @@ class CreateOrUpdateRelationship extends CreateRelationship {
    * @return mixed
    */
   protected function findExistingRelationshipId($contact_id_a, $contact_id_b, $type_id, $also_inactive = FALSE) {
-    if (version_compare(\CRM_Utils_System::version(), '5.29.0', '<')) {
-      return $this->findExistingRelationshipIdLegacy($contact_id_a, $contact_id_b, $type_id, $also_inactive);
-    }
-    else {
-      $relationshipQuery = \Civi\Api4\RelationshipCache::get(FALSE)
-        ->addSelect('id')
-        ->addWhere('near_contact_id', '=', $contact_id_a)
-        ->addWhere('far_contact_id', '=', $contact_id_b)
-        ->addWhere('relationship_type_id', '=', $type_id)
-        ->addOrderBy('is_active', 'DESC');
+    $relationshipQuery = \Civi\Api4\Relationship::get(FALSE)
+      ->addSelect('id')
+      ->addWhere('contact_id_a', '=', $contact_id_a)
+      ->addWhere('contact_id_b', '=', $contact_id_b)
+      ->addWhere('relationship_type_id', '=', $type_id)
+      ->addOrderBy('is_active', 'DESC');
 
-      if (!$also_inactive) {
-        $relationshipQuery->addWhere('is_active', '=', TRUE);
-      }
-      try {
-        $id = $relationshipQuery->execute()->first()['id'] ?? FALSE;
-        return $id;
-      } catch (\Exception $e) {
-        // Do nothing
-        return FALSE;
-      }
+    if (!$also_inactive) {
+      $relationshipQuery->addWhere('is_active', '=', TRUE);
     }
-  }
-
-  protected function findExistingRelationshipIdLegacy($contact_id_a, $contact_id_b, $type_id, $also_inactive = FALSE) {
-    $relationshipFindParams = array();
-    $relationshipFindParams['contact_id_a'] = $contact_id_a;
-    $relationshipFindParams['contact_id_b'] = $contact_id_b;
-    $relationshipFindParams['relationship_type_id'] = $type_id;
-    $relationshipFindParams['is_active'] = '1';
     try {
-      $relationship = civicrm_api3('Relationship', 'getsingle', $relationshipFindParams);
-      return $relationship['id'];
+      $id = $relationshipQuery->execute()->first()['id'] ?? FALSE;
+      return $id;
     } catch (\Exception $e) {
       // Do nothing
+      return FALSE;
     }
-    if ($also_inactive) {
-      $relationshipFindParams = array();
-      $relationshipFindParams['contact_id_a'] = $contact_id_a;
-      $relationshipFindParams['contact_id_b'] = $contact_id_b;
-      $relationshipFindParams['relationship_type_id'] = $type_id;
-      $relationshipFindParams['is_active'] = '0';
-      try {
-        $relationship = civicrm_api3('Relationship', 'getsingle', $relationshipFindParams);
-        return $relationship['id'];
-      } catch (\Exception $e) {
-        // Do nothing
-      }
-    }
-    return false;
   }
 
   /**
@@ -104,7 +71,6 @@ class CreateOrUpdateRelationship extends CreateRelationship {
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $relationship_type_id = $this->relationshipTypeIds[$this->configuration->getParameter('relationship_type_id')];
-    $relationship_id = false;
     $alsoUpdateInactiveOne = false;
     if ($this->configuration->doesParameterExists('also_update_inactive') && $this->configuration->getParameter('also_update_inactive')) {
       $alsoUpdateInactiveOne = true;
