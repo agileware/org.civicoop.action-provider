@@ -417,7 +417,7 @@ class CreatePdf extends AbstractAction {
    * @param string $fileName
    */
   protected function _html2pdf_wkhtmltopdf($paper_size, $orientation, $margins, $html_file, $fileName) {
-    if (!class_exists('Knp\Snappy\Pdf', FALSE)) {
+    if (!class_exists('\Knp\Snappy\Pdf')) {
       require_once 'packages/snappy/src/autoload.php';
     }
     $config = \CRM_Core_Config::singleton();

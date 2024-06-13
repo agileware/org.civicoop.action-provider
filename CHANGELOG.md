@@ -1,5 +1,7 @@
-Version 1.146 (not yet released)
+Version 1.146
 -------------
+
+* Fixed issue with generating PDF from action provider (and Drupal 10).
 
 Version 1.145
 -------------
