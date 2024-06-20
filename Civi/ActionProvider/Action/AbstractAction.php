@@ -2,13 +2,15 @@
 
 namespace Civi\ActionProvider\Action;
 
+use Civi\ActionProvider\Exception\ExecutionException;
 use \Civi\ActionProvider\Provider;
 use \Civi\ActionProvider\Condition\AbstractCondition;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\ParameterBag;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
-use \Civi\ActionProvider\Parameter\InvalidParameterException;
+use \Civi\ActionProvider\Exception\InvalidParameterException;
 use \Civi\ActionProvider\Exception\InvalidConfigurationException;
+use Throwable;
 
 /**
  * This is the abstract class for an action.
@@ -136,17 +138,25 @@ abstract class AbstractAction implements \JsonSerializable {
     try {
       $this->validateParameters($parameters);
     } catch (InvalidParameterException $e) {
-      throw new InvalidParameterException("Found invalid parameters for the action: ".get_class($this).' '.$e->getMessage());
+      throw new \Civi\ActionProvider\Exception\InvalidParameterException("Found invalid parameters for the action: ".get_class($this).' '.$e->getMessage());
     }
 
     // Condition is valid or no condition class is set
     $output = $this->createParameterBag();
     try {
       // Install API wrapper at first level of action provider only
-      if (++ self::$wrapperLevel == 1) {
-        \Civi::dispatcher()->addListener('civi.api.prepare', ['Civi\ActionProvider\APIWrapper', 'onApiPrepare'], -100);
+      if (++self::$wrapperLevel == 1) {
+        \Civi::dispatcher()
+          ->addListener('civi.api.prepare', [
+            'Civi\ActionProvider\APIWrapper',
+            'onApiPrepare'
+          ], -100);
       }
-      $this->doAction($parameters, $output);
+      try {
+        $this->doAction($parameters, $output);
+      } catch (Throwable $e) {
+        throw new ExecutionException($e->getMessage());
+      }
     } finally {
       // Uninstall API wrapper, even if there was an exception
       if (-- self::$wrapperLevel == 0) {

@@ -1,6 +1,8 @@
 Version 1.148 (not yet released)
 -------------
 
+* Improved error handling.
+
 Version 1.147
 -------------
 

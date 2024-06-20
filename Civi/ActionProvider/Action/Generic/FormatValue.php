@@ -7,12 +7,9 @@
 namespace Civi\ActionProvider\Action\Generic;
 
 use \Civi\ActionProvider\Action\AbstractAction;
-use \Civi\ActionProvider\Exception\ExecutionException;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
-
-use Civi\FormProcessor\API\Exception;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 /**
