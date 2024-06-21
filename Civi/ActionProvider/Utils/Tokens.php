@@ -144,8 +144,8 @@ class Tokens {
     if (defined('CIVICRM_MAIL_SMARTY') && CIVICRM_MAIL_SMARTY) {
       $smarty = \CRM_Core_Smarty::singleton();
       // also add the contact tokens to the template
-      $smarty->assign_by_ref('contact', $contact);
-      $tokenHtml = $smarty->fetch("string:$tokenHtml");
+      $smarty->assign('contact', $contact);
+      $tokenHtml = \CRM_Utils_String::parseOneOffStringThroughSmarty($tokenHtml);
     }
 
     return $tokenHtml;
