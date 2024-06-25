@@ -2,6 +2,7 @@ Version 1.148 (not yet released)
 -------------
 
 * Improved error handling.
+* Implement next_sched_contribution_date field on Create contribution recur action. See !170
 
 Version 1.147
 -------------
