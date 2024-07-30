@@ -76,12 +76,12 @@ abstract class AbstractValidator implements JsonSerializable {
     try {
       $this->validateConfiguration();
     } catch (InvalidParameterException $e) {
-      return "Found invalid configuration for the action: ".get_class($this).' '.$e->getMessage();
+      return "Found invalid configuration for the validator: ".get_class($this).' '.$e->getMessage();
     }
     try {
       $this->validateParameters($parameters);
     } catch (InvalidParameterException $e) {
-      return "Found invalid parameters for the action: ".get_class($this).' '.$e->getMessage();
+      return "Found invalid parameters for the for the validator: ".get_class($this).' '.$e->getMessage();
     }
 
     return $this->doValidation($parameters);
