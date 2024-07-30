@@ -1,5 +1,8 @@
 {
     "name": "civicrm/action-provider",
     "type": "civicrm-ext",
-    "description": "Action Provider"
+    "description": "Action Provider",
+    "require": {
+        "ext-json": "*"
+    }
 }
