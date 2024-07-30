@@ -1,6 +1,8 @@
 Version 1.149 (not yet released)
 -------------
 
+* Added validation: CiviCase Contact does not have role on a case
+
 Version 1.148
 -------------
 

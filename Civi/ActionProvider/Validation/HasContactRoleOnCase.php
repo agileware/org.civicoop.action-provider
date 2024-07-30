@@ -6,9 +6,7 @@
 
 namespace Civi\ActionProvider\Validation;
 
-use Civi\ActionProvider\Action\AbstractAction;
 use Civi\ActionProvider\ConfigContainer;
-use Civi\ActionProvider\Exception\ExecutionException;
 use Civi\ActionProvider\Parameter\ParameterBagInterface;
 use Civi\ActionProvider\Parameter\Specification;
 use Civi\ActionProvider\Parameter\SpecificationBag;
