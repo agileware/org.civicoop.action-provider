@@ -1,6 +1,7 @@
 Version 1.149 (not yet released)
 -------------
 
+* Fixed issue with saving mappings of type collection. Used in condition  Parameters are (not) empty.
 * Added validation: CiviCase Contact does not have role on a case
 
 Version 1.148
