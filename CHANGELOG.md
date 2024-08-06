@@ -1,4 +1,4 @@
-Version 1.149 (not yet released)
+Version 1.149
 -------------
 
 * Fixed issue with saving mappings of type collection. Used in condition  Parameters are (not) empty.
