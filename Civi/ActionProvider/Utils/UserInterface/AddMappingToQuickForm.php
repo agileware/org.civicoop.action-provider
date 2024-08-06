@@ -118,7 +118,7 @@ class AddMappingToQuickForm {
   }
 
   protected static function addCollectionMappingField($spec, $prefix, $current_mapping, CRM_Core_Form $form, $availableFields, $count, $groupName) {
-    $singleName = $prefix.'mapping_'.$spec->getName();
+    $singleName = $prefix . '_' . $groupName . '_mapping_' . $spec->getName();
     $description = null;
     if ($spec->getDescription()) {
       $description = $spec->getDescription();
@@ -154,7 +154,7 @@ class AddMappingToQuickForm {
         $count = $submittedValues[$spec->getName().'Count'];
         for($i=1; $i <= $count; $i++) {
           foreach($spec->getSpecificationBag() as $subSpec) {
-            $name = $prefix.'mapping_'.$subSpec->getName();
+            $name = $prefix . '_' . $spec->getName() . '_mapping_' . $subSpec->getName();
             if (isset($submittedValues[$name])) {
               $return[$spec->getName()][$i-1]['parameter_mapping'][$subSpec->getName()] = $submittedValues[$name][$i];
             }
