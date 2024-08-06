@@ -1,5 +1,7 @@
-Version 1.150 (not yet released)
+Version 1.150
 -------------
+
+* Fixed issue with update existing non-primary e-mail address.
 
 Version 1.149
 -------------

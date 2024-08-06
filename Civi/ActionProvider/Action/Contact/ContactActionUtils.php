@@ -302,13 +302,17 @@ class ContactActionUtils {
    */
   public static function createEmail($contact_id, ParameterBagInterface $parameters, ParameterBagInterface $configuration) {
     $existingEmailId = false;
+    $createOrUpdate = false;
     if ($configuration->getParameter('email_update_existing')) {
+      $createOrUpdate = true;
       $existingEmailId = self::findExistingEmail($contact_id, $configuration->getParameter('email_location_type'), $configuration->getParameter('email_is_primary'));
+    } elseif ($parameters->getParameter('email')) {
+      $createOrUpdate = !self::doesEmailExists($contact_id, $parameters->getParameter('email'));
     }
 
     if ($parameters->getParameter('email')) {
       // Create email if it does not exist yet
-      if ($existingEmailId || !self::doesEmailExists($contact_id, $parameters->getParameter('email'))) {
+      if ($createOrUpdate) {
         $emailParams = array();
         if ($existingEmailId) {
           $emailParams['id'] = $existingEmailId;
