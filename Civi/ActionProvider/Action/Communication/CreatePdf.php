@@ -95,7 +95,7 @@ class CreatePdf extends AbstractAction {
    * @return array
    *   Returns the file array
    */
-  protected function createActivity($contactId, $message, $pdfContents, $filename, $subject='', $attachToCase, $caseId) {
+  protected function createActivity($contactId, $message, $pdfContents, $filename, $subject='', $attachToCase=false, $caseId=null) {
     $activityTypeId = $this->getPdfLetterActivityTypeId();
     $activityParams = array(
       'activity_type_id' => $activityTypeId,

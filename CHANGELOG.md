@@ -2,6 +2,7 @@ Version 1.151 (not yet released)
 -------------
 
 * Contribution: Update made configuration parameters optional. See as well !104
+* Communications: Create PDF fix issue with php 8.2
 
 Version 1.150
 -------------
