@@ -25,7 +25,8 @@ class UpdateContribution extends AbstractAction {
    * @param ParameterBagInterface $parameters
    *   The parameters to this action.
    * @param ParameterBagInterface $output
-   * 	 The parameters this action can send back
+   *   The parameters this action can send back
+   *
    * @return void
    * @throws \Exception
    */
@@ -33,19 +34,24 @@ class UpdateContribution extends AbstractAction {
     $contribution_params = CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification());
     $contribution_params['id'] = $parameters->getParameter('id');
 
-	$contribution_params['financial_type_id'] = $this->configuration->getParameter('financial_type_id');
-	$contribution_params['contribution_status_id'] = $this->configuration->getParameter('contribution_status');
-	$contribution_params['payment_instrument_id'] = $this->configuration->getParameter('payment_instrument');
-	$contribution_params['is_pay_later'] = $this->configuration->getParameter('is_pay_later') ? true : false;
+    if ($this->configuration->doesParameterExists('is_pay_later')) {
+      $contribution_params['is_pay_later'] = $this->configuration->getParameter('is_pay_later') ? TRUE : FALSE;
+    }
 
     if ($parameters->doesParameterExists('financial_type_id')) {
       $contribution_params['financial_type_id'] = $parameters->getParameter('financial_type_id');
+    } elseif ($this->configuration->doesParameterExists('financial_type_id')) {
+      $contribution_params['financial_type_id'] = $this->configuration->getParameter('financial_type_id');
     }
     if ($parameters->doesParameterExists('contribution_status')) {
-    $contribution_params['contribution_status_id'] = $parameters->getParameter('contribution_status');
+      $contribution_params['contribution_status_id'] = $parameters->getParameter('contribution_status');
+    } elseif ($this->configuration->doesParameterExists('contribution_status')) {
+      $contribution_params['contribution_status_id'] = $this->configuration->getParameter('contribution_status');
     }
     if ($parameters->doesParameterExists('payment_instrument')) {
-    $contribution_params['payment_instrument_id'] = $parameters->getParameter('payment_instrument');
+      $contribution_params['payment_instrument_id'] = $parameters->getParameter('payment_instrument');
+    } elseif ($this->configuration->doesParameterExists('payment_instrument')) {
+      $contribution_params['payment_instrument_id'] = $this->configuration->getParameter('payment_instrument');
     }
     if ($parameters->doesParameterExists('contact_id')) {
       $contribution_params['contact_id'] = $parameters->getParameter('contact_id');;
@@ -87,23 +93,24 @@ class UpdateContribution extends AbstractAction {
    * @return \Civi\ActionProvider\Parameter\SpecificationBag
    */
   public function getOutputSpecification() {
-    return new SpecificationBag(array(
-      new Specification('contribution_id', 'Integer', E::ts('Contribution ID'), false),
-    ));
+    return new SpecificationBag([
+      new Specification('contribution_id', 'Integer', E::ts('Contribution ID'), FALSE),
+    ]);
   }
 
   /**
-   * Returns the specification of the configuration options for the actual action.
+   * Returns the specification of the configuration options for the actual
+   * action.
    *
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
-	  return new SpecificationBag(array(
-		  new Specification('financial_type_id', 'Integer', E::ts('Financial Type'), TRUE, null, 'FinancialType'),
-		  new OptionGroupSpecification('payment_instrument', 'payment_instrument', E::ts('Payment instrument'), TRUE),
-		  new OptionGroupSpecification('contribution_status', 'contribution_status', E::ts('Status of contribution'), TRUE),
-		  new Specification('is_pay_later', 'Boolean', E::ts('Is Pay Later'), true, false),
-	  ));
+    return new SpecificationBag([
+      new Specification('financial_type_id', 'Integer', E::ts('Financial Type'), FALSE, NULL, 'FinancialType'),
+      new OptionGroupSpecification('payment_instrument', 'payment_instrument', E::ts('Payment instrument'), FALSE),
+      new OptionGroupSpecification('contribution_status', 'contribution_status', E::ts('Status of contribution'), FALSE),
+      new Specification('is_pay_later', 'Boolean', E::ts('Is Pay Later'), FALSE),
+    ]);
   }
 
   /**
@@ -112,22 +119,22 @@ class UpdateContribution extends AbstractAction {
    * @return SpecificationBag
    */
   public function getParameterSpecification() {
-    $specs = new SpecificationBag(array(
-      new Specification('id', 'Integer', E::ts('Contribution ID'), true),
-      new Specification('contact_id', 'Integer', E::ts('Contact ID'), false),
-      new Specification('amount', 'Float', E::ts('Amount'), false),
-      new Specification('financial_type_id', 'Integer', E::ts('Financial Type'), false, null, 'FinancialType'),
-      new OptionGroupSpecification('payment_instrument', 'payment_instrument', E::ts('Payment instrument'), false),
-      new OptionGroupSpecification('contribution_status', 'contribution_status', E::ts('Status of contribution'), false),
-      new Specification('campaign_id', 'Integer', E::ts('Campaign'), false),
-      new Specification('contribution_recur_id', 'Integer', E::ts('Contribution Recur ID'), false),
-      new Specification('receive_date', 'Date', E::ts('Receive date'), false),
-      new Specification('receipt_date', 'Date', E::ts('Receipt date'), false),
+    $specs = new SpecificationBag([
+      new Specification('id', 'Integer', E::ts('Contribution ID'), TRUE),
+      new Specification('contact_id', 'Integer', E::ts('Contact ID'), FALSE),
+      new Specification('amount', 'Float', E::ts('Amount'), FALSE),
+      new Specification('financial_type_id', 'Integer', E::ts('Financial Type'), FALSE, NULL, 'FinancialType'),
+      new OptionGroupSpecification('payment_instrument', 'payment_instrument', E::ts('Payment instrument'), FALSE),
+      new OptionGroupSpecification('contribution_status', 'contribution_status', E::ts('Status of contribution'), FALSE),
+      new Specification('campaign_id', 'Integer', E::ts('Campaign'), FALSE),
+      new Specification('contribution_recur_id', 'Integer', E::ts('Contribution Recur ID'), FALSE),
+      new Specification('receive_date', 'Date', E::ts('Receive date'), FALSE),
+      new Specification('receipt_date', 'Date', E::ts('Receipt date'), FALSE),
       new OptionGroupSpecification('currency', 'currencies_enabled', E::ts('Currency'), FALSE),
-      new Specification('source', 'String', E::ts('Source'), false),
-      new Specification('note', 'String', E::ts('Note'), false),
-      new Specification('trxn_id', 'String', E::ts('Transaction ID'), false),
-    ));
+      new Specification('source', 'String', E::ts('Source'), FALSE),
+      new Specification('note', 'String', E::ts('Note'), FALSE),
+      new Specification('trxn_id', 'String', E::ts('Transaction ID'), FALSE),
+    ]);
 
     $config = ConfigContainer::getInstance();
     $customGroups = $config->getCustomGroupsForEntity('Contribution');

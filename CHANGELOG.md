@@ -1,6 +1,8 @@
 Version 1.151 (not yet released)
 -------------
 
+* Contribution: Update made configuration parameters optional. See as well !104
+
 Version 1.150
 -------------
 
