@@ -1,6 +1,8 @@
 Version 1.152 (not yet released)
 -------------
 
+* Enable the clearing of a custom value with a parameter that has the value NULL.
+
 Version 1.151
 -------------
 
