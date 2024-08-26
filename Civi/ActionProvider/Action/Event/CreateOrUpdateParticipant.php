@@ -49,6 +49,7 @@ class CreateOrUpdateParticipant extends AbstractAction {
       new Specification('event_id', 'Integer', E::ts('Event ID'), true, null, null, null, FALSE),
       new Specification('contact_id', 'Integer', E::ts('Contact ID'), true, null, null, null, FALSE),
       new Specification('campaign_id', 'Integer', E::ts('Campaign ID'), false, null, null, null, FALSE),
+      new Specification('register_date', 'Date', E::ts('Register Date'), false, null, null, null, FALSE),
     ));
 
     $config = ConfigContainer::getInstance();
@@ -117,6 +118,9 @@ class CreateOrUpdateParticipant extends AbstractAction {
       }
       if ($parameters->getParameter('campaign_id')) {
         $participantParams['campaign_id'] = $parameters->getParameter('campaign_id');
+      }
+      if ($parameters->doesParameterExists('register_date')) {
+        $participantParams['register_date'] = $parameters->getParameter('register_date') ?? '';
       }
 
       $result = civicrm_api3('Participant', 'create', $participantParams);
