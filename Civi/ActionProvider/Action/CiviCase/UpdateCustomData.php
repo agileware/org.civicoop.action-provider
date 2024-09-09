@@ -3,6 +3,7 @@
 namespace Civi\ActionProvider\Action\CiviCase;
 
 use \Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\Exception\ExecutionException;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
@@ -24,7 +25,11 @@ class UpdateCustomData extends AbstractAction {
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $apiParams['id'] = $parameters->getParameter('case_id');
     $apiParams = array_merge($apiParams, CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification()));
-    $result = civicrm_api3('Case', 'create', $apiParams);
+    try {
+      $result = civicrm_api3('Case', 'create', $apiParams);
+    } catch (\Exception|\CRM_Core_Exception|\TypeError $e) {
+      throw new ExecutionException('Could not update case custom data: ' . $e);
+    }
   }
 
   /**
