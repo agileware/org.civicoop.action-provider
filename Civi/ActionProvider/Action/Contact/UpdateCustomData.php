@@ -29,7 +29,7 @@ class UpdateCustomData extends AbstractAction {
     try {
       $result = civicrm_api3('Contact', 'create', $apiParams);
     } catch (\Exception|\CRM_Core_Exception|\TypeError $e) {
-      throw new ExecutionException('Could not update contact custom data');
+      throw new ExecutionException('Could not update contact custom data: ' . $e);
     }
   }
 
