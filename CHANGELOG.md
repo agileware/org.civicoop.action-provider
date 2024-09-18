@@ -1,4 +1,4 @@
-Version 1.152 (not yet released)
+Version 1.152
 -------------
 
 * At registering on waitlist functionality to Create/Update Participant actions.
