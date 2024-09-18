@@ -1,4 +1,4 @@
-Version 1.153 (not yet released)
+Version 1.153
 -------------
 
 * Added action Contact: Create/update primary phone
