@@ -186,6 +186,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('CreateUpdatePrimaryPhone', '\Civi\ActionProvider\Action\Phone\CreateUpdatePrimaryPhone', E::ts('Contact: Create or update primary phone number'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $provider->addAction('GetPhone', '\Civi\ActionProvider\Action\Phone\GetPhone', E::ts('Contact: Get phone number'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,

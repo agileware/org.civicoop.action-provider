@@ -1,6 +1,9 @@
 Version 1.153 (not yet released)
 -------------
 
+* Added action Contact: Create/update primary phone
+* Added functionality to to set the phone to primary in the Contact create/update phone.
+
 Version 1.152
 -------------
 

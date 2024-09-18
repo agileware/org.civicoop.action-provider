@@ -12,14 +12,14 @@ use \Civi\ActionProvider\Parameter\OptionGroupSpecification;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class CreateUpdatePhone extends AbstractAction {
-  
+
   /**
    * Run the action
-   * 
+   *
    * @param ParameterInterface $parameters
    *   The parameters to this action.
    * @param ParameterBagInterface $output
-   *   The parameters this action can send back 
+   *   The parameters this action can send back
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
@@ -35,7 +35,7 @@ class CreateUpdatePhone extends AbstractAction {
     } catch (\Exception $e) {
       // Do nothing
     }
-    
+
     if (!empty($parameters->getParameter('phone'))) {
       $params = array();
       if ($existingPhoneId) {
@@ -44,6 +44,9 @@ class CreateUpdatePhone extends AbstractAction {
       $params['phone_type_id'] = $this->configuration->getParameter('phone_type');
       $params['location_type_id'] = $this->configuration->getParameter('location_type');
       $params['contact_id'] = $contact_id;
+      if (!empty($this->configuration->getParameter('phone_set_primary'))) {
+        $params['is_primary'] = '1';
+      }
       $params['phone'] = $parameters->getParameter('phone');
       civicrm_api3('Phone', 'create', $params);
     } elseif ($existingPhoneId) {
@@ -52,10 +55,10 @@ class CreateUpdatePhone extends AbstractAction {
       civicrm_api3('Phone', 'delete', $params);
     }
   }
-  
+
   /**
    * Returns the specification of the configuration options for the actual action.
-   * 
+   *
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
@@ -65,12 +68,13 @@ class CreateUpdatePhone extends AbstractAction {
     return new SpecificationBag(array(
       new OptionGroupSpecification('phone_type', 'phone_type', E::ts('Phone Type'), true),
       new Specification('location_type', 'Integer', E::ts('Location type'), true, $defaultLocationType, null, $locationTypes, FALSE),
+      new Specification('phone_set_primary', 'Boolean', E::ts('Set as primary'), false, 0, null, null, FALSE),
     ));
   }
-  
+
   /**
    * Returns the specification of the parameters of the actual action.
-   * 
+   *
    * @return SpecificationBag
    */
   public function getParameterSpecification() {
@@ -79,12 +83,12 @@ class CreateUpdatePhone extends AbstractAction {
       new Specification('phone', 'String', E::ts('Phone'), false),
     ));
   }
-  
+
   /**
    * Returns the specification of the output parameters of this action.
-   * 
+   *
    * This function could be overridden by child classes.
-   * 
+   *
    * @return SpecificationBag
    */
   public function getOutputSpecification() {
@@ -92,5 +96,5 @@ class CreateUpdatePhone extends AbstractAction {
   }
 
 
-  
+
 }
