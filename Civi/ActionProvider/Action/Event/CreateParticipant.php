@@ -2,18 +2,15 @@
 
 namespace Civi\ActionProvider\Action\Event;
 
-use \Civi\ActionProvider\Action\AbstractAction;
 use Civi\ActionProvider\ConfigContainer;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
 use \Civi\ActionProvider\Parameter\OptionGroupSpecification;
-use Civi\ActionProvider\Parameter\SpecificationGroup;
 use \Civi\ActionProvider\Utils\CustomField;
-
 use CRM_ActionProvider_ExtensionUtil as E;
 
-class CreateParticipant extends AbstractAction {
+class CreateParticipant extends AbstractParticipantAction {
 
   /**
    * Returns the specification of the configuration options for the actual action.
@@ -21,12 +18,16 @@ class CreateParticipant extends AbstractAction {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
-    return new SpecificationBag(array(
+    $spec = new SpecificationBag(array(
       new Specification('status_id', 'Integer', E::ts('Status'), true, null, 'ParticipantStatusType', null, FALSE),
       new OptionGroupSpecification('role_id', 'participant_role', E::ts('Role'), true, null, FALSE),
       new Specification('create_when_exists', 'Boolean', E::ts('Create participant when already registered'), false, false, null, null, FALSE),
       new Specification('source', 'String', E::ts('Source'), false, null, null, null, FALSE),
     ));
+    if (Actions::isWaitListEnabled()) {
+      $spec->addSpecification(new Specification('waitlist_status_id', 'Integer', E::ts('Waitlist Status'), true, null, 'ParticipantStatusType', null, FALSE));
+    }
+    return $spec;
   }
 
   /**
@@ -95,6 +96,9 @@ class CreateParticipant extends AbstractAction {
     $role_id = $this->configuration->getParameter('role_id');
     $status_id = $this->configuration->getParameter('status_id');
     $participant_id = false;
+    if (Actions::isWaitListEnabled() && $this->needToRegisterOnWaitlist($event_id)) {
+      $status_id = $this->configuration->getParameter('waitlist_status_id');
+    }
 
     // Find the participant record for this contact and event.
     // This assumes that the contact has already been registered for the event.

@@ -1,5 +1,7 @@
 Version 1.152 (not yet released)
 -------------
+
+* At registering on waitlist functionality to Create/Update Participant actions.
 * Add the parameter Fee Level to the actions 'Participant: Create/Update event registration' and 'Participant: Register contact for an event'
 * Add the parameter Register Date to the actions 'Participant: Create/Update event registration' and 'Participant: Register contact for an event'
 * Enable the clearing of a custom value with a parameter that has the value NULL.

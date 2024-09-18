@@ -8,6 +8,7 @@ namespace Civi\ActionProvider\Action\Event;
 
 use Civi\ActionProvider\Action\AbstractAction;
 use Civi\ActionProvider\Provider;
+use Civi\API\Exception\UnauthorizedException;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class Actions {
@@ -111,6 +112,30 @@ class Actions {
     $provider->addAction('GetParticipantPayment', '\Civi\ActionProvider\Action\Event\GetParticipantPayment', E::ts('ParticipantPayment: get by Participant Id or Contribution ID') , array(
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+  }
+
+  /**
+   * Is the waitlist functionality enabled?
+   *
+   * @return bool
+   */
+  public static function isWaitListEnabled(): bool {
+    try {
+      $waitlistStatusCount = \Civi\Api4\ParticipantStatusType::get(TRUE)
+        ->addClause('OR', ['name', '=', 'Pending from waitlist'], [
+          'name',
+          '=',
+          'On waitlist',
+        ])
+        ->addWhere('is_active', '=', TRUE)
+        ->execute()
+        ->count();
+      return $waitlistStatusCount > 0;
+    }
+    catch (UnauthorizedException|\CRM_Core_Exception $e) {
+      // Do nothing
+    }
+    return false;
   }
 
 }

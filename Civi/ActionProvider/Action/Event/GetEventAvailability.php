@@ -68,6 +68,9 @@ class GetEventAvailability extends AbstractAction {
           ->execute()
           ->count();
         $availablePlaces = $event['max_participants'] - $participantCount;
+        if ($availablePlaces < 0) {
+          $availablePlaces = 0;
+        }
         $output->setParameter('available_places', $availablePlaces);
         if (!$availablePlaces) {
           if (!empty($event['has_waitlist']) && !empty($event['waitlist_text'])) {
