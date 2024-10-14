@@ -1,5 +1,7 @@
-Version 1.154 (not yet released)
+Version 1.154
 -------------
+
+* Fixed issue with the action Participant: send confirmation e-mail. An activity is also recordedd for the email.
 
 Version 1.153
 -------------
