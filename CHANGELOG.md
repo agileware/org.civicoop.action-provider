@@ -1,6 +1,3 @@
-Version 1.155 (not yet released)
--------------
-
 Version 1.154
 -------------
 

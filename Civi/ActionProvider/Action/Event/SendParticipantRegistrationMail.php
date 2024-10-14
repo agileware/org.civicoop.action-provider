@@ -36,6 +36,7 @@ class SendParticipantRegistrationMail extends AbstractAction {
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
+    $template = \CRM_Core_Smarty::singleton();
     $participantId = $parameters->getParameter('participant_id');
     $participant = civicrm_api3('Participant','getsingle',['id' => $participantId]);
     $event =  civicrm_api3('Event','getsingle',['id' => $participant['event_id']]);
@@ -51,28 +52,87 @@ class SendParticipantRegistrationMail extends AbstractAction {
         // Do nothing.
       }
     }
-    $location = array();
-    if (\CRM_Utils_Array::value('is_show_location',$event) == 1) {
-      $locationParams = array(
-        'entity_id' => $event['id'],
-        'entity_table' => 'civicrm_event',
-      );
-      $location = \CRM_Core_BAO_Location::getValues($locationParams, TRUE);
-      \CRM_Core_BAO_Address::fixAddress($location['address'][1]);
-    }
-    $lineItem[] = \CRM_Price_BAO_LineItem::getLineItems($participantId);
 
-    $values = array(
-      'params' => array($participantId => $participant),
-      'event' => $event,
-      'location' => $location,
-      'custom_pre_id' => $custom_pre_id,
-      'custom_post_id' => null,
-      'payer' => null,
-      'customGroup' => null,
-      'lineItem' => $lineItem,
-    );
-    \CRM_Event_BAO_Event::sendMail($participant['contact_id'],$values,$participantId);
+
+    $fromEmails = \CRM_Event_BAO_Event::getFromEmailIds($event['id']);
+    $contactID = $participant['contact_id'];
+
+    [$displayName, $email] = \CRM_Contact_BAO_Contact_Location::getEmailDetails($contactID);
+    $notifyEmail = \CRM_Utils_Array::valueByRegexKey('/^email-/', $participant) ?? $email;
+    if (!empty($notifyEmail)) {
+      $contributionID = \CRM_Core_DAO::getFieldValue('CRM_Event_DAO_ParticipantPayment', $participantId, 'contribution_id', 'participant_id');
+
+      $profilePre = \CRM_Event_BAO_Event::buildCustomDisplay($custom_pre_id,
+        'customPre',
+        $contactID,
+        $template,
+        $participantId,
+        false,
+        TRUE,
+        $participant
+      );
+
+      $tplParams = array_merge($participant, [
+        'email' => $notifyEmail,
+        'confirm_email_text' => $event['confirm_email_text'] ?? NULL,
+        'isShowLocation' => $event['is_show_location'] ?? NULL,
+        'customPre' => $profilePre[0],
+        'customPre_grouptitle' => empty($profilePre[1]) ? NULL : [\CRM_Core_BAO_UFGroup::getFrontEndTitle((int) $custom_pre_id)],
+        'customPost' => null,
+        'customPost_grouptitle' => null,
+        'participantID' => $participantId,
+        'contactID' => $contactID,
+        'credit_card_number' => \CRM_Utils_System::mungeCreditCard(\CRM_Utils_Array::value('credit_card_number', $participant)),
+        'credit_card_exp_date' => \CRM_Utils_Date::mysqlToIso(\CRM_Utils_Date::format(\CRM_Utils_Array::value('credit_card_exp_date', $participant))),
+        'selfcancelxfer_time' => abs($event['selfcancelxfer_time']),
+        'selfservice_preposition' => $event['selfcancelxfer_time'] < 0 ? ts('after') : ts('before'),
+        'currency' => $event['currency'] ?? \CRM_Core_Config::singleton()->defaultCurrency,
+      ]);
+
+      $sendTemplateParams = [
+        'workflow' => 'event_online_receipt',
+        'contactId' => $contactID,
+        'tplParams' => $tplParams,
+        'isTest' => false,
+        'PDFFilename' => ts('confirmation') . '.pdf',
+        'modelProps' => [
+          'participantID' => $participantId,
+          'eventID' => $event['id'],
+          'contributionID' => $contributionID,
+        ],
+      ];
+      //'custom_pre_id' => $custom_pre_id,
+
+      $sendTemplateParams['from'] = $event['confirm_from_email'];
+      $sendTemplateParams['toName'] = $displayName;
+      $sendTemplateParams['toEmail'] = $notifyEmail;
+      $sendTemplateParams['cc'] = $fromEmails['cc'] ?? NULL;
+      $sendTemplateParams['bcc'] = $fromEmails['bcc'] ?? NULL;
+
+      //send email with pdf invoice
+      if (\Civi::settings()->get('invoice_is_email_pdf')) {
+        $sendTemplateParams['isEmailPdf'] = TRUE;
+        $sendTemplateParams['contributionId'] = $contributionID;
+      }
+      [$mailSent, $subject, $body, $html] = \CRM_Core_BAO_MessageTemplate::sendTemplate($sendTemplateParams);
+      if ($mailSent) {
+        if ($contributionID) {
+          \Civi\Api4\Contribution::update(FALSE)
+            ->addWhere('id', '=', $contributionID)
+            ->setValues(['receipt_date' => 'now'])
+            ->execute();
+        }
+
+        $objParticipant = new \CRM_Event_BAO_Participant();
+        $objParticipant->id = $participantId;
+        $objParticipant->find(TRUE);
+
+        $activityParams['subject'] = $subject;
+        $activityParams['details'] = $html;
+
+        \CRM_Activity_BAO_Activity::addActivity($objParticipant, 'Email', $contactID, $activityParams);
+      }
+    }
   }
 
   /**
