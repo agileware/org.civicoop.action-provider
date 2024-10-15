@@ -1,6 +1,8 @@
 Version 1.155 (not yet released)
 -------------
 
+* Added preferred_language on Contact: Create or Update Organization. See !175 
+
 Version 1.154
 -------------
 
