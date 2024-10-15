@@ -85,6 +85,9 @@ class CreateUpdateOrganization extends AbstractAction {
     if ($parameters->doesParameterExists('do_not_sms')) {
       $params['do_not_sms'] = $parameters->getParameter('do_not_sms') ? '1' : '0';
     }
+    if ($parameters->doesParameterExists('preferred_language')) {
+      $params['preferred_language'] = $parameters->getParameter('preferred_language');
+    }
     $result     = civicrm_api3('Contact', 'create', $params);
     $contact_id = $result['id'];
     $output->setParameter('contact_id', $contact_id);
@@ -154,6 +157,7 @@ class CreateUpdateOrganization extends AbstractAction {
       new Specification('do_not_email', 'Boolean', E::ts('Do not e-mail'), FALSE),
       new Specification('do_not_phone', 'Boolean', E::ts('Do not Phone'), FALSE),
       new Specification('do_not_sms', 'Boolean', E::ts('Do not SMS'), FALSE),
+      new Specification('preferred_language', 'String', E::ts('Preferred Language'), false),
     ]);
     ContactActionUtils::createAddressParameterSpecification($spec);
     ContactActionUtils::createEmailParameterSpecification($spec);
