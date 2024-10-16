@@ -329,9 +329,12 @@ class Provider {
 	public function createdMappedParameterBag(ParameterBagInterface $parameterBag, $mapping) {
 		$mappedParameterBag = $this->createParameterBag();
 		foreach($mapping as $mappedField => $field) {
-		  if (is_array($field)) {
+		  if (is_array($field) && !empty($field)) {
         $subParameterBags = array();
 		    foreach($field as $subField) {
+          if(empty($subField)) {
+            continue;
+          }
 		      if (isset($subField['parameter_mapping'])) {
             $subParameterBags[] = $this->createdMappedParameterBag($parameterBag, $subField['parameter_mapping']);
           } elseif ($parameterBag->doesParameterExists($subField)) {
@@ -345,7 +348,7 @@ class Provider {
           }
         }
 		    $mappedParameterBag->setParameter($mappedField, $subParameterBags);
-      } elseif ($parameterBag->doesParameterExists($field)) {
+      } elseif (!empty($field) && $parameterBag->doesParameterExists($field)) {
 				$mappedParameterBag->setParameter($mappedField, $parameterBag->getParameter($field));
 			}
 		}
