@@ -1,4 +1,4 @@
-Version 1.155 (not yet released)
+Version 1.155
 -------------
 
 * Fixed issue with api verions 3 calls in actions and failure handling. See form-processor#84
