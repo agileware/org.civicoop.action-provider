@@ -21,10 +21,17 @@ class APIWrapper {
     $api_request = $event->getApiRequest();
 
     if (is_array($api_request) && $api_request['version'] == 3) {
-      $action = $api_request['action'];
+      $action = strtolower($api_request['action']);
       if($action == 'get' || $action == 'getsingle') {
         // Only interested in APIv3 requests
         $event->wrapAPI([self::class, 'wrapV3calls']);
+      }
+      if ($action == 'create' || $action == 'delete' || $action == 'submit') {
+        // Make sure that the Transaction is nested.
+        // So that an api failure will not cause the transaction not being
+        // committed.
+        $api_request['params']['is_transactional'] = 'nest';
+        $event->setApiRequest($api_request);
       }
     }
   }

@@ -38,7 +38,7 @@ class UpdateGroupSubscriptions extends AbstractAction {
       try {
         civicrm_api3('GroupContact', $action, array(
           'contact_id' => $parameters->getParameter('contact_id'),
-          'group_id' => $groupIdToCheck
+          'group_id' => $groupIdToCheck,
         ));
       } catch (\CiviCRM_API3_Exception $ex) {
         // Do nothing.

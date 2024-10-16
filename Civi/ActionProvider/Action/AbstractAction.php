@@ -10,6 +10,7 @@ use \Civi\ActionProvider\Parameter\ParameterBag;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Exception\InvalidParameterException;
 use \Civi\ActionProvider\Exception\InvalidConfigurationException;
+use Civi\API\Events;
 use Throwable;
 
 /**
@@ -150,13 +151,16 @@ abstract class AbstractAction implements \JsonSerializable {
           ->addListener('civi.api.prepare', [
             'Civi\ActionProvider\APIWrapper',
             'onApiPrepare'
-          ], -100);
+          ], Events::W_EARLY +1);
       }
+      // Wrap action in a transatcion.
+      $transaction = new \CRM_Core_Transaction();
       try {
         $this->doAction($parameters, $output);
       } catch (Throwable $e) {
         throw new ExecutionException($e->getMessage());
       }
+      $transaction->commit();
     } finally {
       // Uninstall API wrapper, even if there was an exception
       if (-- self::$wrapperLevel == 0) {

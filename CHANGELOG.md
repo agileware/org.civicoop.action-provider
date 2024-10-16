@@ -1,6 +1,7 @@
 Version 1.155 (not yet released)
 -------------
 
+* Fixed issue with api verions 3 calls in actions and failure handling. See form-processor#84
 * Added preferred_language on Contact: Create or Update Organization. See !175
 * Fix for unintended custom field erasure. See #57
 
