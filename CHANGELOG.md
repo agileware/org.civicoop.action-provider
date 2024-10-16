@@ -1,7 +1,8 @@
 Version 1.155 (not yet released)
 -------------
 
-* Added preferred_language on Contact: Create or Update Organization. See !175 
+* Added preferred_language on Contact: Create or Update Organization. See !175
+* Fix for unintended custom field erasure. See #57
 
 Version 1.154
 -------------
