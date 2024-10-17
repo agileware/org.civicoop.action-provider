@@ -59,6 +59,8 @@ class CustomField {
    * @return Specification|null
    */
   public static function getSpecFromCustomField($customField, $titlePrefix='', $useRequiredFromCustomField=false) {
+    $customGroup = ConfigContainer::getInstance()->getCustomGroup($customField['custom_group_id']);
+
     $name = self::getCustomFieldName($customField['id']);
     $apiFieldName = 'custom_'.$customField['id'];
     $type = self::getTypeForCustomField($customField);
@@ -87,6 +89,7 @@ class CustomField {
     }
     if ($spec) {
       $spec->setApiFieldName($apiFieldName);
+      $spec->setApi4FieldName($customGroup['name'] . '.' . $customField['name']);
       return $spec;
     }
     return null;
@@ -100,7 +103,6 @@ class CustomField {
    * @param $customGroupTitle
    *
    * @return \Civi\ActionProvider\Parameter\SpecificationGroup
-   * @throws \CiviCRM_API3_Exception
    */
   public static function getSpecForCustomGroup($customGroupId, $customGroupName, $customGroupTitle) {
     $customFields = ConfigContainer::getInstance()->getCustomFieldsOfCustomGroup($customGroupId);
@@ -141,6 +143,41 @@ class CustomField {
           $apiParams[$spec->getApiFieldName()] = $parameters->getParameter($spec->getName());
           if ($spec instanceof OptionGroupSpecification && !$spec->isMultiple() && is_array($apiParams[$spec->getApiFieldName()])) {
             $apiParams[$spec->getApiFieldName()] = implode(",", $apiParams[$spec->getApiFieldName()]);
+          }
+        }
+      }
+    }
+    // to set a customfield to null the API needs to receive an empty string ("")
+    // so replace all the null values with an empty string
+    $apiParams = array_map(function($x){ return is_null($x)?"":$x;},$apiParams);
+    return $apiParams;
+  }
+
+  /**
+   * Returns an array with the api v4 parameters for the custom fields.
+   *
+   * @param \Civi\ActionProvider\Parameter\ParameterBagInterface $parameters
+   * @param \Civi\ActionProvider\Parameter\SpecificationBag $parameterSpecification
+   *
+   * @return array
+   */
+  public static function getCustomFieldsApi4Parameter(ParameterBagInterface $parameters, SpecificationBag $parameterSpecification) {
+    $apiParams = array();
+    foreach($parameterSpecification as $spec) {
+      if ($spec instanceof SpecificationGroup) {
+        foreach($spec->getSpecificationBag() as $subSpec) {
+          if (stripos($subSpec->getName(), 'custom_')===0 && $parameters->doesParameterExists($subSpec->getName())) {
+            $apiParams[$subSpec->getApi4FieldName()] = $parameters->getParameter($subSpec->getName());
+            if ($subSpec instanceof OptionGroupSpecification && !$subSpec->isMultiple() && is_array($apiParams[$subSpec->getApi4FieldName()])) {
+              $apiParams[$subSpec->getApi4FieldName()] = implode(",", $apiParams[$subSpec->getApi4FieldName()]);
+            }
+          }
+        }
+      } elseif (stripos($spec->getName(), 'custom_')===0) {
+        if ($parameters->doesParameterExists($spec->getName())) {
+          $apiParams[$spec->getApi4FieldName()] = $parameters->getParameter($spec->getName());
+          if ($spec instanceof OptionGroupSpecification && !$spec->isMultiple() && is_array($apiParams[$spec->getApi4FieldName()])) {
+            $apiParams[$spec->getApi4FieldName()] = implode(",", $apiParams[$spec->getApi4FieldName()]);
           }
         }
       }

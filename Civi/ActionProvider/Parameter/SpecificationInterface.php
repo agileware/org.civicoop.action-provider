@@ -52,4 +52,13 @@ interface SpecificationInterface {
    */
   public function setMultiple($multiple);
 
+  /**
+   * Set the default value in the parameter bag
+   *
+   * @param \Civi\ActionProvider\Parameter\ParameterBagInterface $parameterBag
+   *
+   * @return void
+   */
+  public function setDefaultInParameterBag(ParameterBagInterface $parameterBag);
+
 }

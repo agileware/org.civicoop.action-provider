@@ -234,6 +234,20 @@ class SpecificationCollection implements SpecificationInterface {
     return $this;
   }
 
+  /**
+   * Set the default value in the parameter bag
+   *
+   * @param \Civi\ActionProvider\Parameter\ParameterBagInterface $parameterBag
+   *
+   * @return void
+   */
+  public function setDefaultInParameterBag(ParameterBagInterface $parameterBag) {
+    /* @var \Civi\ActionProvider\Parameter\SpecificationInterface */
+    foreach($this->specificationBag as $spec) {
+      $spec->setDefaultInParameterBag($parameterBag);
+    }
+  }
+
 
 
 

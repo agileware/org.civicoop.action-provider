@@ -1,6 +1,8 @@
 Version 1.156 (not yet released)
 -------------
 
+* Added configuration of actions for custom fields.
+
 Version 1.155
 -------------
 

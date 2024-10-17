@@ -3,6 +3,7 @@
 namespace Civi\ActionProvider\Action;
 
 use Civi\ActionProvider\Exception\ExecutionException;
+use Civi\ActionProvider\Parameter\SpecificationCollection;
 use \Civi\ActionProvider\Provider;
 use \Civi\ActionProvider\Condition\AbstractCondition;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
@@ -284,11 +285,12 @@ abstract class AbstractAction implements \JsonSerializable {
 		$this->configuration = $this->createParameterBag();
 		$this->defaultConfiguration = $this->createParameterBag();
 
+    /**
+     * @var \Civi\ActionProvider\Parameter\SpecificationInterface
+     */
 		foreach($this->getConfigurationSpecification() as $spec) {
-			if ($spec->getDefaultValue() !== null) {
-				$this->configuration->setParameter($spec->getName(), $spec->getDefaultValue());
-				$this->defaultConfiguration->setParameter($spec->getName(), $spec->getDefaultValue());
-			}
+      $spec->setDefaultInParameterBag($this->configuration);
+      $spec->setDefaultInParameterBag($this->defaultConfiguration);
 		}
 	}
 

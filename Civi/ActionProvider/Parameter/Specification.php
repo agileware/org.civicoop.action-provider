@@ -50,6 +50,11 @@ class Specification implements SpecificationInterface {
   protected $apiFieldName;
 
   /**
+   * @var string
+   */
+  protected $api4FieldName;
+
+  /**
    * @param string $name
    * @param string $dataType
    * @param string $title
@@ -125,6 +130,23 @@ class Specification implements SpecificationInterface {
    */
   public function setApiFieldName($name) {
     $this->apiFieldName = $name;
+    return $this;
+  }
+
+  /**
+   * @return string
+   */
+  public function getApi4FieldName() {
+    return $this->api4FieldName;
+  }
+
+  /**
+   * @param string $name
+   *
+   * @return $this
+   */
+  public function setApi4FieldName($name) {
+    $this->api4FieldName = $name;
     return $this;
   }
 
@@ -329,6 +351,17 @@ class Specification implements SpecificationInterface {
       }
     }
     return true;
+  }
+
+  /**
+   * Set the default value in the parameter bag
+   *
+   * @param \Civi\ActionProvider\Parameter\ParameterBagInterface $parameterBag
+   *
+   * @return void
+   */
+  public function setDefaultInParameterBag(ParameterBagInterface $parameterBag) {
+    $parameterBag->setParameter($this->getName(), $this->getDefaultValue());
   }
 
 }

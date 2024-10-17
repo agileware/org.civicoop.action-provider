@@ -111,14 +111,20 @@ class Config extends \Symfony\Component\DependencyInjection\Container {
     $customGroupPerExtends = array();
     $customFields = array();
     $customFieldsPerGroup = array();
-    $customGroupApi = civicrm_api3('CustomGroup', 'get', ['options' => ['limit' => 0]]);
-    foreach($customGroupApi['values'] as $customGroup) {
+    $customGroupsApi = \Civi\Api4\CustomGroup::get(FALSE)
+      ->addOrderBy('weight', 'ASC')
+      ->addOrderBy('id', 'ASC')
+      ->execute();
+    foreach($customGroupsApi as $customGroup) {
       $customGroups[$customGroup['id']] = $customGroup;
       $customGroupNames[$customGroup['id']] = $customGroup['name'];
       $customGroupPerExtends[$customGroup['extends']][] = $customGroup;
     }
-    $customFieldsApi = civicrm_api3('CustomField', 'get', ['options' => ['limit' => 0]]);
-    foreach($customFieldsApi['values'] as $customField) {
+    $customFieldsApi = \Civi\Api4\CustomField::get(FALSE)
+      ->addOrderBy('weight', 'ASC')
+      ->addOrderBy('id', 'ASC')
+      ->execute();
+    foreach($customFieldsApi as $customField) {
       $customFields[$customField['id']] = $customField;
       $customFieldsPerGroup[$customField['custom_group_id']][] = $customField;
     }
