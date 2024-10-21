@@ -34,7 +34,7 @@ class ThrowException extends AbstractAction {
     if ($parameters->doesParameterExists('error_message')) {
       $error_message = $parameters->getParameter('error_message');
     }
-    throw new ExecutionException($error_message);
+    throw new ExecutionException($error_message, 0, null, FALSE);
   }
 
   /**

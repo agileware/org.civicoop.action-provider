@@ -159,7 +159,14 @@ abstract class AbstractAction implements \JsonSerializable {
       try {
         $this->doAction($parameters, $output);
       } catch (Throwable $e) {
-        throw new ExecutionException($e->getMessage());
+        $rollback = true;
+        if (method_exists($e, 'rollbackDBTransaction')) {
+          $rollback = $e->rollbackDBTransaction();
+        }
+        if ($rollback) {
+          $transaction->rollback();
+        }
+        throw new ExecutionException($e->getMessage(), $e->getCode(), $e, $rollback);
       }
       $transaction->commit();
     } finally {

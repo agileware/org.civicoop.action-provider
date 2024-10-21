@@ -1,6 +1,7 @@
 Version 1.156 (not yet released)
 -------------
 
+* Fixed issue with action: Stop Execution. Which did not behave correctly anymore.
 * Added configuration of actions for custom fields.
 
 Version 1.155
