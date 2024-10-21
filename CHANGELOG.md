@@ -1,4 +1,4 @@
-Version 1.156 (not yet released)
+Version 1.156
 -------------
 
 * Fixed issue with action: Stop Execution. Which did not behave correctly anymore.
