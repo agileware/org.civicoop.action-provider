@@ -1,6 +1,8 @@
 Version 1.157 (not yet released)
 -------------
 
+* Fixed issue with action map value.
+
 Version 1.156
 -------------
 

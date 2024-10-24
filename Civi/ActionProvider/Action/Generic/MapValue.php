@@ -92,7 +92,7 @@ class MapValue extends AbstractAction {
       $mappedValue = $this->mapValue($value, $mapping);
     }
 
-    $output->setParameter('value', count($mappedValue) > 1 ? $mappedValue : $mappedValue[0]);
+    $output->setParameter('value', is_array($mappedValue) ? reset($mappedValue) : $mappedValue);
   }
 
   protected function mapValue($value, $mapping) {
