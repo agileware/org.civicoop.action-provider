@@ -10,6 +10,7 @@ use Civi\ActionProvider\Action\AbstractAction;
 use Civi\ActionProvider\Parameter\ParameterBagInterface;
 use Civi\ActionProvider\Parameter\Specification;
 use Civi\ActionProvider\Parameter\SpecificationBag;
+use Civi\ActionProvider\Exception\ExecutionException;
 
 use CRM_ActionProvider_ExtensionUtil as E;
 
@@ -40,8 +41,8 @@ class UpdateGroupSubscriptions extends AbstractAction {
           'contact_id' => $parameters->getParameter('contact_id'),
           'group_id' => $groupIdToCheck,
         ));
-      } catch (\CiviCRM_API3_Exception $ex) {
-        // Do nothing.
+      } catch (\CiviCRM_API3_Exception $e) {
+        throw new ExecutionException('Could not update group subscriptions: ' . $e->getMessage(), 0, null, FALSE);
       }
     }
   }
