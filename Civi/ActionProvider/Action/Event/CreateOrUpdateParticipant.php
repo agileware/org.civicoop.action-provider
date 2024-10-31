@@ -52,6 +52,7 @@ class CreateOrUpdateParticipant extends AbstractParticipantAction {
       new Specification('contact_id', 'Integer', E::ts('Contact ID'), true, null, null, null, FALSE),
       new Specification('campaign_id', 'Integer', E::ts('Campaign ID'), false, null, null, null, FALSE),
       new Specification('register_date', 'Date', E::ts('Register Date'), false, null, null, null, FALSE),
+      new Specification('fee_amount', 'Float', E::ts('Fee Amount'), false),
       new Specification('fee_level', 'String', E::ts('Fee Level'), false, null, null, null, FALSE),
     ));
 
@@ -130,6 +131,9 @@ class CreateOrUpdateParticipant extends AbstractParticipantAction {
       }
       if ($parameters->doesParameterExists('fee_level')) {
         $participantParams['fee_level'] = $parameters->getParameter('fee_level') ?? '';
+      }
+      if ($parameters->doesParameterExists('fee_amount')) {
+        $participantParams['fee_amount'] = $parameters->getParameter('fee_amount');
       }
 
       $result = civicrm_api3('Participant', 'create', $participantParams);

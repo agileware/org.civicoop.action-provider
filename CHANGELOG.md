@@ -1,6 +1,7 @@
-Version 1.157 (not yet released)
+Version 1.157
 -------------
 
+* Add price field values processing with Create Line Item and calculate participant fee.
 * Fixed issue with action map value.
 
 Version 1.156

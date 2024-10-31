@@ -13,20 +13,32 @@ use CRM_ActionProvider_ExtensionUtil as E;
 class CalculateParticipantFee extends AbstractAction {
 
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    $priceFieldValue = \Civi\Api4\PriceFieldValue::get(FALSE)
-      ->addSelect('*', 'price_field_id.*')
-      ->addWhere('id', '=', $parameters->getParameter('price_field_value_id'))
-      ->execute()
-      ->first();
+    $priceOptions = [];
+    if ($parameters->doesParameterExists('price_set_field_values')) {
+      $priceOptions = $parameters->getParameter('price_set_field_values');
+    }
+    if ($parameters->doesParameterExists('price_field_value_id')) {
+      $priceOptions[] = $parameters->getParameter('price_field_value_id');
+    }
     $qty = $parameters->getParameter('qty');
     if ($qty < 1) {
       $qty = 1;
     }
-    $amount_level = $priceFieldValue['price_field_id.label'] . ' - ' . $priceFieldValue['label'];
+
+    $total_amount = 0.00;
+    $amount_level = '';
+    foreach ($priceOptions as $priceOption) {
+      $priceFieldValue = \Civi\Api4\PriceFieldValue::get(FALSE)
+        ->addWhere('id', '=', $priceOption)
+        ->execute()
+        ->first();
+      $amount_level .= $priceFieldValue['label'] . ' - ' . $qty .' ';
+      $total_amount += $priceFieldValue['amount'] * $qty;
+    }
     if ($qty > 1) {
       $amount_level .= E::ts(' (multiple participants)');
     }
-    $total_amount = $priceFieldValue['amount'] * $qty;
+    $amount_level = trim($amount_level);
     $output->setParameter('amount', $total_amount);
     $output->setParameter('amount_level', $amount_level);
   }
@@ -48,8 +60,9 @@ class CalculateParticipantFee extends AbstractAction {
    */
   public function getParameterSpecification() {
     return new SpecificationBag([
-      new Specification('price_field_value_id', 'Integer', E::ts('Event Price ID'), true),
-      new Specification('qty', 'Integer', E::ts('Number of registrations'), true, 1),
+      new Specification('price_set_field_values', 'Integer', E::ts('Price Set Field Value(s)'), false, null, 'PriceFieldValue', null, true),
+      new Specification('price_field_value_id', 'Integer', E::ts('Event Price ID'), false),
+      new Specification('qty', 'Integer', E::ts('Number of registrations'), false, 1),
     ]);
   }
 
