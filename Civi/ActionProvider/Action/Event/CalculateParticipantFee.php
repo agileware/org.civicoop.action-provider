@@ -8,6 +8,7 @@ use Civi\ActionProvider\Parameter\ParameterBagInterface;
 use Civi\ActionProvider\Parameter\Specification;
 use Civi\ActionProvider\Parameter\SpecificationBag;
 
+use Civi\API\Exception\UnauthorizedException;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class CalculateParticipantFee extends AbstractAction {
@@ -28,14 +29,21 @@ class CalculateParticipantFee extends AbstractAction {
     $total_amount = 0.00;
     $amount_level = '';
     foreach ($priceOptions as $priceOption) {
-      $priceFieldValue = \Civi\Api4\PriceFieldValue::get(FALSE)
-        ->addWhere('id', '=', $priceOption)
-        ->execute()
-        ->first();
-      $amount_level .= $priceFieldValue['label'] . ' - ' . $qty .' ';
-      $total_amount += $priceFieldValue['amount'] * $qty;
+      if ($priceOption) {
+        try {
+          $priceFieldValue = \Civi\Api4\PriceFieldValue::get(FALSE)
+            ->addWhere('id', '=', $priceOption)
+            ->execute()
+            ->first();
+          $amount_level .= $priceFieldValue['label'] . ' - ' . $qty . ' ';
+          $total_amount += $priceFieldValue['amount'] * $qty;
+        }
+        catch (UnauthorizedException|\CRM_Core_Exception $e) {
+
+        }
+      }
     }
-    if ($qty > 1) {
+    if ($qty > 1 && strlen($amount_level)) {
       $amount_level .= E::ts(' (multiple participants)');
     }
     $amount_level = trim($amount_level);

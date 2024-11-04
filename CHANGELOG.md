@@ -1,5 +1,7 @@
-Version 1.158 (not yet released)
+Version 1.158
 -------------
+
+* Fixed price field values processing with Create Line Item and calculate participant fee.
 
 Version 1.157
 -------------
