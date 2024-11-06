@@ -1,5 +1,7 @@
-Version 1.159 (not yet released
+Version 1.159
 -------------
+
+* Fixed bug in Get Participant actions and multi value custom fields.
 
 Version 1.158
 -------------

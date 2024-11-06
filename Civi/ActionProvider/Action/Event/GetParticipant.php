@@ -7,6 +7,7 @@ use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
 use \Civi\ActionProvider\Parameter\OptionGroupSpecification;
+use Civi\API\Exception\UnauthorizedException;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class GetParticipant extends AbstractGetSingleAction {
@@ -32,7 +33,8 @@ class GetParticipant extends AbstractGetSingleAction {
   }
 
   /**
-   * Returns the specification of the configuration options for the actual action.
+   * Returns the specification of the configuration options for the actual
+   * action.
    *
    * @return SpecificationBag
    */
@@ -43,7 +45,8 @@ class GetParticipant extends AbstractGetSingleAction {
   }
 
   /**
-   * Returns the specification of the configuration options for the actual action.
+   * Returns the specification of the configuration options for the actual
+   * action.
    *
    * @return SpecificationBag
    */
@@ -85,7 +88,7 @@ class GetParticipant extends AbstractGetSingleAction {
     $participant_id = \CRM_Core_DAO::singleValueQuery("SELECT id FROM civicrm_participant WHERE is_test = '0' AND contact_id = %1 AND event_id = %2 and role_id = %3 ORDER BY id DESC LIMIT 1", array(
       1 => array($contact_id, 'Integer'),
       2 => array($event_id, 'Integer'),
-      3 => array($role_id, 'Integer')
+      3 => array($role_id, 'Integer'),
     ));
 
     if (!$participant_id) {
@@ -93,10 +96,22 @@ class GetParticipant extends AbstractGetSingleAction {
     }
 
     try {
-      $participant = civicrm_api3('Participant', 'getsingle', array('id' => $participant_id));
+      $participant = \Civi\Api4\Participant::get(TRUE)
+        ->addSelect('*', 'custom.*')
+        ->addWhere('id', '=', $participant_id)
+        ->execute()
+        ->first();
+      /** @var Specification $spec */
+      foreach($this->getOutputSpecification() as $spec) {
+        if (!empty($spec->getApi4FieldName()) && isset($participant[$spec->getApi4FieldName()])) {
+          $participant[$spec->getApiFieldName()] = $participant[$spec->getApi4FieldName()];
+          unset($participant[$spec->getApi4FieldName()]);
+        }
+      }
       $this->setOutputFromEntity($participant, $output);
-    } catch (\Exception $e) {
-      // Do nothing
+    }
+    catch (UnauthorizedException|\CRM_Core_Exception $e) {
+
     }
   }
 

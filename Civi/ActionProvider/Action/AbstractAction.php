@@ -166,7 +166,7 @@ abstract class AbstractAction implements \JsonSerializable {
         if ($rollback) {
           $transaction->rollback();
         }
-        throw new ExecutionException($e->getMessage(), $e->getCode(), $e, $rollback);
+        throw new ExecutionException($e->getMessage() . '(in ' . $e->getFile() . ':' . $e->getLine() . ')' , $e->getCode(), $e, $rollback);
       }
       $transaction->commit();
     } finally {

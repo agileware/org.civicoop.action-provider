@@ -6,6 +6,7 @@ use Civi\ActionProvider\Action\AbstractGetSingleAction;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
+use Civi\API\Exception\UnauthorizedException;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class GetParticipantById extends AbstractGetSingleAction {
@@ -52,6 +53,42 @@ class GetParticipantById extends AbstractGetSingleAction {
     ));
 
     return $specs;
+  }
+
+  /**
+   * Run the action
+   *
+   * @param ParameterBagInterface $parameters
+   *   The parameters to this action.
+   * @param ParameterBagInterface $output
+   *   The parameters this action can send back
+   * @return void
+   */
+  protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
+    // Get the contact and the event.
+    $participant_id = $parameters->getParameter('participant_id');
+    if (!$participant_id) {
+      return;
+    }
+
+    try {
+      $participant = \Civi\Api4\Participant::get(TRUE)
+        ->addSelect('*', 'custom.*')
+        ->addWhere('id', '=', $participant_id)
+        ->execute()
+        ->first();
+      /** @var Specification $spec */
+      foreach($this->getOutputSpecification() as $spec) {
+        if (!empty($spec->getApi4FieldName()) && isset($participant[$spec->getApi4FieldName()])) {
+          $participant[$spec->getApiFieldName()] = $participant[$spec->getApi4FieldName()];
+          unset($participant[$spec->getApi4FieldName()]);
+        }
+      }
+      $this->setOutputFromEntity($participant, $output);
+    }
+    catch (UnauthorizedException|\CRM_Core_Exception $e) {
+
+    }
   }
 
 
