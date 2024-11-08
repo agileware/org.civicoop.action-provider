@@ -82,8 +82,8 @@ class GetMembershipByContactID extends AbstractGetSingleAction {
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output): void {
     $apiParams['contact_id']         = $parameters->getParameter('contact_id');
-    $apiParams['membership_type_id'] = explode(',',$this->configuration->getParameter('membership_type_id'));
-    $apiParams['status_id']          = explode(',',$this->configuration->getParameter('status_id'));
+    $apiParams['membership_type_id'] = $this->configuration->getParameter('membership_type_id');
+    $apiParams['status_id']          = $this->configuration->getParameter('status_id');
     $apiParams['order_by']           = $this->configuration->getParameter('order_by');
     $apiParams['sort_order']         = $this->configuration->getParameter('sort_order');
 

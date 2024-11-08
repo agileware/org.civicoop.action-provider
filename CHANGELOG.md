@@ -1,6 +1,8 @@
 Version 1.160 (not yet released)
 -------------
 
+* Removed obsolete explodes from GetMembershipByContactID action.
+
 Version 1.159
 -------------
 
