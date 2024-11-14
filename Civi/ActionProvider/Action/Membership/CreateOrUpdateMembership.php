@@ -51,6 +51,7 @@ class CreateOrUpdateMembership extends AbstractAction {
       new Specification('end_date', 'Date', E::ts('End date'), false),
       new Specification('source', 'String', E::ts('Source'), false),
       new Specification('num_terms', 'Integer', E::ts('Number of Terms'), false),
+      new Specification('contribution_recur_id', 'Integer', E::ts('Link to recurring contribution'), false, null, null, FALSE),
     ));
 
     $config = ConfigContainer::getInstance();
@@ -109,6 +110,9 @@ class CreateOrUpdateMembership extends AbstractAction {
     }
     if ($parameters->doesParameterExists('num_terms')) {
       $apiParams['num_terms'] = $parameters->getParameter('num_terms');
+    }
+    if ($parameters->doesParameterExists('contribution_recur_id')) {
+      $apiParams['contribution_recur_id'] = $parameters->getParameter('contribution_recur_id');
     }
     if ($this->configuration->doesParameterExists('status')) {
       $apiParams['status_id'] = $this->configuration->getParameter('status');

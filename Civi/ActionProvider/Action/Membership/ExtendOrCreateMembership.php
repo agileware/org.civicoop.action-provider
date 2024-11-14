@@ -54,6 +54,7 @@ class ExtendOrCreateMembership extends AbstractAction {
       new Specification('join_date', 'Date', E::ts('Join date'), false),
       new Specification('start_date', 'Date', E::ts('Start date'), false),
       new Specification('source', 'String', E::ts('Source'), false),
+      new Specification('contribution_recur_id', 'Integer', E::ts('Link to recurring contribution'), false, null, null, FALSE),
     ));
 
     $config = ConfigContainer::getInstance();
@@ -114,6 +115,9 @@ class ExtendOrCreateMembership extends AbstractAction {
     }
     if ($parameters->doesParameterExists('source')) {
       $apiParams['source'] = $parameters->getParameter('source');
+    }
+    if ($parameters->doesParameterExists('contribution_recur_id')) {
+      $apiParams['contribution_recur_id'] = $parameters->getParameter('contribution_recur_id');
     }
 
     try {
