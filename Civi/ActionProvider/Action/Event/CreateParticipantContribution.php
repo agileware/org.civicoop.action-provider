@@ -8,26 +8,61 @@ use Civi\ActionProvider\Parameter\ParameterBagInterface;
 use Civi\ActionProvider\Parameter\Specification;
 use Civi\ActionProvider\Parameter\SpecificationBag;
 
+use Civi\API\Exception\UnauthorizedException;
+use Civi\Api4\Event;
+use Civi\Api4\Participant;
+use Civi\Api4\PriceFieldValue;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class CreateParticipantContribution extends AbstractAction {
 
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    $participant = \Civi\Api4\Participant::get(FALSE)
-      ->addSelect('*', 'event_id.*')
-      ->addWhere('id', '=', $parameters->getParameter('participant_id'))
-      ->execute()
-      ->first();
-    $priceFieldValue = \Civi\Api4\PriceFieldValue::get(FALSE)
-      ->addSelect('*', 'price_field_id.*')
-      ->addWhere('id', '=', $parameters->getParameter('price_field_value_id'))
-      ->execute()
-      ->first();
+    $priceOptions = [];
+    if ($parameters->doesParameterExists('price_set_field_values')) {
+      $priceOptions = $parameters->getParameter('price_set_field_values');
+    }
+    if ($parameters->doesParameterExists('price_field_value_id')) {
+      $priceOptions[] = $parameters->getParameter('price_field_value_id');
+    }
     $qty = $parameters->getParameter('qty');
     if ($qty < 1) {
       $qty = 1;
     }
-    $contribParams['amount_level'] = $priceFieldValue['price_field_id.label'] . ' - ' . $priceFieldValue['label'];
+
+    $participant = Participant::get(FALSE)
+      ->addSelect('*', 'event_id.*')
+      ->addWhere('id', '=', $parameters->getParameter('participant_id'))
+      ->execute()
+      ->first();
+    $event = Event::get(FALSE)
+      ->addWhere('id', '=', $participant['event_id'])
+      ->execute()
+      ->first();
+
+    $qty = $parameters->getParameter('qty');
+    if ($qty < 1) {
+      $qty = 1;
+    }
+
+    $total_amount = 0.00;
+    $amount_level = '';
+    foreach ($priceOptions as $priceOption) {
+      if ($priceOption) {
+        try {
+          $priceFieldValue = \Civi\Api4\PriceFieldValue::get(FALSE)
+            ->addWhere('id', '=', $priceOption)
+            ->execute()
+            ->first();
+          $amount_level .= $priceFieldValue['label'] . ' - ' . $qty . ' ';
+          $total_amount += $priceFieldValue['amount'] * $qty;
+        }
+        catch (UnauthorizedException|\CRM_Core_Exception $e) {
+
+        }
+      }
+    }
+
+    $contribParams['amount_level'] = $amount_level;
     if ($qty > 1) {
       $contribParams['amount_level'] .= E::ts(' (multiple participants)');
     }
@@ -49,30 +84,70 @@ class CreateParticipantContribution extends AbstractAction {
     $contribParams['currency'] = $currency;
     $contribParams['is_pay_later'] = $this->configuration->getParameter('is_pay_later') ? true : false;
     $contribParams['skipLineItem'] =
-    $total_amount = $priceFieldValue['amount'] * $qty;
     $contribParams['total_amount'] = \CRM_Utils_Money::format((float) $total_amount, $currency, NULL, TRUE);
-    $contribParams['financial_type_id'] = $priceFieldValue['financial_type_id'];
+    $contribParams['financial_type_id'] = $event['financial_type_id'];
     $contribution = civicrm_api3('Contribution', 'Create', $contribParams);
 
     $apiParams['contribution_id'] = $contribution['id'];
     $apiParams['participant_id'] = $parameters->getParameter('participant_id');
     civicrm_api3('ParticipantPayment', 'create', $apiParams);
 
-    $lineItemParams['entity_table'] = 'civicrm_participant';
-    $lineItemParams['entity_id'] = $parameters->getParameter('participant_id');
-    $lineItemParams['participant_count'] = $qty;
-    $lineItemParams['label'] = $priceFieldValue['label'];
-    $lineItemParams['contribution_id'] = $contribution['id'];
-    $lineItemParams['qty'] = $qty;
-    $lineItemParams['unit_price'] = $priceFieldValue['amount'];
-    $lineItemParams['line_total'] = $total_amount;
-    $lineItemParams['financial_type_id'] = $priceFieldValue['financial_type_id'];
-    $lineItemParams['price_field_value_id'] = $priceFieldValue['id'];
-    $lineItemParams['price_field_id'] = $priceFieldValue['price_field_id.id'];
-    civicrm_api3('LineItem', 'create', $lineItemParams);
+    foreach ($priceOptions as $priceOption) {
+      if ($priceOption) {
+        try {
+          $priceFieldValue = PriceFieldValue::get(FALSE)
+            ->addWhere('id', '=', $priceOption)
+            ->execute()
+            ->first();
+
+          $lineItemParams['entity_table'] = 'civicrm_participant';
+          $lineItemParams['entity_id'] = $parameters->getParameter('participant_id');
+          $lineItemParams['participant_count'] = $qty;
+          $lineItemParams['label'] = $priceFieldValue['label'];
+          $lineItemParams['contribution_id'] = $contribution['id'];
+          $lineItemParams['qty'] = $qty;
+          $lineItemParams['unit_price'] = $priceFieldValue['amount'];
+          $lineItemParams['financial_type_id'] = $priceFieldValue['financial_type_id'];
+          $lineItemParams['price_field_value_id'] = $priceFieldValue['id'];
+          $lineItemParams['price_field_id'] = $priceFieldValue['price_field_id.id'];
+          // exit if unit price is zero value
+          if ($lineItemParams['unit_price'] == 0) {
+            continue;
+          }
+
+          // calculate line total + copy financial type
+          $lineItemParams['line_total'] = $lineItemParams['unit_price'] * $lineItemParams['qty'];
+
+          // if the financial type is not set then use the Contribution financial type
+          if (empty($lineItemParams['financial_type_id'])) {
+            $lineItemParams['financial_type_id'] = $contribParams['financial_type_id'];
+          }
+          $new_lineitem = civicrm_api3('LineItem', 'create', $lineItemParams);
+
+          // Get the lineitem object (not the array)
+          $lineitem_param = ['id' => $new_lineitem['id']];
+          $lineitem = \CRM_Price_BAO_LineItem::create($lineitem_param);
+          $lineitem->find(TRUE);
+
+          // Get the contribution object (not the array)
+          $contribution_param = ['id' => $contribution['id']];
+          $contributionObj = \CRM_Contribute_BAO_Contribution::create($contribution_param);
+
+          // Add the financial item
+          \CRM_Financial_BAO_FinancialItem::add($lineitem, $contributionObj);
+
+          // Add the financial item for tax
+          if (!empty($lineitem->tax_amount)) {
+            \CRM_Financial_BAO_FinancialItem::add($lineitem, $contributionObj, TRUE);
+          }
+        }
+        catch (UnauthorizedException|\CRM_Core_Exception $e) {
+        }
+      }
+    }
 
     $updateParticipantParams['id'] = $participant['id'];
-    $updateParticipantParams['fee_level'] = $priceFieldValue['label'] . ' - ' . $qty;
+    $updateParticipantParams['fee_level'] = $amount_level;
     $updateParticipantParams['fee_amount'] = $total_amount;
     $updateParticipantParams['fee_currency_id'] = $currency;
     civicrm_api3('Participant', 'create', $updateParticipantParams);
@@ -80,7 +155,7 @@ class CreateParticipantContribution extends AbstractAction {
     $output->setParameter('contribution_id', $contribution['id']);
     $output->setParameter('amount', $total_amount);
     $output->setParameter('currency', $currency);
-    $output->setParameter('amount_level', $contribParams['amount_level']);
+    $output->setParameter('amount_level', $amount_level);
   }
 
   /**
