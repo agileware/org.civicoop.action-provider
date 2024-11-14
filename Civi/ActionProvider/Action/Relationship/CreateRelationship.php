@@ -76,6 +76,7 @@ class CreateRelationship extends AbstractAction {
          * @param bool $multiple
          */
         $specs = new SpecificationBag([
+            new Specification('relationship_type_id', 'String', E::ts('Relationship type'), true, null, null, $this->relationshipTypes, False),
             new Specification('contact_id_a', 'Integer', E::ts('Contact ID A'), true, null, null, null, FALSE),
             new Specification('contact_id_b', 'Integer', E::ts('Contact ID B'), true, null, null, null, FALSE),
             new Specification('start_date', 'Date', E::ts('Start date'), false),
@@ -122,7 +123,13 @@ class CreateRelationship extends AbstractAction {
     // Get the contact and the event.
     $relationshipParams['contact_id_a'] = $parameters->getParameter('contact_id_a');
     $relationshipParams['contact_id_b'] = $parameters->getParameter('contact_id_b');
+
     $relationshipParams['relationship_type_id'] = $this->relationshipTypeIds[$this->configuration->getParameter('relationship_type_id')];
+
+    if ($parameters->doesParameterExists('relationship_type_id') && $parameters->getParameter('relationship_type_id')) {
+        $relationshipParams['relationship_type_id'] = $parameters->getParameter('relationship_type_id');
+    }
+
     $relationshipParams['is_active'] = '1';
     if ($this->configuration->getParameter('set_start_date')) {
       $today = new \DateTime();
