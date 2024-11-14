@@ -347,6 +347,7 @@ class Provider {
             }
           }
         }
+            $subParameterBags = array_filter($subParameterBags, fn($value) => $value !== null);
 		    $mappedParameterBag->setParameter($mappedField, $subParameterBags);
       } elseif (!empty($field) && $parameterBag->doesParameterExists($field)) {
 				$mappedParameterBag->setParameter($mappedField, $parameterBag->getParameter($field));
