@@ -1,6 +1,7 @@
 Version 1.160 (not yet released)
 -------------
 
+* Refactor removal with backwards compatibility of the Action: Create Relationship With Type Parameter; by adding Type Parameter to Create Relationship Action. See !180
 * Updated action Participant: Create Participant Contribution to make use of price set options.
 * Removed obsolete explodes from GetMembershipByContactID action.
 * Add Relationship Permissions options to Create Relationship and Create or Update Relationship actions. See !178
