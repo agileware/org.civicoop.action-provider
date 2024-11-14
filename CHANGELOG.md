@@ -4,6 +4,7 @@ Version 1.160 (not yet released)
 * Removed obsolete explodes from GetMembershipByContactID action.
 * Add Relationship Permissions options to Create Relationship and Create or Update Relationship actions. See !178
 * Filter out null array values which may still exist in Parameter Bag arrays. See !181
+* Fix for #60: link contribution recur to a membership. See !182
 
 Version 1.159
 -------------
