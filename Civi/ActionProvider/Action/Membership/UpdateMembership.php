@@ -45,6 +45,7 @@ class UpdateMembership extends AbstractAction {
       new Specification('join_date', 'Date', E::ts('Join date'), false),
       new Specification('start_date', 'Date', E::ts('Start date'), false),
       new Specification('end_date', 'Date', E::ts('End date'), false),
+      new Specification('contribution_recur_id', 'Integer', E::ts('Link to recurring contribution'), false, null, null, FALSE),
     ));
 
     $config = ConfigContainer::getInstance();
@@ -91,6 +92,9 @@ class UpdateMembership extends AbstractAction {
     }
     if ($parameters->doesParameterExists('join_date')) {
       $apiParams['join_date'] = $parameters->getParameter('join_date');
+    }
+    if ($parameters->doesParameterExists('contribution_recur_id')) {
+      $apiParams['contribution_recur_id'] = $parameters->getParameter('contribution_recur_id');
     }
 
     // Create or Update the event through an API call.

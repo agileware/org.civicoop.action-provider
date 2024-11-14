@@ -62,6 +62,14 @@ class Actions {
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG
     ]);
+    $provider->addAction('LinkContributionRecurToMembership', '\Civi\ActionProvider\Action\Contribution\LinkContributionRecurToMembership', E::ts('Contribution: Add recurring contribution to membership'), [
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG
+    ]);
+    $provider->addAction('UnlinkContributionFromMembership', '\Civi\ActionProvider\Action\Contribution\UnlinkContributionRecurFromMembership', E::ts('Contribution: Remove recurring contribution from membership'), [
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG
+    ]);
     $provider->addAction('LinkContributionToParticipant', '\Civi\ActionProvider\Action\Contribution\LinkContributionToParticipant', E::ts('Contribution: Link to participant'), [
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG
