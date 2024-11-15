@@ -1,4 +1,4 @@
-Version 1.160 (not yet released)
+Version 1.160
 -------------
 
 * Refactor removal with backwards compatibility of the Action: Create Relationship With Type Parameter; by adding Type Parameter to Create Relationship Action. See !180
