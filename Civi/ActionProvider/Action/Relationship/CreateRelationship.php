@@ -76,7 +76,7 @@ class CreateRelationship extends AbstractAction {
          * @param bool $multiple
          */
         $specs = new SpecificationBag([
-            new Specification('relationship_type_id', 'String', E::ts('Relationship type'), true, null, null, $this->relationshipTypes, False),
+            new Specification('relationship_type_id', 'String', E::ts('Relationship type'), false, null, null, $this->relationshipTypes, False),
             new Specification('contact_id_a', 'Integer', E::ts('Contact ID A'), true, null, null, null, FALSE),
             new Specification('contact_id_b', 'Integer', E::ts('Contact ID B'), true, null, null, null, FALSE),
             new Specification('start_date', 'Date', E::ts('Start date'), false),
