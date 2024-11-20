@@ -7,11 +7,11 @@
 namespace Civi\ActionProvider\Action\Relationship;
 
 use \Civi\ActionProvider\Action\AbstractAction;
-use Civi\ActionProvider\ConfigContainer;
+use \Civi\ActionProvider\ConfigContainer;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
-use Civi\ActionProvider\Parameter\SpecificationGroup;
+use \Civi\ActionProvider\Parameter\SpecificationGroup;
 use \Civi\ActionProvider\Utils\CustomField;
 
 use CRM_ActionProvider_ExtensionUtil as E;
@@ -124,7 +124,10 @@ class CreateRelationship extends AbstractAction {
     $relationshipParams['contact_id_a'] = $parameters->getParameter('contact_id_a');
     $relationshipParams['contact_id_b'] = $parameters->getParameter('contact_id_b');
 
-    $relationshipParams['relationship_type_id'] = $this->relationshipTypeIds[$this->configuration->getParameter('relationship_type_id')];
+    // CreateRelationshipWithTypeParameter sets this configuration to optional, so this check is required
+    if ($this->configuration->doesParameterExists('relationship_type_id') && $this->configuration->getParameter('relationship_type_id')) {
+        $relationshipParams['relationship_type_id'] = $this->relationshipTypeIds[$this->configuration->getParameter('relationship_type_id')];
+    }
 
     if ($parameters->doesParameterExists('relationship_type_id') && $parameters->getParameter('relationship_type_id')) {
         $relationshipParams['relationship_type_id'] = $parameters->getParameter('relationship_type_id');
