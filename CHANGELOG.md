@@ -1,6 +1,8 @@
 Version 1.161 (not yet released)
 -------------
 
+* More refactoring of the Action: Create Relationship and Action: Create Relationship With Type Parameter. See !183 and !178
+
 Version 1.160
 -------------
 
