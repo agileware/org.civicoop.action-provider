@@ -1,6 +1,7 @@
-Version 1.161 (not yet released)
+Version 1.161
 -------------
 
+* Fixed issue with custom fields and multiple options.
 * More refactoring of the Action: Create Relationship and Action: Create Relationship With Type Parameter. See !183 and !178
 
 Version 1.160
