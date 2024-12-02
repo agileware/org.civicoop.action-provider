@@ -74,11 +74,23 @@ class ContactDataById extends AbstractGetSingleAction {
    */
   public function getOutputSpecification() {
     $specs = parent::getOutputSpecification();
-    $config = ConfigContainer::getInstance();
-    $customGroups = $config->getCustomGroupsForEntities(['Contact', 'Individual', 'Household', 'Organization']);
-    foreach ($customGroups as $customGroup) {
-      if (!empty($customGroup['is_active'])) {
-        $specs->addSpecification(CustomField::getSpecForCustomGroup($customGroup['id'], $customGroup['name'], $customGroup['title']));
+    // add custom fields from sub types
+    foreach (['Individual', 'Household', 'Organization'] as $entity) {
+      $customGroups = ConfigContainer::getInstance()
+        ->getCustomGroupsForEntity($entity);
+      foreach ($customGroups as $customGroup) {
+        if ($customGroup['is_active']) {
+          $customFields = ConfigContainer::getInstance()
+            ->getCustomFieldsOfCustomGroup($customGroup['id']);
+          foreach ($customFields as $customField) {
+            if ($customField['is_active']) {
+              $spec = CustomField::getSpecFromCustomField($customField, $customGroup['title'] . ': ', FALSE);
+              if ($spec) {
+                $specs->addSpecification($spec);
+              }
+            }
+          }
+        }
       }
     }
     return $specs;
