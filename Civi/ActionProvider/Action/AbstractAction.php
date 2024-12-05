@@ -2,6 +2,7 @@
 
 namespace Civi\ActionProvider\Action;
 
+use Civi\ActionProvider\Exception\BreakException;
 use Civi\ActionProvider\Exception\ExecutionException;
 use Civi\ActionProvider\Parameter\SpecificationCollection;
 use \Civi\ActionProvider\Provider;
@@ -158,6 +159,9 @@ abstract class AbstractAction implements \JsonSerializable {
       $transaction = new \CRM_Core_Transaction();
       try {
         $this->doAction($parameters, $output);
+      } catch(BreakException $e) {
+        // Break exception should never roll back.
+        throw $e;
       } catch (Throwable $e) {
         $rollback = true;
         if (method_exists($e, 'rollbackDBTransaction')) {
