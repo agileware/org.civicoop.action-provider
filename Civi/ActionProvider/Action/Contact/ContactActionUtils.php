@@ -99,16 +99,18 @@ class ContactActionUtils {
     // Create address
     $hasAddressParams = false;
     $addressParams = array();
-    if ($existingAddressId) {
-      $addressParams['id'] = $existingAddressId;
-    }
 
     if ($contact_id) {
       $addressParams['contact_id'] = $contact_id;
     } else {
       $addressParams['contact_id'] = 'null';
     }
-    $addressParams['master_id'] = 'null';
+
+    if ($existingAddressId) {
+      // when updating an existing address the contact id is already in the address
+      $addressParams['id'] = $existingAddressId;
+      unset( $addressParams['contact_id']);
+    }
     if ($configuration->doesParameterExists('address_location_type')) {
       $addressParams['location_type_id'] = $configuration->getParameter('address_location_type');
     }

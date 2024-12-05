@@ -1,6 +1,7 @@
 Version 1.162 (not yet released)
 -------------
 * The action 'ContactDataById' does not offer output fields for custom fields that are defined for subtypes. (#61)
+* CreateUpdateIndividual does not process an update on a shared address correctly. (#62)
 
 Version 1.161
 -------------
