@@ -29,20 +29,17 @@ class UpdateGroupSubscriptions extends AbstractAction {
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     $groups = $parameters->getParameter('group_ids');
     $groupsToCheck = $this->configuration->getParameter('group_ids');
-    foreach($groupsToCheck as $groupIdToCheck) {
-      if (in_array($groupIdToCheck, $groups)) {
-        $action = 'create';
-      } else {
-        $action = 'delete';
+    foreach ($groupsToCheck as $groupIdToCheck) {
+      $params = [
+        'contact_id' => $parameters->getParameter('contact_id'),
+        'group_id' => $groupIdToCheck,
+      ];
+      $groupContact = civicrm_api3('GroupContact', 'get', $params);
+      if (in_array($groupIdToCheck, $groups) && $groupContact['count'] == 0) {
+        civicrm_api3('GroupContact', 'create', $params);
       }
-
-      try {
-        civicrm_api3('GroupContact', $action, array(
-          'contact_id' => $parameters->getParameter('contact_id'),
-          'group_id' => $groupIdToCheck,
-        ));
-      } catch (\CiviCRM_API3_Exception $e) {
-        throw new ExecutionException('Could not update group subscriptions: ' . $e->getMessage(), 0, null, FALSE);
+      elseif (!in_array($groupIdToCheck, $groups) && $groupContact['count'] > 0) {
+        civicrm_api3('GroupContact', 'delete', $params);
       }
     }
   }
