@@ -1,3 +1,6 @@
+Version 1.163 (not yet released)
+-------------
+
 Version 1.162
 -------------
 * Fixed: The action 'ContactDataById' does not offer output fields for custom fields that are defined for subtypes. (#61)
