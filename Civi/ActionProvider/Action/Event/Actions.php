@@ -43,6 +43,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('AddRoleToParticipant', '\Civi\ActionProvider\Action\Event\AddRoleToParticipant', E::ts('Participant: Add role to participant') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $provider->addAction('CreateOrUpdateEvent', '\Civi\ActionProvider\Action\Event\CreateOrUpdateEvent', E::ts('Event: Create or update') , array(
       AbstractAction::DATA_MANIPULATION_TAG,
     ));

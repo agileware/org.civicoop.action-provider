@@ -1,5 +1,8 @@
-Version 1.163 (not yet released)
+Version 1.163
 -------------
+
+* Fixed issue with array parameter contains
+* Added action: Participant add role
 
 Version 1.162
 -------------

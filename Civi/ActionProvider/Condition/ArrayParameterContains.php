@@ -22,6 +22,11 @@ class ArrayParameterContains extends AbstractCondition {
    */
   public function isConditionValid(ParameterBagInterface $parameterBag) {
     $parameter = $parameterBag->getParameter('parameter');
+    if ($parameter === null) {
+      $parameter = array();
+    } elseif (!is_array($parameter)) {
+      $parameter = array($parameter);
+    }
     $value = $this->configuration->getParameter('value');
     return in_array($value, $parameter);
   }
