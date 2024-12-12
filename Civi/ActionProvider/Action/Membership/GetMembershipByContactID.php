@@ -53,6 +53,8 @@ class GetMembershipByContactID extends AbstractGetSingleAction {
   public function getParameterSpecification(): SpecificationBag {
     $specs = new SpecificationBag([
       new Specification('contact_id', 'Integer', E::ts('Contact ID'), TRUE, NULL, NULL, NULL, FALSE),
+
+      new Specification('membership_type_id', 'Integer', E::ts('Membership Type by Parameter'), FALSE, NULL, 'MembershipType', NULL, TRUE),
     ]);
 
     return $specs;
@@ -99,6 +101,10 @@ class GetMembershipByContactID extends AbstractGetSingleAction {
       $apiParams['sort_order']          = $this->configuration->getParameter('sort_order');
     }
 
+    // Override with parameter membership type ids
+    if ($parameters->doesParameterExists('membership_type_id')) {
+      $apiParams['membership_type_id']  = array_filter((array) $parameters->getParameter('membership_type_id'));
+    }
 
     try {
       // Build the query
