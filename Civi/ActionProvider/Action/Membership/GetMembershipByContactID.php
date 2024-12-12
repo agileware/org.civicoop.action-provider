@@ -35,7 +35,6 @@ class GetMembershipByContactID extends AbstractGetSingleAction {
 
     return new SpecificationBag([
       new Specification('membership_type_id', 'Integer', E::ts('Membership Type'), FALSE, NULL, 'MembershipType', NULL, TRUE),
-      new Specification('status_id', 'Integer', E::ts('Status'), FALSE, NULL, 'MembershipStatus', NULL, TRUE),
 
       new Specification('status_id', 'Integer', E::ts('Status'), FALSE, NULL, 'MembershipStatus', NULL, TRUE),
 
@@ -81,23 +80,50 @@ class GetMembershipByContactID extends AbstractGetSingleAction {
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output): void {
-    $apiParams['contact_id']         = $parameters->getParameter('contact_id');
-    $apiParams['membership_type_id'] = $this->configuration->getParameter('membership_type_id');
-    $apiParams['status_id']          = $this->configuration->getParameter('status_id');
-    $apiParams['order_by']           = $this->configuration->getParameter('order_by');
-    $apiParams['sort_order']         = $this->configuration->getParameter('sort_order');
+    $apiParams['contact_id']            = $parameters->getParameter('contact_id');
+
+    // Configuration membership type ids
+    if ($this->configuration->doesParameterExists('membership_type_id')) {
+      $apiParams['membership_type_id']  = array_filter((array) $this->configuration->getParameter('membership_type_id')); // Strips out empty strings
+    }
+
+    if ($this->configuration->doesParameterExists('status_id')) {
+      $apiParams['status_id']           = array_filter((array) $this->configuration->getParameter('status_id')); // Strips out empty strings
+    }
+
+    if ($this->configuration->doesParameterExists('order_by') && !empty($this->configuration->getParameter('order_by'))) {
+      $apiParams['order_by']            = $this->configuration->getParameter('order_by');
+    }
+
+    if ($this->configuration->doesParameterExists('sort_order') && !empty($this->configuration->getParameter('sort_order'))) {
+      $apiParams['sort_order']          = $this->configuration->getParameter('sort_order');
+    }
+
 
     try {
-      $membership_id = Membership::get(FALSE)
+      // Build the query
+      $membership_query = Membership::get(FALSE)
                                  ->addSelect('id')
                                  ->addWhere('contact_id', '=', $apiParams['contact_id'])
-                                 ->addWhere('membership_type_id', 'IN', $apiParams['membership_type_id'])
-                                 ->addWhere('status_id', 'IN', $apiParams['status_id'])
-                                 ->addWhere('is_test', '=', FALSE)
-                                 ->addOrderBy($apiParams['order_by'], $apiParams['sort_order'])
-                                 ->setLimit(1)
-                                 ->execute()->first()['id'] ?? FALSE;
+                                 ->addWhere('is_test', '=', FALSE);
 
+      if ( !empty($apiParams['membership_type_id']) ) {
+        $membership_query->addWhere('membership_type_id', 'IN', $apiParams['membership_type_id']);
+      }
+
+      if ( isset($apiParams['status_id']) && !empty($apiParams['status_id']) ) {
+        $membership_query->addWhere('status_id', 'IN', $apiParams['status_id']);
+      }
+
+      if ( isset($apiParams['order_by']) && !empty($apiParams['order_by']) && isset($apiParams['sort_order']) && !empty($apiParams['sort_order']) ) {
+        $membership_query->addOrderBy($apiParams['order_by'], $apiParams['sort_order']);
+      }
+
+      // Excute the query to get the Membership ID according to parameters and configuration
+      $membership_id = $membership_query->setLimit(1)
+                                        ->execute()->first()['id'] ?? FALSE;
+
+      // Get the Membership entity by ID
       if ($membership_id) {
         $membership = civicrm_api3('Membership', 'getsingle', ['id' => $membership_id]);
         $this->setOutputFromEntity($membership, $output);
