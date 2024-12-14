@@ -7,7 +7,6 @@
 namespace Civi\ActionProvider\Condition;
 
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
-use \Civi\ActionProvider\Parameter\ParameterBag;
 use \Civi\ActionProvider\Parameter\Specification;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Utils\SetOps;
@@ -22,19 +21,8 @@ class ContactIsInGroup extends AbstractCondition {
    * @return bool
    */
   public function isConditionValid(ParameterBagInterface $parameterBag) {
-    $groupTitles = $this->configuration->getParameter('groups');
-    $conditionGroupIds = [];
-    foreach($groupTitles as $groupTitle) {
-      try {
-        $groupId = civicrm_api3('Group', 'getvalue', [
-          'return' => 'id',
-          'title' => $groupTitle
-        ]);
-        $conditionGroupIds[$groupId] = 1;
-      } catch (\Exception $e) {
-        // do nothing
-      }
-    }
+    $conditionGroupIdsCommaSeparated = $this->configuration->getParameter('groups');
+    $conditionGroupIds = array_fill_keys(array_map('intval', explode(',', $conditionGroupIdsCommaSeparated)), 1);
 
     $contact_id = $parameterBag->getParameter('contact_id');
     $operator = $this->configuration->getParameter('operator');
@@ -67,7 +55,7 @@ class ContactIsInGroup extends AbstractCondition {
     ];
     return new SpecificationBag([
       new Specification('operator', 'String', E::ts('Operator'), true, 'in all of', null, $operatorOptions, FALSE),
-      new Specification('groups', 'Integer', E::ts('Groups'), true, null, null, $this->getAllGroups(), true),
+      new Specification('groups', 'Integer', E::ts('Groups'), true, null, 'Group', null, true),
     ]);
   }
 
@@ -129,7 +117,7 @@ class ContactIsInGroup extends AbstractCondition {
     if (SetOps::isEmpty($condition_group_ids)) {
       return false;
     }
-    $contact_group_ids = \CRM_Contact_BAO_GroupContact::getGroupList($contact_id);
+    $contact_group_ids = $this->getContactGroups($contact_id);
     return SetOps::isSubset($condition_group_ids, $contact_group_ids);
   }
 
@@ -140,25 +128,23 @@ class ContactIsInGroup extends AbstractCondition {
    * @return bool
    */
   protected function contactHasNotGroups($contact_id, $condition_group_ids) {
-    $contact_group_ids = \CRM_Contact_BAO_GroupContact::getGroupList($contact_id);
+    $contact_group_ids = $this->getContactGroups($contact_id);
     return SetOps::disjoint($contact_group_ids, $condition_group_ids);
   }
 
   /**
-   * Method to get groups
+   * Get the groups a contact belongs to, as set in the form required by SetOps.
+   * If the contact ID has gone missing for some reason (e.g. the user forgot to
+   * define the parameter mapping), the current code returns all groups. It is
+   * not clear how this should be handled.
    *
-   * @return array
-   * @access protected
+   * @param contact_id
    */
-  protected function getAllGroups() {
-    $apiParams['options']['limit'] = 0;
-    $options = [];
-    $api = civicrm_api3('Group', 'get', $apiParams);
-    foreach($api['values'] as $group) {
-      $options[$group['title']] = $group['title'];
+  protected function getContactGroups($contact_id) {
+    if ($contact_id === NULL) {
+      \Civi::log()->error("No contact ID was passed as a parameter to ContactIsInGroup. Check the parameter mapping. Form processor ID = " . $this->getMetaData()->getParameter("form_processor_id"));
     }
-    asort($options);
-    return $options;
+    return \CRM_Contact_BAO_GroupContact::getGroupList($contact_id);
   }
 
 }
