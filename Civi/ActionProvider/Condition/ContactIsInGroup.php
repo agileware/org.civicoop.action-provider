@@ -21,10 +21,13 @@ class ContactIsInGroup extends AbstractCondition {
    * @return bool
    */
   public function isConditionValid(ParameterBagInterface $parameterBag) {
+    $contact_id = $parameterBag->getParameter('contact_id');
+    if ($contact_id === NULL) {
+      \Civi::log()->error("No contact ID was passed as a parameter to ContactIsInGroup. Check the parameter mapping. Form processor ID = " . $this->getMetaData()->getParameter("form_processor_id"));
+      return false;
+    }
     $conditionGroupIdsCommaSeparated = $this->configuration->getParameter('groups');
     $conditionGroupIds = SetOps::setFromArray(array_map('intval', explode(',', $conditionGroupIdsCommaSeparated)));
-
-    $contact_id = $parameterBag->getParameter('contact_id');
     $operator = $this->configuration->getParameter('operator');
     switch($operator) {
       case 'in one of':
@@ -141,9 +144,6 @@ class ContactIsInGroup extends AbstractCondition {
    * @param contact_id
    */
   protected function getContactGroups($contact_id) {
-    if ($contact_id === NULL) {
-      \Civi::log()->error("No contact ID was passed as a parameter to ContactIsInGroup. Check the parameter mapping. Form processor ID = " . $this->getMetaData()->getParameter("form_processor_id"));
-    }
     return \CRM_Contact_BAO_GroupContact::getGroupList($contact_id);
   }
 
