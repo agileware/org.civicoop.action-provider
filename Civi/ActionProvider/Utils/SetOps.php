@@ -13,6 +13,17 @@ namespace Civi\ActionProvider\Utils;
 class SetOps {
 
   /**
+   * Create a set as required by the other functions (where members are stored as keys)
+   * from a more standard array (where members are represented by values).
+   *
+   * @param array $array
+   * @return array
+   */
+  public static function setFromArray($array) {
+    return array_fill_keys($array, 1);
+  }
+
+  /**
    * Checks whether a set is empty
    *
    * @param $set

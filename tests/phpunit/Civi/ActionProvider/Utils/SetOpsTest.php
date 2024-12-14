@@ -10,6 +10,18 @@ use \Civi\ActionProvider\Utils\SetOps;
  */
 class SetOpsTest extends \PHPUnit\Framework\TestCase {
 
+  public function testSetFromArray1() {
+    $this->assertEquals([], SetOps::setFromArray([]));
+  }
+
+  public function testSetFromArray2() {
+    $this->assertEquals(["a" => 1, "b" => 1], SetOps::setFromArray(["a", "b"]));
+  }
+
+  public function testSetFromArray3() {
+    $this->assertEquals(["a" => 1, "b" => 1], SetOps::setFromArray(["a", "b", "a"]));
+  }
+
   public function testIsEmpty1() {
     $this->assertTrue(SetOps::isEmpty(
       []

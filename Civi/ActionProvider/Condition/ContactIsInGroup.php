@@ -22,7 +22,7 @@ class ContactIsInGroup extends AbstractCondition {
    */
   public function isConditionValid(ParameterBagInterface $parameterBag) {
     $conditionGroupIdsCommaSeparated = $this->configuration->getParameter('groups');
-    $conditionGroupIds = array_fill_keys(array_map('intval', explode(',', $conditionGroupIdsCommaSeparated)), 1);
+    $conditionGroupIds = SetOps::setFromArray(array_map('intval', explode(',', $conditionGroupIdsCommaSeparated)));
 
     $contact_id = $parameterBag->getParameter('contact_id');
     $operator = $this->configuration->getParameter('operator');
