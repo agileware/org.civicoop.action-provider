@@ -105,6 +105,7 @@ class Provider {
       new \Civi\ActionProvider\Condition\ContactHasTag(),
       new \Civi\ActionProvider\Condition\ContactHasEmail(),
       new \Civi\ActionProvider\Condition\ContactHasActivity(),
+      new \Civi\ActionProvider\Condition\ContactIsInGroup(),
     );
 
     foreach($conditions as $condition) {
