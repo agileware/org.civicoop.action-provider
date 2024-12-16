@@ -1,6 +1,8 @@
 Version 1.164 (not yet released)
 -------------
 
+* Added condition: Contact is (not) in Group(s). See !186
+
 Version 1.163
 -------------
 
