@@ -1,6 +1,7 @@
-Version 1.164 (not yet released)
+Version 1.164
 -------------
 
+* Fixed issue with create participant which creates line items (without a linked contribution).
 * Added condition: Contact is (not) in Group(s). See !186
 
 Version 1.163

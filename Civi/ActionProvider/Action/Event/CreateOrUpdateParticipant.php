@@ -129,14 +129,21 @@ class CreateOrUpdateParticipant extends AbstractParticipantAction {
       if ($parameters->doesParameterExists('register_date')) {
         $participantParams['register_date'] = $parameters->getParameter('register_date') ?? '';
       }
-      if ($parameters->doesParameterExists('fee_level')) {
-        $participantParams['fee_level'] = $parameters->getParameter('fee_level') ?? '';
-      }
-      if ($parameters->doesParameterExists('fee_amount')) {
-        $participantParams['fee_amount'] = $parameters->getParameter('fee_amount');
-      }
 
       $result = civicrm_api3('Participant', 'create', $participantParams);
+
+      $updateParticipantParams = [];
+      if ($parameters->doesParameterExists('fee_level')) {
+        $updateParticipantParams['fee_level'] = $parameters->getParameter('fee_level') ?? '';
+      }
+      if ($parameters->doesParameterExists('fee_amount')) {
+        $updateParticipantParams['fee_amount'] = $parameters->getParameter('fee_amount');
+      }
+      if (count($updateParticipantParams)) {
+        $updateParticipantParams['id'] = $result['id'];
+        civicrm_api3('Participant', 'create', $updateParticipantParams);
+      }
+
       $output->setParameter('id', $result['id']);
     } catch (Exception $e) {
       throw new \Civi\ActionProvider\Exception\ExecutionException(E::ts('Could not update or create a participant record'));
