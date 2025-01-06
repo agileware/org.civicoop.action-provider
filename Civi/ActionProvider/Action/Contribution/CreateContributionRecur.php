@@ -134,13 +134,19 @@ class CreateContributionRecur extends AbstractAction {
     /** @var \CRM_Contribute_BAO_Contribution $contribution */
     $contribution = $event->object;
 
-    if($contribution->contribution_recur_id !== $this->id) {
+    // Comparison without type conversion is intentional (string and integer)
+    if($contribution->contribution_recur_id != $this->id) {
       return;
     }
 
     \Civi::dispatcher()->removeListener('hook_civicrm_post', [ $this, 'initializeSchedule' ]);
 
-    $next_sched_contribution_date = \DateTime::createFromFormat('YmdHis', $contribution->receive_date);
+    $next_sched_contribution_date = \DateTime::createFromFormat('Y-m-d H:i:s', $contribution->receive_date);
+    // If date is not set, then try alternate date format
+    if ( false === $next_sched_contribution_date ) {
+      $next_sched_contribution_date = \DateTime::createFromFormat( 'YmdHis', $contribution->receive_date);
+    }
+
     $next_sched_contribution_date->modify('+ ' . $this->frequency);
 
     civicrm_api3('ContributionRecur', 'create', [
