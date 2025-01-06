@@ -1,5 +1,6 @@
 Version 1.165 (not yet released)
 -------------
+* Fix Membership: Get by Contact ID to actually support optional configurations. Add parameter mapping for membership type. See !185
 
 Version 1.164
 -------------
