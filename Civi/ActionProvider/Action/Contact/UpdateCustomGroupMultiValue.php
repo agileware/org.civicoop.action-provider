@@ -92,7 +92,12 @@ class UpdateCustomGroupMultiValue extends AbstractAction {
         $entry_id = civicrm_api4($apiCustomGroupName, 'update', $apiParams);
       }
       else {
-        $entry_id = civicrm_api4($apiCustomGroupName, 'create', $apiParams);
+        $result = civicrm_api4($apiCustomGroupName, 'create', $apiParams);
+        $row = $result->first();
+        if (!empty($row) && isset($row['id'])) {
+          // return the id of the newly created entry
+          $output->setParameter('id', $row['id']);
+        }
       }
     }
     catch (\CiviCRM_API3_Exception $ex) {
@@ -143,7 +148,7 @@ class UpdateCustomGroupMultiValue extends AbstractAction {
    */
   public function getOutputSpecification() {
     return new SpecificationBag(array(
-      new Specification('test_output', 'String', E::ts('Output for testing puporses'), true, null, null, null, false),
+      new Specification('id', 'Integer', E::ts('ID of the new created row in civicrm_value_... table')),
     ));
   }
 
