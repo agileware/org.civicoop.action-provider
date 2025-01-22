@@ -38,16 +38,20 @@ class FindByCustomGroupMultiValueId extends AbstractAction {
       throw new InvalidParameterException(E::ts("No custom group provided."));
     }
 
+    $apiParams = [
+      'where' => [],
+    ];
+
     $entry_id = $parameters->getParameter('entry_id');
     if (empty($entry_id)) {
       throw new InvalidParameterException(E::ts("No entry id given."));
     }
-
-    $apiParams = [
-      'where' => [],
-    ];
     $apiParams['where'][] = ['id', '=', $entry_id];
-    $apiParams['where'][] = ['entity_id', '=', $parameters->getParameter('contact_id')];
+
+    $contact_id = $parameters->getParameter('contact_id');
+    if (!empty($contact_id)) {
+      $apiParams['where'][] = ['entity_id', '=', $contact_id];
+    }
 
     $apiParams['checkPermissions'] = $this->configuration->getParameter('check_permission');
 
@@ -96,8 +100,8 @@ class FindByCustomGroupMultiValueId extends AbstractAction {
    */
   public function getParameterSpecification() {
     $specs = new SpecificationBag();
-    $specs->addSpecification(new Specification('contact_id', 'Integer', E::ts('Contact ID'), TRUE));
-    $specs->addSpecification(new Specification('entry_id', 'Integer', E::ts('Custom group entry ID'), FALSE));
+    $specs->addSpecification(new Specification('contact_id', 'Integer', E::ts('Contact ID'), FALSE));
+    $specs->addSpecification(new Specification('entry_id', 'Integer', E::ts('Custom group entry ID'), TRUE));
 
     return $specs;
   }
