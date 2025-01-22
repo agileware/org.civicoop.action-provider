@@ -56,10 +56,6 @@ class FindByCustomGroupMultiValueId extends AbstractAction {
     $apiParams['checkPermissions'] = $this->configuration->getParameter('check_permission');
 
     $apiCustomGroupName = 'Custom_' . $customGroupName;
-    if (!count($apiParams)) {
-      throw new InvalidParameterException(E::ts("No parameter given"));
-    }
-
     $result = civicrm_api4($apiCustomGroupName, 'get', $apiParams);
     $output->setParameter('custom_group_id', $this->configuration->getParameter('custom_group'));
     if (isset($result[0])) {
