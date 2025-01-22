@@ -40,19 +40,20 @@ class DeleteCustomGroupMultiValue extends AbstractAction {
 
     $apiCustomGroupName = 'Custom_' . $customGroupName;
 
-    $entry_id = $parameters->doesParameterExists('entry_id');
-    if (!$entry_id) {
+    if (!$parameters->doesParameterExists('entry_id')) {
       throw new InvalidParameterException(E::ts("No entry ID provided."));
     }
 
     $apiParams['where'] = [];
     $apiParams['where'][] = ['id', '=', $parameters->getParameter('entry_id')];
 
+    $contact_id = $parameters->getParameter('contact_id');
+    if (!empty($contact_id)) {
+      $apiParams['where'][] = ['entity_id', '=', $contact_id];
+    }
+
     $apiParams['checkPermissions'] = $this->configuration->getParameter('check_permission');
 
-    if (!count($apiParams)) {
-      throw new InvalidParameterException(E::ts("No parameter given"));
-    }
     try {
       $result = civicrm_api4($apiCustomGroupName, 'delete', $apiParams);
     }
@@ -81,7 +82,8 @@ class DeleteCustomGroupMultiValue extends AbstractAction {
    */
   public function getParameterSpecification() {
     $specs = new SpecificationBag();
-    $specs->addSpecification(new Specification('entry_id', 'Integer', E::ts('Custom group entry ID'), FALSE));
+    $specs->addSpecification(new Specification('contact_id', 'Integer', E::ts('Contact ID'), FALSE));
+    $specs->addSpecification(new Specification('entry_id', 'Integer', E::ts('Custom group entry ID'), TRUE));
 
     return $specs;
   }
