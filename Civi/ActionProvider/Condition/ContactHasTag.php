@@ -7,9 +7,9 @@
 namespace Civi\ActionProvider\Condition;
 
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
-use \Civi\ActionProvider\Parameter\ParameterBag;
-use Civi\ActionProvider\Parameter\Specification;
+use \Civi\ActionProvider\Parameter\Specification;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
+use \Civi\ActionProvider\Utils\SetOps;
 
 use CRM_ActionProvider_ExtensionUtil as E;
 
@@ -21,62 +21,80 @@ class ContactHasTag extends AbstractCondition {
    * @return bool
    */
   public function isConditionValid(ParameterBagInterface $parameterBag) {
-    $tagNames = $this->configuration->getParameter('tags');
-    $tagIds = array();
-    foreach($tagNames as $tagName) {
+    $contactId = $parameterBag->getParameter('contact_id');
+    if ($contactId === NULL) {
+      \Civi::log()->error("No contact ID was passed as a parameter to ContactHasTag. Check the parameter mapping. Form processor ID = " . $this->getMetaData()->getParameter("form_processor_id"));
+      return false;
+    }
+    $conditionTagIds = $this->getConditionTagIds();
+    $operator = $this->configuration->getParameter('operator');
+    switch($operator) {
+      case 'in one of':
+        $isConditionValid = $this->contactHasOneOfTags($contactId, $conditionTagIds);
+        break;
+      case 'in all of':
+        $isConditionValid = $this->contactHasAllTags($contactId, $conditionTagIds);
+        break;
+      case 'not in':
+        $isConditionValid = $this->contactHasNoneOfTags($contactId, $conditionTagIds);
+        break;
+      default:
+        throw new Exception("invalid operator: '$operator'");
+    }
+    return $isConditionValid;
+  }
+
+  /**
+   * Returns the IDs of the tags in this condition, in the format used in SetOps
+   *
+   * @return array
+   */
+  protected function getConditionTagIds()
+  {
+    $conditionTagNames = $this->configuration->getParameter('tags');
+\Civi::log()->debug("condition tag names: " . var_export($conditionTagNames, TRUE));
+    $conditionTagIds = SetOps::emptySet();
+    foreach($conditionTagNames as $tagName) {
       try {
         $tagId = civicrm_api3('Tag', 'getvalue', [
           'return' => 'id',
           'name' => $tagName,
           'used_for' => 'Contacts'
         ]);
-        $tagIds[] = $tagId;
+        SetOps::add($conditionTagIds, $tagId, $tagName);
       } catch (\Exception $e) {
         // Do nothing
       }
     }
-
-    $isConditionValid = true;
-    switch($this->configuration->getParameter('operator')) {
-      case 'in one of':
-        $isConditionValid = $this->contactHasOneOfTags($parameterBag->getParameter('contact_id'), $tagIds);
-        break;
-      case 'in all of':
-        $isConditionValid = $this->contactHasAllTags($parameterBag->getParameter('contact_id'), $tagIds);
-        break;
-      case 'not in':
-        $isConditionValid = $this->contactHasNotTag($parameterBag->getParameter('contact_id'), $tagIds);
-        break;
-    }
-    return $isConditionValid;
+    return $conditionTagIds;
   }
 
   /**
-   * Returns the specification of the configuration options for the actual condition.
+   * Returns the specification of the configuration options for this condition
    *
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
-    $operatorOptions = array(
+    $operatorOptions = [
       'in one of' => E::ts('Has one of the selected tags'),
       'in all of' => E::ts('Has all of the selected tags'),
       'not in' => E::ts('Does not have any of the selected tags'),
-    );
-    return new SpecificationBag(array(
+    ];
+    return new SpecificationBag([
       new Specification('operator', 'String', E::ts('Operator'), true, 'in all of', null, $operatorOptions, FALSE),
-      new Specification('tags', 'Integer', E::ts('Tags'), true, null, null, $this->getTags(), true),
-    ));
+      new Specification('tags', 'Integer', E::ts('Tags'), true, null, null, $this->getAllTags(), true),
+    ]);
   }
 
   /**
-   * Returns the specification of the parameters of the actual condition.
+   * Returns the specification of the parameters of the actual condition
    *
    * @return SpecificationBag
    */
   public function getParameterSpecification() {
-    return new SpecificationBag(array(
+    return new SpecificationBag([
       new Specification('contact_id', 'Integer', E::ts('Contact ID')),
-    ));
+    ]);
   }
 
   /**
@@ -87,65 +105,58 @@ class ContactHasTag extends AbstractCondition {
   }
 
   /**
-   * @param $contact_id
-   * @param $tag_ids
+   * @param $contactId
+   * @param $conditionTagIds
    *
    * @return bool
    */
-  protected function contactHasNotTag($contact_id, $tag_ids) {
-    $isValid = true;
-
-    $tags = CRM_Core_BAO_EntityTag::getTag($contact_id);
-    foreach($tag_ids as $tag_id) {
-      if (in_array($tag_id, $tags)) {
-        $isValid = false;
-      }
-    }
-
-    return $isValid;
+  protected function contactHasNoneOfTags($contactId, $conditionTagIds) {
+    $contactTagIds = $this->getContactTags($contactId);
+    return SetOps::disjoint($contactTagIds, $conditionTagIds);
   }
 
   /**
-   * @param $contact_id
-   * @param $tag_ids
+   * @param $contactId
+   * @param $conditionTagIds
    *
    * @return bool
    */
-  protected function contactHasAllTags($contact_id, $tag_ids) {
-    $isValid = 0;
-
-    $tags = \CRM_Core_BAO_EntityTag::getTag($contact_id);
-    foreach($tag_ids as $tag_id) {
-      if (in_array($tag_id, $tags)) {
-        $isValid++;
-      }
+  protected function contactHasAllTags($contactId, $conditionTagIds) {
+    /**
+     * About the following if statement:
+     *
+     * If no tags were specified in the condition, from a set-theoretical point of view
+     * the result should always be true, as the empty set is a subset of any set.
+     * However, there is a pragmatic argument for changing this logic.
+     *
+     * Imagine you have defined perhaps one small-ish tag (in terms of number of tagged contacts)
+     * in the condition and for some reason that tag disappears from it. The effect could be
+     * a very drastic change, from an action that applies only to a small number of tagged contacts
+     * to one that applies to all contacts.
+     *
+     * Handling it this way still is an irregularity. In every other situation,
+     * the condition becomes more restrictive as more tags are added to it.
+     * (Requiring that a contact has two tags is more restrictive than requiring
+     * just one tag, and so on.) Conversely, removing one of several tags from
+     * the condition makes it less restrictive. Now, when the last tag is taken away
+     * from the condition, its "restrictiveness" jumps to being maximally strict
+     * (the condition never passes).
+     */
+    if (SetOps::isEmpty($conditionTagIds)) {
+      return false;
     }
-
-    if (count($tag_ids) == $isValid && count($tag_ids) > 0) {
-      return true;
-    }
-
-    return false;
+    $contactTagIds = $this->getContactTags($contactId);
+    return SetOps::isSubset($conditionTagIds, $contactTagIds);
   }
 
   /**
-   * @param $contact_id
-   * @param $tag_ids
+   * @param $contactId
+   * @param $conditionTagIds
    *
    * @return bool
    */
-  protected function contactHasOneOfTags($contact_id, $tag_ids) {
-    $isValid = false;
-
-    $tags = \CRM_Core_BAO_EntityTag::getTag($contact_id);
-    foreach($tag_ids as $tag_id) {
-      if (in_array($tag_id, $tags)) {
-        $isValid = true;
-        break;
-      }
-    }
-
-    return $isValid;
+  protected function contactHasOneOfTags($contactId, $conditionTagIds) {
+    return !$this->contactHasNoneOfTags($contactId, $conditionTagIds);
   }
 
   /**
@@ -154,10 +165,10 @@ class ContactHasTag extends AbstractCondition {
    * @return array
    * @access protected
    */
-  protected function getTags() {
+  protected function getAllTags() {
     $apiParams['used_for'] = 'Contacts';
     $apiParams['options']['limit'] = 0;
-    $options = array();
+    $options = [];
     $api = civicrm_api3('Tag', 'get', $apiParams);
     foreach($api['values'] as $tag) {
       $options[$tag['name']] = $tag['name'];
@@ -166,6 +177,14 @@ class ContactHasTag extends AbstractCondition {
     return $options;
   }
 
-
+  /**
+   * Returns the IDs for the tags of a given contact, in the format used in SetOps
+   *
+   * @param contactId
+   */
+  protected function getContactTags($contactId) {
+     $tagArray = \CRM_Core_BAO_EntityTag::getTag($contactId);
+     return SetOps::setFromArray($tagArray);
+  }
 
 }
