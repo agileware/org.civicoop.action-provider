@@ -1,5 +1,6 @@
 Version 1.165 (not yet released)
 -------------
+* Condition Contact is in Group works with dynamic groups as well. See !190
 * Fixed: Contribution: Create recurring contribution, two bugs causing next next scheduled contribution date to not be set. Strict type comparison causes failure and assumed date format incorrect. See !187
 * Fixed: Membership: Get by Contact ID to actually support optional configurations. Add parameter mapping for membership type. See !185
 * New Action to get Membership ID by custom field values. See !188
