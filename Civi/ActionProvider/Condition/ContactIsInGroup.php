@@ -92,7 +92,7 @@ class ContactIsInGroup extends AbstractCondition {
    * @return bool
    */
   protected function contactHasOneOfGroups($contactId, $conditionGroupIds) {
-    $query = \Civi\Api4\Contact::get(TRUE)
+    $query = \Civi\Api4\Contact::get(FALSE)
       ->addSelect('id')
       ->addWhere('id', '=', $contactId)
       ->addWhere('groups', 'IN', $conditionGroupIds);
@@ -129,7 +129,7 @@ class ContactIsInGroup extends AbstractCondition {
     if (!$conditionGroupIds) {
       return false;
     }
-    $query = \Civi\Api4\Contact::get(TRUE)
+    $query = \Civi\Api4\Contact::get(FALSE)
       ->addSelect('id')
       ->addWhere('id', '=', $contactId);
     foreach ($conditionGroupIds as $conditionGroupId) {
