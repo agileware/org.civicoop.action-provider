@@ -6,6 +6,7 @@ Version 1.165 (not yet released)
 * Fixed: Membership: Get by Contact ID to actually support optional configurations. Add parameter mapping for membership type. See !185
 * New Action to get Membership ID by custom field values. See !188
 * Added validation for e-mail is valid.
+* Add additional configurations to Membership: Get by Custom Field: added filtering by Membership Status and sort order. See !192
 
 Version 1.164
 -------------
