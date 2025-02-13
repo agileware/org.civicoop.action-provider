@@ -1,3 +1,7 @@
+Version 1.166 (not yet released)
+-------------
+
+
 Version 1.165
 -------------
 * Condition Contact is in Group works with dynamic groups as well. See !190
