@@ -11,6 +11,7 @@ Version 1.165
 * New Action to get Membership ID by custom field values. See !188
 * Added validation for e-mail is valid.
 * Add additional configurations to Membership: Get by Custom Field: added filtering by Membership Status and sort order. See !192
+* Disable permission check for Event actions: isWaitListEnabled, GetParticipant, GetParticipantById. See !193
 
 Version 1.164
 -------------
