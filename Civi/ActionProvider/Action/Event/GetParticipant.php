@@ -96,7 +96,7 @@ class GetParticipant extends AbstractGetSingleAction {
     }
 
     try {
-      $participant = \Civi\Api4\Participant::get(TRUE)
+      $participant = \Civi\Api4\Participant::get(FALSE)
         ->addSelect('*', 'custom.*')
         ->addWhere('id', '=', $participant_id)
         ->execute()
