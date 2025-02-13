@@ -1,4 +1,4 @@
-Version 1.165 (not yet released)
+Version 1.165
 -------------
 * Condition Contact is in Group works with dynamic groups as well. See !190
 * Fixed issue with add contact to group and issue with permissions. See !191
