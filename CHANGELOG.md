@@ -1,5 +1,7 @@
-Version 1.166 (not yet released)
+Version 1.166
 -------------
+
+* Fix for Contact: Get list of subscribed groups.
 
 
 Version 1.165
