@@ -191,6 +191,7 @@ class SendEmail {
         'from' => $from,
         'toName' => $toName,
         'toEmail' => $email,
+        'contactId' => $contactId,
         'subject' => $subject,
       );
       if ($cc) {
