@@ -2,6 +2,7 @@ Version 1.167 (not yet released)
 -------------
 
 * Fix when updating exising phone numbers do not delete an existing when the parameter is not set. See !195
+* Communication: Send e-mail action: pass contactId to hook alterMailContent. See !194
 
 Version 1.166
 -------------
