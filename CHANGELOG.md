@@ -1,6 +1,8 @@
 Version 1.167 (not yet released)
 -------------
 
+* Fix when updating exising phone numbers do not delete an existing when the parameter is not set. See !195
+
 Version 1.166
 -------------
 * Fix for Contact: Get list of subscribed groups.
