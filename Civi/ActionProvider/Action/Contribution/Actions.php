@@ -94,6 +94,10 @@ class Actions {
       AbstractAction::SEND_MESSAGES_TO_CONTACTS,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ]);
+    $provider->addAction('GetContributionByMembershipID', '\Civi\ActionProvider\Action\Contribution\GetContributionByMembershipID', E::ts('Contribution: Get by Membership ID'), [
+      AbstractAction::DATA_RETRIEVAL_TAG,
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG
+    ]);
   }
 
 }
