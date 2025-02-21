@@ -48,8 +48,8 @@ class GetContributionByMembershipID extends AbstractGetSingleAction {
     $sort_order['DESC'] = ts('Descending');
 
     return new SpecificationBag([
+      new OptionGroupSpecification('contribution_status', 'contribution_status', E::ts('Status of contribution'), FALSE, NULL, TRUE),
       new Specification('order_by', 'String', E::ts('Select Contribution, Order By'), FALSE, 'receive_date', NULL, $sort_field, FALSE),
-
       new Specification('sort_order', 'String', E::ts('Select Contribution, Sort Order'), FALSE, 'DESC', NULL, $sort_order, FALSE),
     ]);
   }
@@ -81,7 +81,11 @@ class GetContributionByMembershipID extends AbstractGetSingleAction {
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output): void {
     $apiParams['membership_id']            = $parameters->getParameter('membership_id');
 
-    // Configuration membership type ids
+    // Configuration
+    if ($this->configuration->doesParameterExists('contribution_status') && !empty($this->configuration->getParameter('contribution_status'))) {
+      $apiParams['contribution_status']           = array_filter((array) $this->configuration->getParameter('contribution_status')); // Strips out empty strings
+    }
+
     if ($this->configuration->doesParameterExists('order_by') && !empty($this->configuration->getParameter('order_by'))) {
       $apiParams['order_by']            = $this->configuration->getParameter('order_by');
     }
@@ -100,6 +104,10 @@ class GetContributionByMembershipID extends AbstractGetSingleAction {
 
       if ( !empty($apiParams['membership_id']) ) {
         $contributions_query->addWhere('membership.id', '=', $apiParams['membership_id']);
+      }
+
+      if ( !empty($apiParams['contribution_status']) ) {
+        $contributions_query->addWhere('contribution_status_id', 'IN', $apiParams['contribution_status']);
       }
 
       if ( isset($apiParams['order_by']) && !empty($apiParams['order_by']) && isset($apiParams['sort_order']) && !empty($apiParams['sort_order']) ) {
