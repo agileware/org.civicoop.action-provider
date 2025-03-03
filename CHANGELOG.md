@@ -5,6 +5,7 @@ Version 1.167 (not yet released)
 * Communication: Send e-mail action: pass contactId to hook alterMailContent. See !194
 * New action. Contribution: Get by Membership ID. See !196
 * Fix for Action Validate Checksum of case client. See !198
+* Get State and Province ID - get by name OR abbreviation. See !199
 
 Version 1.166
 -------------
