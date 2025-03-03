@@ -12,6 +12,10 @@ use CRM_ActionProvider_ExtensionUtil as E;
 
 class GetStateProvinceId extends AbstractAction {
 
+  const LOOKUP_TYPE_NAME = 0;
+  const LOOKUP_TYPE_ABBREV = 1;
+  const LOOKUP_TYPE_BOTH = 2;
+
   /**
    * Run the action
    *
@@ -22,15 +26,18 @@ class GetStateProvinceId extends AbstractAction {
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    if ($this->configuration->doesParameterExists('use_abbreviation') && $this->configuration->getParameter('use_abbreviation')) {
+    if ($this->configuration->doesParameterExists('use_abbreviation') && $this->configuration->getParameter('use_abbreviation') == $this::LOOKUP_TYPE_ABBREV) {
       $sql = "SELECT id FROM `civicrm_state_province` WHERE `country_id` = %1 AND `abbreviation` = %2";
-      $params[1] = [$parameters->getParameter('country_id'), 'Integer'];
-      $params[2] = [$parameters->getParameter('state_province'), 'String'];
+    }
+    elseif ($this->configuration->doesParameterExists('use_abbreviation') && $this->configuration->getParameter('use_abbreviation') == $this::LOOKUP_TYPE_NAME){
+      $sql = "SELECT id FROM `civicrm_state_province` WHERE `country_id` = %1 AND `name` = %2";
     } else {
       $sql = "SELECT id FROM `civicrm_state_province` WHERE `country_id` = %1 AND `name` = %2";
-      $params[1] = [$parameters->getParameter('country_id'), 'Integer'];
-      $params[2] = [$parameters->getParameter('state_province'), 'String'];
+      $sql .= " UNION SELECT id FROM `civicrm_state_province` WHERE `country_id` = %1 AND `abbreviation` = %2";
     }
+    $params[1] = [$parameters->getParameter('country_id'), 'Integer'];
+    $params[2] = [$parameters->getParameter('state_province'), 'String'];
+
     $state_id = \CRM_Core_DAO::singleValueQuery($sql, $params);
     $output->setParameter('state_province_id', $state_id);
   }
@@ -41,8 +48,13 @@ class GetStateProvinceId extends AbstractAction {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
+    $options = [
+      $this::LOOKUP_TYPE_NAME => E::ts('Name'),
+      $this::LOOKUP_TYPE_ABBREV => E::ts('Abbreviation'),
+      $this::LOOKUP_TYPE_BOTH => E::ts('Both'),
+    ];
     return new SpecificationBag(array(
-      new Specification('use_abbreviation', 'Boolean', E::ts('Use abbreviation'), true, false),
+      new Specification('use_abbreviation', 'Integer', E::ts('Use by name or abbreviation'), true, 0, NULL, $options),
     ));
   }
 
