@@ -1,5 +1,6 @@
 <?php
 /**
+ * @author Sebastian Lisken <sebastian.lisken@civiservice.de>
  * @author Jaap Jansma <jaap.jansma@civicoop.org>
  * @license AGPL-3.0
  */
@@ -9,7 +10,6 @@ namespace Civi\ActionProvider\Condition;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\Specification;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
-use \Civi\ActionProvider\Utils\SetOps;
 
 use CRM_ActionProvider_ExtensionUtil as E;
 
@@ -21,28 +21,33 @@ class ContactIsInGroup extends AbstractCondition {
    * @return bool
    */
   public function isConditionValid(ParameterBagInterface $parameterBag) {
-    $contact_id = $parameterBag->getParameter('contact_id');
-    if ($contact_id === NULL) {
+    $contactId = $parameterBag->getParameter('contact_id');
+    if ($contactId === NULL) {
       \Civi::log()->error("No contact ID was passed as a parameter to ContactIsInGroup. Check the parameter mapping. Form processor ID = " . $this->getMetaData()->getParameter("form_processor_id"));
       return false;
     }
-    $conditionGroupIdsCommaSeparated = $this->configuration->getParameter('groups');
-    $conditionGroupIds = SetOps::setFromArray(array_map('intval', explode(',', $conditionGroupIdsCommaSeparated)));
+    $conditionGroupIds = $this->getConditionGroupIds();
     $operator = $this->configuration->getParameter('operator');
     switch($operator) {
       case 'in one of':
-        $isConditionValid = $this->contactHasOneOfGroups($contact_id, $conditionGroupIds);
+        $isConditionValid = $this->contactHasOneOfGroups($contactId, $conditionGroupIds);
         break;
       case 'in all of':
-        $isConditionValid = $this->contactHasAllGroups($contact_id, $conditionGroupIds);
+        $isConditionValid = $this->contactHasAllGroups($contactId, $conditionGroupIds);
         break;
       case 'not in':
-        $isConditionValid = $this->contactHasNotGroups($contact_id, $conditionGroupIds);
+        $isConditionValid = $this->contactHasNoneOfGroups($contactId, $conditionGroupIds);
         break;
       default:
         throw new Exception("invalid operator: '$operator'");
     }
     return $isConditionValid;
+  }
+
+  private function getConditionGroupIds()
+  {
+    $conditionGroupIdsCommaSeparated = $this->configuration->getParameter('groups');
+    return array_map('intval', explode(',', $conditionGroupIdsCommaSeparated));
   }
 
   /**
@@ -81,22 +86,26 @@ class ContactIsInGroup extends AbstractCondition {
   }
 
   /**
-   * @param $contact_id
-   * @param $group_ids
+   * @param $contactId
+   * @param $conditionGroupIds
    *
    * @return bool
    */
-  protected function contactHasOneOfGroups($contact_id, $condition_group_ids) {
-    return !$this->contactHasNotGroups($contact_id, $condition_group_ids);
+  protected function contactHasOneOfGroups($contactId, $conditionGroupIds) {
+    $query = \Civi\Api4\Contact::get(FALSE)
+      ->addSelect('id')
+      ->addWhere('id', '=', $contactId)
+      ->addWhere('groups', 'IN', $conditionGroupIds);
+    return count($query->execute()) != 0;
   }
 
   /**
-   * @param $contact_id
-   * @param $group_ids
+   * @param $contactId
+   * @param $conditionGroupIds
    *
    * @return bool
    */
-  protected function contactHasAllGroups($contact_id, $condition_group_ids) {
+  protected function contactHasAllGroups($contactId, $conditionGroupIds) {
     /**
      * About the following if statement:
      *
@@ -109,7 +118,7 @@ class ContactIsInGroup extends AbstractCondition {
      * change, from an action that applies only to a small number of members to one
      * that applies to all contacts.
      *
-     * Handling it this way breaks remains an irregularity. In every other situation,
+     * Handling it this way still is an irregularity. In every other situation,
      * the condition becomes more restrictive as more groups are added to it.
      * (Requiring that a contact has two groups is more restrictive than requiring
      * just one group, and so on.) Conversely, removing one of several groups from
@@ -117,34 +126,26 @@ class ContactIsInGroup extends AbstractCondition {
      * from the condition, its "restrictiveness" jumps to being maximally strict
      * (the condition never passes).
      */
-    if (SetOps::isEmpty($condition_group_ids)) {
+    if (!$conditionGroupIds) {
       return false;
     }
-    $contact_group_ids = $this->getContactGroups($contact_id);
-    return SetOps::isSubset($condition_group_ids, $contact_group_ids);
+    $query = \Civi\Api4\Contact::get(FALSE)
+      ->addSelect('id')
+      ->addWhere('id', '=', $contactId);
+    foreach ($conditionGroupIds as $conditionGroupId) {
+      $query = $query->addWhere('groups', 'IN', [$conditionGroupId]);
+    }
+    return count($query->execute()) != 0;
   }
 
   /**
-   * @param $contact_id
-   * @param $group_ids
+   * @param $contactId
+   * @param $conditionGroupIds
    *
    * @return bool
    */
-  protected function contactHasNotGroups($contact_id, $condition_group_ids) {
-    $contact_group_ids = $this->getContactGroups($contact_id);
-    return SetOps::disjoint($contact_group_ids, $condition_group_ids);
-  }
-
-  /**
-   * Get the groups a contact belongs to, as set in the form required by SetOps.
-   * If the contact ID has gone missing for some reason (e.g. the user forgot to
-   * define the parameter mapping), the current code returns all groups. It is
-   * not clear how this should be handled.
-   *
-   * @param contact_id
-   */
-  protected function getContactGroups($contact_id) {
-    return \CRM_Contact_BAO_GroupContact::getGroupList($contact_id);
+  protected function contactHasNoneOfGroups($contactId, $conditionGroupIds) {
+    return !$this->contactHasOneOfGroups($contactId, $conditionGroupIds);
   }
 
 }

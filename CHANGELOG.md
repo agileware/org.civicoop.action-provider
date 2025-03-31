@@ -1,8 +1,27 @@
-Version 1.165 (not yet released)
+Version 1.167 (not yet released)
 -------------
+
+* Fix when updating exising phone numbers do not delete an existing when the parameter is not set. See !195
+* Communication: Send e-mail action: pass contactId to hook alterMailContent. See !194
+* New action. Contribution: Get by Membership ID. See !196
+* Fix for Action Validate Checksum of case client. See !198
+* Get State and Province ID - get by name OR abbreviation. See !199
+* Fix GetRelationshipByContactId returning active relationships to deleted contacts. See !200
+
+Version 1.166
+-------------
+* Fix for Contact: Get list of subscribed groups.
+
+Version 1.165
+-------------
+* Condition Contact is in Group works with dynamic groups as well. See !190
+* Fixed issue with add contact to group and issue with permissions. See !191
 * Fixed: Contribution: Create recurring contribution, two bugs causing next next scheduled contribution date to not be set. Strict type comparison causes failure and assumed date format incorrect. See !187
 * Fixed: Membership: Get by Contact ID to actually support optional configurations. Add parameter mapping for membership type. See !185
 * New Action to get Membership ID by custom field values. See !188
+* Added validation for e-mail is valid.
+* Add additional configurations to Membership: Get by Custom Field: added filtering by Membership Status and sort order. See !192
+* Disable permission check for Event actions: isWaitListEnabled, GetParticipant, GetParticipantById. See !193
 
 Version 1.164
 -------------

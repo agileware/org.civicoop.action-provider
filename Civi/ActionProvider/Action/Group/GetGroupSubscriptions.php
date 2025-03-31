@@ -31,7 +31,10 @@ class GetGroupSubscriptions extends AbstractAction {
     $apiParams['contact_id'] = $contact_id;
     $apiParams['options']['limit'] = 0;
     if ($this->configuration->doesParameterExists('group_ids')) {
-      $groupsToCheck = explode(",", $this->configuration->getParameter('group_ids'));
+      $groupsToCheck = $this->configuration->getParameter('group_ids');
+      if (!is_array($groupsToCheck)) {
+        $groupsToCheck = explode(",", $groupsToCheck);
+      }
       foreach($groupsToCheck as $group_id) {
         $apiParams['group_id'] = $group_id;
         try {

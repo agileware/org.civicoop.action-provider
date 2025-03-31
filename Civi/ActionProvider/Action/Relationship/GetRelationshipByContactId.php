@@ -85,25 +85,27 @@ class GetRelationshipByContactId extends AbstractGetSingleAction {
     } else {
       $relationshipFindParams['contact_id_b'] = $contact_id;
     }
+
+    // Relationships to deleted contacts are assumed to be inactive.
+    // Ensure related contact isn't deleted.
+    $relationshipFindParams['contact_id_a.is_deleted'] = 0;
+    $relationshipFindParams['contact_id_b.is_deleted'] = 0;
+
     $relationshipFindParams['relationship_type_id'] = $type_id;
-    $relationshipFindParams['is_active'] = '1';
     $relationshipFindParams['options']['limit'] = 1;
+
+    // Check for active relationship
+    $relationshipFindParams['is_active'] = '1';
     try {
       $relationship = civicrm_api3('Relationship', 'getsingle', $relationshipFindParams);
       return $relationship;
     } catch (\Exception $e) {
       // Do nothing
     }
+
+    // If no active relationship was found, and we also want to check inactive relationships
     if ($also_inactive) {
-      $relationshipFindParams = array();
-      if ($side == 'a') {
-        $relationshipFindParams['contact_id_a'] = $contact_id;
-      } else {
-        $relationshipFindParams['contact_id_b'] = $contact_id;
-      }
-      $relationshipFindParams['relationship_type_id'] = $type_id;
       $relationshipFindParams['is_active'] = '0';
-      $relationshipFindParams['options']['limit'] = 1;
       try {
         $relationship = civicrm_api3('Relationship', 'getsingle', $relationshipFindParams);
         return $relationship;
@@ -111,6 +113,7 @@ class GetRelationshipByContactId extends AbstractGetSingleAction {
         // Do nothing
       }
     }
+
     return false;
   }
 

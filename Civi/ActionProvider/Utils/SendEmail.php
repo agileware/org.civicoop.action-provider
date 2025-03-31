@@ -125,30 +125,29 @@ class SendEmail {
   public function send($contactIds, $subject, $body_text, $body_html, $extra_data=false, $cc=false, $bcc=false) {
     $from = \CRM_Core_BAO_Domain::getNameAndEmail();
     if ($this->from_email && $this->from_name) {
-      $from = $this->from_name."<".$this->from_email.">";
+      $from = $this->from_name.'<'.$this->from_email.'>';
     } elseif ($this->from_email) {
       $from = $this->from_email;
     } elseif ($this->from_name) {
-      $from = $this->from_name ." <".$from[1].">";
+      $from = $this->from_name .' <'.$from[1].'>';
     } else {
       $from = "$from[0] <$from[1]>";
     }
 
-    $result     = NULL;
     if (!$body_text) {
       $body_text = \CRM_Utils_String::htmlToText($body_html);
     }
 
-    $returnValues = array();
+    $returnValues = [];
     foreach($contactIds as $contactId) {
-      $contact_params = array(array('contact_id', '=', $contactId, 0, 0));
+      $contact_params = [['contact_id', '=', $contactId, 0, 0]];
       list($contact) = \CRM_Contact_BAO_Query::apiQuery($contact_params);
       $contact = reset($contact);
       if (!$contact || is_a($contact, 'CRM_Core_Error')) {
-        throw new \Exception('Could not find contact with ID: ' . $contact_params['contact_id']);
+        throw new \Exception('Could not find contact with ID: ' . $contact_params[0]['contact_id']);
       }
 
-      $contactData = array();
+      $contactData = [];
       if ($this->case_id) {
         $contactData['case_id'] = $this->case_id;
       }
@@ -165,7 +164,7 @@ class SendEmail {
         $contactData['extra_data']['participant']['id'] = $this->participant_id;
       }
 
-      if ($contact['do_not_email'] || (empty($contact['email']) && empty($this->alternative_recipient_email)) || \CRM_Utils_Array::value('is_deceased', $contact) || $contact['on_hold']) {
+      if ($contact['do_not_email'] || (empty($contact['email']) && empty($this->alternative_recipient_email)) || $contact['is_deceased'] || $contact['on_hold']) {
         /**
          * Contact is deceased or has opted out from mailings so do not send the e-mail
          */
@@ -180,19 +179,19 @@ class SendEmail {
       if ($this->alternative_recipient_email) {
         $email = $this->alternative_recipient_email;
       }
-      $type = array('body_html', 'body_text', 'subject');
       $html = Tokens::replaceTokens($contactId, $body_html, $contactData, 'text/html');
       $text = Tokens::replaceTokens($contactId, $body_text, $contactData, 'text/plain');
       $subject = Tokens::replaceTokens($contactId, $subject, $contactData, 'text/plain');
 
       // set up the parameters for CRM_Utils_Mail::send
-      $mailParams = array(
+      $mailParams = [
         'groupName' => 'E-mail from API',
         'from' => $from,
         'toName' => $toName,
         'toEmail' => $email,
+        'contactId' => $contactId,
         'subject' => $subject,
-      );
+      ];
       if ($cc) {
         $mailParams['cc'] = $cc;
       }
@@ -224,17 +223,17 @@ class SendEmail {
         $details = "-ALTERNATIVE ITEM 0-\n$html\n-ALTERNATIVE ITEM 1-\n$text\n-ALTERNATIVE END-\n";
       }
       else {
-        $details = $html ? $html : $text;
+        $details = $html ?: $text;
       }
 
-      $activityParams = array(
+      $activityParams = [
         'source_contact_id' => $contactId,
         'activity_type_id' => $activityTypeID,
         'activity_date_time' => date('YmdHis'),
         'subject' => $subject,
         'details' => $details,
         'status_id' => 2, //Completed
-      );
+      ];
       if ($this->sender_contact_id) {
         $activityParams['source_contact_id'] = $this->sender_contact_id;
       }
@@ -246,28 +245,28 @@ class SendEmail {
       $activityContacts = \CRM_Core_OptionGroup::values('activity_contacts', FALSE, FALSE, FALSE, NULL, 'name');
       $targetID = \CRM_Utils_Array::key('Activity Targets', $activityContacts);
 
-      $activityTargetParams = array(
+      $activityTargetParams = [
         'activity_id' => $activity->id,
         'contact_id' => $contactId,
         'record_type_id' => $targetID
-      );
+      ];
       \CRM_Activity_BAO_ActivityContact::create($activityTargetParams);
 
       if (!empty($this->case_id)) {
-        $caseActivity = array(
+        $caseActivity = [
           'activity_id' => $activity->id,
           'case_id' => $this->case_id,
-        );
+        ];
         \CRM_Case_BAO_Case::processCaseActivity($caseActivity);
       }
 
       $this->processAttachments($activity->id);
 
-      $returnValues[$contactId] = array(
+      $returnValues[$contactId] = [
         'contact_id' => $contactId,
         'send' => 1,
         'status_msg' => 'Succesfully send e-mail to ' . ' <' . $email . '> ',
-      );
+      ];
     }
     return $returnValues;
   }

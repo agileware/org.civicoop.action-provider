@@ -125,7 +125,7 @@ class Actions {
    */
   public static function isWaitListEnabled(): bool {
     try {
-      $waitlistStatusCount = \Civi\Api4\ParticipantStatusType::get(TRUE)
+      $waitlistStatusCount = \Civi\Api4\ParticipantStatusType::get(FALSE)
         ->addClause('OR', ['name', '=', 'Pending from waitlist'], [
           'name',
           '=',
