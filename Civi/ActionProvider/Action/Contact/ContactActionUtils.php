@@ -221,6 +221,12 @@ class ContactActionUtils {
    * Create a phone for a contact.
    */
   public static function createPhone($contact_id, ParameterBagInterface $parameters, ParameterBagInterface $configuration) {
+    // Only proceed if there is a 'phone' parameter. Value can still be null.
+    // Prevents unintended overrides/deletion of existing phone numbers if no parameter is passed.
+    if (!$parameters->doesParameterExists('phone')) {
+      return false;
+    }
+
     $existingPhoneId = false;
     if ($configuration->getParameter('phone_update_existing')) {
       $existingPhoneId = self::findExistingPhone($contact_id, $configuration->getParameter('phone_location_type'), $configuration->getParameter('phone_is_primary'));

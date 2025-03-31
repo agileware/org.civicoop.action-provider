@@ -59,7 +59,7 @@ class ValidateChecksumCaseClient extends AbstractAction {
 	    try {
 	      $case = civicrm_api4('CaseContact', 'get', [
 		'select' => ['contact_id'],
-		'where' => [['id', '=',  $case_id]],
+		'where' => [['case_id', '=',  $case_id]],
 		'limit' => 1,
 		'checkPermissions' => FALSE,
 		]);

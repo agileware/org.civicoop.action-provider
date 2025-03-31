@@ -13,10 +13,20 @@ namespace Civi\ActionProvider\Utils;
 class SetOps {
 
   /**
+   * Create an empty set.
+   *
+   * @return array
+   */
+  public static function emptySet() {
+    return [];
+  }
+
+  /**
    * Create a set as required by the other functions (where members are stored as keys)
    * from a more standard array (where members are represented by values).
    *
    * @param array $array
+   *
    * @return array
    */
   public static function setFromArray($array) {
@@ -26,7 +36,7 @@ class SetOps {
   /**
    * Checks whether a set is empty
    *
-   * @param $set
+   * @param array $set
    *
    * @return bool
    */
@@ -35,10 +45,24 @@ class SetOps {
   }
 
   /**
+   * Add a member to a set. A new array with the member used as the key will be added.
+   * If relevant, the array to use can be provided as well (the default is 1).
+   *
+   * @param array $set
+   * @param int|string $member
+   * @param mixed $value
+   *
+   * @return array
+   */
+  public static function add(&$set, $member, $value = 1) {
+    $set[$member] = $value;
+  }
+
+  /**
    * Checks whether two sets have no common members (their intersection is empty).
    *
-   * @param $set1
-   * @param $set2
+   * @param array $set1
+   * @param array $set2
    *
    * @return bool
    */
@@ -61,8 +85,8 @@ class SetOps {
   /**
    * Checks whether the first given set is a subset of (or equal to) the second.
    *
-   * @param $subset
-   * @param $superset
+   * @param array $subset
+   * @param array $superset
    *
    * @return bool
    */
@@ -90,10 +114,10 @@ class SetOps {
    *
    * If the callback returns a truthy value, the iteration is stopped.
    *
-   * @param $setToFind
-   * @param $setToSearch
-   * @param $callback
-   * @param $call_mode
+   * @param array $setToFind
+   * @param array $setToSearch
+   * @param callable $callback
+   * @param int $call_mode
    */
   protected static function findInMembers($setToSearch, $setToIterate, $callback, $call_mode = SetOps::CALL_IF_FOUND) {
     foreach($setToIterate as $member => $value) {
