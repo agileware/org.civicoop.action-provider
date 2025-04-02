@@ -5,7 +5,7 @@ Version 1.167
 -------------
 
 * Add Log Case Change to Activity option to Update Case Status Activity.
-* Fix when updating exising phone numbers do not delete an existing when the parameter is not set. See !195
+* Fix when updating existing phone numbers do not delete an existing when the parameter is not set. See !195
 * Communication: Send e-mail action: pass contactId to hook alterMailContent. See !194
 * New action. Contribution: Get by Membership ID. See !196
 * Fix for Action Validate Checksum of case client. See !198
