@@ -56,12 +56,13 @@ class FindOrganizationByName extends AbstractAction {
       }
       $contacts = $query->execute();
 
+      $contact_id = '';
+
       if ($name_length_limit) {
         if ($contacts->count() > self::FUZZY_WARNING_LIMIT) {
           \Civi::log()->warning('Action FindOrganizationByName: too many results for the fuzzy search. This is a potential performance problem. Try to increase the "Organisation name length".');
         }
 
-        $contact_id = 0;
         $top_score = PHP_INT_MAX;
         foreach ($contacts as $contact) {
           \Civi::log()->info($contact['display_name'] . " (" . $contact['id'] . ")");
@@ -74,7 +75,9 @@ class FindOrganizationByName extends AbstractAction {
         }
       }
       else {
-        $contact_id = $contacts->first()['id'];
+        if ($contacts->count() > 0) {
+          $contact_id = $contacts->first()['id'];
+        }
       }
       $output->setParameter('contact_id', $contact_id);
     } catch (\Exception $e) {
