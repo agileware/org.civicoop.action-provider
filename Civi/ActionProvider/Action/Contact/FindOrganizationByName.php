@@ -13,6 +13,8 @@ use CRM_ActionProvider_ExtensionUtil as E;
 
 class FindOrganizationByName extends AbstractAction {
 
+  const FUZZY_WARNING_LIMIT = 1000;
+
 	/**
 	 * Run the action
 	 *
@@ -55,6 +57,10 @@ class FindOrganizationByName extends AbstractAction {
       $contacts = $query->execute();
 
       if ($name_length_limit) {
+        if ($contacts->count() > self::FUZZY_WARNING_LIMIT) {
+          \Civi::log()->warning('Action FindOrganizationByName: too many results for the fuzzy search. This is a potential performance problem. Try to increase the "Organisation name length".');
+        }
+
         $contact_id = 0;
         $top_score = PHP_INT_MAX;
         foreach ($contacts as $contact) {
