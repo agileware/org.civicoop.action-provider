@@ -1,5 +1,7 @@
-Version 1.168 (not yet released)
+Version 1.168
 -------------
+
+* Action Event: Get By ID added Address ID to the output.
 
 Version 1.167
 -------------
