@@ -13,7 +13,7 @@ use CRM_ActionProvider_ExtensionUtil as E;
 
 class FindOrganizationByName extends AbstractAction {
 
-  const FUZZY_WARNING_LIMIT = 1000;
+  private const FUZZY_WARNING_LIMIT = 1000;
 
 	/**
 	 * Run the action
@@ -65,9 +65,8 @@ class FindOrganizationByName extends AbstractAction {
 
         $top_score = PHP_INT_MAX;
         foreach ($contacts as $contact) {
-          \Civi::log()->info($contact['display_name'] . " (" . $contact['id'] . ")");
           $score = levenshtein($organization_name, $contact['display_name']);
-          \Civi::log()->info("  score: $score");
+          \Civi::log()->info($contact['display_name'] . " (" . $contact['id'] . "), score: $score");
           if ($score < $top_score) {
             $contact_id = $contact['id'];
             $top_score = $score;
