@@ -153,6 +153,8 @@ class CustomField {
     // to set a customfield to null the API needs to receive an empty string ("")
     // so replace all the null values with an empty string
     $apiParams = array_map(function($x){ return is_null($x)?"":$x;},$apiParams);
+    // to set a boolean customfield to false the API needs to receive an '0'.
+    $apiParams = array_map(function($x){ return is_bool($x) && $x === false?"0": $x;},$apiParams);
     return $apiParams;
   }
 
