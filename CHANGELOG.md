@@ -1,5 +1,6 @@
-Version 1.170 (not yet released)
+Version 1.170
 -------------
+* Fixed issue #65: add action to find default location type id
 
 Version 1.169
 -------------
