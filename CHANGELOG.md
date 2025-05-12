@@ -1,3 +1,8 @@
+Version 1.172
+-------------
+
+* Made it possible to set qty or option of price fields at the action for Calculate Participant Fee and for the action Create Participant Contribution.
+
 Version 1.171
 -------------
 
