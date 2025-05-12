@@ -1,3 +1,8 @@
+Version 1.171
+-------------
+
+* Added HTML line items to action Caclulate Participant Fees.
+
 Version 1.170
 -------------
 * Fixed issue #65: add action to find default location type id

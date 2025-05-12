@@ -17,6 +17,7 @@ use CRM_ActionProvider_ExtensionUtil as E;
 class CreateParticipantContribution extends AbstractAction {
 
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
+    $taxRates = \CRM_Core_PseudoConstant::getTaxRates();
     $priceOptions = [];
     if ($parameters->doesParameterExists('price_set_field_values')) {
       $priceOptions = $parameters->getParameter('price_set_field_values');
@@ -74,6 +75,7 @@ class CreateParticipantContribution extends AbstractAction {
     if (!$currency) {
       $currency = $config->defaultCurrency;
     }
+
     $allContributionStatuses = \CRM_Contribute_PseudoConstant::contributionStatus(NULL, 'name');
     $contribParams['source'] = $participant['event_id.title'];
     $contribParams['contribution_status_id'] = array_search('Completed', $allContributionStatuses);
@@ -83,7 +85,7 @@ class CreateParticipantContribution extends AbstractAction {
     $contribParams['contact_id'] = $participant['contact_id'];
     $contribParams['currency'] = $currency;
     $contribParams['is_pay_later'] = $this->configuration->getParameter('is_pay_later') ? true : false;
-    $contribParams['skipLineItem'] =
+    $contribParams['skipLineItem'] = true;
     $contribParams['total_amount'] = \CRM_Utils_Money::format((float) $total_amount, $currency, NULL, TRUE);
     $contribParams['financial_type_id'] = $event['financial_type_id'];
     $contribution = civicrm_api3('Contribution', 'Create', $contribParams);
@@ -99,6 +101,12 @@ class CreateParticipantContribution extends AbstractAction {
             ->addWhere('id', '=', $priceOption)
             ->execute()
             ->first();
+
+          $priceFieldValue['tax_rate'] = (float) ($taxRates[$priceFieldValue['financial_type_id']] ?? 0);
+          if ($priceFieldValue['tax_rate']) {
+            $tax_amount = \CRM_Contribute_BAO_Contribution_Utils::calculateTaxAmount($priceFieldValue['amount'], $priceFieldValue['tax_rate'])['tax_amount'];
+            $lineItemParams['tax_amount'] = $tax_amount * $qty;
+          }
 
           $lineItemParams['entity_table'] = 'civicrm_participant';
           $lineItemParams['entity_id'] = $parameters->getParameter('participant_id');
