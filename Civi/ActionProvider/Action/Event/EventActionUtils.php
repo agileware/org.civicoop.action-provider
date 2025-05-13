@@ -48,7 +48,7 @@ class EventActionUtils {
         ];
       }
     }
-    $taxRates = \CRM_Core_PseudoConstant::getTaxRates();
+    $taxRates = self::getTaxRates();
     $priceSets = self::getPriceSetMetaData();
     foreach ($priceSets as $priceSet) {
       foreach ($priceSet['fields'] as $field) {
@@ -106,19 +106,37 @@ class EventActionUtils {
     return $specs;
   }
 
+  public static function getTaxRates(): array {
+    static $taxRates;
+    $key = E::SHORT_NAME . '.tax_rates';
+    if (empty($metaData)) {
+      $taxRates = \Civi::cache('long')->get($key, NULL);
+      if (empty($taxRates)) {
+        $taxRates = \CRM_Core_PseudoConstant::getTaxRates();
+        \Civi::cache('long')->set($key, $taxRates, 300);
+      }
+    }
+    return is_array($taxRates) ? $taxRates : [];
+  }
+
   public static function getPriceSetMetaData(): array {
     static $metaData = [];
+    $key = E::SHORT_NAME . '.priceSetMetaData';
     if (empty($metaData)) {
-      try {
-        $priceSets = \Civi\Api4\PriceSet::get(FALSE)
-          ->addWhere('extends', '=', 1)
-          ->addWhere('is_active', '=', TRUE)
-          ->execute();
-        foreach ($priceSets as $priceSet) {
-          $metaData[$priceSet['id']] = \CRM_Price_BAO_PriceSet::getCachedPriceSetDetail($priceSet['id']);
+      $metaData = \Civi::cache('long')->get($key, NULL);
+      if (empty($metaData)) {
+        try {
+          $priceSets = \Civi\Api4\PriceSet::get(FALSE)
+            ->addWhere('extends', '=', 1)
+            ->addWhere('is_active', '=', TRUE)
+            ->execute();
+          foreach ($priceSets as $priceSet) {
+            $metaData[$priceSet['id']] = \CRM_Price_BAO_PriceSet::getCachedPriceSetDetail($priceSet['id']);
+          }
+          \Civi::cache('long')->set($key, $metaData, 300);
+        } catch (\Throwable $e) {
+          // Do nothing.
         }
-      } catch (\Throwable $e) {
-        // Do nothing.
       }
     }
     return $metaData;

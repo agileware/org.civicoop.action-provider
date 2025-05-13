@@ -1,5 +1,7 @@
-Version 1.175 (not yet released
+Version 1.175
 -------------
+
+* Fixed performance with calculation of participant fee.
 
 Version 1.174
 -------------
