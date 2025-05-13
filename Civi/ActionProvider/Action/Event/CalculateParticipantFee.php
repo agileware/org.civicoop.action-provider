@@ -30,28 +30,23 @@ class CalculateParticipantFee extends AbstractAction {
     $total_tax_amounts = [];
     $amount_level = '';
     foreach ($selectedPriceOptions as $priceOption) {
-      try {
-        $amount = $priceOption['amount'];
-        if ($priceOption['tax_rate']) {
-          if (!isset($total_tax_amounts[$priceOption['tax_rate']])) {
-            $total_tax_amounts[$priceOption['tax_rate']] = 0;
-          }
-          $amount += $priceOption['tax_amount'];
-          $total_tax_amounts[$priceOption['tax_rate']] += $priceOption['tax_amount'] * $priceOption['qty'];
+      $amount = $priceOption['amount'];
+      if ($priceOption['tax_rate']) {
+        if (!isset($total_tax_amounts[$priceOption['tax_rate']])) {
+          $total_tax_amounts[$priceOption['tax_rate']] = 0;
         }
-
-        $amount_level .= $priceOption['field_value']['label'] . ' - ' . $priceOption['qty'] . ' ';
-        $total_amount += $amount * $priceOption['qty'];
-        $lines[] = [
-          'qty' => $priceOption['qty'],
-          'label' => $priceOption['field_value']['label'],
-          'amount' => $amount,
-          'currency' => $currency,
-        ];
+        $amount += $priceOption['tax_amount'];
+        $total_tax_amounts[$priceOption['tax_rate']] += $priceOption['tax_amount'] * $priceOption['qty'];
       }
-      catch (UnauthorizedException|\CRM_Core_Exception $e) {
 
-      }
+      $amount_level .= $priceOption['field_value']['label'] . ' - ' . $priceOption['qty'] . ' ';
+      $total_amount += $amount * $priceOption['qty'];
+      $lines[] = [
+        'qty' => $priceOption['qty'],
+        'label' => $priceOption['field_value']['label'],
+        'amount' => $amount * $priceOption['qty'],
+        'currency' => $currency,
+      ];
     }
     if ($qty > 1 && strlen($amount_level)) {
       $amount_level .= E::ts(' (multiple participants)');

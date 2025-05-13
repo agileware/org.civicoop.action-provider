@@ -1,5 +1,7 @@
-Version 1.174 (not yet released)
+Version 1.174
 -------------
+
+* Fixed issue with calculation of participant fee.
 
 Version 1.173
 -------------
