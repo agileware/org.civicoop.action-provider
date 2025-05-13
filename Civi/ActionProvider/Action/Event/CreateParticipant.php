@@ -54,6 +54,7 @@ class CreateParticipant extends AbstractParticipantAction {
       new Specification('register_date', 'Date', E::ts('Register Date'), false, null, null, null, FALSE),
       new Specification('fee_level', 'String', E::ts('Fee Level'), false, null, null, null, FALSE),
       new Specification('source', 'String', E::ts('Source'), false, null, null, null, FALSE),
+      new Specification('registered_by_id', 'Integer', E::ts('Registered By ID (Another participant record ID)'), false, null, null, null, FALSE),
     ));
 
     $config = ConfigContainer::getInstance();
@@ -133,6 +134,9 @@ class CreateParticipant extends AbstractParticipantAction {
         }
         if ($parameters->doesParameterExists('fee_level')) {
           $participantParams['fee_level'] = $parameters->getParameter('fee_level') ?? '';
+        }
+        if ($parameters->doesParameterExists('registered_by_id')) {
+          $participantParams['registered_by_id'] = $parameters->getParameter('registered_by_id');
         }
 
         $participantParams = array_merge($participantParams, CustomField::getCustomFieldsApiParameter($parameters, $this->getParameterSpecification()));

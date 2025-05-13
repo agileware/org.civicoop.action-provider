@@ -18,46 +18,7 @@ use CRM_ActionProvider_ExtensionUtil as E;
 class CreateParticipantContribution extends AbstractAction {
 
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    $taxRates = \CRM_Core_PseudoConstant::getTaxRates();
-    $priceOptions = [];
-    if ($parameters->doesParameterExists('price_set_field_values')) {
-      $priceOptions = $parameters->getParameter('price_set_field_values');
-    }
-    if ($parameters->doesParameterExists('price_field_value_id')) {
-      $priceOptions[] = $parameters->getParameter('price_field_value_id');
-    }
-    $qty = $parameters->getParameter('qty');
-    if ($qty < 1) {
-      $qty = 1;
-    }
-
-    $selectedPriceOptions = [];
-    foreach ($priceOptions as $priceOption) {
-      if ($priceOption) {
-        $selectedPriceOptions[] = [
-          'id' => $priceOption,
-          'qty' => $qty,
-        ];
-      }
-    }
-    $priceSets = self::getPriceSetMetaData();
-    foreach ($priceSets as $priceSet) {
-      foreach ($priceSet['fields'] as $field) {
-        if ($parameters->doesParameterExists('pricefield_'.$field['id']) && $parameters->getParameter('pricefield_'.$field['id'])) {
-          if ($field['is_enter_qty']) {
-            $selectedPriceOptions[] = [
-              'id' => $field['id'],
-              'qty' => $parameters->getParameter('pricefield_'.$field['id']),
-            ];
-          } else {
-            $selectedPriceOptions[] = [
-              'id' => $parameters->getParameter('pricefield_'.$field['id']),
-              'qty' => 1,
-            ];
-          }
-        }
-      }
-    }
+    $selectedPriceOptions = EventActionUtils::getLineItemInfo($parameters);
 
     $participant = Participant::get(FALSE)
       ->addSelect('*', 'event_id.*')
@@ -77,23 +38,11 @@ class CreateParticipantContribution extends AbstractAction {
     $total_amount = 0.00;
     $amount_level = '';
     foreach ($selectedPriceOptions as $priceOption) {
-      try {
-        $priceFieldValue = \Civi\Api4\PriceFieldValue::get(FALSE)
-          ->addWhere('id', '=', $priceOption['id'])
-          ->execute()
-          ->first();
-        $priceFieldValue['tax_rate'] = (float) ($taxRates[$priceFieldValue['financial_type_id']] ?? 0);
+      $amount_level .= $priceOption['field_value']['label'] . ' - ' . $priceOption['qty'] . ' ';
+      $total_amount += $priceOption['amount'] * $priceOption['qty'];
 
-        $amount_level .= $priceFieldValue['label'] . ' - ' . $priceOption['qty'] . ' ';
-        $total_amount += $priceFieldValue['amount'] * $priceOption['qty'];
-
-        if ($priceFieldValue['tax_rate']) {
-          $tax_amount = \CRM_Contribute_BAO_Contribution_Utils::calculateTaxAmount($priceFieldValue['amount'], $priceFieldValue['tax_rate'])['tax_amount'];
-          $total_amount += $tax_amount * $priceOption['qty'];
-        }
-      }
-      catch (UnauthorizedException|\CRM_Core_Exception $e) {
-
+      if ($priceOption['tax_rate']) {
+        $total_amount += $priceOption['tax_amount'] * $priceOption['qty'];
       }
     }
 
@@ -105,6 +54,9 @@ class CreateParticipantContribution extends AbstractAction {
     $config = \CRM_Core_Config::singleton();
     if ($parameters->doesParameterExists('currency')) {
       $currency = $parameters->getParameter('currency');
+    }
+    if (!$currency && $this->configuration->doesParameterExists('currency')) {
+      $currency = $this->configuration->getParameter('currency');
     }
     if (!$currency) {
       $currency = $config->defaultCurrency;
@@ -130,27 +82,20 @@ class CreateParticipantContribution extends AbstractAction {
 
     foreach ($selectedPriceOptions as $priceOption) {
       try {
-        $priceFieldValue = PriceFieldValue::get(FALSE)
-          ->addWhere('id', '=', $priceOption['id'])
-          ->execute()
-          ->first();
-
-        $priceFieldValue['tax_rate'] = (float) ($taxRates[$priceFieldValue['financial_type_id']] ?? 0);
-        if ($priceFieldValue['tax_rate']) {
-          $tax_amount = \CRM_Contribute_BAO_Contribution_Utils::calculateTaxAmount($priceFieldValue['amount'], $priceFieldValue['tax_rate'])['tax_amount'];
-          $lineItemParams['tax_amount'] = $tax_amount * $priceOption['qty'];
+        if ($priceOption['tax_rate']) {
+          $lineItemParams['tax_amount'] = $priceOption['tax_amount'] * $priceOption['qty'];
         }
 
         $lineItemParams['entity_table'] = 'civicrm_participant';
         $lineItemParams['entity_id'] = $parameters->getParameter('participant_id');
         $lineItemParams['participant_count'] = $priceOption['qty'];
-        $lineItemParams['label'] = $priceFieldValue['label'];
+        $lineItemParams['label'] = $priceOption['field_value']['label'];
         $lineItemParams['contribution_id'] = $contribution['id'];
         $lineItemParams['qty'] = $priceOption['qty'];
-        $lineItemParams['unit_price'] = $priceFieldValue['amount'];
-        $lineItemParams['financial_type_id'] = $priceFieldValue['financial_type_id'];
-        $lineItemParams['price_field_value_id'] = $priceFieldValue['id'];
-        $lineItemParams['price_field_id'] = $priceFieldValue['price_field_id.id'];
+        $lineItemParams['unit_price'] = $priceOption['field_value']['amount'];
+        $lineItemParams['financial_type_id'] = $priceOption['field_value']['financial_type_id'];
+        $lineItemParams['price_field_value_id'] = $priceOption['field_value']['id'];
+        $lineItemParams['price_field_id'] = $priceOption['field_value']['price_field_id.id'];
         // exit if unit price is zero value
         if ($lineItemParams['unit_price'] == 0) {
           continue;
@@ -207,6 +152,7 @@ class CreateParticipantContribution extends AbstractAction {
   public function getConfigurationSpecification() {
     return new SpecificationBag([
       new Specification('is_pay_later', 'Boolean', E::ts('Is Pay Later'), true, false),
+      new OptionGroupSpecification('currency', 'currencies_enabled', E::ts('Currency'), FALSE),
     ]);
   }
 
@@ -223,23 +169,7 @@ class CreateParticipantContribution extends AbstractAction {
       new Specification('qty', 'Integer', E::ts('Number of registrations'), false, 1),
       new OptionGroupSpecification('currency', 'currencies_enabled', E::ts('Currency'), FALSE),
     ]);
-
-    $priceSets = self::getPriceSetMetaData();
-    foreach ($priceSets as $priceSet) {
-      $priceSetSpec = new SpecificationBag();
-      foreach ($priceSet['fields'] as $field) {
-        if (!empty($field['is_enter_qty'])) {
-          $priceSetFielSpec = new Specification('pricefield_'.$field['id'], 'Integer', E::ts('Quantity of %1', [1=>$field['label']]));
-        } else {
-          $priceSetFielSpec = new Specification('pricefield_'.$field['id'], 'Integer', E::ts('Selected option of %1', [1=>$field['label']]));
-        }
-        $priceSetFielSpec->setApiFieldName($field['name']);
-        $priceSetSpec->addSpecification($priceSetFielSpec);
-      }
-      $specs->addSpecification(new SpecificationGroup($priceSet['name'], $priceSet['title'], $priceSetSpec));
-    }
-
-    return $specs;
+    return EventActionUtils::addPriceFieldsToSpecification($specs);
   }
 
   public function getOutputSpecification() {
@@ -249,24 +179,6 @@ class CreateParticipantContribution extends AbstractAction {
       new Specification('amount_level', 'String', E::ts('Amount Level'), false),
       new OptionGroupSpecification('currency', 'currencies_enabled', E::ts('Currency'), FALSE),
     ]);
-  }
-
-  protected static function getPriceSetMetaData(): array {
-    static $metaData = [];
-    if (empty($metaData)) {
-      try {
-        $priceSets = \Civi\Api4\PriceSet::get(FALSE)
-          ->addWhere('extends', '=', 1)
-          ->addWhere('is_active', '=', TRUE)
-          ->execute();
-        foreach ($priceSets as $priceSet) {
-          $metaData[$priceSet['id']] = \CRM_Price_BAO_PriceSet::getCachedPriceSetDetail($priceSet['id']);
-        }
-      } catch (\Throwable $e) {
-        // Do nothing.
-      }
-    }
-    return $metaData;
   }
 
 }

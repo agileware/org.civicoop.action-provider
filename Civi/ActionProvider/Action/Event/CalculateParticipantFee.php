@@ -15,78 +15,36 @@ use CRM_ActionProvider_ExtensionUtil as E;
 class CalculateParticipantFee extends AbstractAction {
 
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    $priceOptions = [];
-    if ($parameters->doesParameterExists('price_set_field_values')) {
-      $priceOptions = $parameters->getParameter('price_set_field_values');
-    }
-    if ($parameters->doesParameterExists('price_field_value_id')) {
-      $priceOptions[] = $parameters->getParameter('price_field_value_id');
+    $currency = null;
+    if ($this->configuration->doesParameterExists('currency')) {
+      $currency = $this->configuration->getParameter('currency');
     }
     $qty = $parameters->getParameter('qty');
     if ($qty < 1) {
       $qty = 1;
     }
-    $currency = null;
-    if ($this->configuration->doesParameterExists('currency')) {
-      $currency = $this->configuration->getParameter('currency');
-    }
-
-    $selectedPriceOptions = [];
-    foreach ($priceOptions as $priceOption) {
-      if ($priceOption) {
-        $selectedPriceOptions[] = [
-          'id' => $priceOption,
-          'qty' => $qty,
-        ];
-      }
-    }
-    $priceSets = self::getPriceSetMetaData();
-    foreach ($priceSets as $priceSet) {
-      foreach ($priceSet['fields'] as $field) {
-        if ($parameters->doesParameterExists('pricefield_'.$field['id']) && $parameters->getParameter('pricefield_'.$field['id'])) {
-          if ($field['is_enter_qty']) {
-            $selectedPriceOptions[] = [
-              'id' => $field['id'],
-              'qty' => $parameters->getParameter('pricefield_'.$field['id']),
-            ];
-          } else {
-            $selectedPriceOptions[] = [
-              'id' => $parameters->getParameter('pricefield_'.$field['id']),
-              'qty' => 1,
-            ];
-          }
-        }
-      }
-    }
+    $selectedPriceOptions = EventActionUtils::getLineItemInfo($parameters);
 
     $lines = [];
     $total_amount = 0.00;
     $total_tax_amounts = [];
     $amount_level = '';
-    $taxRates = \CRM_Core_PseudoConstant::getTaxRates();
     foreach ($selectedPriceOptions as $priceOption) {
       try {
-        $priceFieldValue = \Civi\Api4\PriceFieldValue::get(FALSE)
-          ->addWhere('id', '=', $priceOption['id'])
-          ->execute()
-          ->first();
-
-        $amount = $priceFieldValue['amount'];
-        $priceFieldValue['tax_rate'] = (float) ($taxRates[$priceFieldValue['financial_type_id']] ?? 0);
-        if ($priceFieldValue['tax_rate']) {
-          $tax_amount = \CRM_Contribute_BAO_Contribution_Utils::calculateTaxAmount($priceFieldValue['amount'], $priceFieldValue['tax_rate'])['tax_amount'];
-          if (!isset($total_tax_amounts[$priceFieldValue['tax_rate']])) {
-            $total_tax_amounts[$priceFieldValue['tax_rate']] = 0;
+        $amount = $priceOption['amount'];
+        if ($priceOption['tax_rate']) {
+          if (!isset($total_tax_amounts[$priceOption['tax_rate']])) {
+            $total_tax_amounts[$priceOption['tax_rate']] = 0;
           }
-          $amount += $tax_amount;
-          $total_tax_amounts[$priceFieldValue['tax_rate']] += $tax_amount * $priceOption['qty'];
+          $amount += $priceOption['tax_amount'];
+          $total_tax_amounts[$priceOption['tax_rate']] += $priceOption['tax_amount'] * $priceOption['qty'];
         }
 
-        $amount_level .= $priceFieldValue['label'] . ' - ' . $priceOption['qty'] . ' ';
+        $amount_level .= $priceOption['field_value']['label'] . ' - ' . $priceOption['qty'] . ' ';
         $total_amount += $amount * $priceOption['qty'];
         $lines[] = [
           'qty' => $priceOption['qty'],
-          'label' => $priceFieldValue['label'],
+          'label' => $priceOption['field_value']['label'],
           'amount' => $amount,
           'currency' => $currency,
         ];
@@ -105,7 +63,7 @@ class CalculateParticipantFee extends AbstractAction {
     $htmlCart = '';
     foreach ($lines as $line) {
       $formattedAmount = \CRM_Utils_Money::format($line['amount'], $line['currency']);
-      $htmlCart .= '<p class="line"><span class="label">' . $line['label'] . '</span> <span class="amount">'.$formattedAmount.'</span></p>';
+      $htmlCart .= '<p class="line"><span class="label">' . $line['label'] . '</span> <span class="qty">'.$line['qty'].'</span> <span class="amount">'.$formattedAmount.'</span></p>';
     }
     foreach ($total_tax_amounts as $taxRate => $taxAmount) {
       $formattedAmount = \CRM_Utils_Money::format($taxAmount, $currency);
@@ -139,23 +97,7 @@ class CalculateParticipantFee extends AbstractAction {
       new Specification('price_field_value_id', 'Integer', E::ts('Event Price ID'), false),
       new Specification('qty', 'Integer', E::ts('Number of registrations'), false, 1),
     ]);
-
-    $priceSets = self::getPriceSetMetaData();
-    foreach ($priceSets as $priceSet) {
-      $priceSetSpec = new SpecificationBag();
-      foreach ($priceSet['fields'] as $field) {
-        if (!empty($field['is_enter_qty'])) {
-          $priceSetFielSpec = new Specification('pricefield_'.$field['id'], 'Integer', E::ts('Quantity of %1', [1=>$field['label']]));
-        } else {
-          $priceSetFielSpec = new Specification('pricefield_'.$field['id'], 'Integer', E::ts('Selected option of %1', [1=>$field['label']]));
-        }
-        $priceSetFielSpec->setApiFieldName($field['name']);
-        $priceSetSpec->addSpecification($priceSetFielSpec);
-      }
-      $specs->addSpecification(new SpecificationGroup($priceSet['name'], $priceSet['title'], $priceSetSpec));
-    }
-
-    return $specs;
+    return EventActionUtils::addPriceFieldsToSpecification($specs);
   }
 
   public function getOutputSpecification() {
@@ -164,24 +106,6 @@ class CalculateParticipantFee extends AbstractAction {
       new Specification('amount_level', 'String', E::ts('Amount Level'), false),
       new Specification('html_line_items', 'String', E::ts('Line Items in HTML'), false),
     ]);
-  }
-
-  protected static function getPriceSetMetaData(): array {
-    static $metaData = [];
-    if (empty($metaData)) {
-      try {
-        $priceSets = \Civi\Api4\PriceSet::get(FALSE)
-          ->addWhere('extends', '=', 1)
-          ->addWhere('is_active', '=', TRUE)
-          ->execute();
-        foreach ($priceSets as $priceSet) {
-          $metaData[$priceSet['id']] = \CRM_Price_BAO_PriceSet::getCachedPriceSetDetail($priceSet['id']);
-        }
-      } catch (\Throwable $e) {
-        // Do nothing.
-      }
-    }
-    return $metaData;
   }
 
 }
