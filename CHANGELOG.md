@@ -1,5 +1,7 @@
-Version 1.176 (not yet released)
+Version 1.176
 -------------
+
+* Updated send partcipant confirmation mail action.
 
 Version 1.175
 -------------
