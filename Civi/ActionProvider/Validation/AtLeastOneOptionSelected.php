@@ -71,7 +71,7 @@ class AtLeastOneOptionSelected extends AbstractValidator {
     $count = 0;
     foreach($parameters->getParameter('parameters') as $value) {
       $count ++;
-      if (!in_array($value, $values)) {
+      if ($value !== null && !in_array($value, $values)) {
         $validCount++;
       }
     }
