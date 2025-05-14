@@ -1,6 +1,7 @@
 Version 1.177
 -------------
 
+* Added validation of at least one option selected.
 * Fixed issue with calculation of participant fee.
 
 Version 1.176
