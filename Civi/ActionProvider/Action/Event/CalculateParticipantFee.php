@@ -44,7 +44,7 @@ class CalculateParticipantFee extends AbstractAction {
       $lines[] = [
         'qty' => $priceOption['qty'],
         'label' => $priceOption['field_value']['label'],
-        'amount' => $amount * $priceOption['qty'],
+        'amount' => $priceOption['amount'] * $priceOption['qty'],
         'currency' => $currency,
       ];
     }
