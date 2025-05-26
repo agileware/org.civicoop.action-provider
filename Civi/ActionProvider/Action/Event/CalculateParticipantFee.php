@@ -26,10 +26,12 @@ class CalculateParticipantFee extends AbstractAction {
     $selectedPriceOptions = EventActionUtils::getLineItemInfo($parameters);
 
     $lines = [];
+    $subtotal_amount = 0;
     $total_amount = 0.00;
     $total_tax_amounts = [];
     $amount_level = '';
     foreach ($selectedPriceOptions as $priceOption) {
+      $amount_without_tax = $priceOption['amount'];
       $amount = $priceOption['amount'];
       if ($priceOption['tax_rate']) {
         if (!isset($total_tax_amounts[$priceOption['tax_rate']])) {
@@ -41,6 +43,7 @@ class CalculateParticipantFee extends AbstractAction {
 
       $amount_level .= $priceOption['field_value']['label'] . ' - ' . $priceOption['qty'] . ' ';
       $total_amount += $amount * $priceOption['qty'];
+      $subtotal_amount += $amount_without_tax * $priceOption['qty'];
       $lines[] = [
         'qty' => $priceOption['qty'],
         'label' => $priceOption['field_value']['label'],
@@ -60,12 +63,14 @@ class CalculateParticipantFee extends AbstractAction {
       $formattedAmount = \CRM_Utils_Money::format($line['amount'], $line['currency']);
       $htmlCart .= '<p class="line"><span class="label">' . $line['label'] . '</span> <span class="qty">'.$line['qty'].'</span> <span class="amount">'.$formattedAmount.'</span></p>';
     }
+    $formattedAmount = \CRM_Utils_Money::format($subtotal_amount, $currency);
+    $htmlCart .= '<p class="line sub-total"><span class="label">'.E::ts('Subtotal amount').'</span><span class="amount">' . $formattedAmount.'</span></p>';
     foreach ($total_tax_amounts as $taxRate => $taxAmount) {
       $formattedAmount = \CRM_Utils_Money::format($taxAmount, $currency);
       $htmlCart .= '<p class="line tax tax-'.$taxRate.'"><span class="label">'.E::ts('%1 VAT', [1=>$taxRate . '%']).'</span><span class="amount">' . $formattedAmount.'</span></p>';
     }
     $formattedAmount = \CRM_Utils_Money::format($total_amount, $currency);
-    $htmlCart .= '<p class="line total"><span class="label">'.E::ts('Total amount', [1=>$taxRate . '%']).'</span><span class="amount">' . $formattedAmount.'</span></p>';
+    $htmlCart .= '<p class="line total"><span class="label">'.E::ts('Total amount').'</span><span class="amount">' . $formattedAmount.'</span></p>';
     $output->setParameter('html_line_items', $htmlCart);
   }
 
