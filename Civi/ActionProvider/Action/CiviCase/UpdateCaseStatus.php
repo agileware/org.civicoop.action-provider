@@ -26,7 +26,8 @@ class UpdateCaseStatus extends AbstractAction {
    */
   public function getConfigurationSpecification() {
     return new SpecificationBag([
-      new OptionGroupSpecification('status_id', 'case_status', E::ts('Case Status'), false)
+      new OptionGroupSpecification('status_id', 'case_status', E::ts('Case Status'), false),
+      new Specification('log_activity', 'Boolean', E::ts('Log Case Change to Activity'), true, 0),
     ]);
   }
 
@@ -39,6 +40,7 @@ class UpdateCaseStatus extends AbstractAction {
     $bag = new SpecificationBag([
       new Specification('id', 'Integer', E::ts('Case ID'), true),
       new Specification('status_id', 'Integer', E::ts('Status ID'), false),
+      new Specification('reporter_contact_id', 'Integer', E::ts('Reporter Contact ID'), false),
     ]);
     return $bag;
   }
@@ -66,18 +68,46 @@ class UpdateCaseStatus extends AbstractAction {
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     // Get the contact and the event.
-    $activityParams['id'] = $parameters->getParameter('id');
+    $caseParams['id'] = $parameters->getParameter('id');
     if ($parameters->getParameter('status_id')) {
-      $activityParams['status_id'] = $parameters->getParameter('status_id');
+      $caseParams['status_id'] = $parameters->getParameter('status_id');
     } else {
-      $activityParams['status_id'] = $this->configuration->getParameter('status_id');
+      $caseParams['status_id'] = $this->configuration->getParameter('status_id');
+    }
+    $activityParams = [];
+    if($this->configuration->doesParameterExists('log_activity') && $this->configuration->getParameter('log_activity')) {
+      $case = civicrm_api3('Case', 'getsingle', ['id' => $parameters->getParameter('id')]);
+      // log only when the status actually changes
+      if ($case['status_id'] <> $caseParams['status_id']) {
+        $statusLabels = \CRM_Case_PseudoConstant::caseStatus();
+        $activityParams['subject'] = ts('Case status changed from %1 to %2', [
+          1 => $statusLabels[$case['status_id']] ?? NULL,
+          2 => $statusLabels[$caseParams['status_id']] ?? NULL,
+        ]);
+        $activityParams['activity_type_id'] = "Change Case Status";
+        if($parameters->doesParameterExists('reporter_contact_id') && !empty($parameters->getParameter('reporter_contact_id'))) {
+          $activityParams['source_contact_id'] = $parameters->getParameter('reporter_contact_id');
+        } else {
+          $activityParams['source_contact_id'] = 'user_contact_id';
+        }
+        $activityParams['case_id'] = $case['id'];
+        $activityParams['target_id'] = $case['client_id'];
+      }
+
     }
     try {
       // Do not use api as the api checks for an existing relationship.
-      $result = civicrm_api3('Case', 'Create', $activityParams);
+      $result = civicrm_api3('Case', 'Create', $caseParams);
+      if(!empty($activityParams)){
+        $resultActivity =civicrm_api3('Activity', 'Create', $activityParams);
+      }
     } catch (\Exception $e) {
       // Do nothing.
     }
+  }
+
+  public function getHelpText() {
+    return E::ts('Set the <i>Log Case Change to Activity</i> if you want to have a Case Change Activity in the same way as in the userinterface.');
   }
 
 

@@ -82,6 +82,8 @@ class SendParticipantRegistrationMail extends AbstractAction {
         'customPost_grouptitle' => null,
         'participantID' => $participantId,
         'contactID' => $contactID,
+        'participant' => ['id' => $participantId],
+        'event' => ['id' => $event['id']],
         'credit_card_number' => \CRM_Utils_System::mungeCreditCard(\CRM_Utils_Array::value('credit_card_number', $participant)),
         'credit_card_exp_date' => \CRM_Utils_Date::mysqlToIso(\CRM_Utils_Date::format(\CRM_Utils_Array::value('credit_card_exp_date', $participant))),
         'selfcancelxfer_time' => abs($event['selfcancelxfer_time']),
@@ -98,10 +100,11 @@ class SendParticipantRegistrationMail extends AbstractAction {
         'modelProps' => [
           'participantID' => $participantId,
           'eventID' => $event['id'],
-          'contributionID' => $contributionID,
         ],
       ];
-      //'custom_pre_id' => $custom_pre_id,
+      if ($contributionID) {
+        $sendTemplateParams['modelProps']['contributionID'] = $contributionID;
+      }
 
       $sendTemplateParams['from'] = $event['confirm_from_email'];
       $sendTemplateParams['toName'] = $displayName;
