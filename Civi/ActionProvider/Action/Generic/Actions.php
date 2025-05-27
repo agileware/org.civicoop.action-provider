@@ -107,6 +107,8 @@ class Actions {
     ]);
     $provider->addAction('ThrowException', '\Civi\ActionProvider\Action\Generic\ThrowException', E::ts('Other: Stop execution'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG));
+    $provider->addAction('FindDefaulLocationTypeId', '\Civi\ActionProvider\Action\Generic\FindDefaultLocationTypeId', E::ts('Other: Find Default Location Type ID'), array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG));
   }
 
 }

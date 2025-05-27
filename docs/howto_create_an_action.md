@@ -247,10 +247,7 @@ When we do that we give our action a name, a title and we provide some tags for 
 
     public function __construct() {
       // ..
-      $this->addAction('UpdateParticipantStatus', '\Civi\ActionProvider\Action\Event\UpdateParticipantStatus', E::ts('Update participant status'), array(
-        AbstractAction::SINGLE_CONTACT_ACTION,
-        AbstractAction::DATA_MANIPULATION
-      ));
+      $this->addAction('UpdateParticipantStatus', '\Civi\ActionProvider\Action\Event\UpdateParticipantStatus', E::ts('Update participant status'));
       // ...
     }
 
@@ -260,27 +257,5 @@ When we do that we give our action a name, a title and we provide some tags for 
 
 ```
 
-The only thing we do is add our action to the constructor.
+The only thing we do is add our action to the constructor and afterwards clear the cache to enable the new action in your installation.
 If you implement actions in [your own extension](howto_create_an_action_in_an_extension.md) this would be done in a different way.
-
-## Using Metadata
-
-The action provider also provides metadata. Metadata consists for example of the form processor name or form processor id.
-
-To use metadata you can use the following code snippet in your action:
-
-```php
-if ($this->getMetadata()->getParameter('form_processor_id')) {
-  $form_processor_id = $this->getMetadata()->getParameter('form_procesor_id');
-  // Do something with this data
-}
-```
-
-The function `getMetadata` returns a _ParameterBag_ containing all the metadata.
-The function `getMetadataSpecification` returns a _SpecificationBag_ which holds a specification of the possible metadata.
-
-Depending on where the action provider is used the following metadata might be available:
-
-* **FormProcessor**:  `form_processor_name` and `form_processor_id`
-* **Search Action Designer**: `search_task_id`
-* **Data Processor Export Task**: `dataprocessor_export_task_tid`

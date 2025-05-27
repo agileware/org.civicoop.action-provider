@@ -72,5 +72,19 @@ class GetEvent extends AbstractGetSingleAction {
 
   }
 
+  /**
+   * Returns the specification of the output parameters of this action.
+   *
+   * This function could be overridden by child classes.
+   *
+   * @return SpecificationBag
+   */
+  public function getOutputSpecification()
+  {
+    $spec = parent::getOutputSpecification();
+    $spec->addSpecification(new Specification('address_id', 'Integer', E::ts('Address ID')));
+    return $spec;
+  }
+
 
 }

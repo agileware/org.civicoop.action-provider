@@ -49,6 +49,7 @@ class CreateOrUpdateParticipantWithDynamicStatusRole extends AbstractAction {
       new OptionGroupSpecification('role_id', 'participant_role', E::ts('Role'), true, null, FALSE),
       new Specification('status_id', 'Integer', E::ts('Status'), true, null, 'ParticipantStatusType', null, FALSE),
       new Specification('campaign_id', 'Integer', E::ts('Campaign ID'), false, null, null, null, FALSE),
+      new Specification('registered_by_id', 'Integer', E::ts('Registered By ID (Another participant record ID)'), false, null, null, null, FALSE),
     ));
 
     $config = ConfigContainer::getInstance();
@@ -117,6 +118,9 @@ class CreateOrUpdateParticipantWithDynamicStatusRole extends AbstractAction {
       }
       if ($parameters->getParameter('campaign_id')) {
         $participantParams['campaign_id'] = $parameters->getParameter('campaign_id');
+      }
+      if ($parameters->doesParameterExists('registered_by_id')) {
+        $participantParams['registered_by_id'] = $parameters->getParameter('registered_by_id');
       }
 
       $result = civicrm_api3('Participant', 'create', $participantParams);
