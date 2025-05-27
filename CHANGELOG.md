@@ -1,7 +1,66 @@
-Version 1.167 (not yet released)
+Version 1.179 (not yet released)
 -------------
 
-* Fix when updating exising phone numbers do not delete an existing when the parameter is not set. See !195
+Version 1.178
+-------------
+
+* Fixed issue with calculation of participant fee.
+
+Version 1.177
+-------------
+
+* Added validation of at least one option selected.
+* Fixed issue with calculation of participant fee.
+
+Version 1.176
+-------------
+
+* Updated send partcipant confirmation mail action.
+
+Version 1.175
+-------------
+
+* Fixed performance with calculation of participant fee.
+
+Version 1.174
+-------------
+
+* Fixed issue with calculation of participant fee.
+
+Version 1.173
+-------------
+
+* Possibility to register multiple persons.
+
+Version 1.172
+-------------
+
+* Made it possible to set qty or option of price fields at the action for Calculate Participant Fee and for the action Create Participant Contribution.
+
+Version 1.171
+-------------
+
+* Added HTML line items to action Caclulate Participant Fees.
+
+Version 1.170
+-------------
+* Fixed issue #65: add action to find default location type id
+
+Version 1.169
+-------------
+
+* Fixed issue with Yes/No custom fields.
+
+Version 1.168
+-------------
+
+* Action Event: Get By ID added Address ID to the output.
+
+Version 1.167
+-------------
+
+* Add Log Case Change to Activity option to Update Case Status Activity.
+* Fix when updating existing phone numbers do not delete an existing when the parameter is not set. See !195
 * Communication: Send e-mail action: pass contactId to hook alterMailContent. See !194
 * New action. Contribution: Get by Membership ID. See !196
 * Fix for Action Validate Checksum of case client. See !198

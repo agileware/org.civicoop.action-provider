@@ -31,6 +31,7 @@ class Validators {
   public static function loadValidators(Provider $provider) {
     $provider->addValidator('is_not_empty', 'Civi\ActionProvider\Validation\ParameterIsNotEmpty', E::ts('Parameter is not empty'));
     $provider->addValidator('is_empty', 'Civi\ActionProvider\Validation\ParameterIsEmpty', E::ts('Parameter is empty'));
+    $provider->addValidator('at_least_one_option_selected', 'Civi\ActionProvider\Validation\AtLeastOneOptionSelected', E::ts('At least one option selected'));
     $provider->addValidator('is_email_valid', 'Civi\ActionProvider\Validation\IsEmailAddressValid', E::ts('E-mail is valid'));
     $provider->addValidator('compare_parameter_value', 'Civi\ActionProvider\Validation\CompareParameterValue', E::ts('Compare Parameter Value'));
     $provider->addValidator('has_role_on_case', 'Civi\ActionProvider\Validation\HasContactRoleOnCase', E::ts('CiviCase: Contact has role on case'));

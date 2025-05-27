@@ -109,6 +109,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('CreateParticipantLineItems', '\Civi\ActionProvider\Action\Event\CreateParticipantLineItems',E::ts('Participant: Create line items for participant (used for additional registrations)') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $provider->addAction('CalculateParticipantFee', '\Civi\ActionProvider\Action\Event\CalculateParticipantFee',E::ts('Participant: Calculate Participant Fee') , array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
