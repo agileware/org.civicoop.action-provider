@@ -1,5 +1,60 @@
-Version 1.168 (not yet released)
+Version 1.179 (not yet released)
 -------------
+
+Version 1.178
+-------------
+
+* Fixed issue with calculation of participant fee.
+
+Version 1.177
+-------------
+
+* Added validation of at least one option selected.
+* Fixed issue with calculation of participant fee.
+
+Version 1.176
+-------------
+
+* Updated send partcipant confirmation mail action.
+
+Version 1.175
+-------------
+
+* Fixed performance with calculation of participant fee.
+
+Version 1.174
+-------------
+
+* Fixed issue with calculation of participant fee.
+
+Version 1.173
+-------------
+
+* Possibility to register multiple persons.
+
+Version 1.172
+-------------
+
+* Made it possible to set qty or option of price fields at the action for Calculate Participant Fee and for the action Create Participant Contribution.
+
+Version 1.171
+-------------
+
+* Added HTML line items to action Caclulate Participant Fees.
+
+Version 1.170
+-------------
+* Fixed issue #65: add action to find default location type id
+
+Version 1.169
+-------------
+
+* Fixed issue with Yes/No custom fields.
+
+Version 1.168
+-------------
+
+* Action Event: Get By ID added Address ID to the output.
 
 Version 1.167
 -------------
