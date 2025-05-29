@@ -1,6 +1,11 @@
 Version 1.179 (not yet released)
 -------------
 
+* Added a fuzzy search to the action Contact:Find organization by name. See !202
+* Added output parameter ID to the action Contact: Update custom multi value data. See !203
+* New action: Contact: Delete entry of multi value custom group. See !204
+* New action: Contact: Find entry of multi value custom group by id. See !205
+
 Version 1.178
 -------------
 
