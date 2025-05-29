@@ -213,6 +213,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('DeleteCustomGroupMultiValue', '\Civi\ActionProvider\Action\Contact\DeleteCustomGroupMultiValue', E::ts('Contact: Delete entry of multi valued custom group'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
 
   }
 
