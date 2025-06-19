@@ -5,6 +5,7 @@ Version 1.179 (not yet released)
 * Added output parameter ID to the action Contact: Update custom multi value data. See !203
 * New action: Contact: Delete entry of multi value custom group. See !204
 * New action: Contact: Find entry of multi value custom group by id. See !205
+* Added Street Number, Street Name and Street Unit as outputs to the Contact: get by ID action.
 
 Version 1.178
 -------------

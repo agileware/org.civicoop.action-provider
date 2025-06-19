@@ -8,6 +8,7 @@ use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
 use Civi\ActionProvider\Utils\CustomField;
+use Civi\ActionProvider\Utils\Fields;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class ContactDataById extends AbstractGetSingleAction {
@@ -23,7 +24,27 @@ class ContactDataById extends AbstractGetSingleAction {
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-    parent::doAction($parameters, $output);
+    try {
+      $id = $this->getIdFromParamaters($parameters);
+      $entity = civicrm_api3($this->getApiEntity(), 'getsingle', array('id' => $id));
+      if ($entity) {
+        $this->setOutputFromEntity($entity, $output);
+      }
+    } catch (\Exception $e) {
+      // Do nothing
+    }
+    if (!empty($entity['address_id'])) {
+      $address = civicrm_api3('Address', 'getsingle', ['id' => $entity['address_id']]);
+      if (isset($address['street_number']) && $address['street_number_suffix']) {
+        $address['street_number'] = trim($address['street_number']) . trim($address['street_number_suffix']);
+      }
+      $ignoredAddessFields = $this->getIgnoredAddressFields();
+      foreach ($address as $addressField => $addressValue) {
+        if (!in_array($addressField, $ignoredAddessFields)) {
+          $output->setParameter($addressField, $addressValue);
+        }
+      }
+    }
     // Get custom data
     $custom_data = civicrm_api3('CustomValue', 'get', array('entity_id' => $parameters->getParameter('contact_id'), 'entity_table' => 'civicrm_contact'));
     foreach ($custom_data['values'] as $custom) {
@@ -74,6 +95,7 @@ class ContactDataById extends AbstractGetSingleAction {
    */
   public function getOutputSpecification() {
     $specs = parent::getOutputSpecification();
+    Fields::getFieldsForEntity($specs, 'Address', 'get', $this->getIgnoredAddressFields());
     // add custom fields from sub types
     foreach (['Individual', 'Household', 'Organization'] as $entity) {
       $customGroups = ConfigContainer::getInstance()
@@ -94,6 +116,10 @@ class ContactDataById extends AbstractGetSingleAction {
       }
     }
     return $specs;
+  }
+
+  protected function getIgnoredAddressFields() {
+    return ['id', 'contact_id', 'location_type_id', 'is_primary', 'is_billing', 'street_number_suffix', 'street_number_predirectional', 'street_number_postdirectional', 'postal_code_suffix', 'usps_adc', 'timezone'];
   }
 
 
