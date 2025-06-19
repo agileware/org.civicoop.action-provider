@@ -1,4 +1,4 @@
-Version 1.179 (not yet released)
+Version 1.179
 -------------
 
 * Added a fuzzy search to the action Contact:Find organization by name. See !202
