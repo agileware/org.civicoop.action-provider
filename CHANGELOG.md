@@ -1,5 +1,6 @@
 Version 1.180 (not yet released)
 -------------
+* Added Case ID to the Relationship:End action (when end relationship is used as end role this prevents ending a role on the wrong case)
 
 Version 1.179
 -------------

@@ -62,6 +62,7 @@ class EndRelationship extends AbstractAction {
        */
       new Specification('contact_id_a', 'Integer', E::ts('Contact ID A'), true, null, null, null, FALSE),
       new Specification('contact_id_b', 'Integer', E::ts('Contact ID B'), true, null, null, null, FALSE),
+      new Specification('case_id', 'Integer', E::ts('Case ID'), false, null, null, null, FALSE),
     ));
 
     return $specs;
@@ -82,13 +83,17 @@ class EndRelationship extends AbstractAction {
     $contact_id_b = $parameters->getParameter('contact_id_b');
     $relationship_type_id = $this->relationshipTypeIds[$this->configuration->getParameter('relationship_type_id')];
 
-    $sql = "SELECT id FROM civicrm_relationship WHERE contact_id_a = %1 AND contact_id_b = %2 AND relationship_type_id = %3 
-      AND civicrm_relationship.is_active = 1 
-      AND (civicrm_relationship.start_date IS NULL OR civicrm_relationship.start_date <= CURRENT_DATE()) 
+    $sql = "SELECT id FROM civicrm_relationship WHERE contact_id_a = %1 AND contact_id_b = %2 AND relationship_type_id = %3
+      AND civicrm_relationship.is_active = 1
+      AND (civicrm_relationship.start_date IS NULL OR civicrm_relationship.start_date <= CURRENT_DATE())
       AND (civicrm_relationship.end_date IS NULL OR civicrm_relationship.end_date >= CURRENT_DATE())";
     $sqlParams[1] = array($contact_id_a, 'Integer');
     $sqlParams[2] = array($contact_id_b, 'Integer');
     $sqlParams[3] = array($relationship_type_id, 'Integer');
+    if($parameters->doesParameterExists('case_id') && $parameters->getParameter('case_id')) {
+      $sql .= ' AND civicrm_relationship.case_id = %4';
+      $sqlParams[4] = array($parameters->getParameter('case_id'), 'Integer');
+    }
     $dao = \CRM_Core_DAO::executeQuery($sql, $sqlParams);
     while ($dao->fetch()) {
       try {
