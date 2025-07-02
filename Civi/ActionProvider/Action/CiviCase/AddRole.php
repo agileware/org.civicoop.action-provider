@@ -51,6 +51,7 @@ class AddRole extends AbstractAction {
     return new SpecificationBag(
       [
         new Specification('relationship_type', 'String', E::ts('RelationShip'), TRUE, NULL, NULL,$this->relationshipTypes(), FALSE),
+        new Specification('replace', 'Boolean', E::ts('Replace old role'), TRUE, FALSE),
       ]
     );
   }
@@ -93,6 +94,22 @@ class AddRole extends AbstractAction {
     $contact_id = $parameters->getParameter('contact_id');
     $case_id = $parameters->getParameter('case_id');
     $relationshipType = $this->configuration->getParameter('relationship_type');
+    if($this->configuration->getParameter('replace')){
+      [$relTypeId, $b, $a] = explode('_', $relationshipType);
+      $relationShipResult = civicrm_api3('Relationship', 'get', [
+        'contact_id_'.$a => ['<>' =>  $contact_id], // if the same contact is supplied do not close it, it will be merged with the new one
+        'relationship_type_id' => $relTypeId,
+        'case_id' => $case_id,
+        'is_active' => 1,
+        'options' => ['limit' => 0]]);
+      foreach($relationShipResult['values'] as $key => $value){
+        civicrm_api3('Relationship', 'create', [
+          'id' => $value['id'],
+          'is_active' => 0,
+          'end_date' => 'now'
+          ]);
+      }
+    }
     $result = CiviCase::relationship($relationshipType,$contact_id,$case_id);
     if($result['is_error']) {
       throw new \Civi\ActionProvider\Exception\ExecutionException($result['error_message']);
