@@ -51,7 +51,7 @@ class AddRole extends AbstractAction {
     return new SpecificationBag(
       [
         new Specification('relationship_type', 'String', E::ts('RelationShip'), TRUE, NULL, NULL,$this->relationshipTypes(), FALSE),
-        new Specification('replace', 'Boolean', E::ts('Replace old role'), TRUE, FALSE),
+        new Specification('replace', 'Boolean', E::ts('End existing relationships'), TRUE, FALSE),
       ]
     );
   }
@@ -75,7 +75,8 @@ class AddRole extends AbstractAction {
    */
   public function getOutputSpecification() {
     return new SpecificationBag(
-      [new Specification('relation_ship_id', 'Integer', E::ts('Relationship ID'), FALSE)]
+      [new Specification('first_relationship_id', 'Integer', E::ts('First Relationship ID'), FALSE),
+       new Specification('relationship_ids', 'Integer', E::ts('Relationship IDS'), FALSE, NULL, NULL, NULL, TRUE), ]
     );
   }
 
@@ -113,6 +114,19 @@ class AddRole extends AbstractAction {
     $result = CiviCase::relationship($relationshipType,$contact_id,$case_id);
     if($result['is_error']) {
       throw new \Civi\ActionProvider\Exception\ExecutionException($result['error_message']);
+    } else {
+      $relationShipResult = civicrm_api3('Relationship', 'get', [
+        'contact_id_'.$a => $contact_id, // if the same contact is supplied do not close it, it will be merged with the new one
+        'relationship_type_id' => $relTypeId,
+        'case_id' => $case_id,
+        'is_active' => 1,
+        'options' => ['limit' => 0]]);
+         $relationship_ids = [];
+         foreach($relationShipResult['values'] as $key => $value){
+           $relationship_ids[] = $value['id'];
+         }
+         $output->setParameter('relationship_ids', $relationship_ids);
+         $output->setParameter('first_relationship_id', reset($relationship_ids));
     }
   }
 }
