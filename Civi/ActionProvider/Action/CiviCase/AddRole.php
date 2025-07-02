@@ -93,6 +93,9 @@ class AddRole extends AbstractAction {
     $contact_id = $parameters->getParameter('contact_id');
     $case_id = $parameters->getParameter('case_id');
     $relationshipType = $this->configuration->getParameter('relationship_type');
-    CiviCase::relationship($relationshipType,$contact_id,$case_id);
+    $result = CiviCase::relationship($relationshipType,$contact_id,$case_id);
+    if($result['is_error']) {
+      throw new \Civi\ActionProvider\Exception\ExecutionException($result['error_message']);
+    }
   }
 }
