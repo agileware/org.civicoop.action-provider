@@ -17,14 +17,22 @@ class ParameterBag implements ParameterBagInterface, \IteratorAggregate {
 		}
 		return null;
 	}
+
+	/**
+	 * Legacy name for parameterExists.
+	 *
+	 * @deprecated
+	 * @see parameterExists
+	 */
+	public function doesParameterExists($name) {
+	  return $this->parameterExists($name);
+	}
+
 	/**
 	 * Tests whether the parameter with the name exists.
 	 */
-	public function doesParameterExists($name) {
-		if (key_exists($name,$this->parameters)) {
-			return true;
-		}
-		return false;
+	public function parameterExists($name) {
+		return array_key_exists($name, $this->parameters);
 	}
 
 	/**
