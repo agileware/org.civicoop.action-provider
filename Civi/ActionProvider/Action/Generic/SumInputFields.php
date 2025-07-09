@@ -76,7 +76,7 @@ class SumInputFields extends AbstractAction {
       }
     }
     if ($this->configuration->doesParameterExists('offsetValue')) {
-      $result += $this->configuration->getParameter('offsetValue');
+      $result += floatval($this->configuration->getParameter('offsetValue'));
     }
     $output->setParameter('value', $result);
   }
