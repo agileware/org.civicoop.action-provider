@@ -1,4 +1,4 @@
-Version 1.180 (not yet released)
+Version 1.180
 -------------
 * Added Case ID to the Relationship:End action (when end relationship is used as end role this prevents ending a role on the wrong case)
 * CiviCase: AddRole has to replace the old role (replacing means terminating it).
