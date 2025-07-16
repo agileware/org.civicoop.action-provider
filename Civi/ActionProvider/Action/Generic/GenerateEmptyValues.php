@@ -22,7 +22,7 @@ class GenerateEmptyValues extends AbstractAction {
   }
 
   /**
-   * Returns the specification of the configuration options for the actual
+   * Returns the specification of the parameter options for the actual
    * action.
    *
    * @return SpecificationBag
