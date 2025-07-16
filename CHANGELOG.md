@@ -1,6 +1,9 @@
-Version 1.181 (not yet released
+Version 1.182 (not released yet)
 -------------
 
+Version 1.181
+-------------
+* Added update contact with employer ID if relationship type is employee/employer in create/update relationship
 * Added nwe action Other: Generate Empty Values
 
 Version 1.180
@@ -33,7 +36,7 @@ Version 1.177
 Version 1.176
 -------------
 
-* Updated send partcipant confirmation mail action.
+* Updated send participant confirmation mail action.
 
 Version 1.175
 -------------
