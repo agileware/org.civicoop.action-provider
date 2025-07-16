@@ -1,6 +1,8 @@
 Version 1.181 (not yet released
 -------------
 
+* Added nwe action Other: Generate Empty Values
+
 Version 1.180
 -------------
 * Added Case ID to the Relationship:End action (when end relationship is used as end role this prevents ending a role on the wrong case)
