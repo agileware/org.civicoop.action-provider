@@ -70,32 +70,32 @@ class GetMembershipByIdWithConfig extends AbstractGetSingleAction {
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output): void {
-    $apiParams['membership_id']            = $parameters->getParameter('membership_id');
+    $apiParams['membership_id'] = $parameters->getParameter('membership_id');
 
     // Configuration membership type ids
     if ($this->configuration->parameterExists('membership_type_id')) {
-      $apiParams['membership_type_id']  = array_filter((array) $this->configuration->getParameter('membership_type_id')); // Strips out empty strings
+      $apiParams['membership_type_id'] = array_filter((array) $this->configuration->getParameter('membership_type_id')); // Strips out empty strings
     }
 
     if ($this->configuration->parameterExists('status_id')) {
-      $apiParams['status_id']           = array_filter((array) $this->configuration->getParameter('status_id')); // Strips out empty strings
+      $apiParams['status_id'] = array_filter((array) $this->configuration->getParameter('status_id')); // Strips out empty strings
     }
 
     // Override with parameter membership id
     if ($parameters->parameterExists('membership_id')) {
-      $apiParams['membership_id']  = $parameters->getParameter('membership_id');
+      $apiParams['membership_id'] = $parameters->getParameter('membership_id');
     }
 
     if ($parameters->parameterExists('contact_id')) {
-      $apiParams['contact_id']  = $parameters->getParameter('contact_id');
+      $apiParams['contact_id'] = $parameters->getParameter('contact_id');
     }
 
     try {
       // Build the query
       $membership_query = Membership::get(FALSE)
-                                 ->addSelect('id')
-                                 ->addWhere('id', '=', $apiParams['membership_id'])
-                                 ->addWhere('is_test', '=', FALSE);
+                                    ->addSelect('id')
+                                    ->addWhere('id', '=', $apiParams['membership_id'])
+                                    ->addWhere('is_test', '=', FALSE);
 
       if ( !empty($apiParams['membership_type_id']) ) {
         $membership_query->addWhere('membership_type_id', 'IN', $apiParams['membership_type_id']);
