@@ -1,6 +1,9 @@
 Version 1.182 (not released yet)
 -------------
 
+* Added nwe action: Membership: Get by ID (with configuration) See !209
+* The action: Other Set Value has now a non required paramater. Making it possible to use it as an empty/null value. See !210
+
 Version 1.181
 -------------
 * Added update contact with employer ID if relationship type is employee/employer in create/update relationship
