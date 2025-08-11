@@ -66,6 +66,10 @@ class Actions {
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $provider->addAction('GetMembershipByIdWithConfig', '\Civi\ActionProvider\Action\Membership\GetMembershipByIdWithConfig',E::ts('Membership: Get by ID (with configuration)') , array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
   }
 
 }
