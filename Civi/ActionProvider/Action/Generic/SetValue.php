@@ -23,7 +23,7 @@ class SetValue extends AbstractAction {
    */
   public function getConfigurationSpecification() {
     return new SpecificationBag(array(
-      new Specification('value', 'String', E::ts('Value'), true),
+      new Specification('value', 'String', E::ts('Value'), false),
     ));
   }
 
