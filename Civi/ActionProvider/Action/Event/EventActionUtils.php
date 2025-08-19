@@ -123,11 +123,11 @@ class EventActionUtils {
     static $metaData = [];
     $key = E::SHORT_NAME . '.priceSetMetaData';
     if (empty($metaData)) {
-      $metaData = \Civi::cache('long')->get($key, NULL);
+      $metaData = \Civi::cache('long')->get($key, []);
       if (empty($metaData)) {
         try {
           $priceSets = \Civi\Api4\PriceSet::get(FALSE)
-            ->addWhere('extends', '=', 1)
+            ->addWhere('extends', 'CONTAINS', 1)
             ->addWhere('is_active', '=', TRUE)
             ->execute();
           foreach ($priceSets as $priceSet) {
