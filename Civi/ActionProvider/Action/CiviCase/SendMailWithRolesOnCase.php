@@ -12,7 +12,7 @@ use CRM_ActionProvider_ExtensionUtil as E;
 
 class SendMailWithRolesOnCase extends AbstractAction {
 
-  public const DEBUG = TRUE;
+  public const DEBUG = FALSE;
 
   // used for the select
   protected array $relationshipTypes = [];
@@ -52,6 +52,10 @@ class SendMailWithRolesOnCase extends AbstractAction {
 
     $relationship_cc = $parameters->getParameter('relationship_cc');
     \Civi::log()->debug('CC: ' . print_r($relationship_cc, TRUE));
+    // formfieldlibrary returns coma-separated values in the first array element, so we have to convert it to an array
+    if (!empty($relationship_cc) && !is_numeric($relationship_cc[0])) {
+      $relationship_cc = explode(',', $relationship_cc[0]);
+    }
 
     // get main contact
     try {
@@ -62,11 +66,15 @@ class SendMailWithRolesOnCase extends AbstractAction {
         ->addWhere('case_id', '=', $case_id)
         ->execute()->first();
 
-      \Civi::log()->debug('API Output:');
-      \Civi::log()->debug('contact: ' . print_r($relationship, TRUE));
-      $contact_id = $relationship['contact_id_b'];
-
-      $output->setParameter('contact_id', $contact_id);
+      if (!empty($relationship) && !empty($relationship['contact_id_b'])) {
+        \Civi::log()->debug('API Output:');
+        \Civi::log()->debug('contact: ' . print_r($relationship, TRUE));
+        $contact_id = $relationship['contact_id_b'];
+        $output->setParameter('contact_id', $contact_id);
+      }
+      else {
+        \Civi::log()->warning('$SendMailWithRolesOnCase: No contact found for case ' . $case_id . ' and main relationship type ' . $relationship_main);
+      }
     }
     catch (\Exception $e) {
       // Do nothing but log it...
@@ -252,7 +260,8 @@ class SendMailWithRolesOnCase extends AbstractAction {
     return new SpecificationBag([
       new Specification('case_id', 'Integer', E::ts('Case ID'), TRUE),
       new Specification('relationship_main', 'Integer', E::ts('Mail Relationship main'), TRUE),
-      new Specification('relationship_cc', 'Integer', E::ts('Mail Relationship cc'), FALSE, NULL, NULL, NULL, TRUE),
+      // we have to use a string here because formfieldlibrary return coma-separated values
+      new Specification('relationship_cc', 'String', E::ts('Mail Relationship cc'), FALSE, NULL, NULL, NULL, TRUE),
       new Specification('from_name', 'String', E::ts('From name'), FALSE),
       new Specification('from_email', 'String', E::ts('From email'), FALSE),
       new Specification('bcc', 'String', E::ts('BCC'), FALSE),
