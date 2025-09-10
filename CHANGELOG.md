@@ -1,6 +1,7 @@
 Version 1.182 (not released yet)
 -------------
 
+* When generating files fow download store this in the database
 * After a file has been generated the download link starts automatically.
 * Added nwe action: Membership: Get by ID (with configuration) See !209
 * The action: Other Set Value has now a non required paramater. Making it possible to use it as an empty/null value. See !210

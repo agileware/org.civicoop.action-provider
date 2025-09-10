@@ -7,6 +7,7 @@
 namespace Civi\ActionProvider\Action\Generic;
 
 use Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\Download\DownloadFileTrait;
 use Civi\ActionProvider\Parameter\OptionGroupByNameSpecification;
 use Civi\ActionProvider\Parameter\ParameterBagInterface;
 use Civi\ActionProvider\Parameter\Specification;
@@ -22,6 +23,8 @@ use ZipArchive;
 
 class ExportFile extends AbstractAction {
 
+  use DownloadFileTrait;
+
   /**
    * @var \ZipArchive
    */
@@ -36,6 +39,16 @@ class ExportFile extends AbstractAction {
    * @var String
    */
   protected $downloadName;
+
+  /** 
+   * @var String 
+   */
+  protected $fileName;
+
+  /**
+   * @var String
+   */
+  protected $subDir;
 
   /**
    * Run the action
@@ -93,8 +106,9 @@ class ExportFile extends AbstractAction {
    * @param $batchName
    */
   public function initializeBatch($batchName) {
-    $subdir = Files::createRestrictedDirectory('exportfile');
-    $outputName = CRM_Core_Config::singleton()->templateCompileDir . $subdir . '/' . $batchName . '.zip';
+    $this->subDir = Files::createRestrictedDirectory('exportfile');
+    $this->fileName = $batchName . '.zip';
+    $outputName = CRM_Core_Config::singleton()->customFileUploadDir . $this->subDir . DIRECTORY_SEPARATOR . $this->fileName;
     $this->zip = new ZipArchive();
     if ($this->zip->open($outputName, ZipArchive::CREATE) !== TRUE) {
       $this->zip = NULL;
@@ -103,8 +117,8 @@ class ExportFile extends AbstractAction {
 
     $this->downloadName = $this->configuration->getParameter('filename').'.zip';
     $this->downloadUrl = CRM_Utils_System::url('civicrm/actionprovider/downloadfile', [
-      'filename' => $batchName.'.zip',
-      'subdir' => $subdir,
+      'filename' => $this->fileName,
+      'subdir' => $this->subDir,
       'downloadname' => $this->downloadName
     ]);
   }
@@ -122,7 +136,7 @@ class ExportFile extends AbstractAction {
     if ($this->zip) {
       $this->zip->close();
       if ($isLastBatch) {
-        CRM_Core_Session::setStatus(E::ts('<a href="%1">Download file(s)<a/>', [1 => $this->downloadUrl]), E::ts('Created ZIP'), 'success');
+        $this->createDownloadStatusMessage(E::ts('Created ZIP'), $this->fileName, $this->subDir, $this->downloadName);
       }
     }
   }

@@ -15,14 +15,19 @@ class CRM_ActionProvider_Page_DownloadFile extends CRM_Core_Page {
       CRM_Core_Error::statusBounce("Malformed filename");
     }
 
-    $basePath = CRM_Core_Config::singleton()->templateCompileDir . $subdir;
-    $path = $basePath.'/'.$fileName;
-    $mimeType = mime_content_type($path);
+    $basePath = CRM_Core_Config::singleton()->customFileUploadDir . $subdir;
+    $path = $basePath.DIRECTORY_SEPARATOR.$fileName;
+
+    if (!$path || !file_exists($path)) {
+      $basePath = CRM_Core_Config::singleton()->templateCompileDir . $subdir;
+      $path = $basePath.DIRECTORY_SEPARATOR.$fileName;
+    }
 
     if (!$path || !file_exists($path)) {
       CRM_Core_Error::statusBounce('Could not retrieve the file');
     }
 
+    $mimeType = mime_content_type($path);
     $now = gmdate('D, d M Y H:i:s') . ' GMT';
     CRM_Utils_System::setHttpHeader('Content-Type', $mimeType);
     CRM_Utils_System::setHttpHeader('Expires', $now);
