@@ -231,7 +231,7 @@ class CreatePdf extends AbstractAction {
       'subdir' => $subdir,
       'downloadname' => $downloadName
     ]);
-    \CRM_Core_Session::setStatus(E::ts('<a href="%1">Download document(s)<a/>', [1 => $downloadUrl]), E::ts('Created PDF'), 'success');
+    \CRM_Core_Session::setStatus(E::ts('<a href="%1" class="action-provider start-download">Download document(s)<a/>', [1 => $downloadUrl]), E::ts('Created PDF'), 'success');
   }
 
   /**

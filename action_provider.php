@@ -33,6 +33,16 @@ function action_provider_civicrm_post($op, $objectName, $objectId, &$objectRef) 
 }
 
 /**
+ * Implements hook_civicrm_alterBundle().
+ */
+function action_provider_civicrm_alterBundle(CRM_Core_Resources_Bundle $bundle) {
+  if ($bundle->name !== 'coreResources') {
+    return;
+  }
+  $bundle->addScriptFile('action-provider', 'js/action-provider.js');
+}
+
+/**
  * Implements hook_civicrm_config().
  */
 function action_provider_civicrm_config(&$config) {
