@@ -1,4 +1,4 @@
-Version 1.182 (not released yet)
+Version 1.182
 -------------
 
 * When generating files fow download store this in the database
