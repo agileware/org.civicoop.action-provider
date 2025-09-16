@@ -195,14 +195,23 @@ class SendMailWithRolesOnCase extends AbstractAction {
             $mime_type = $file['mime_type'];
           }
           if (file_exists($path)) {
+            if (!$mime_type && preg_match('/\.pdf$/i', $path)) {
+              // if the file is not created yet, fix the mime type for most common case
+              $mime_type = 'application/pdf';
+            }
+
             if (!$mime_type) {
               $mime_type = mime_content_type($path);
             }
+
             if (!$filename) {
               $filename = basename($path);
+              $filename = \CRM_Utils_File::cleanFileName($filename);
             }
+
             \Civi::log()
               ->info('$SendMailWithRolesOnCase - attachment: [' . $path . "] - mime_type: [$mime_type] - filename: [$filename]");
+
             $mailer->addAttachment($path, $filename, $mime_type);
           }
           else {
