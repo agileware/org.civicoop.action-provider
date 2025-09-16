@@ -1,6 +1,8 @@
 Version 1.183 (not yet released)
 -------------
 
+* Added action CiviCase: Send e-mail to role on case.
+
 Version 1.182
 -------------
 

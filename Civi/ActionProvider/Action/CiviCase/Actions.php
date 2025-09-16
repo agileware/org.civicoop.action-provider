@@ -79,6 +79,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('CaseSendEmailToCaseRole', '\Civi\ActionProvider\Action\CiviCase\SendEmailToCaseRole', E::ts('CiviCase: Send e-mail to case role'), array (
+      AbstractAction::SEND_MESSAGES_TO_CONTACTS,
+      AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
+    ));
   }
 
 }
