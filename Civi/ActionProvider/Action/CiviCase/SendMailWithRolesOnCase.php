@@ -48,11 +48,13 @@ class SendMailWithRolesOnCase extends AbstractAction {
     $relationship_main = (int) $parameters->getParameter('relationship_main');
 
     \Civi::log()
-      ->debug('$SendMailWithRolesOnCase: ' . $case_id . ' - ' . print_r($relationship_main, TRUE));
+      ->debug('SendMailWithRolesOnCase: ' . $case_id . ' - ' . print_r($relationship_main, TRUE));
 
     $relationship_cc = $parameters->getParameter('relationship_cc');
+
     \Civi::log()->debug('CC: ' . print_r($relationship_cc, TRUE));
-    // formfieldlibrary returns coma-separated values in the first array element, so we have to convert it to an array
+
+    // formfieldlibrary returns coma-separated single value (in the first array element), so we have to convert it to an array
     if (!empty($relationship_cc) && !is_numeric($relationship_cc[0])) {
       $relationship_cc = explode(',', $relationship_cc[0]);
     }
@@ -111,8 +113,8 @@ class SendMailWithRolesOnCase extends AbstractAction {
       // Do nothing but log it...
       \Civi::log()->error('$SendMailWithRolesOnCase: ' . $e->getMessage());
     }
-    \Civi::log()->debug('CC Array: ' . print_r($contact_ids_cc, TRUE));
 
+    $cc_contacts_output = [];
     $cc = FALSE;
     if (!empty($contact_ids_cc)) {
       $cc_mails = [];
@@ -133,6 +135,8 @@ class SendMailWithRolesOnCase extends AbstractAction {
           // Do nothing but log it...
           \Civi::log()->error('$SendMailWithRolesOnCase: no contact with primary mail found for contact_id: ' . $contact_id_cc . ' - ' . $e->getMessage());
         }
+
+        $cc_contacts_output[] = $contact_id_cc;
       }
       \Civi::log()->debug('CC Mails: ' . print_r($cc_mails, TRUE));
       if (!empty($cc_mails)) {
@@ -140,6 +144,8 @@ class SendMailWithRolesOnCase extends AbstractAction {
         \Civi::log()->info('to contact cc mails: ' . $cc);
       }
     }
+
+    $output->setParameter('cc_contact_ids', $cc_contacts_output);
 
     $mailer = new \Civi\ActionProvider\Utils\SendEmail();
 
@@ -231,6 +237,7 @@ class SendMailWithRolesOnCase extends AbstractAction {
   public function getOutputSpecification() {
     return new SpecificationBag([
       new Specification('contact_id', 'Integer', E::ts('Contact ID'), TRUE),
+      new Specification('cc_contact_ids', 'Integer', E::ts('CC Contact IDs'), FALSE, NULL, 'Contact', NULL, TRUE),
     ]);
   }
 
@@ -242,7 +249,6 @@ class SendMailWithRolesOnCase extends AbstractAction {
    */
   public function getConfigurationSpecification() {
     return new SpecificationBag([
-      #new Specification('relationship_type_id', 'String', E::ts('Role'), TRUE, NULL, NULL, $this->relationshipTypes, TRUE),
       new Specification('from_name', 'String', E::ts('From name'), FALSE),
       new Specification('from_email', 'String', E::ts('From email'), FALSE),
       new Specification('bcc', 'String', E::ts('BCC'), FALSE),
@@ -260,7 +266,8 @@ class SendMailWithRolesOnCase extends AbstractAction {
     return new SpecificationBag([
       new Specification('case_id', 'Integer', E::ts('Case ID'), TRUE),
       new Specification('relationship_main', 'Integer', E::ts('Mail Relationship main'), TRUE),
-      // we have to use a string here because formfieldlibrary return coma-separated values
+      // we have to use a string here because formfieldlibrary return coma-separated values (single)
+      // and for form-processor we have to use multi...
       new Specification('relationship_cc', 'String', E::ts('Mail Relationship cc'), FALSE, NULL, NULL, NULL, TRUE),
       new Specification('from_name', 'String', E::ts('From name'), FALSE),
       new Specification('from_email', 'String', E::ts('From email'), FALSE),
