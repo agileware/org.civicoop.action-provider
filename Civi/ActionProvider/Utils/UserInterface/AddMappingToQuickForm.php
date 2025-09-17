@@ -15,28 +15,28 @@ use CRM_Core_Form;
 class AddMappingToQuickForm {
 
   public static function addMapping($prefix, SpecificationBag $parameterSpecs, $current_mapping, CRM_Core_Form $form, $availableFields) {
-    $actionProviderMappingFields = $form->get_template_vars('actionProviderMappingFields');
+    $actionProviderMappingFields = $form->getTemplateVars('actionProviderMappingFields');
     if (!is_array($actionProviderMappingFields)) {
       $actionProviderMappingFields = array($prefix=>array());
     }
     if (!isset($actionProviderMappingFields[$prefix])) {
       $actionProviderMappingFields[$prefix] = array();
     }
-    $actionProviderMappingDescriptions = $form->get_template_vars('actionProviderMappingDescriptions');
+    $actionProviderMappingDescriptions = $form->getTemplateVars('actionProviderMappingDescriptions');
     if (!is_array($actionProviderMappingDescriptions)) {
       $actionProviderMappingDescriptions = array($prefix=>array());
     }
     if (!isset($actionProviderMappingDescriptions[$prefix])) {
       $actionProviderMappingDescriptions[$prefix] = array();
     }
-    $actionProviderGroupedMappingFields = $form->get_template_vars('actionProviderGroupedMappingFields');
+    $actionProviderGroupedMappingFields = $form->getTemplateVars('actionProviderGroupedMappingFields');
     if (!is_array($actionProviderGroupedMappingFields)) {
       $actionProviderGroupedMappingFields = array($prefix=>array());
     }
     if (!isset($actionProviderGroupedMappingFields[$prefix])) {
       $actionProviderGroupedMappingFields[$prefix] = array();
     }
-    $actionProviderCollectionMappingFields = $form->get_template_vars('actionProviderCollectionMappingFields');
+    $actionProviderCollectionMappingFields = $form->getTemplateVars('actionProviderCollectionMappingFields');
     if (!is_array($actionProviderCollectionMappingFields)) {
       $actionProviderCollectionMappingFields = array($prefix=>array());
     }

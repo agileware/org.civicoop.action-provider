@@ -26,7 +26,7 @@ class AddValidatorConfigToQuickForm {
 		// Check whether the actionProviderElementNames is already set if so get
 		// the variable and append the configuration for this action to it.
 		// Because we dont want to overwrite the current actionProviderElementNames.
-		$elementNames = $form->get_template_vars('actionProviderElementNames');
+		$elementNames = $form->getTemplateVars('actionProviderElementNames');
 		if (empty($elementNames)) {
 			$elementNames = array();
 		}
