@@ -1,5 +1,7 @@
-Version 1.184 (not yet released)
+Version 1.184
 -------------
+
+* Fix for Participant: Send confirmation mail (the from name was not used).
 
 Version 1.183
 -------------
