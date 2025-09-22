@@ -1,6 +1,8 @@
 Version 1.185 (not yet released)
 -------------
 
+* Fix for RoleGroupSync. Accept multiple ids, also when they are offered as an array instead of a string with delimiters.
+
 Version 1.184
 -------------
 

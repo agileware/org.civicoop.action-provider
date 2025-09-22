@@ -68,7 +68,7 @@ class RoleGroupSync extends AbstractAction {
   public function getParameterSpecification() {
     return new SpecificationBag([
       new Specification('case_id', 'Integer', E::ts('Case ID'), TRUE, NULL, NULL, NULL, FALSE),
-      new Specification('contact_ids', 'String', E::ts('Contact IDS'), false),
+      new Specification('contact_ids', 'String', E::ts('Contact IDS'), false,  NULL, NULL, NULL, TRUE),
     ]);
   }
 
