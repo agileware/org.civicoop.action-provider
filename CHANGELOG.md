@@ -1,4 +1,4 @@
-Version 1.186 (not yet released)
+Version 1.186
 -------------
 
 * Added action: Membership: Get By E-mail.
