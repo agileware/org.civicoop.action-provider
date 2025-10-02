@@ -1,3 +1,6 @@
+Version 1.187 (not yet released)
+-------------
+
 Version 1.186
 -------------
 
