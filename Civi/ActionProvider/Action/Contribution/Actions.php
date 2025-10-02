@@ -38,6 +38,10 @@ class Actions {
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ]);
+    $provider->addAction('CancelContributionRecur', '\Civi\ActionProvider\Action\Contribution\CancelContributionRecur', E::ts('Contribution: Cancel recurring contribution'), [
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ]);
     $provider->addAction('UpdateContributionRecur', '\Civi\ActionProvider\Action\Contribution\UpdateContributionRecur', E::ts('Contribution: Update recurring contribution'), [
       AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
