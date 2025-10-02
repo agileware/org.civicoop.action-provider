@@ -1,4 +1,4 @@
-Version 1.185 (not yet released)
+Version 1.185
 -------------
 
 * Added action Contribution: Cancel Contribution Recur
