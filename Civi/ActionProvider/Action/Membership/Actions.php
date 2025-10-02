@@ -62,6 +62,10 @@ class Actions {
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $provider->addAction('GetMembershipByEmail', '\Civi\ActionProvider\Action\Membership\GetMembershipByEmail',E::ts('Membership: Get by E-mail') , array(
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $provider->addAction('GetMembershipByCustomField', '\Civi\ActionProvider\Action\Membership\GetMembershipByCustomField',E::ts('Membership: Get by custom field') , array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
