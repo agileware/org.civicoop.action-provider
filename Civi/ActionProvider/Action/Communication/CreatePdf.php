@@ -7,6 +7,7 @@
 namespace Civi\ActionProvider\Action\Communication;
 
 use Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\Download\DownloadFileTrait;
 use Civi\ActionProvider\Parameter\OptionGroupByNameSpecification;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use Civi\ActionProvider\Parameter\SpecificationBag;
@@ -16,6 +17,8 @@ use Civi\ActionProvider\Utils\Tokens;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class CreatePdf extends AbstractAction {
+  
+  use DownloadFileTrait;
 
   /**
    * @var \ZipArchive
@@ -155,7 +158,7 @@ class CreatePdf extends AbstractAction {
     $outputMode = $this->configuration->getParameter('batch_output_mode');
     if ($outputMode == 'zip') {
       $subdir = Files::createRestrictedDirectory('createpdf');
-      $outputName = \CRM_Core_Config::singleton()->templateCompileDir . $subdir . '/' . $batchName . '.zip';
+      $outputName = \CRM_Core_Config::singleton()->customFileUploadDir . $subdir . DIRECTORY_SEPARATOR . $batchName . '.zip';
       $this->zip = new \ZipArchive();
       if ($this->zip->open($outputName, \ZipArchive::CREATE) !== TRUE) {
         $this->zip = NULL;
@@ -181,22 +184,22 @@ class CreatePdf extends AbstractAction {
         if ($isLastBatch) {
           $subdir = Files::createRestrictedDirectory('createpdf');
           $downloadName = $this->configuration->getParameter('filename') . '.zip';
-          $this->createDownloadStatusMessage($batchName . '.zip', $subdir, $downloadName);
+          $this->createDownloadStatusMessage(E::ts('Created zip file with the PDF'), $batchName . '.zip', $subdir, $downloadName);
         }
       } else {
         $subdir = Files::createRestrictedDirectory('createpdf');
-        $zipFileName = \CRM_Core_Config::singleton()->templateCompileDir . $subdir . '/' . $batchName . '.zip';
-        $basePath = \CRM_Core_Config::singleton()->templateCompileDir . $subdir;
+        $zipFileName = \CRM_Core_Config::singleton()->customFileUploadDir . $subdir . DIRECTORY_SEPARATOR . $batchName . '.zip';
+        $basePath = \CRM_Core_Config::singleton()->customFileUploadDir . $subdir;
         $pdfFile = $this->zip->getNameIndex(0);
         $this->zip->close();
         copy("zip://".$zipFileName."#".$pdfFile, $basePath . DIRECTORY_SEPARATOR .$batchName.'.pdf');
         unlink($zipFileName);
         $downloadName = $this->configuration->getParameter('filename').'.pdf';
-        $this->createDownloadStatusMessage($batchName.'.pdf', $subdir, $downloadName);
+        $this->createDownloadStatusMessage(E::ts('Created PDF'), $batchName.'.pdf', $subdir, $downloadName);
       }
     } else {
       $subdir = Files::createRestrictedDirectory('createpdf');
-      $basePath = \CRM_Core_Config::singleton()->templateCompileDir . $subdir;
+      $basePath = \CRM_Core_Config::singleton()->customFileUploadDir . $subdir;
       $htmlFile = $basePath .'/'.$batchName.'.html';
       $pdfFormatFile = $basePath .'/'.$batchName.'.pdfformat';
       if ($this->pdfFormat) {
@@ -213,25 +216,9 @@ class CreatePdf extends AbstractAction {
         $pdfFile = $basePath .'/'.$batchName.'.pdf';
         $this->convertHtmlToPdf($htmlFile, $pdfFile);
         $downloadName = $this->configuration->getParameter('filename').'.pdf';
-        $this->createDownloadStatusMessage($batchName.'.pdf', $subdir, $downloadName);
+        $this->createDownloadStatusMessage(E::ts('Created PDF'), $batchName.'.pdf', $subdir, $downloadName);
       }
     }
-  }
-
-  /**
-   * Creates a status message with a download link.
-   *
-   * @param $filename
-   * @param $subdir
-   * @param $downloadName
-   */
-  protected function createDownloadStatusMessage($filename, $subdir, $downloadName) {
-    $downloadUrl = \CRM_Utils_System::url('civicrm/actionprovider/downloadfile', [
-      'filename' => $filename,
-      'subdir' => $subdir,
-      'downloadname' => $downloadName
-    ]);
-    \CRM_Core_Session::setStatus(E::ts('<a href="%1">Download document(s)<a/>', [1 => $downloadUrl]), E::ts('Created PDF'), 'success');
   }
 
   /**

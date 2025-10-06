@@ -7,7 +7,6 @@
 namespace Civi\ActionProvider\Action\Communication;
 
 use Civi\ActionProvider\Action\AbstractAction;
-use Civi\ActionProvider\Parameter\FileSpecification;
 use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use Civi\ActionProvider\Parameter\SpecificationBag;
 use Civi\ActionProvider\Parameter\Specification;
@@ -26,6 +25,14 @@ class SendEmail extends AbstractAction {
    * @return void
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
+    $contactIds[] = $parameters->getParameter('contact_id');
+    $this->sendEmailToContacts($contactIds, $parameters);
+  }
+
+  /**
+   * Send an email to one or more contacts.
+   */
+  protected function sendEmailToContacts(array $contactIds, ParameterBagInterface $parameters) {
     $mailer = new \Civi\ActionProvider\Utils\SendEmail();
     if ($this->configuration->getParameter('use_sender_as') == 'from' && $parameters->doesParameterExists('sender_contact_id')) {
       $mailer->setSenderContactId($parameters->getParameter('sender_contact_id'), false, true);
@@ -71,8 +78,6 @@ class SendEmail extends AbstractAction {
       $mailer->setCampaignId($parameters->getParameter('campaign_id'));
     }
 
-
-    $contact_id = array($parameters->getParameter('contact_id'));
     $subject = $parameters->getParameter('subject');
     $body_text = '';
     if ($parameters->doesParameterExists('body_text')) {
@@ -108,12 +113,12 @@ class SendEmail extends AbstractAction {
             }
             $mailer->addAttachment($path, $filename, $mime_type);
           }
-        } catch (\CiviCRM_API3_Exception $ex) {
+        } catch (\CRM_Core_Exception $ex) {
           // Do nothing.
         }
       }
     }
-    $mailer->send($contact_id, $subject, $body_text, $body_html, $extra_data, $cc, $bcc);
+    $mailer->send($contactIds, $subject, $body_text, $body_html, $extra_data, $cc, $bcc);
   }
 
   /**

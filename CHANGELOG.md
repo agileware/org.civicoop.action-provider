@@ -1,6 +1,35 @@
-Version 1.180 (not yet released)
+Version 1.185 (not yet released)
+-------------
+
+Version 1.184
+-------------
+
+* Fix for Participant: Send confirmation mail (the from name was not used).
+
+Version 1.183
+-------------
+
+* Added action CiviCase: Send e-mail to role on case.
+
+Version 1.182
+-------------
+
+* When generating files fow download store this in the database
+* After a file has been generated the download link starts automatically.
+* Added nwe action: Membership: Get by ID (with configuration) See !209
+* The action: Other Set Value has now a non required paramater. Making it possible to use it as an empty/null value. See !210
+
+Version 1.181
+-------------
+* Added update contact with employer ID if relationship type is employee/employer in create/update relationship
+* Added nwe action Other: Generate Empty Values
+
+Version 1.180
 -------------
 * Added Case ID to the Relationship:End action (when end relationship is used as end role this prevents ending a role on the wrong case)
+* CiviCase: AddRole has to replace the old role (replacing means terminating it).
+* CiviCase: AddRole returns the relationship id(s) is of the created of found relationship(s).
+* Fixed issue with Sum up to 6 input fields.
 
 Version 1.179
 -------------
@@ -25,7 +54,7 @@ Version 1.177
 Version 1.176
 -------------
 
-* Updated send partcipant confirmation mail action.
+* Updated send participant confirmation mail action.
 
 Version 1.175
 -------------

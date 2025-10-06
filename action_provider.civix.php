@@ -24,7 +24,7 @@ class CRM_ActionProvider_ExtensionUtil {
    *   Translated text.
    * @see ts
    */
-  public static function ts($text, $params = []) {
+  public static function ts($text, $params = []): string {
     if (!array_key_exists('domain', $params)) {
       $params['domain'] = [self::LONG_NAME, NULL];
     }
@@ -41,7 +41,7 @@ class CRM_ActionProvider_ExtensionUtil {
    *   Ex: 'http://example.org/sites/default/ext/org.example.foo'.
    *   Ex: 'http://example.org/sites/default/ext/org.example.foo/css/foo.css'.
    */
-  public static function url($file = NULL) {
+  public static function url($file = NULL): string {
     if ($file === NULL) {
       return rtrim(CRM_Core_Resources::singleton()->getUrl(self::LONG_NAME), '/');
     }
@@ -75,14 +75,44 @@ class CRM_ActionProvider_ExtensionUtil {
     return self::CLASS_PREFIX . '_' . str_replace('\\', '_', $suffix);
   }
 
+  /**
+   * @return \CiviMix\Schema\SchemaHelperInterface
+   */
+  public static function schema() {
+    if (!isset($GLOBALS['CiviMixSchema'])) {
+      pathload()->loadPackage('civimix-schema@5', TRUE);
+    }
+    return $GLOBALS['CiviMixSchema']->getHelper(static::LONG_NAME);
+  }
+
 }
 
 use CRM_ActionProvider_ExtensionUtil as E;
 
-function _action_provider_civix_mixin_polyfill() {
-  if (!class_exists('CRM_Extension_MixInfo')) {
-    $polyfill = __DIR__ . '/mixin/polyfill.php';
-    (require $polyfill)(E::LONG_NAME, E::SHORT_NAME, E::path());
+($GLOBALS['_PathLoad'][0] ?? require __DIR__ . '/mixin/lib/pathload-0.php');
+pathload()->addSearchDir(__DIR__ . '/mixin/lib');
+spl_autoload_register('_action_provider_civix_class_loader', TRUE, TRUE);
+
+function _action_provider_civix_class_loader($class) {
+  if ($class === 'CRM_ActionProvider_DAO_Base') {
+    if (version_compare(CRM_Utils_System::version(), '5.74.beta', '>=')) {
+      class_alias('CRM_Core_DAO_Base', 'CRM_ActionProvider_DAO_Base');
+      // ^^ Materialize concrete names -- encourage IDE's to pick up on this association.
+    }
+    else {
+      $realClass = 'CiviMix\\Schema\\ActionProvider\\DAO';
+      class_alias($realClass, $class);
+      // ^^ Abstract names -- discourage IDE's from picking up on this association.
+    }
+    return;
+  }
+
+  // This allows us to tap-in to the installation process (without incurring real file-reads on typical requests).
+  if (strpos($class, 'CiviMix\\Schema\\ActionProvider\\') === 0) {
+    // civimix-schema@5 is designed for backported use in download/activation workflows,
+    // where new revisions may become dynamically available.
+    pathload()->loadPackage('civimix-schema@5', TRUE);
+    CiviMix\Schema\loadClass($class);
   }
 }
 
@@ -91,35 +121,17 @@ function _action_provider_civix_mixin_polyfill() {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_config
  */
-function _action_provider_civix_civicrm_config(&$config = NULL) {
+function _action_provider_civix_civicrm_config($config = NULL) {
   static $configured = FALSE;
   if ($configured) {
     return;
   }
   $configured = TRUE;
 
-  $template =& CRM_Core_Smarty::singleton();
-
-  $extRoot = dirname(__FILE__) . DIRECTORY_SEPARATOR;
-  $extDir = $extRoot . 'templates';
-  $template->addTemplateDir($extDir);
-
+  $extRoot = __DIR__ . DIRECTORY_SEPARATOR;
   $include_path = $extRoot . PATH_SEPARATOR . get_include_path();
   set_include_path($include_path);
-  _action_provider_civix_mixin_polyfill();
-}
-
-/**
- * (Delegated) Implements hook_civicrm_xmlMenu().
- *
- * @param $files array(string)
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_xmlMenu
- */
-function _action_provider_civix_civicrm_xmlMenu(&$files) {
-  foreach (_action_provider_civix_glob(__DIR__ . '/xml/Menu/*.xml') as $file) {
-    $files[] = $file;
-  }
+  // Based on <compatibility>, this does not currently require mixin/polyfill.php.
 }
 
 /**
@@ -129,36 +141,7 @@ function _action_provider_civix_civicrm_xmlMenu(&$files) {
  */
 function _action_provider_civix_civicrm_install() {
   _action_provider_civix_civicrm_config();
-  if ($upgrader = _action_provider_civix_upgrader()) {
-    $upgrader->onInstall();
-  }
-  _action_provider_civix_mixin_polyfill();
-}
-
-/**
- * Implements hook_civicrm_postInstall().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_postInstall
- */
-function _action_provider_civix_civicrm_postInstall() {
-  _action_provider_civix_civicrm_config();
-  if ($upgrader = _action_provider_civix_upgrader()) {
-    if (is_callable([$upgrader, 'onPostInstall'])) {
-      $upgrader->onPostInstall();
-    }
-  }
-}
-
-/**
- * Implements hook_civicrm_uninstall().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_uninstall
- */
-function _action_provider_civix_civicrm_uninstall() {
-  _action_provider_civix_civicrm_config();
-  if ($upgrader = _action_provider_civix_upgrader()) {
-    $upgrader->onUninstall();
-  }
+  // Based on <compatibility>, this does not currently require mixin/polyfill.php.
 }
 
 /**
@@ -166,189 +149,9 @@ function _action_provider_civix_civicrm_uninstall() {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_enable
  */
-function _action_provider_civix_civicrm_enable() {
+function _action_provider_civix_civicrm_enable(): void {
   _action_provider_civix_civicrm_config();
-  if ($upgrader = _action_provider_civix_upgrader()) {
-    if (is_callable([$upgrader, 'onEnable'])) {
-      $upgrader->onEnable();
-    }
-  }
-  _action_provider_civix_mixin_polyfill();
-}
-
-/**
- * (Delegated) Implements hook_civicrm_disable().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_disable
- * @return mixed
- */
-function _action_provider_civix_civicrm_disable() {
-  _action_provider_civix_civicrm_config();
-  if ($upgrader = _action_provider_civix_upgrader()) {
-    if (is_callable([$upgrader, 'onDisable'])) {
-      $upgrader->onDisable();
-    }
-  }
-}
-
-/**
- * (Delegated) Implements hook_civicrm_upgrade().
- *
- * @param $op string, the type of operation being performed; 'check' or 'enqueue'
- * @param $queue CRM_Queue_Queue, (for 'enqueue') the modifiable list of pending up upgrade tasks
- *
- * @return mixed
- *   based on op. for 'check', returns array(boolean) (TRUE if upgrades are pending)
- *   for 'enqueue', returns void
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_upgrade
- */
-function _action_provider_civix_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
-  if ($upgrader = _action_provider_civix_upgrader()) {
-    return $upgrader->onUpgrade($op, $queue);
-  }
-}
-
-/**
- * @return CRM_ActionProvider_Upgrader
- */
-function _action_provider_civix_upgrader() {
-  if (!file_exists(__DIR__ . '/CRM/ActionProvider/Upgrader.php')) {
-    return NULL;
-  }
-  else {
-    return CRM_ActionProvider_Upgrader_Base::instance();
-  }
-}
-
-/**
- * Search directory tree for files which match a glob pattern.
- *
- * Note: Dot-directories (like "..", ".git", or ".svn") will be ignored.
- * Note: Delegate to CRM_Utils_File::findFiles(), this function kept only
- * for backward compatibility of extension code that uses it.
- *
- * @param string $dir base dir
- * @param string $pattern , glob pattern, eg "*.txt"
- *
- * @return array
- */
-function _action_provider_civix_find_files($dir, $pattern) {
-  return CRM_Utils_File::findFiles($dir, $pattern);
-}
-
-/**
- * (Delegated) Implements hook_civicrm_managed().
- *
- * Find any *.mgd.php files, merge their content, and return.
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_managed
- */
-function _action_provider_civix_civicrm_managed(&$entities) {
-  $mgdFiles = _action_provider_civix_find_files(__DIR__, '*.mgd.php');
-  sort($mgdFiles);
-  foreach ($mgdFiles as $file) {
-    $es = include $file;
-    foreach ($es as $e) {
-      if (empty($e['module'])) {
-        $e['module'] = E::LONG_NAME;
-      }
-      if (empty($e['params']['version'])) {
-        $e['params']['version'] = '3';
-      }
-      $entities[] = $e;
-    }
-  }
-}
-
-/**
- * (Delegated) Implements hook_civicrm_caseTypes().
- *
- * Find any and return any files matching "xml/case/*.xml"
- *
- * Note: This hook only runs in CiviCRM 4.4+.
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_caseTypes
- */
-function _action_provider_civix_civicrm_caseTypes(&$caseTypes) {
-  if (!is_dir(__DIR__ . '/xml/case')) {
-    return;
-  }
-
-  foreach (_action_provider_civix_glob(__DIR__ . '/xml/case/*.xml') as $file) {
-    $name = preg_replace('/\.xml$/', '', basename($file));
-    if ($name != CRM_Case_XMLProcessor::mungeCaseType($name)) {
-      $errorMessage = sprintf("Case-type file name is malformed (%s vs %s)", $name, CRM_Case_XMLProcessor::mungeCaseType($name));
-      throw new CRM_Core_Exception($errorMessage);
-    }
-    $caseTypes[$name] = [
-      'module' => E::LONG_NAME,
-      'name' => $name,
-      'file' => $file,
-    ];
-  }
-}
-
-/**
- * (Delegated) Implements hook_civicrm_angularModules().
- *
- * Find any and return any files matching "ang/*.ang.php"
- *
- * Note: This hook only runs in CiviCRM 4.5+.
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_angularModules
- */
-function _action_provider_civix_civicrm_angularModules(&$angularModules) {
-  if (!is_dir(__DIR__ . '/ang')) {
-    return;
-  }
-
-  $files = _action_provider_civix_glob(__DIR__ . '/ang/*.ang.php');
-  foreach ($files as $file) {
-    $name = preg_replace(':\.ang\.php$:', '', basename($file));
-    $module = include $file;
-    if (empty($module['ext'])) {
-      $module['ext'] = E::LONG_NAME;
-    }
-    $angularModules[$name] = $module;
-  }
-}
-
-/**
- * (Delegated) Implements hook_civicrm_themes().
- *
- * Find any and return any files matching "*.theme.php"
- */
-function _action_provider_civix_civicrm_themes(&$themes) {
-  $files = _action_provider_civix_glob(__DIR__ . '/*.theme.php');
-  foreach ($files as $file) {
-    $themeMeta = include $file;
-    if (empty($themeMeta['name'])) {
-      $themeMeta['name'] = preg_replace(':\.theme\.php$:', '', basename($file));
-    }
-    if (empty($themeMeta['ext'])) {
-      $themeMeta['ext'] = E::LONG_NAME;
-    }
-    $themes[$themeMeta['name']] = $themeMeta;
-  }
-}
-
-/**
- * Glob wrapper which is guaranteed to return an array.
- *
- * The documentation for glob() says, "On some systems it is impossible to
- * distinguish between empty match and an error." Anecdotally, the return
- * result for an empty match is sometimes array() and sometimes FALSE.
- * This wrapper provides consistency.
- *
- * @link http://php.net/glob
- * @param string $pattern
- *
- * @return array
- */
-function _action_provider_civix_glob($pattern) {
-  $result = glob($pattern);
-  return is_array($result) ? $result : [];
+  // Based on <compatibility>, this does not currently require mixin/polyfill.php.
 }
 
 /**
@@ -367,8 +170,8 @@ function _action_provider_civix_insert_navigation_menu(&$menu, $path, $item) {
   if (empty($path)) {
     $menu[] = [
       'attributes' => array_merge([
-        'label'      => CRM_Utils_Array::value('name', $item),
-        'active'     => 1,
+        'label' => $item['name'] ?? NULL,
+        'active' => 1,
       ], $item),
     ];
     return TRUE;
@@ -431,27 +234,4 @@ function _action_provider_civix_fixNavigationMenuItems(&$nodes, &$maxNavID, $par
       _action_provider_civix_fixNavigationMenuItems($nodes[$origKey]['child'], $maxNavID, $nodes[$origKey]['attributes']['navID']);
     }
   }
-}
-
-/**
- * (Delegated) Implements hook_civicrm_alterSettingsFolders().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_alterSettingsFolders
- */
-function _action_provider_civix_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
-  $settingsDir = __DIR__ . DIRECTORY_SEPARATOR . 'settings';
-  if (!in_array($settingsDir, $metaDataFolders) && is_dir($settingsDir)) {
-    $metaDataFolders[] = $settingsDir;
-  }
-}
-
-/**
- * (Delegated) Implements hook_civicrm_entityTypes().
- *
- * Find any *.entityType.php files, merge their content, and return.
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_entityTypes
- */
-function _action_provider_civix_civicrm_entityTypes(&$entityTypes) {
-  $entityTypes = array_merge($entityTypes, []);
 }

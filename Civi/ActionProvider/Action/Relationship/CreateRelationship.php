@@ -6,14 +6,13 @@
 
 namespace Civi\ActionProvider\Action\Relationship;
 
-use \Civi\ActionProvider\Action\AbstractAction;
-use \Civi\ActionProvider\ConfigContainer;
-use \Civi\ActionProvider\Parameter\ParameterBagInterface;
-use \Civi\ActionProvider\Parameter\SpecificationBag;
-use \Civi\ActionProvider\Parameter\Specification;
-use \Civi\ActionProvider\Parameter\SpecificationGroup;
-use \Civi\ActionProvider\Utils\CustomField;
-
+use Civi\ActionProvider\Action\AbstractAction;
+use Civi\ActionProvider\ConfigContainer;
+use Civi\ActionProvider\Parameter\ParameterBagInterface;
+use Civi\ActionProvider\Parameter\Specification;
+use Civi\ActionProvider\Parameter\SpecificationBag;
+use Civi\ActionProvider\Parameter\SpecificationGroup;
+use Civi\ActionProvider\Utils\CustomField;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class CreateRelationship extends AbstractAction {
@@ -125,43 +124,42 @@ class CreateRelationship extends AbstractAction {
     $relationshipParams['contact_id_b'] = $parameters->getParameter('contact_id_b');
 
     // CreateRelationshipWithTypeParameter sets this configuration to optional, so this check is required
-    if ($this->configuration->doesParameterExists('relationship_type_id') && $this->configuration->getParameter('relationship_type_id')) {
+    if ($this->configuration->parameterExists('relationship_type_id') && $this->configuration->getParameter('relationship_type_id')) {
         $relationshipParams['relationship_type_id'] = $this->relationshipTypeIds[$this->configuration->getParameter('relationship_type_id')];
     }
 
-    if ($parameters->doesParameterExists('relationship_type_id') && $parameters->getParameter('relationship_type_id')) {
+    if ($parameters->parameterExists('relationship_type_id') && $parameters->getParameter('relationship_type_id')) {
         $relationshipParams['relationship_type_id'] = $parameters->getParameter('relationship_type_id');
     }
-
     $relationshipParams['is_active'] = '1';
     if ($this->configuration->getParameter('set_start_date')) {
       $today = new \DateTime();
       $relationshipParams['start_date'] = $today->format('Ymd');
     }
-    else if ($parameters->doesParameterExists('start_date')) {
+    else if ($parameters->parameterExists('start_date')) {
       $relationshipParams['start_date'] = $parameters->getParameter('start_date');
     }
-    if ($parameters->doesParameterExists('end_date')) {
+    if ($parameters->parameterExists('end_date')) {
       $relationshipParams['end_date'] = $parameters->getParameter('end_date');
     }
 
-    if ($this->configuration->doesParameterExists('is_permission_a_b') && $this->configuration->getParameter('is_permission_a_b')) {
+    if ($this->configuration->parameterExists('is_permission_a_b') && $this->configuration->getParameter('is_permission_a_b')) {
         $relationshipParams['is_permission_a_b'] = $this->configuration->getParameter('is_permission_a_b');
     }
-    if ($this->configuration->doesParameterExists('is_permission_b_a') && $this->configuration->getParameter('is_permission_b_a')) {
+    if ($this->configuration->parameterExists('is_permission_b_a') && $this->configuration->getParameter('is_permission_b_a')) {
         $relationshipParams['is_permission_b_a'] = $this->configuration->getParameter('is_permission_b_a');
     }
-    if ($parameters->doesParameterExists('is_permission_a_b') && $parameters->getParameter('is_permission_a_b')) {
+    if ($parameters->parameterExists('is_permission_a_b') && $parameters->getParameter('is_permission_a_b')) {
         $relationshipParams['is_permission_a_b'] = $parameters->getParameter('is_permission_a_b');
     }
-    if ($parameters->doesParameterExists('is_permission_b_a') && $parameters->getParameter('is_permission_b_a')) {
+    if ($parameters->parameterExists('is_permission_b_a') && $parameters->getParameter('is_permission_b_a')) {
         $relationshipParams['is_permission_b_a'] = $parameters->getParameter('is_permission_b_a');
     }
 
-    if ($parameters->doesParameterExists('description')) {
+    if ($parameters->parameterExists('description')) {
         $relationshipParams['description'] = $parameters->getParameter('description');
     }
-    if ($parameters->doesParameterExists('case_id')) {
+    if ($parameters->parameterExists('case_id')) {
         $relationshipParams['case_id'] = $parameters->getParameter('case_id');
     }
 
@@ -169,7 +167,7 @@ class CreateRelationship extends AbstractAction {
     foreach($this->getParameterSpecification() as $spec) {
       if ($spec instanceof SpecificationGroup) {
         foreach($spec->getSpecificationBag() as $subSpec) {
-          if (stripos($subSpec->getName(), 'custom_')===0 && $parameters->doesParameterExists($subSpec->getName())) {
+          if (stripos($subSpec->getName(), 'custom_')===0 && $parameters->parameterExists($subSpec->getName())) {
             list($customFieldID, $customValueID) = \CRM_Core_BAO_CustomField::getKeyID($subSpec->getApiFieldName(), TRUE);
             $value = $parameters->getParameter($subSpec->getName());
             if (is_array($value)) {
@@ -179,7 +177,7 @@ class CreateRelationship extends AbstractAction {
           }
         }
       } elseif (stripos($spec->getName(), 'custom_')===0) {
-        if ($parameters->doesParameterExists($spec->getName())) {
+        if ($parameters->parameterExists($spec->getName())) {
           list($customFieldID, $customValueID) = \CRM_Core_BAO_CustomField::getKeyID($spec->getApiFieldName(), TRUE);
           $value = $parameters->getParameter($spec->getName());
           if (is_array($value)) {
@@ -193,7 +191,8 @@ class CreateRelationship extends AbstractAction {
       // Do not use api as the api checks for an existing relationship.
       $relationship = \CRM_Contact_BAO_Relationship::add($relationshipParams);
       $relationship_id = $relationship->id;
-
+      // Update employee_id on contact if required
+      EmployerId::updateEmployerId($relationshipParams);
       // Update the related memberships
       $contact_ids = [
         'contactTarget' => $relationshipParams['contact_id_b'],

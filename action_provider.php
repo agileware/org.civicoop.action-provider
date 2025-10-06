@@ -33,17 +33,20 @@ function action_provider_civicrm_post($op, $objectName, $objectId, &$objectRef) 
 }
 
 /**
+ * Implements hook_civicrm_alterBundle().
+ */
+function action_provider_civicrm_alterBundle(CRM_Core_Resources_Bundle $bundle) {
+  if ($bundle->name !== 'coreResources') {
+    return;
+  }
+  $bundle->addScriptFile('action-provider', 'js/action-provider.js');
+}
+
+/**
  * Implements hook_civicrm_config().
  */
 function action_provider_civicrm_config(&$config) {
   _action_provider_civix_civicrm_config($config);
-}
-
-/**
- * Implements hook_civicrm_xmlMenu().
- */
-function action_provider_civicrm_xmlMenu(&$files) {
-  _action_provider_civix_civicrm_xmlMenu($files);
 }
 
 /**
@@ -54,71 +57,8 @@ function action_provider_civicrm_install() {
 }
 
 /**
- * Implements hook_civicrm_postInstall().
- */
-function action_provider_civicrm_postInstall() {
-  _action_provider_civix_civicrm_postInstall();
-}
-
-/**
- * Implements hook_civicrm_uninstall().
- */
-function action_provider_civicrm_uninstall() {
-  _action_provider_civix_civicrm_uninstall();
-}
-
-/**
  * Implements hook_civicrm_enable().
  */
 function action_provider_civicrm_enable() {
   _action_provider_civix_civicrm_enable();
-}
-
-/**
- * Implements hook_civicrm_disable().
- */
-function action_provider_civicrm_disable() {
-  _action_provider_civix_civicrm_disable();
-}
-
-/**
- * Implements hook_civicrm_upgrade().
- */
-function action_provider_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
-  return _action_provider_civix_civicrm_upgrade($op, $queue);
-}
-
-/**
- * Implements hook_civicrm_managed().
- *
- * Generate a list of entities to create/deactivate/delete when this module
- * is installed, disabled, uninstalled.
- */
-function action_provider_civicrm_managed(&$entities) {
-  _action_provider_civix_civicrm_managed($entities);
-}
-
-/**
- * Implements hook_civicrm_caseTypes().
- *
- * Generate a list of case-types.
- */
-function action_provider_civicrm_caseTypes(&$caseTypes) {
-  _action_provider_civix_civicrm_caseTypes($caseTypes);
-}
-
-/**
- * Implements hook_civicrm_angularModules().
- *
- * Generate a list of Angular modules.
- */
-function action_provider_civicrm_angularModules(&$angularModules) {
-  _action_provider_civix_civicrm_angularModules($angularModules);
-}
-
-/**
- * Implements hook_civicrm_alterSettingsFolders().
- */
-function action_provider_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
-  _action_provider_civix_civicrm_alterSettingsFolders($metaDataFolders);
 }

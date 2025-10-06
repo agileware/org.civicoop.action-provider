@@ -109,6 +109,9 @@ class Actions {
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG));
     $provider->addAction('FindDefaulLocationTypeId', '\Civi\ActionProvider\Action\Generic\FindDefaultLocationTypeId', E::ts('Other: Find Default Location Type ID'), array(
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG, AbstractAction::DATA_MANIPULATION_TAG));
+    $provider->addAction('GenerateEmptyValues', '\Civi\ActionProvider\Action\Generic\GenerateEmptyValues', E::ts('Other: Generate Empty Values'), [
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG
+    ]);
   }
 
 }

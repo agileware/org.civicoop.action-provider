@@ -115,6 +115,8 @@ class UpdateRelationshipById extends CreateRelationship {
       // Do not use api as the api checks for an existing relationship.
       $relationship = \CRM_Contact_BAO_Relationship::add($relationshipParams);
       $relationship_id = $relationship->id;
+      // Update employee_id on contact if required
+      EmployerId::updateEmployerId($relationshipParams);
 
       // Update the related memberships
       $contact_ids = [

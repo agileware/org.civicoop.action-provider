@@ -64,7 +64,7 @@ class Specification implements SpecificationInterface {
    * @param array $options
    * @param bool $multiple
    */
-  public function __construct($name, $dataType = 'String', $title='', $required = false, $defaultValue = null, $fkEntity = null, $options = null, $multiple = false) {
+  public function __construct($name, $dataType = 'String', $title='', $required = false, $defaultValue = null, $fkEntity = null, $options = null, $multiple = false, $description = null) {
     $this->setName($name);
     $this->setDataType($dataType);
 		$this->setTitle($title);
@@ -73,6 +73,7 @@ class Specification implements SpecificationInterface {
 		$this->setFkEntity($fkEntity);
 		$this->setOptions($options);
 		$this->setMultiple($multiple);
+		$this->setDescription($description);
 
     if ($this->dataType == 'Boolean') {
       $this->options = array(
