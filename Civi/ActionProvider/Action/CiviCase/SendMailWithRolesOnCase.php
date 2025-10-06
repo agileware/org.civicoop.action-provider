@@ -47,12 +47,7 @@ class SendMailWithRolesOnCase extends AbstractAction {
     $case_id = $parameters->getParameter('case_id');
     $relationship_main = (int) $parameters->getParameter('relationship_main');
 
-    \Civi::log()
-      ->debug('SendMailWithRolesOnCase: ' . $case_id . ' - ' . print_r($relationship_main, TRUE));
-
     $relationship_cc = $parameters->getParameter('relationship_cc');
-
-    \Civi::log()->debug('CC: ' . print_r($relationship_cc, TRUE));
 
     // formfieldlibrary returns coma-separated single value (in the first array element), so we have to convert it to an array
     if (!empty($relationship_cc) && !is_numeric($relationship_cc[0])) {
@@ -69,8 +64,6 @@ class SendMailWithRolesOnCase extends AbstractAction {
         ->execute()->first();
 
       if (!empty($relationship) && !empty($relationship['contact_id_b'])) {
-        \Civi::log()->debug('API Output:');
-        \Civi::log()->debug('contact: ' . print_r($relationship, TRUE));
         $contact_id = $relationship['contact_id_b'];
         $output->setParameter('contact_id', $contact_id);
       }
@@ -119,7 +112,6 @@ class SendMailWithRolesOnCase extends AbstractAction {
     if (!empty($contact_ids_cc)) {
       $cc_mails = [];
       foreach ($contact_ids_cc as $contact_id_cc => $value) {
-        \Civi::log()->debug('Reading cc contact: ' . $contact_id_cc);
         try {
           $contact = \Civi\Api4\Contact::get(FALSE)
             ->addSelect('email.email')
@@ -128,7 +120,6 @@ class SendMailWithRolesOnCase extends AbstractAction {
             ->addWhere('id', '=', $contact_id_cc)
             ->execute()->single();
 
-          \Civi::log()->debug('   ... got mail: ' . $contact['email.email']);
           $cc_mails[] = $contact['email.email'];
         }
         catch (\Exception $e) {
@@ -138,10 +129,9 @@ class SendMailWithRolesOnCase extends AbstractAction {
 
         $cc_contacts_output[] = $contact_id_cc;
       }
-      \Civi::log()->debug('CC Mails: ' . print_r($cc_mails, TRUE));
+
       if (!empty($cc_mails)) {
         $cc = implode(', ', $cc_mails);
-        \Civi::log()->info('to contact cc mails: ' . $cc);
       }
     }
 
@@ -178,7 +168,6 @@ class SendMailWithRolesOnCase extends AbstractAction {
     }
 
     if ($parameters->doesParameterExists('attachments') && !empty($parameters->getParameter('attachments')[0])) {
-      \Civi::log()->debug('$SendMailWithRolesOnCase - attachments: ' . print_r($parameters->getParameter('attachments'), TRUE));
 
       $config = \CRM_Core_Config::singleton();
       foreach ($parameters->getParameter('attachments') as $path) {
@@ -208,9 +197,6 @@ class SendMailWithRolesOnCase extends AbstractAction {
               $filename = basename($path);
               $filename = \CRM_Utils_File::cleanFileName($filename);
             }
-
-            \Civi::log()
-              ->info('$SendMailWithRolesOnCase - attachment: [' . $path . "] - mime_type: [$mime_type] - filename: [$filename]");
 
             $mailer->addAttachment($path, $filename, $mime_type);
           }
