@@ -1,4 +1,4 @@
-Version 1.187 (not yet released)
+Version 1.187
 -------------
 
 * Added new action CiviCase: Send E-Mail to contacts with roles on the case
