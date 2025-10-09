@@ -1,5 +1,7 @@
-Version 1.188 (not yet released)
+Version 1.188
 -------------
+
+* Fixed issue with creating event addresses.
 
 Version 1.187
 -------------

@@ -104,6 +104,13 @@ class ContactActionUtils {
       $addressParams['contact_id'] = $contact_id;
     } else {
       $addressParams['contact_id'] = 'null';
+      if (!$existingAddressId) {
+        // The address does not belang to a contact
+        // And we are going to create this new address.
+        // So we should default it to primary.
+        // This address probably belongs to an event.
+        $addressParams['is_primary'] = 1;
+      }
     }
 
     if ($existingAddressId) {
