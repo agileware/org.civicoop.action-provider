@@ -60,6 +60,7 @@ class CreateOrUpdateEvent extends AbstractAction {
       new Specification('is_public', 'Boolean', E::ts('Is public'), false, 0, null, null, FALSE),
       new Specification('max_participants', 'Integer', E::ts('Max. Participants'), false, null),
       new Specification('event_full_text', 'String', E::ts('Text when event is full'), false, null),
+      new Specification('has_waitlist', 'Boolean', E::ts('Has waitlist'), false, 0, null, null, FALSE),
       new Specification('waitlist_text', 'String', E::ts('Waitlist Text'), false, null),
     ));
 
@@ -154,6 +155,9 @@ class CreateOrUpdateEvent extends AbstractAction {
     }
     if ($parameters->doesParameterExists('event_full_text')) {
       $apiParams['event_full_text'] = $parameters->getParameter('event_full_text');
+    }
+    if ($parameters->doesParameterExists('has_waitlist')) {
+      $apiParams['has_waitlist'] = $parameters->getParameter('has_waitlist');
     }
     if ($parameters->doesParameterExists('waitlist_text')) {
       $apiParams['waitlist_text'] = $parameters->getParameter('waitlist_text');

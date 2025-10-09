@@ -2,6 +2,7 @@ Version 1.187 (not yet released)
 -------------
 
 * Added new action CiviCase: Send E-Mail to contacts with roles on the case
+* Add parameter Has Waitlist to the action Event: Create or Update
 
 Version 1.186
 -------------
