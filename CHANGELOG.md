@@ -1,5 +1,7 @@
-Version 1.189 (not yet released)
+Version 1.189
 -------------
+
+* Fixed issue with a required output field.
 
 Version 1.188
 -------------

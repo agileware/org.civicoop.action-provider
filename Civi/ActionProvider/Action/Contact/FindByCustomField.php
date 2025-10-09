@@ -100,7 +100,7 @@ class FindByCustomField extends AbstractAction {
 	 */
 	public function getOutputSpecification() {
 		return new SpecificationBag(array(
-			new Specification('contact_id', 'Integer', E::ts('Contact ID'), true)
+			new Specification('contact_id', 'Integer', E::ts('Contact ID'), false)
 		));
 	}
 
