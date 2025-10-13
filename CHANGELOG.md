@@ -1,5 +1,7 @@
-Version 1.190 (not yet released)
+Version 1.190
 -------------
+
+* Fixed issue with retrieving custom fields of type checkbox or multi select.
 
 Version 1.189
 -------------

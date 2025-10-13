@@ -6,6 +6,7 @@
 
 namespace Civi\ActionProvider\Action;
 
+use Civi\ActionProvider\Parameter\OptionGroupSpecification;
 use Civi\ActionProvider\Parameter\ParameterBagInterface;
 use Civi\ActionProvider\Parameter\SpecificationBag;
 use Civi\ActionProvider\Utils\CustomField;
@@ -97,6 +98,10 @@ abstract class AbstractGetSingleAction extends AbstractAction {
         $custom_id = substr($field, 7);
         if (is_numeric($custom_id)) {
           $fieldName = CustomField::getCustomFieldName($custom_id);
+          $spec = $this->getOutputSpecification()->getSpecificationByName($fieldName);
+          if ($spec instanceof OptionGroupSpecification && $spec->isMultiple()) {
+            $value = array_keys($value);
+          }
           $output->setParameter($fieldName, $value);
         }
       }
