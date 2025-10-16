@@ -179,15 +179,15 @@ abstract class AbstractAction implements \JsonSerializable {
         \Civi::dispatcher()->removeListener('civi.api.prepare', ['Civi\ActionProvider\APIWrapper', 'onApiPrepare']);
       }
     }
-		return $output;
-	}
+    return $output;
+   }
 
   /**
    * This function initialize a batch.
    *
    * @param $batchName
    */
-	public function initializeBatch($batchName) {
+  public function initializeBatch($batchName) {
     $this->currentBatch = $batchName;
   }
 
