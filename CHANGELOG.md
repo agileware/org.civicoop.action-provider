@@ -1,6 +1,8 @@
 Version 1.191 (not yet released)
 -------------
 
+* Prevents the creation of dangling transactions in a forms processor action.
+
 Version 1.190
 -------------
 
