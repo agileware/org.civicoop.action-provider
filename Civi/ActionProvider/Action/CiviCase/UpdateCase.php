@@ -127,7 +127,7 @@ class UpdateCase extends AbstractAction {
     } catch (Exception $e) {
       throw new \Civi\ActionProvider\Action\Exception\ExecutionException(E::ts('Could not create case'));
     }
-    $case_id = \CRM_Utils_Array::value('id', $result);
+    $case_id = $result['id'] ?? NULL;
     $output->setParameter('case_id', $case_id);
   }
 }
