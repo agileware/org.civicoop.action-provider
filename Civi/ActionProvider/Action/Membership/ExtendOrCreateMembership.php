@@ -131,7 +131,7 @@ class ExtendOrCreateMembership extends AbstractAction {
         unset($apiParams['num_terms']);
       }
       unset($apiParams['membership_type_id']);
-    } catch (\CiviCRM_API3_Exception $e) {
+    } catch (\CRM_Core_Exception $e) {
 
     }
 

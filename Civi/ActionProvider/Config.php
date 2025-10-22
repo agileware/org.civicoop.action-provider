@@ -103,7 +103,7 @@ class Config extends \Symfony\Component\DependencyInjection\Container {
    * Build the container with the custom field and custom groups.
    *
    * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
-   * @throws \CiviCRM_API3_Exception
+   * @throws \CRM_Core_Exception
    */
   public static function buildConfigContainer(ContainerBuilder $containerBuilder) {
     $customGroups = array();

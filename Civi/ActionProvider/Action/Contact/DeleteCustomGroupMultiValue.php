@@ -57,7 +57,7 @@ class DeleteCustomGroupMultiValue extends AbstractAction {
     try {
       $result = civicrm_api4($apiCustomGroupName, 'delete', $apiParams);
     }
-    catch (\CiviCRM_API3_Exception $ex) {
+    catch (\CRM_Core_Exception $ex) {
     }
   }
 

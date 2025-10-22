@@ -48,7 +48,7 @@ class SendParticipantRegistrationMail extends AbstractAction {
       try {
         $profile = civicrm_api3('UFGroup', 'getsingle', ['name' => $this->configuration->getParameter('profile')]);
         $custom_pre_id = $profile['id'];
-      } catch (\CiviCRM_API3_Exception $ex) {
+      } catch (\CRM_Core_Exception $ex) {
         // Do nothing.
       }
     }

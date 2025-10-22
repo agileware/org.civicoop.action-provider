@@ -6,7 +6,7 @@
 
 namespace Civi\ActionProvider\Action\CiviCase;
 
-use API_Exception;
+use CRM_Core_Exception;
 use Civi\ActionProvider\Action\AbstractAction;
 use Civi\ActionProvider\Parameter\OptionGroupByNameSpecification;
 use Civi\ActionProvider\Parameter\OptionGroupSpecification;
@@ -62,7 +62,7 @@ class DeleteCase extends AbstractAction {
    * @param ParameterBagInterface $output
    *   The parameters this action can send back
    * @return void
-   * @throws UnauthorizedException|API_Exception
+   * @throws UnauthorizedException|CRM_Core_Exception
    */
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     CiviCase::delete()

@@ -23,7 +23,7 @@ class ContactHasActivity extends AbstractCondition {
   public function isConditionValid(ParameterBagInterface $parameterBag) {
     try {
         $activity_count = civicrm_api3('Activity', 'getcount', array('activity_type_id' => $this->configuration->getParameter('activity_type_id'), 'contact_id' => $parameterBag->getParameter('contact_id')));
-    } catch (\CiviCRM_API3_Exception $ex) {
+    } catch (\CRM_Core_Exception $ex) {
       // Do nothing
     }
 

@@ -36,7 +36,7 @@ class ContactHasSubtype extends AbstractCondition {
     try {
       $contact = civicrm_api3('Contact', 'getsingle', $apiParams);
       return true;
-    } catch (\CiviCRM_API3_Exception $ex) {
+    } catch (\CRM_Core_Exception $ex) {
       // Do nothing
     }
     return false;

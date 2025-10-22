@@ -41,7 +41,7 @@ class FindByExternalId extends AbstractAction {
       $apiParams['options'] = ['limit' => 1];
       $contact_id = civicrm_api3('Contact', 'getvalue', $apiParams);
       $output->setParameter('contact_id', $contact_id);
-    } catch (\CiviCRM_API3_Exception $ex) {
+    } catch (\CRM_Core_Exception $ex) {
       // Do nothing
     }
 	}

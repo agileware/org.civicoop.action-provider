@@ -100,7 +100,7 @@ class UpdateCustomGroupMultiValue extends AbstractAction {
         }
       }
     }
-    catch (\CiviCRM_API3_Exception $ex) {
+    catch (\CRM_Core_Exception $ex) {
 
     }
   }

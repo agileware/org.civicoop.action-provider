@@ -96,7 +96,7 @@ class Create extends AbstractAction {
           'title' => $parameters->getParameter('title'),
           'options' => ['limit' => 1]
         ]);
-      } catch (\CiviCRM_API3_Exception $ex) {
+      } catch (\CRM_Core_Exception $ex) {
         // Do nothing
       }
     }

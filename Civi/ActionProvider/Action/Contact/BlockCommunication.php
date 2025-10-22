@@ -48,7 +48,7 @@ class BlockCommunication extends AbstractAction {
         'do_not_sms' => '1',
         'do_not_trade' => '1'
       ]);
-    } catch (\CiviCRM_API3_Exception $ex) {
+    } catch (\CRM_Core_Exception $ex) {
       // Do nothing.
     }
   }

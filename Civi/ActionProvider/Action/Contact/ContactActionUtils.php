@@ -67,7 +67,7 @@ class ContactActionUtils {
    * @param $addressId
    *
    * @return mixed
-   * @throws \CiviCRM_API3_Exception
+   * @throws \CRM_Core_Exception
    */
   public static function findMasterAddress($addressId) {
     try {
@@ -79,7 +79,7 @@ class ContactActionUtils {
       if ($master_id) {
         return self::findMasterAddress($master_id);
       }
-    } catch (\CiviCRM_API3_Exception $ex) {
+    } catch (\CRM_Core_Exception $ex) {
       // Do nothing
     }
     return $addressId;
@@ -93,7 +93,7 @@ class ContactActionUtils {
    * @param \Civi\ActionProvider\Parameter\ParameterBagInterface $configuration
    *
    * @return bool
-   * @throws \CiviCRM_API3_Exception
+   * @throws \CRM_Core_Exception
    */
   public static function createAddress($existingAddressId, $contact_id, ParameterBagInterface $parameters, ParameterBagInterface $configuration)  {
     // Create address
@@ -428,7 +428,7 @@ class ContactActionUtils {
   /**
    * @param $contactTypeId
    * @return array
-   * @throws \CiviCRM_API3_Exception
+   * @throws \CRM_Core_Exception
    */
   public static function getContactType($contactTypeId) {
     $contactType = civicrm_api3('ContactType', 'getsingle', ['id' => $contactTypeId]);
@@ -461,7 +461,7 @@ class ContactActionUtils {
           return TRUE;
         }
       }
-      catch (\CiviCRM_API3_Exception $ex) {
+      catch (\CRM_Core_Exception $ex) {
       }
     }
     return FALSE;

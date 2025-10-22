@@ -42,7 +42,7 @@ class GetGroupSubscriptions extends AbstractAction {
           foreach($subscribedGroups['values'] as $value) {
             $subscribedGroupIds[] = $value['group_id'];
           }
-        } catch (\CiviCRM_API3_Exception $ex) {
+        } catch (\CRM_Core_Exception $ex) {
           // Do nothing.
         }
       }
@@ -52,7 +52,7 @@ class GetGroupSubscriptions extends AbstractAction {
         foreach($subscribedGroups['values'] as $value) {
           $subscribedGroupIds[] = $value['group_id'];
         }
-      } catch (\CiviCRM_API3_Exception $ex) {
+      } catch (\CRM_Core_Exception $ex) {
         // Do nothing.
       }
     }

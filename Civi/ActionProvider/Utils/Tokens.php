@@ -243,7 +243,7 @@ class Tokens {
    * @param false $escapeSmarty
    *
    * @return array|mixed|string|string[]|null
-   * @throws \CiviCRM_API3_Exception
+   * @throws \CRM_Core_Exception
    */
   public static function replaceEntityTokens($entity, $entityArray, $str, $knownTokens = [], $escapeSmarty = FALSE) {
     if (!$knownTokens || empty($knownTokens[$entity])) {
@@ -270,7 +270,7 @@ class Tokens {
    * @param string $token
    * @param array $entityArray
    * @return string
-   * @throws \CiviCRM_API3_Exception
+   * @throws \CRM_Core_Exception
    */
   public static function getApiTokenReplacement($entity, $token, $entityArray) {
     if (!isset($entityArray[$token])) {
@@ -278,7 +278,7 @@ class Tokens {
     }
     $fields = civicrm_api3($entity, 'getfields', ['api_action' => 'get', 'name' => $token, 'get_options' => 'get']);
     if(!key_exists($token,$fields['values'])){
-      throw new \CiviCRM_API3_Exception ("The field '{$token}' doesn't exist.");
+      throw new \CRM_Core_Exception ("The field '{$token}' doesn't exist.");
     }
     $field = $fields['values'][$token];
     $fieldType = $field['type'] ?? NULL;
