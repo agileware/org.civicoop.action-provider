@@ -155,25 +155,14 @@ abstract class AbstractAction implements \JsonSerializable {
             'onApiPrepare'
           ], Events::W_EARLY +1);
       }
-      // Wrap action in a transatcion.
-      $transaction = new \CRM_Core_Transaction();
       try {
         $this->doAction($parameters, $output);
       } catch(BreakException $e) {
         // Break exception should never roll back.
         throw $e;
       } catch (Throwable $e) {
-        $rollback = true;
-        if (method_exists($e, 'rollbackDBTransaction')) {
-          $rollback = $e->rollbackDBTransaction();
-        }
-        if ($rollback) {
-          $transaction->rollback();
-        }
         throw new ExecutionException($e->getMessage() . '(in ' . $e->getFile() . ':' . $e->getLine() . ')' , $e->getCode(), $e, $rollback);
-      } finally {
-          $transaction->commit();
-      }
+      } 
     } finally {
       // Uninstall API wrapper, even if there was an exception
       if (-- self::$wrapperLevel == 0) {

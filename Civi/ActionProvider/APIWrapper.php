@@ -26,13 +26,6 @@ class APIWrapper {
         // Only interested in APIv3 requests
         $event->wrapAPI([self::class, 'wrapV3calls']);
       }
-      if ($action == 'create' || $action == 'delete' || $action == 'submit') {
-        // Make sure that the Transaction is nested.
-        // So that an api failure will not cause the transaction not being
-        // committed.
-        $api_request['params']['is_transactional'] = 'nest';
-        $event->setApiRequest($api_request);
-      }
     }
   }
 
