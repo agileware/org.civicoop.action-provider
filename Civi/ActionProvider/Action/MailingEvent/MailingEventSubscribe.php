@@ -112,7 +112,7 @@ class MailingEventSubscribe extends AbstractAction {
       $output->setParameter('id', $result['id']);
     } catch (\Exception $e) {
       \Civi::log()->error('ActionProvider MailingEventSubscribe Error: ' . $e->getMessage() . '; using API parameters: ' . json_encode($subscribe_params));
-      throw new \Civi\ActionProvider\Exception\ExecutionException(E::ts('Could not subscribe to Mailing List. Error: ' . $e->getMessage()));
+      throw new \Civi\ActionProvider\Exception\ExecutionException(E::ts('Could not subscribe to Mailing List. Error: %1', [1 => $e->getMessage()]));
     }
   }
 }

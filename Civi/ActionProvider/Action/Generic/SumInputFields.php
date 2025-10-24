@@ -40,7 +40,7 @@ class SumInputFields extends AbstractAction {
   public function getParameterSpecification() {
     $specs = new SpecificationBag();
     for ($id = 1; $id < 7; $id++) {
-      $specs->addSpecification(new Specification("input_{$id}", 'Float', E::ts("{$id}. input")));
+      $specs->addSpecification(new Specification("input_{$id}", 'Float', E::ts("%1. input", [1 => $id])));
     }
     return $specs;
   }
