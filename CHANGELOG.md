@@ -2,6 +2,7 @@ Version 1.192-dev (not yet released)
 -------------
 
 * Removed the nested transaction.
+* Added action for adding values to a multi value custom field.
 
 
 Version 1.191

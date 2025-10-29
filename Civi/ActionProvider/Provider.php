@@ -71,6 +71,7 @@ class Provider {
 
 	public function __construct() {
     Action\Contact\Actions::loadActions($this);
+    Action\CustomField\Actions::loadActions($this);
     Action\Group\Actions::loadActions($this);
     Action\Relationship\Actions::loadActions($this);
     Action\Activity\Actions::loadActions($this);
