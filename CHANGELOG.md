@@ -1,4 +1,4 @@
-Version 1.192-dev (not yet released)
+Version 1.192
 -------------
 
 * Removed the nested transaction.
