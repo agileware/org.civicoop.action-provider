@@ -161,7 +161,7 @@ abstract class AbstractAction implements \JsonSerializable {
         // Break exception should never roll back.
         throw $e;
       } catch (Throwable $e) {
-        throw new ExecutionException($e->getMessage() . '(in ' . $e->getFile() . ':' . $e->getLine() . ')' , $e->getCode(), $e, $rollback);
+        throw new ExecutionException($e->getMessage() . '(in ' . $e->getFile() . ':' . $e->getLine() . ')' , $e->getCode(), $e, true);
       } 
     } finally {
       // Uninstall API wrapper, even if there was an exception
