@@ -1,5 +1,7 @@
-Version 1.193 (not yet released)
+Version 1.193
 -------------
+
+* Fixed bug introduced by the removal of the nested transactions.
 
 Version 1.192
 -------------
