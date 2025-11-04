@@ -40,17 +40,17 @@ class UpdateContribution extends AbstractAction {
 
     if ($parameters->doesParameterExists('financial_type_id')) {
       $contribution_params['financial_type_id'] = $parameters->getParameter('financial_type_id');
-    } elseif ($this->configuration->doesParameterExists('financial_type_id')) {
+    } elseif ($this->configuration->getParameter('financial_type_id')) {
       $contribution_params['financial_type_id'] = $this->configuration->getParameter('financial_type_id');
     }
     if ($parameters->doesParameterExists('contribution_status')) {
       $contribution_params['contribution_status_id'] = $parameters->getParameter('contribution_status');
-    } elseif ($this->configuration->doesParameterExists('contribution_status')) {
+    } elseif ($this->configuration->getParameter('contribution_status')) {
       $contribution_params['contribution_status_id'] = $this->configuration->getParameter('contribution_status');
     }
     if ($parameters->doesParameterExists('payment_instrument')) {
       $contribution_params['payment_instrument_id'] = $parameters->getParameter('payment_instrument');
-    } elseif ($this->configuration->doesParameterExists('payment_instrument')) {
+    } elseif ($this->configuration->getParameter('payment_instrument')) {
       $contribution_params['payment_instrument_id'] = $this->configuration->getParameter('payment_instrument');
     }
     if ($parameters->doesParameterExists('contact_id')) {
