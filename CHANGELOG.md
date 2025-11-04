@@ -1,3 +1,7 @@
+Version 1.194 (not yet released)
+-------------
+
+* Make update contribution config truly optional. See !219
 Version 1.193
 -------------
 
