@@ -3,6 +3,12 @@ use CRM_ActionProvider_ExtensionUtil as E;
 
 class CRM_ActionProvider_Page_DownloadFile extends CRM_Core_Page {
 
+  // 4 MB
+  public const CHUNK_SIZE_BYTES = 8 * (1024 * 1024);
+
+  // 1 hour
+  public const TIMEOUT_SECONDS = 3600;
+
   public function run() {
     $fileName = CRM_Utils_Request::retrieve('filename', 'String', $this, FALSE);
     $downloadName = CRM_Utils_Request::retrieve('downloadname', 'String', $this, FALSE);
@@ -44,7 +50,29 @@ class CRM_ActionProvider_Page_DownloadFile extends CRM_Core_Page {
       CRM_Utils_System::setHttpHeader('Pragma', 'no-cache');
     }
 
-    print readfile($path);
+    $fileSize = (int) sprintf("%u", filesize($path));
+    CRM_Utils_System::setHttpHeader('Content-Length', $fileSize);
+    CRM_Utils_System::setHttpHeader('Content-Type', 'application/octet-stream');
+    CRM_Utils_System::setHttpHeader('Content-Transfer-Encoding', 'binary');
+
+    // prevent timeouts
+    set_time_limit(self::TIMEOUT_SECONDS);
+
+    if ($fileSize > self::CHUNK_SIZE_BYTES) {
+      // use chunks...
+      $fileHandle = fopen($path, 'rb');
+      while (!feof($fileHandle)) {
+        print(@fread($fileHandle, self::CHUNK_SIZE_BYTES));
+        ob_flush();
+        flush();
+      }
+      fclose($fileHandle);
+    }
+    else {
+      // output in one run
+      readfile($path);
+    }
+
     CRM_Utils_System::civiExit();
   }
 
