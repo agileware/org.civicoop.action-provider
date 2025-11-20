@@ -3,6 +3,7 @@ Version 1.194 (not yet released)
 
 * Make update contribution config truly optional. See !219
 * Enable huge file downloads by chunking. See !221
+* New action: Event: Update by ID
 
 Version 1.193
 -------------
