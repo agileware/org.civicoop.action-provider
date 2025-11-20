@@ -120,6 +120,10 @@ class Actions {
     $provider->addAction('GetParticipantPayment', '\Civi\ActionProvider\Action\Event\GetParticipantPayment', E::ts('ParticipantPayment: get by Participant Id or Contribution ID') , array(
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $provider->addAction('UpdateEventById', '\Civi\ActionProvider\Action\Event\UpdateEventById',E::ts('Event: Update by ID') , array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
   }
 
   /**
