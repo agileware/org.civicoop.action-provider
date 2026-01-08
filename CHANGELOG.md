@@ -1,10 +1,15 @@
-Version 1.194 (not yet released)
+Version 1.195 (not yet released)
+-------------
+
+Version 1.194
 -------------
 
 * Make update contribution config truly optional. See !219
 * Enable huge file downloads by chunking. See !221
 * Action CiviCase: Get by Id make title and name available as outputs. See !223
 * New action: Event: Update by ID
+* New action: Contact: delete phone number (issue #69)
+* Fixed error with htmlattribute -> quotes do not match
 
 Version 1.193
 -------------

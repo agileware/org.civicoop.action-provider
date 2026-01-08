@@ -190,6 +190,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('DeletePhone', '\Civi\ActionProvider\Action\Phone\DeletePhone', E::ts('Contact: delete phone number'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $provider->addAction('GetPhone', '\Civi\ActionProvider\Action\Phone\GetPhone', E::ts('Contact: Get phone number'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
