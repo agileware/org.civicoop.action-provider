@@ -1,6 +1,8 @@
 Version 1.195 (not yet released)
 -------------
 
+* Fixed bug in the GetCaseById that caused the removal of the first value in a multi value customfield.
+
 Version 1.194
 -------------
 
