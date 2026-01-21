@@ -1,7 +1,9 @@
-Version 1.195 (not yet released)
--------------
+Version 1.196 (not released yet)
 
+Version 1.195
+-------------
 * Fixed bug in the GetCaseById that caused the removal of the first value in a multi value customfield.
+* Fixed bug in AbstractGetSingleAction when value is not an array (funded by AIVL)
 
 Version 1.194
 -------------

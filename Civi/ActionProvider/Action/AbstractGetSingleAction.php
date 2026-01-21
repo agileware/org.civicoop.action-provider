@@ -99,7 +99,7 @@ abstract class AbstractGetSingleAction extends AbstractAction {
         if (is_numeric($custom_id)) {
           $fieldName = CustomField::getCustomFieldName($custom_id);
           $spec = $this->getOutputSpecification()->getSpecificationByName($fieldName);
-          if ($spec instanceof OptionGroupSpecification && $spec->isMultiple()) {
+          if ($spec instanceof OptionGroupSpecification && $spec->isMultiple() && is_array($value)) {
             $value = array_keys($value);
           }
           $output->setParameter($fieldName, $value);
