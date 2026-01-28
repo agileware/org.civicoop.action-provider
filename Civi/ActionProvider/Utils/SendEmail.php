@@ -325,7 +325,7 @@ class SendEmail {
             'options' => array('move-file' => $tmpPath),
           ));
           $this->attachments[$index] = reset($result['values']);
-        } catch (\CiviCRM_API3_Exception $ex) {
+        } catch (\CRM_Core_Exception $ex) {
           // Do nothing
         }
         unlink($tmpPath);
@@ -343,7 +343,7 @@ class SendEmail {
           'contact_id' => $contactId,
           'options' => ['limit' => 1]
         ]);
-      } catch (\CiviCRM_API3_Exception $e) {
+      } catch (\CRM_Core_Exception $e) {
         // Do nothing
       }
     }

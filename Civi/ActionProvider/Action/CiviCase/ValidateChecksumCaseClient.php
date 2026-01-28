@@ -69,7 +69,7 @@ class ValidateChecksumCaseClient extends AbstractAction {
 		    if (!$valid) {
 		throw new InvalidParameterException(E::ts('Invalid checksum, can not access contact data.'));
 	      }
-	    } catch (\CiviCRM_API3_Exception $ex) {
+	    } catch (\CRM_Core_Exception $ex) {
 	      throw new InvalidParameterException(E::ts('Invalid checksum, can not access contact data.'));
 	    }
 	    return TRUE;

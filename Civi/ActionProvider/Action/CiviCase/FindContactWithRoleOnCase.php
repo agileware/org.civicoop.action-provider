@@ -52,7 +52,7 @@ class FindContactWithRoleOnCase extends AbstractAction {
       $relationshipFindParams['options']['limit'] = 1;
       $relationship = civicrm_api3('Relationship', 'getsingle', $relationshipFindParams);
       $output->setParameter('contact_id', $relationship['contact_id_b']);
-    } catch (\CiviCRM_API3_Exception $ex) {
+    } catch (\CRM_Core_Exception $ex) {
       // Do nothing.
     }
   }

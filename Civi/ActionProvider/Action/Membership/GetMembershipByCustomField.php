@@ -30,7 +30,7 @@ class GetMembershipByCustomField extends AbstractAction {
    *
    * @return void
    * @throws \Civi\ActionProvider\Exception\ExecutionException
-   * @throws \CiviCRM_API3_Exception
+   * @throws \CRM_Core_Exception
    * @throws \Civi\ActionProvider\Exception\InvalidParameterException
    */
 	protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
@@ -81,7 +81,7 @@ class GetMembershipByCustomField extends AbstractAction {
         $output->setParameter('membership_id', $membership_id);
       }
 
-    } catch (\CiviCRM_API3_Exception $ex) {
+    } catch (\CRM_Core_Exception $ex) {
       if ($fail) {
         throw new ExecutionException('Could not find membership');
       }

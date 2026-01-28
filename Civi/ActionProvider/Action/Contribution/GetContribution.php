@@ -64,7 +64,7 @@ class GetContribution extends AbstractGetSingleAction {
     try {
       $participantId = civicrm_api3('ParticipantPayment', 'getvalue', ['contribution_id' => $entity['id'], 'return' => 'participant_id','options' => ['limit' => 1]]);
       $output->setParameter('participant_id', $participantId);
-    } catch (\CiviCRM_API3_Exception $ex) {
+    } catch (\CRM_Core_Exception $ex) {
       // Do nothing.
     }
   }

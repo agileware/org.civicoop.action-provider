@@ -134,7 +134,7 @@ class CreatePdf extends AbstractAction {
 
   /**
    * @return array
-   * @throws \CiviCRM_API3_Exception
+   * @throws \CRM_Core_Exception
    */
   protected function getPdfLetterActivityTypeId() {
     if (!$this->pdfLetterActivityType) {

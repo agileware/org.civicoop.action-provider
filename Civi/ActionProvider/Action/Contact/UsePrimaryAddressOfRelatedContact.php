@@ -74,7 +74,7 @@ class UsePrimaryAddressOfRelatedContact extends AbstractAction {
         $relationshipParams['options'] = [ 'limit' => 1];
         $master_contact_id = civicrm_api3('Relationship', 'getvalue', $relationshipParams);
         break;
-      } catch (\CiviCRM_API3_Exception $ex) {
+      } catch (\CRM_Core_Exception $ex) {
         // Do nothing
       }
     }

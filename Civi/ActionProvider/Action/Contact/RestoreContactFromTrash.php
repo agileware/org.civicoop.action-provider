@@ -43,7 +43,7 @@ class RestoreContactFromTrash extends AbstractAction {
         'id' => $cid,
         'is_deleted' => '0',
       ]);
-    } catch (\CiviCRM_API3_Exception $ex) {
+    } catch (\CRM_Core_Exception $ex) {
       // Do nothing.
     }
   }
