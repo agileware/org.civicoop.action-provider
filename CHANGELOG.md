@@ -1,4 +1,7 @@
 Version 1.196 (not released yet)
+-------------
+
+* Fixed issue with Create / Update participant action. See !229. 
 
 Version 1.195
 -------------
