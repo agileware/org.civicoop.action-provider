@@ -89,16 +89,25 @@ class SendEmail {
    */
   public function setSenderContactId($senderContactId, $useAsReplyTo=true, $useAsFrom=false) {
     try {
-      $senderContact = civicrm_api3('Contact', 'getsingle', ['id' => $senderContactId]);
+      $senderContact = civicrm_api4('Contact', 'get', [
+        'checkPermissions' => FALSE,
+        'select' => [
+          'display_name',
+          'email_primary.email',
+        ],
+        'where' => [
+          ['id', '=', $senderContactId],
+        ],
+      ])->single();
       $this->sender_contact_id = $senderContactId;
-      if ($senderContact['email']) {
+      if ($senderContact['email_primary.email']) {
         if ($useAsReplyTo) {
-          $this->reply_to_email = $senderContact['email'];
+          $this->reply_to_email = $senderContact['email_primary.email'];
           $this->from_name = $senderContact['display_name'];
         }
         if ($useAsFrom) {
-          $this->from_email = $senderContact['email'];
-          if ($senderContact['display_name'] != $senderContact['email']) {
+          $this->from_email = $senderContact['email_primary.email'];
+          if ($senderContact['display_name'] != $senderContact['email_primary.email']) {
             $this->from_name = $senderContact['display_name'];
           }
         }
@@ -337,12 +346,13 @@ class SendEmail {
     $email = $fallbackEmail;
     if ($this->location_type_id) {
       try {
-        $email = civicrm_api3('Email', 'getvalue', [
-          'return' => 'email',
-          'location_type_id' => $this->location_type_id,
-          'contact_id' => $contactId,
-          'options' => ['limit' => 1]
-        ]);
+        $email = civicrm_api4('Email', 'get', [
+          'checkPermissions' => FALSE,
+          'where' => [
+            ['location_type_id', '=', $this->location_type_id],
+            ['contact_id', '=', $contactId],
+          ],
+        ], ['email'])->first() ?: $fallbackEmail;
       } catch (\CRM_Core_Exception $e) {
         // Do nothing
       }
