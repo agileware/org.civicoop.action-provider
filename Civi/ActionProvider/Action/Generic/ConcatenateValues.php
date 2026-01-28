@@ -22,7 +22,7 @@ class ConcatenateValues extends AbstractAction {
       $specifications[$k] = new Specification(
         'text'.$k,
         'String',
-        E::ts('Text'.$k)
+        E::ts('Text%1', [1 => $k])
       );
     }
     $specifications['seperator'] = new Specification(
