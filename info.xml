@@ -17,7 +17,7 @@
   <version>1.195</version>
   <develStage>stable</develStage>
   <compatibility>
-    <ver>5.45</ver>
+    <ver>5.70</ver>
   </compatibility>
   <comments>Funded by CiviCooP, Roparun, Velt, Bosplus, Barnekreftforeningen, Civiservice.de GmbH, Bundesverband Soziokultur e.V., Amnesty International Vlaanderen</comments>
   <classloader>
