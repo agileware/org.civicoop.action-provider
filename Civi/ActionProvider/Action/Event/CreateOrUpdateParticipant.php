@@ -145,6 +145,7 @@ class CreateOrUpdateParticipant extends AbstractParticipantAction {
       }
       if (count($updateParticipantParams)) {
         $updateParticipantParams['id'] = $result['id'];
+        $updateParticipantParams['event_id'] = $event_id;
         civicrm_api3('Participant', 'create', $updateParticipantParams);
       }
 
