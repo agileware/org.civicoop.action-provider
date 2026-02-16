@@ -36,6 +36,14 @@ class CreatePdf extends AbstractAction {
     $message = $parameters->getParameter('message');
     $contactId = $parameters->getParameter('contact_id');
     $filename = $this->configuration->getParameter('filename');
+    if ($parameters->parameterExists('replacement')) {
+      $replacement = $parameters->getParameter('replacement');
+      if (isset($replacement)) {
+        $filename = str_replace('%1', $replacement, $filename);
+        $this->configuration->setParameter('filename', $filename);
+      }
+    }
+
     $contact = [];
     if ($participantId) {
       $contact['extra_data']['participant']['id'] = $participantId;
@@ -61,8 +69,12 @@ class CreatePdf extends AbstractAction {
     }
 
     $fileNameWithoutPattern = $filename . '.pdf';
-    if($this->configuration->doesParameterExists('filename_pattern')) {
-      $filenamePattern = $filename . $this->configuration->getParameter('filename_pattern') . '.pdf';
+    if ($this->configuration->parameterExists('filename_pattern')) {
+      $pattern = $this->configuration->getParameter('filename_pattern');
+      if (isset($replacement)) {
+        $pattern = str_replace('%1', $replacement, $pattern);
+      }
+      $filenamePattern = $filename . $pattern . '.pdf';
       $filenameWithPattern = Tokens::replaceTokens($contactId, $filenamePattern,  $contact, 'text/html');
     }
     $processedMessage = Tokens::replaceTokens($contactId, $message, $contact, 'text/html');
@@ -183,7 +195,7 @@ class CreatePdf extends AbstractAction {
         $this->zip->close();
         if ($isLastBatch) {
           $subdir = Files::createRestrictedDirectory('createpdf');
-          $downloadName = $this->configuration->getParameter('filename') . '.zip';
+          $downloadName = $this->getDownloadName('zip');
           $this->createDownloadStatusMessage(E::ts('Created zip file with the PDF'), $batchName . '.zip', $subdir, $downloadName);
         }
       } else {
@@ -194,7 +206,7 @@ class CreatePdf extends AbstractAction {
         $this->zip->close();
         copy("zip://".$zipFileName."#".$pdfFile, $basePath . DIRECTORY_SEPARATOR .$batchName.'.pdf');
         unlink($zipFileName);
-        $downloadName = $this->configuration->getParameter('filename').'.pdf';
+        $downloadName = $this->getDownloadName();
         $this->createDownloadStatusMessage(E::ts('Created PDF'), $batchName.'.pdf', $subdir, $downloadName);
       }
     } else {
@@ -215,10 +227,14 @@ class CreatePdf extends AbstractAction {
         }
         $pdfFile = $basePath .'/'.$batchName.'.pdf';
         $this->convertHtmlToPdf($htmlFile, $pdfFile);
-        $downloadName = $this->configuration->getParameter('filename').'.pdf';
+        $downloadName = $this->getDownloadName();
         $this->createDownloadStatusMessage(E::ts('Created PDF'), $batchName.'.pdf', $subdir, $downloadName);
       }
     }
+  }
+
+  private function getDownloadName(string $ext = 'pdf'): string {
+    return $this->configuration->getParameter('filename') . '.' . $ext;
   }
 
   /**
@@ -227,6 +243,8 @@ class CreatePdf extends AbstractAction {
    * @return SpecificationBag
    */
   public function getParameterSpecification() {
+    $replacement = new Specification('replacement', 'String', E::ts('Replacement'), false);
+    $replacement->setDescription(E::ts('Replace %1 in Filename and/or batch name pattern from the configuration with mapped content (leave empty if not needed).'));
     return new SpecificationBag(array(
       new Specification('contact_id', 'Integer', E::ts('Contact ID'), true),
       new Specification('message', 'String', E::ts('Message'), true),
@@ -238,6 +256,7 @@ class CreatePdf extends AbstractAction {
       new Specification('membership_id', 'Integer', E::ts('Membership ID'), false),
       new Specification('subject', 'String', E::ts('Subject (for the activity)'), false),
       new Specification('page_format_id', 'Integer', E::ts('Print Page (PDF) Format'), false),
+      $replacement,
     ));
   }
 
