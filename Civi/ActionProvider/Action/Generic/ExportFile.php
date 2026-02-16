@@ -108,7 +108,7 @@ class ExportFile extends AbstractAction {
   public function initializeBatch($batchName) {
     $this->subDir = Files::createRestrictedDirectory('exportfile');
     $this->fileName = $batchName . '.zip';
-    $outputName = CRM_Core_Config::singleton()->customFileUploadDir . $this->subDir . DIRECTORY_SEPARATOR . $this->fileName;
+    $outputName = CRM_Core_Config::singleton()->templateCompileDir . $this->subDir . DIRECTORY_SEPARATOR . $this->fileName;
     $this->zip = new ZipArchive();
     if ($this->zip->open($outputName, ZipArchive::CREATE) !== TRUE) {
       $this->zip = NULL;
