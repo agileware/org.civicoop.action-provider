@@ -2,6 +2,7 @@ Version 1.196 (not released yet)
 -------------
 
 * Fixed issue with Create / Update participant action. See !229. 
+* Export file Action: Use templateCompileDir instead of customFileUploadDir see !231
 
 Version 1.195
 -------------
