@@ -243,8 +243,8 @@ class CreatePdf extends AbstractAction {
    * @return SpecificationBag
    */
   public function getParameterSpecification() {
-    $replacement = new Specification('replacement', 'String', E::ts('Replacement'), false);
-    $replacement->setDescription(E::ts('Replace %1 in Filename and/or batch name pattern from the configuration with mapped content (leave empty if not needed).'));
+    $replacement = new Specification('replacement', 'String', E::ts('File Name Replacement Source'), false);
+    $replacement->setDescription(E::ts('Replace %1 in Filename from the configuration with mapped content (leave empty if not needed). With other actions such as “Other: Replace Tokens in HTML”, tokens can also be used flexibly here. May at the same time be used instead of Name pattern in batch mode, e.g. if the replacement for the file name already contains a suitable ID.'));
     return new SpecificationBag(array(
       new Specification('contact_id', 'Integer', E::ts('Contact ID'), true),
       new Specification('message', 'String', E::ts('Message'), true),
@@ -268,7 +268,7 @@ class CreatePdf extends AbstractAction {
         'pdf' => E::ts('Merge all files into one PDF'),
       ));
     $batch_output_mode->setDescription(E::ts('When this action is executed in batch mode, meaning that it generates more than one pdf, in which way do you want to retrieve the generated PDFs'));
-    $filename_pattern = new Specification('filename_pattern', 'String', E::ts('Name pattern in batch mode'), true, '_{contact.contact_id}', null, array(
+    $filename_pattern = new Specification('filename_pattern', 'String', E::ts('Name pattern in batch mode'), false, '_{contact.contact_id}', null, array(
     ));
     $filename_pattern->setDescription(E::ts('Defines the way individual PDFs-files are named, if several files are created in a zip. The pattern is appended to the filename. You can use tokens in this context.'));
     $attach_to_case = new Specification('attach_to_case', 'Boolean', E::ts('Store activity on case'), true, FALSE, null, array());
