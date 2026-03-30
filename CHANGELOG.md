@@ -1,6 +1,8 @@
 Version 1.196 (not released yet)
 -------------
 
+* Added action: update address by ID
+* Added action: Address: Unlink Shared Address
 * Added action Household: find by its member contact id
 * Fixed issue with Create / Update participant action. See !229. 
 * Export file Action: Use templateCompileDir instead of customFileUploadDir see !231

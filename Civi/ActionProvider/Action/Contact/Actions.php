@@ -58,6 +58,14 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $provider->addAction('UnlinkAddressFromMaster', '\Civi\ActionProvider\Action\Contact\UnlinkAddressFromMaster', E::ts('Address: Unlink shared address'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
+    $provider->addAction('UpdateAddressById', '\Civi\ActionProvider\Action\Contact\UpdateAddressById', E::ts('Address: Update By ID'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
     $provider->addAction('GetContactIdFromMasterAddress', '\Civi\ActionProvider\Action\Contact\GetContactIdFromMasterAddress', E::ts('Contact: Get contact ID of a master address'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
