@@ -82,6 +82,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $provider->addAction('FindHouseholdByIndividualId', '\Civi\ActionProvider\Action\Contact\FindHouseholdByIndividualId', E::ts('Household: find by its member contact id'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $provider->addAction('FindOrCreateOrganizationByName', '\Civi\ActionProvider\Action\Contact\FindOrCreateOrganizationByName', E::ts('Contact: Get or create organization by name'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
