@@ -96,7 +96,7 @@ class FindHouseholdByIndividualId extends AbstractAction {
 	 */
 	public function getOutputSpecification() {
 		return new SpecificationBag(array(
-			new Specification('contact_id', 'Integer', E::ts('Household ID'), true)
+			new Specification('household_id', 'Integer', E::ts('Household ID'), true)
 		));
 	}
 
