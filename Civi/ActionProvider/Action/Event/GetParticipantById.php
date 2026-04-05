@@ -7,6 +7,7 @@ use \Civi\ActionProvider\Parameter\ParameterBagInterface;
 use \Civi\ActionProvider\Parameter\SpecificationBag;
 use \Civi\ActionProvider\Parameter\Specification;
 use Civi\API\Exception\UnauthorizedException;
+use Civi\ActionProvider\Utils\CustomField;
 use CRM_ActionProvider_ExtensionUtil as E;
 
 class GetParticipantById extends AbstractGetSingleAction {
@@ -91,5 +92,35 @@ class GetParticipantById extends AbstractGetSingleAction {
     }
   }
 
+  /**
+   * @param $entity
+   * @param \Civi\ActionProvider\Parameter\ParameterBagInterface $output
+   *
+   * @return void
+   */
+  protected function setOutputFromEntity($entity, ParameterBagInterface $output) {
+    $fieldsToSkip = $this->getSkippedFields();
+    $entity = $this->normalizeCustomValues($entity);
+    foreach ($entity as $field => $value) {
+      if (in_array($field, $fieldsToSkip)) {
+        continue;
+      }
+      if (stripos($field, $this->getEntityAlias() . '_') === 0) {
+        $output->setParameter(substr($field, strlen($this->getEntityAlias() . '_')), $value);
+      }
+      else {
+        if (stripos($field, 'custom_') !== 0) {
+          $output->setParameter($field, $value);
+        }
+        else {
+          $custom_id = substr($field, 7);
+          if (is_numeric($custom_id)) {
+            $fieldName = CustomField::getCustomFieldName($custom_id);
+            $output->setParameter($fieldName, $value);
+          }
+        }
+      }
+    }
+  }
 
 }
