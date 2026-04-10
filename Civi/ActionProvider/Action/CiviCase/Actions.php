@@ -22,6 +22,10 @@ class Actions {
       AbstractAction::DATA_RETRIEVAL_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ));
+    $provider->addAction('GetCaseDataByCustomField', '\Civi\ActionProvider\Action\CiviCase\GetCaseDataByCustomField', E::ts('CiviCase: Get by Custom Field'), array(
+      AbstractAction::DATA_RETRIEVAL_TAG,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ));
     $provider->addAction('FindContactWithRoleOnCase', '\Civi\ActionProvider\Action\CiviCase\FindContactWithRoleOnCase', E::ts('CiviCase: Get contact with a role on the case'), array(
       AbstractAction::DATA_RETRIEVAL_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
