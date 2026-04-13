@@ -112,6 +112,9 @@ class Actions {
     $provider->addAction('GenerateEmptyValues', '\Civi\ActionProvider\Action\Generic\GenerateEmptyValues', E::ts('Other: Generate Empty Values'), [
       AbstractAction::WITHOUT_CONTACT_ACTION_TAG
     ]);
+    $provider->addAction('LogParameterValues', '\Civi\ActionProvider\Action\Generic\LogParameterValues', E::ts('Other: Log Parameter Values (Debugging)'), [
+      AbstractAction::WITHOUT_CONTACT_ACTION_TAG
+    ]);
   }
 
 }
