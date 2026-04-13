@@ -8,6 +8,7 @@ Version 1.196 (not released yet)
 * Export file Action: Use templateCompileDir instead of customFileUploadDir see !231
 * Fixed bug in the GetParticipantById that caused the removal of the first value in a multi value customfield.
 * Added action CiviCase: Get by Custom Field. See !233
+* Added action Other: Log Parameter Values (Debugging). See !235
 
 Version 1.195
 -------------
