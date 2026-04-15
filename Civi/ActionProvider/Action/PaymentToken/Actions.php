@@ -19,12 +19,16 @@ class Actions {
    */
   public static function loadActions(Provider $provider) {
     $provider->addAction('CreateOrUpdatePaymentToken', '\Civi\ActionProvider\Action\PaymentToken\CreateOrUpdatePaymentToken', E::ts('Payment Token: Create or Update'), [
-      AbstractAction::DATA_RETRIEVAL_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
     ]);
     $provider->addAction('GetPaymentToken', '\Civi\ActionProvider\Action\PaymentToken\GetPaymentToken', E::ts('Payment Token: Get by Payment Processor'), [
       AbstractAction::DATA_RETRIEVAL_TAG,
       AbstractAction::SINGLE_CONTACT_ACTION_TAG
+    ]);
+    $provider->addAction('ResetFailedContributionRecursForPaymentToken', ResetFailedContributionRecursForPaymentToken::class, E::ts('Payment Token: Reset associated Failed Recurring Contributions to In Progress'), [
+      AbstractAction::DATA_MANIPULATION_TAG,
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
     ]);
 		}
 
