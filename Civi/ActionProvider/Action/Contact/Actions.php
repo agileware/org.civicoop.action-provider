@@ -30,6 +30,15 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction(
+      'EmailResetOnHold',
+      EmailResetOnHold::class,
+      E::ts('Contact: Reset email on hold flag'),
+      [
+        AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+        AbstractAction::DATA_MANIPULATION_TAG,
+      ]
+    );
     $provider->addAction('UsePrimaryAddressOfContact', '\Civi\ActionProvider\Action\Contact\UsePrimaryAddressOfContact', E::ts('Contact: Use primary address of another contact'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
