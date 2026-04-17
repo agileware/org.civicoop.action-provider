@@ -1,4 +1,4 @@
-Version 1.196 (not released yet)
+Version 1.196
 -------------
 
 * Added action: update address by ID
@@ -10,6 +10,7 @@ Version 1.196 (not released yet)
 * Added action CiviCase: Get by Custom Field. See !233
 * Added action Other: Log Parameter Values (Debugging). See !235
 * Add action for resetting failure count, retry date, and status on Recurring Contributions. See !236
+* Fixed issue with attachment added to events.
 
 Version 1.195
 -------------
