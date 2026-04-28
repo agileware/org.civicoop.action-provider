@@ -117,11 +117,11 @@ class ParseRawAmount extends AbstractAction {
       else {
         $fixedAmount = $rawAmount;
       }
-      if ($divide) {
+      if ($divide && $fixedAmount) {
         $fixedAmount = $fixedAmount / 100;
       }
     }
-    return round($fixedAmount,2);
+    return round((float) $fixedAmount,2);
   }
 
   /**
