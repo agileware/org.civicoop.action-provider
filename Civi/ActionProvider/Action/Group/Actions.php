@@ -60,6 +60,10 @@ class Actions {
     $provider->addAction('DeleteGroup', '\Civi\ActionProvider\Action\Group\DeleteGroup', E::ts('Group: Delete'), array(
       AbstractAction::DATA_MANIPULATION_TAG
     ));
+    $provider->addAction('GetContactsOfGroup', '\Civi\ActionProvider\Action\Group\GetContactsOfGroup', E::ts('Group: Get contacts of a group'), array(
+      AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
   }
 
 }
