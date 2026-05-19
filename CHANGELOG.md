@@ -2,6 +2,7 @@ Version 1.197 (not yet released)
 -------------
 
 * Added action Contact: Reset email on hold flag. See !238
+* Added action Group: Get contacts of a group. See !239
 
 Version 1.196
 -------------
