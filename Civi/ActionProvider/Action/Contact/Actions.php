@@ -246,6 +246,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_MANIPULATION_TAG,
     ));
+    $provider->addAction('IterateContactsWithAction', '\Civi\ActionProvider\Action\Contact\IterateContactsWithAction', E::ts('Contact: Run action on each contact in a list'), array(
+      AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
+      AbstractAction::DATA_MANIPULATION_TAG,
+    ));
 
   }
 
