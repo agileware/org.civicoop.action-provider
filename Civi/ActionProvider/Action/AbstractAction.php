@@ -68,6 +68,11 @@ abstract class AbstractAction implements \JsonSerializable {
    */
   private $condition;
 
+  /**
+   * @var ParameterBagInterface
+   */
+  protected $context;
+
   // Reference counter for adding and removing API Wrapper when it's needed
   protected static $wrapperLevel = 0;
 
@@ -246,6 +251,18 @@ abstract class AbstractAction implements \JsonSerializable {
 	public function setCondition(AbstractCondition $condition=null) {
 	  $this->condition = $condition;
 	  return $this;
+  }
+
+  /**
+   * Sets the full mapping context bag, giving actions access to values beyond
+   * their declared parameter spec when needed.
+   *
+   * @param ParameterBagInterface $context
+   * @return AbstractAction
+   */
+  public function setContext(ParameterBagInterface $context) {
+    $this->context = $context;
+    return $this;
   }
 
 	/**
