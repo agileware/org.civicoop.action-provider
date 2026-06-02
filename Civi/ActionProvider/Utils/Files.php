@@ -18,7 +18,7 @@ class Files {
    */
   public static function createRestrictedDirectory($dir) {
     $subDir = 'action_provider/'.$dir;
-    $fullPath = \CRM_Core_Config::singleton()->templateCompileDir . $subDir;
+    $fullPath = \CRM_Core_Config::singleton()->customFileUploadDir . $subDir;
     if (is_dir($fullPath)) {
       \CRM_Utils_File::restrictAccess($fullPath.'/');
       return $subDir;
