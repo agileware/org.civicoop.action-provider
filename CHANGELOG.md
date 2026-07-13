@@ -1,10 +1,11 @@
-Version 1.197 (not yet released)
+Version 1.197
 -------------
 
 * Fixed issue with creating pdf in a batch.
 * Added action Contact: Reset email on hold flag. See !238
 * Added action Group: Get contacts of a group. See !239
 * Added acion to iterate an acton on a list of contacts. See !240 and !241
+* Added multiple to file specification.
 
 Version 1.196
 -------------
