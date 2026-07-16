@@ -1,5 +1,7 @@
-Version 1.198 (not yet released)
+Version 1.198 
 -------------
+
+* Added action: Contact: Get Household by name
 
 Version 1.197
 -------------

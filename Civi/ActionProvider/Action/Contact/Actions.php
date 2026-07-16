@@ -95,6 +95,10 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
     ));
+    $provider->addAction('FindHouseholdByName', '\Civi\ActionProvider\Action\Contact\FindHouseholdByName', E::ts('Contact: Get household by name'), array(
+      AbstractAction::SINGLE_CONTACT_ACTION_TAG,
+      AbstractAction::DATA_RETRIEVAL_TAG,
+    ));
     $provider->addAction('FindOrganizationByName', '\Civi\ActionProvider\Action\Contact\FindOrganizationByName', E::ts('Contact: Get organization by name'), array(
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::DATA_RETRIEVAL_TAG,
