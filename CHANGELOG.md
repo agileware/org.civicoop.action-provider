@@ -1,5 +1,7 @@
-Version 1.199 (not yet released) 
+Version 1.199
 -------------
+
+* Added action: Communication: send email to multiple contacts.
 
 Version 1.198 
 -------------
