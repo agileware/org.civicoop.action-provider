@@ -1,5 +1,7 @@
-Version 1.200 (not yet released)
+Version 1.200
 -------------
+
+* Action Get Case By ID also returns all clients of the case.
 
 Version 1.199
 -------------

@@ -47,6 +47,7 @@ class GetCaseDataById extends AbstractGetSingleAction {
   public function getOutputSpecification() {
     $bag = new SpecificationBag();
     Fields::getFieldsForEntity($bag, $this->getApiEntity(), 'get', $this->getSkippedFields(), $this->getEntityAlias());
+    $bag->addSpecification(new Specification('contact_ids', 'Integer', E::ts('All Contact IDs'), false, NULL, NULL, NULL, TRUE));
     $bag->addSpecification(new Specification('type_name', 'String', E::ts('Case Type Name'), false));
     $bag->addSpecification(new Specification('type_title', 'String', E::ts('Case Type Title'), false));
     return $bag;
@@ -113,6 +114,7 @@ class GetCaseDataById extends AbstractGetSingleAction {
       }
     }
     $output->setParameter('contact_id', reset($entity['contact_id']));
+    $output->setParameter('contact_ids', $entity['contact_id']);
     $output->setParameter('case_type_id', $entity['case_type_id']);
   }
 
