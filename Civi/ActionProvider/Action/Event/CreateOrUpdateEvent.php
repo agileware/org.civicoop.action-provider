@@ -14,7 +14,8 @@ use \Civi\ActionProvider\Utils\CustomField;
 use CRM_ActionProvider_ExtensionUtil as E;
 use Dompdf\Exception;
 
-class CreateOrUpdateEvent extends AbstractAction {
+final class CreateOrUpdateEvent extends AbstractAction {
+  use EventTrait;
 
   /**
    * Returns the specification of the configuration options for the actual action.
@@ -28,6 +29,7 @@ class CreateOrUpdateEvent extends AbstractAction {
     return new SpecificationBag(array(
       new Specification('add_address', 'Boolean', E::ts('Add address'), true, false),
       new Specification('address_location_type', 'Integer', E::ts('Address: Location type'), false, $defaultLocationType, null, $locationTypes, FALSE),
+      new Specification('campaign_id', 'Integer', E::ts('Default Campaign ID (if not in parameters)'), false, false, null, $this->getCampaignList(), false),
     ));
   }
 
@@ -56,6 +58,7 @@ class CreateOrUpdateEvent extends AbstractAction {
       new Specification('summary', 'String', E::ts('Summary'), false, null, null, null, FALSE),
       new Specification('start_date', 'Timestamp', E::ts('Start date'), true, null, null, null, FALSE),
       new Specification('end_date', 'Timestamp', E::ts('End date'), false, null, null, null, FALSE),
+      new Specification('campaign_id', 'Integer', E::ts('Campaign ID'), false, null, null, null, FALSE),
       new Specification('is_active', 'Boolean', E::ts('Is active'), false, 1, null, null, FALSE),
       new Specification('is_public', 'Boolean', E::ts('Is public'), false, 0, null, null, FALSE),
       new Specification('max_participants', 'Integer', E::ts('Max. Participants'), false, null),
@@ -162,7 +165,10 @@ class CreateOrUpdateEvent extends AbstractAction {
     if ($parameters->doesParameterExists('waitlist_text')) {
       $apiParams['waitlist_text'] = $parameters->getParameter('waitlist_text');
     }
-
+    $campaignId = $this->setCampaignId($parameters, $this->configuration);
+    if ($campaignId) {
+      $apiParams['campaign_id'] = $campaignId;
+    }
     // Create or Update the event through an API call.
     try {
       $result = civicrm_api3('Event', 'create', $apiParams);

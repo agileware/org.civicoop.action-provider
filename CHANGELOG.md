@@ -1,5 +1,8 @@
-Version 1.201 (not yet released)
+Version 1.202 (not yet release)
+
+Version 1.201
 -------------
+* Fixed issue #72 - not possible to add campaign with create or update event
 
 Version 1.200
 -------------
