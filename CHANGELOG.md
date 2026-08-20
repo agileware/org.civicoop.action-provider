@@ -1,4 +1,7 @@
-Version 1.202 (not yet release)
+Version 1.202 
+-------------
+
+* Fixed regression bug #73 with action Send E-mail.
 
 Version 1.201
 -------------
