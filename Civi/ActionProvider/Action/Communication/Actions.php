@@ -30,7 +30,7 @@ class Actions {
       AbstractAction::SINGLE_CONTACT_ACTION_TAG,
       AbstractAction::SEND_MESSAGES_TO_CONTACTS
     ));
-    $provider->addAction('SendEmail', '\Civi\ActionProvider\Action\Communication\SendEmailToMultipleContacts', E::ts('Communication: Send e-mail to multiple contacts'), array(
+    $provider->addAction('SendEmailToMultipleContacts', '\Civi\ActionProvider\Action\Communication\SendEmailToMultipleContacts', E::ts('Communication: Send e-mail to multiple contacts'), array(
       AbstractAction::MULTIPLE_CONTACTS_ACTION_TAG,
       AbstractAction::SEND_MESSAGES_TO_CONTACTS
     ));
