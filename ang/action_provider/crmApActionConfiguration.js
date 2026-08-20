@@ -19,33 +19,46 @@
       	$scope.action = {};
       	$scope.uiFields = {};
 
-      	if (!($scope.context in actions)) {
-      	  actions[$scope.context] = {};
-      	}
+        function loadAction(name, context, metadata) {
+          if (!(context in actions)) {
+            actions[context] = {};
+          }
 
-      	if ($scope.name in actions[$scope.context]) {
-      	  $scope.action = actions[$scope.context][$scope.name];
-      	  return;
-      	}
+          if (name in actions[context]) {
+            $scope.action = actions[context][name];
+            return;
+          }
 
-        actionProviderFactory.getAction($scope.name, $scope.context, $scope.metadata)
-        .then(function (data) {
-      	  actions[$scope.context][$scope.name] = data;
-      	  $scope.action = data;
+          actionProviderFactory.getAction(name, context, metadata)
+          .then(function (data) {
+            actions[context][name] = data;
+            $scope.action = data;
 
-          for (var spec in $scope.action.configuration_spec) {
-            if ($scope.action.configuration_spec[spec].options) {
-              $scope.action.configuration_spec[spec].select2Options = [];
-              for (var optionValue in $scope.action.configuration_spec[spec].options) {
-                var select2Option = {
-                  'id': optionValue,
-                  'text': $scope.action.configuration_spec[spec].options[optionValue],
-                };
-                $scope.action.configuration_spec[spec].select2Options.push(select2Option);
+            for (var spec in data.configuration_spec) {
+              if (data.configuration_spec[spec].options) {
+                data.configuration_spec[spec].select2Options = [];
+                for (var optionValue in data.configuration_spec[spec].options) {
+                  var select2Option = {
+                    'id': optionValue,
+                    'text': data.configuration_spec[spec].options[optionValue],
+                  };
+                  data.configuration_spec[spec].select2Options.push(select2Option);
+                }
               }
             }
+          });
+        }
+
+        loadAction($scope.name, $scope.context, $scope.metadata);
+
+        // Re-load when the caller switches which action is being configured
+        // (e.g. a picker bound to `name`), not just on initial link.
+        $scope.$watch('name', function(newName, oldName) {
+          if (newName !== oldName) {
+            $scope.action = {};
+            loadAction(newName, $scope.context, $scope.metadata);
           }
-      	});
+        });
       }
     };
   }]);

@@ -20,8 +20,8 @@ class CreateOrUpdateRole extends AbstractAction {
       'options' => ['limit' => 0]
     ]);
     foreach ($result['values'] as $value) {
-      $options["${value['id']}_a_b"] = "{$value['label_a_b']} (a->b)";
-      $options["${value['id']}_b_a"] = "{$value['label_b_a']} (b->a)";
+      $options["{$value['id']}_a_b"] = "{$value['label_a_b']} (a->b)";
+      $options["{$value['id']}_b_a"] = "{$value['label_b_a']} (b->a)";
     }
     uasort($options, function ($a, $b) {
       return $a >= $b;
