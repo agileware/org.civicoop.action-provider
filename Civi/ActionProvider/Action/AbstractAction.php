@@ -248,7 +248,7 @@ abstract class AbstractAction implements \JsonSerializable {
    * @param AbstractCondition|null $condition
    * @return AbstractAction
    */
-	public function setCondition(AbstractCondition $condition=null) {
+	public function setCondition(?AbstractCondition $condition=null) {
 	  $this->condition = $condition;
 	  return $this;
   }

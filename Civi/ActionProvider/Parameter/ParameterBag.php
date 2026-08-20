@@ -57,10 +57,11 @@ class ParameterBag implements ParameterBagInterface, \IteratorAggregate {
 
   /**
    * @param array $data
+   * @param SpecificationBag|null $specificationBag
    *
    * @return \Civi\ActionProvider\Parameter\ParameterBag
    */
-	public function fromArray($data, SpecificationBag $specificationBag=null) {
+	public function fromArray($data, ?SpecificationBag $specificationBag=null) {
 	  foreach($data as $key => $val) {
       $spec = null;
       if ($specificationBag) {
