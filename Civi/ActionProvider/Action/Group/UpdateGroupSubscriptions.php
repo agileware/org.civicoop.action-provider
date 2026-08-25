@@ -39,7 +39,8 @@ class UpdateGroupSubscriptions extends AbstractAction {
         civicrm_api3('GroupContact', 'create', $params);
       }
       elseif (!in_array($groupIdToCheck, $groups) && $groupContact['count'] > 0) {
-        civicrm_api3('GroupContact', 'delete', $params);
+        $params['status'] = 'Removed';
+        civicrm_api3('GroupContact', 'create', $params);
       }
     }
   }

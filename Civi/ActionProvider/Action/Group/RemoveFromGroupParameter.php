@@ -21,9 +21,10 @@ class RemoveFromGroupParameter extends AbstractAction {
 	 * @return void
 	 */
 	protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
-		civicrm_api3('GroupContact', 'delete', array(
+		civicrm_api3('GroupContact', 'create', array(
 			'contact_id' => $parameters->getParameter('contact_id'),
 			'group_id' => $parameters->getParameter('group_id'),
+                        'status' => 'Removed',
 		));
 	}
 	

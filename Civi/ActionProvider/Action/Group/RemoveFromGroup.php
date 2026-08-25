@@ -40,9 +40,10 @@ class RemoveFromGroup extends AbstractAction
 
         if (count($existingGroups['values']) > 0) {
 
-            civicrm_api3('GroupContact', 'delete', array(
+            civicrm_api3('GroupContact', 'create', array(
                 'contact_id' => $parameters->getParameter('contact_id'),
                 'group_id' => $group_id,
+                'status' => 'Removed',
             ));
         }
     }
