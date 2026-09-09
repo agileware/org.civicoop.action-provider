@@ -54,7 +54,7 @@ class UpdateContribution extends AbstractAction {
       $contribution_params['payment_instrument_id'] = $this->configuration->getParameter('payment_instrument');
     }
     if ($parameters->doesParameterExists('contact_id')) {
-      $contribution_params['contact_id'] = $parameters->getParameter('contact_id');;
+      $contribution_params['contact_id'] = $parameters->getParameter('contact_id');
     }
     if ($parameters->doesParameterExists('currency')) {
       $contribution_params['currency'] = $parameters->getParameter('currency');

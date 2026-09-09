@@ -100,7 +100,7 @@ class GetContributionByMembershipID extends AbstractGetSingleAction {
                                  ->addJoin('LineItem AS line_item', 'LEFT', ['line_item.contribution_id', '=', 'id'])
                                  ->addJoin('Membership AS membership', 'LEFT', ['line_item.entity_id', '=', 'membership.id'])
                                  ->addWhere('line_item.entity_table', '=', 'civicrm_membership')
-                                 ->addWhere('is_test', '=', FALSE);;
+                                 ->addWhere('is_test', '=', FALSE);
 
       if ( !empty($apiParams['membership_id']) ) {
         $contributions_query->addWhere('membership.id', '=', $apiParams['membership_id']);

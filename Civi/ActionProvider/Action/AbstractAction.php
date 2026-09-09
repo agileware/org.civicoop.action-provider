@@ -357,7 +357,7 @@ abstract class AbstractAction implements \JsonSerializable {
 		// An empty array goes wrong with the default confifuration.
     $return = [];
 		if (empty($return['default_configuration'])) {
-			$return['default_configuration'] = new \stdClass();;
+			$return['default_configuration'] = new \stdClass();
 		}
 		return $return;
 	}
