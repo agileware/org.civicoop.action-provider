@@ -174,7 +174,7 @@ abstract class AbstractCondition implements \JsonSerializable {
     $return['title'] = $this->getTitle();
     // An empty array goes wrong with the default confifuration.
     if (empty($return['default_configuration'])) {
-      $return['default_configuration'] = new \stdClass();;
+      $return['default_configuration'] = new \stdClass();
     }
     return $return;
   }

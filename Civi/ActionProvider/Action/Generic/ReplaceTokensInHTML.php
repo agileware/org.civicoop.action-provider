@@ -31,7 +31,7 @@ class ReplaceTokensInHTML extends AbstractAction {
     $extraData = array();
     $contactId = $parameters->getParameter('contact_id');
     if ($parameters->doesParameterExists('participant_id')) {
-      $extraData['participant']['id'] = $parameters->getParameter('participant_id');;
+      $extraData['participant']['id'] = $parameters->getParameter('participant_id');
     }
     if ($parameters->doesParameterExists('case_id')) {
       $contactData['case_id'] = $parameters->getParameter('case_id');

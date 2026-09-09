@@ -45,7 +45,7 @@ class SendEmail extends AbstractAction {
       $mailer->setLocationTypeId($parameters->getParameter('location_type_id'));
     }
     if ($parameters->doesParameterExists('participant_id')) {
-      $extra_data['participant']['id'] = $parameters->getParameter('participant_id');;
+      $extra_data['participant']['id'] = $parameters->getParameter('participant_id');
     }
     if ($parameters->doesParameterExists('contribution_recur_id')) {
       $extra_data['contribution_recur']['id'] = $parameters->getParameter('contribution_recur_id');
