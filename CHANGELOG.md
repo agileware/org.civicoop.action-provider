@@ -3,6 +3,7 @@ Version 1.203 (not yet released)
 
 * Fixed PHP 8.4 deprecations by declaring explicitly nullable parameter types.
 * Fixed deprecation warnings. See !248
+* Fix the export file action (again..). See !248
 
 Version 1.202 
 -------------
