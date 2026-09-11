@@ -169,7 +169,7 @@ class CreatePdf extends AbstractAction {
   public function initializeBatch($batchName) {
     $outputMode = $this->configuration->getParameter('batch_output_mode');
     if ($outputMode == 'zip') {
-      $subdir = Files::createRestrictedDirectory('createpdf');
+      $subdir = Files::createRestrictedDirectory('createpdf', FALSE);
       $outputName = \CRM_Core_Config::singleton()->customFileUploadDir . $subdir . DIRECTORY_SEPARATOR . $batchName . '.zip';
       $this->zip = new \ZipArchive();
       if ($this->zip->open($outputName, \ZipArchive::CREATE) !== TRUE) {
@@ -194,12 +194,12 @@ class CreatePdf extends AbstractAction {
       if ($this->zip->count() > 1) {
         $this->zip->close();
         if ($isLastBatch) {
-          $subdir = Files::createRestrictedDirectory('createpdf');
+          $subdir = Files::createRestrictedDirectory('createpdf', FALSE);
           $downloadName = $this->getDownloadName('zip');
           $this->createDownloadStatusMessage(E::ts('Created zip file with the PDF'), $batchName . '.zip', $subdir, $downloadName);
         }
       } else {
-        $subdir = Files::createRestrictedDirectory('createpdf');
+        $subdir = Files::createRestrictedDirectory('createpdf', FALSE);
         $zipFileName = \CRM_Core_Config::singleton()->customFileUploadDir . $subdir . DIRECTORY_SEPARATOR . $batchName . '.zip';
         $basePath = \CRM_Core_Config::singleton()->customFileUploadDir . $subdir;
         $pdfFile = $this->zip->getNameIndex(0);
@@ -210,7 +210,7 @@ class CreatePdf extends AbstractAction {
         $this->createDownloadStatusMessage(E::ts('Created PDF'), $batchName.'.pdf', $subdir, $downloadName);
       }
     } else {
-      $subdir = Files::createRestrictedDirectory('createpdf');
+      $subdir = Files::createRestrictedDirectory('createpdf', FALSE);
       $basePath = \CRM_Core_Config::singleton()->customFileUploadDir . $subdir;
       $htmlFile = $basePath .'/'.$batchName.'.html';
       $pdfFormatFile = $basePath .'/'.$batchName.'.pdfformat';
