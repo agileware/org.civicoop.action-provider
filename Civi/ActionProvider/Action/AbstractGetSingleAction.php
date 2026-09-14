@@ -100,7 +100,10 @@ abstract class AbstractGetSingleAction extends AbstractAction {
           $fieldName = CustomField::getCustomFieldName($custom_id);
           $spec = $this->getOutputSpecification()->getSpecificationByName($fieldName);
           if ($spec instanceof OptionGroupSpecification && $spec->isMultiple() && is_array($value)) {
-            $value = array_keys($value);
+            // Only unwrap data when api returns a multi value custom field as a keyed array.
+            if ($value !== array_values($value)) {
+              $value = array_keys($value);
+            }
           }
           $output->setParameter($fieldName, $value);
         }
