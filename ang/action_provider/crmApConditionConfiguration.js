@@ -1,4 +1,4 @@
-(function(angular, $, _) {
+(function(angular, $) {
   // "crmApConditionConfiguration" is a basic skeletal directive.
   // Example usage: <crm-ap-condition-configuration configuration="condition.configuration" condition="condition.type"></crm-ap-condition-configuration>
   angular.module('action_provider').directive('crmApConditionConfiguration', ["actionProviderFactory", function(actionProviderFactory) {
@@ -73,4 +73,4 @@
       }
     };
   }]);
-})(angular, CRM.$, CRM._);
+})(angular, CRM.$);
