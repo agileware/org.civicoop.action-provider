@@ -1,4 +1,4 @@
-(function(angular, $, _) {
+(function(angular, $) {
 
 // Display a fancy SELECT (based on select2).
 // usage: <select crm-form-processor-ui-select="{placeholder:'Something',allowClear:true,...}" ng-model="myobj.field"><option...></select>
@@ -21,4 +21,4 @@ angular.module('action_provider').directive('crmApUiSelect', function () {
     }
   };
 });
-})(angular, CRM.$, CRM._);
+})(angular, CRM.$);

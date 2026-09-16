@@ -1,4 +1,4 @@
-(function(angular, $, _) {
+(function(angular, $) {
   // "crmApActionConfiguration" is a basic skeletal directive.
   // Example usage: <crm-ap-action-configuration configuration="action.configuration" action="action.type"></crm-ap-action-configuration>
   angular.module('action_provider').directive('crmApParameterField', function() {
@@ -12,4 +12,4 @@
       },
     };
   });
-})(angular, CRM.$, CRM._);
+})(angular, CRM.$);
