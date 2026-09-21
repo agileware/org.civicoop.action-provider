@@ -66,16 +66,7 @@ class CustomField {
     $type = self::getTypeForCustomField($customField);
     $title = trim($titlePrefix.$customField['label']);
     $is_required = isset($customField['is_required']) && $customField['is_required'] && $useRequiredFromCustomField ? true : false;
-    $multiple = false;
-    if ($customField['html_type'] == 'CheckBox') {
-      $multiple = true;
-    }
-    if ($customField['html_type'] == 'Multi-Select') {
-      $multiple = true;
-    }
-    if (!empty($customField['serialize'])) {
-      $multiple = true;
-    }
+    $multiple = !empty($customField['serialize']);
     // File custom fields shouldn't be selectable - use the "upload file to a custom field" action instead.
     if ($customField['html_type'] == 'File') {
       return null;
