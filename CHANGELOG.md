@@ -5,6 +5,7 @@ Version 1.203 (not yet released)
 * Fixed deprecation warnings. See !248
 * Fix the export file action (again..). See !248
 * Fix multi value custom fields being returned as array indices by get get-single actions. See !249
+* Update serialization check for custom fields. See !251
 
 Version 1.202 
 -------------
