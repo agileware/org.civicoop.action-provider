@@ -43,7 +43,7 @@ class FindOrCreateContactByEmailAndName extends AbstractAction {
         $params['contact_id.first_name'] = $parameters->getParameter('first_name');
         $params['contact_id.last_name']  = $parameters->getParameter('last_name');
         break;
-      case 'Household';
+      case 'Household':
         $params['contact_id.household_name'] = $parameters->getParameter('household_name');
         break;
       case 'Organization':
@@ -69,7 +69,7 @@ class FindOrCreateContactByEmailAndName extends AbstractAction {
           $createParams['first_name'] = $parameters->getParameter('first_name');
           $createParams['last_name']  = $parameters->getParameter('last_name');
           break;
-        case 'Household';
+        case 'Household':
           $createParams['household_name'] = $parameters->getParameter('household_name');
           break;
         case 'Organization':
@@ -105,7 +105,7 @@ class FindOrCreateContactByEmailAndName extends AbstractAction {
             throw new InvalidParameterException('last_name is required');
           }
           break;
-        case 'Household';
+        case 'Household':
           if (!$parameters->doesParameterExists('household_name')) {
             throw new InvalidParameterException('household_name is required');
           }
