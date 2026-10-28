@@ -1,6 +1,7 @@
 Version 1.203 (not yet released) 
 -------------
 
+* Changed Contact: Block Communication (set do not fields) action so one can set one the do not fields.
 * Fixed PHP 8.4 deprecations by declaring explicitly nullable parameter types.
 * Fixed deprecation warnings. See !248
 * Fix the export file action (again..). See !248

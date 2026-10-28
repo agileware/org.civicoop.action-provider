@@ -39,15 +39,25 @@ class BlockCommunication extends AbstractAction {
   protected function doAction(ParameterBagInterface $parameters, ParameterBagInterface $output) {
     try {
       $cid = $parameters->getParameter('contact_id');
-      civicrm_api3('Contact', 'create', [
-        'id' => $cid,
-        'is_opt_out' => '1',
-        'do_not_email' => '1',
-        'do_not_phone' => '1',
-        'do_not_mail' => '1',
-        'do_not_sms' => '1',
-        'do_not_trade' => '1'
-      ]);
+      $params['id'] = $cid;
+      $which = $this->configuration->getParameter('which');
+      if (!is_array($which)) {
+        $which = ['all'];
+      }
+      if (in_array('all', $which)) {
+        $params['is_opt_out'] = '1';
+        $params['do_not_email'] = '1';
+        $params['do_not_phone'] = '1';
+        $params['do_not_mail'] = '1';
+        $params['do_not_sms'] = '1';
+        $params['do_not_trade'] = '1';
+      } else {
+        foreach($which as $k) {
+          $params[$k] = '1';
+        }
+      }
+      
+      civicrm_api3('Contact', 'create', $params);
     } catch (\CRM_Core_Exception $ex) {
       // Do nothing.
     }
@@ -60,7 +70,18 @@ class BlockCommunication extends AbstractAction {
    * @return SpecificationBag
    */
   public function getConfigurationSpecification() {
-    return new SpecificationBag();
+    $options = [
+      'all' => E::ts('Block all communication'),
+      'is_opt_out' => E::ts('No Bulk Emails (User opt out)'),
+      'do_not_email' => E::ts('Do not e-mail'),
+      'do_not_phone' => E::ts('Do not phone'),
+      'do_not_mail' => E::ts('Do not mail'),
+      'do_not_sms' => E::ts('Do not sms'),
+      'do_not_trade' => E::ts('Do not trade'),
+    ];
+    return new SpecificationBag([
+      new Specification('which', 'String', E::ts('Which communication to block?'), TRUE, 'all', NULL, $options, TRUE),
+    ]);
   }
 
   /**
