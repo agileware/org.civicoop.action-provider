@@ -1,4 +1,4 @@
-Version 1.203 (not yet released) 
+Version 1.203
 -------------
 
 * Changed Contact: Block Communication (set do not fields) action so one can set one the do not fields.
