@@ -48,7 +48,7 @@ class CreateOrUpdatePaymentToken extends AbstractAction {
 			if(!$action->getValue('expiry_date')) {
 				$action->addValue('expiry_date', null);
 			}
-			if(!$action->getValue('masked_acount_number')){
+			if(!$action->getValue('masked_account_number')){
 				$action->addValue('masked_account_number', null);
 			}
 		}
